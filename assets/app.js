@@ -660,8 +660,8 @@
     if (isNum(t.realized_pl)) extra.push('realized <span class="' + cls(t.realized_pl) + '">' + sMoney(t.realized_pl) + "</span>");
     if (isNum(t.fees) && t.fees) extra.push("fees " + money(t.fees));
     return '<li class="tx"><div class="tx-top"><span class="tx-desc">' + esc(t.description || t.type) + '</span><span class="tx-date">' + esc(fmtDate(t.date, { month: "short", day: "numeric", year: "numeric" })) + "</span></div>" +
-      '<div class="tx-sub">' + extra.join(" · ") + (t.note ? ' · <span class="tx-note">' + esc(t.note) + "</span>" : "") +
-      (t.issue ? ' · <a href="' + esc(t.issue_url || "#") + '" target="_blank" rel="noopener">#' + esc(t.issue) + "</a>" : "") + "</div></li>";
+      '<div class="tx-sub">' + extra.concat(t.note ? ['<span class="tx-note">' + esc(t.note) + "</span>"] : [])
+        .concat(t.issue ? ['<a href="' + esc(t.issue_url || "#") + '" target="_blank" rel="noopener">issue #' + esc(t.issue) + "</a>"] : []).join(" · ") + "</div></li>";
   }
   function renderTx(force) {
     var el = $("tx-list");
