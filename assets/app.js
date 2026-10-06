@@ -1433,6 +1433,10 @@
     ui.rowFrom = ui.lastPrices; ui.animFrom = ui.lastTotal;
     try {
       renderHeader(d); renderSummary(d); renderPositions(d); renderOption(d); renderRoll(d);
+      if (!ui.rollScrolled && ui.view === "overview" && /^#overview\/roll/.test(location.hash) && !$("roll-panel").hidden) {
+        ui.rollScrolled = true;  // deep link opened before the data arrived
+        setTimeout(function () { $("roll-panel").scrollIntoView({ block: "start" }); }, 50);
+      }
       renderChart(d, ui.view === "overview" && !ui.ovDrawn); if (ui.view === "overview") ui.ovDrawn = true;
             renderStocks(d); renderEditSide(d);
       ui.lastPrices = priceMap(d); ui.lastTotal = (d.account || {}).total;

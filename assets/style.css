@@ -633,3 +633,4 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
   .rtile, .deadline, details.how[open] .how-body { animation: none; }
   details.how summary::after { transition: none; }
 }
+#roll-panel { scroll-margin-top: 64px; }
