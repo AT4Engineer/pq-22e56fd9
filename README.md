@@ -104,3 +104,13 @@ Each run commits `data/` and `dist/` only if something changed.
 - Option marks use the bid/ask midpoint (or last trade, or intrinsic value as a fallback); wide
   spreads make that approximate. Assignment risk and "odds" are rough guides, not forecasts.
 - A public repository makes the holdings and values visible to anyone with the link.
+
+## Install on a phone (PWA)
+
+The hosted site ships `manifest.webmanifest` ("Portfolio Quest" / "PQuest", standalone, dark theme),
+PNG icons (`assets/icons/`), Apple home-screen meta tags and a small service worker (`sw.js`).
+The service worker caches the app shell for offline launch but always fetches `data/portfolio.json`
+network-first (cached copy only when offline). iPhone: open the Pages URL in Safari > Share >
+Add to Home Screen. Android: Chrome menu > Install app / Add to Home screen.
+Bump `CACHE` in `sw.js` when changing shell files to force a refresh. The standalone
+`dist/dashboard.html` build strips these PWA tags automatically.
