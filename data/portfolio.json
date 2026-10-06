@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 00:42:14 ET",
-  "generated_at_iso": "2026-10-06T00:42:14-04:00",
+  "generated_at_et": "2026-10-06 00:43:48 ET",
+  "generated_at_iso": "2026-10-06T00:43:48-04:00",
   "trade_date": "2026-10-05",
   "quotes_as_of_et": "2026-10-05 16:00 ET",
   "market_state": "PREPRE",
@@ -253,6 +253,7 @@
   "caveats": [
     "UPRO Oct 16 2026 $154 call: no live bid/ask right now (market closed or no quotes); using the last good bid/ask mid 3.80 from session 2026-10-05 (saved 2026-10-06 00:12:07 ET).",
     "UPRO Oct 16 2026 $154 call: wide bid/ask (3.00 x 4.60); the mid-price mark is approximate.",
+    "Paper lab: showing saved snapshot (data through 2026-10-05).",
     "Market not in regular session (Closed (overnight)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
