@@ -629,10 +629,28 @@ def build_quotes_and_charts(H, quotes, wquotes, watch, positions, options, trade
         out[sym] = e
 
     recorded_all = record_option_marks(now, any(q["market_state"] == "REGULAR" for q in quotes.values()), options)
+    rows, methods = [], []
+    try:
+        rows, methods = build_intraday(H, options, cash, recorded_all, history, now)
+    except Exception as ex:  # noqa: BLE001
+        warn(f"intraday 1m account values failed ({ex}); keeping data/intraday.json as it was")
+        old = load_json(D("intraday.json"), {}) or {}
+        rows, methods = old.get("rows", []), old.get("option_mark_method", [])
+    # per-minute option marks: derived from intraday.json's option_liability column (single option only;
+    # the column is the summed value of all options), else the sparse marks recorded each run
+    minute_marks = []
+    if len(options) == 1 and rows:
+        o0 = options[0]
+        unit = (-1 if o0["position"] == "short" else 1) * o0["multiplier"] * o0["contracts"]
+        minute_marks = [(datetime.fromisoformat(r[0]), round(r[4] / unit, 4)) for r in rows
+                        if len(r) >= 5 and r[4] is not None and unit]
     for o in options:
         cid = o["contract"] or o["key"]
         rec = [(datetime.fromtimestamp(p["t"], ET), p["marks"][o["key"]]) for p in recorded_all
                if o["key"] in p.get("marks", {})]
+        interval = "15m"
+        if len(minute_marks) > len(rec):
+            rec, interval = minute_marks, "1m"
         daily = []
         if o["contract"]:
             try:
@@ -642,7 +660,7 @@ def build_quotes_and_charts(H, quotes, wquotes, watch, positions, options, trade
                          if num(r.get("Close")) is not None]
             except Exception as ex:  # noqa: BLE001
                 warn(f"{cid}: option daily history failed ({ex})")
-        ch, spark = charts.option_chart(cid, o["label"], rec, daily, o["prev_mark"], o["mark"], trade_date)
+        ch, spark = charts.option_chart(cid, o["label"], rec, daily, o["prev_mark"], o["mark"], trade_date, interval)
         fname = charts.safe_name(cid) + ".json"
         if ch["ranges"]:
             charts.write_if_changed(os.path.join(cdir, fname), ch, iso)
@@ -654,13 +672,6 @@ def build_quotes_and_charts(H, quotes, wquotes, watch, positions, options, trade
                     "change": r4(chg), "change_pct": r2(chg / o["prev_mark"] * 100) if chg is not None and o["prev_mark"] else None,
                     "held": True, "watch": False, "chart": f"data/charts/{fname}" if ch["ranges"] else None,
                     "spark": spark, "spark_base": o["prev_mark"], "key": o["key"]}
-    rows, methods = [], []
-    try:
-        rows, methods = build_intraday(H, options, cash, recorded_all, history, now)
-    except Exception as ex:  # noqa: BLE001
-        warn(f"intraday 1m account values failed ({ex}); keeping data/intraday.json as it was")
-        old = load_json(D("intraday.json"), {}) or {}
-        rows, methods = old.get("rows", []), old.get("option_mark_method", [])
     try:
         ach = account_chart(rows, methods, history, total, prev_total, trade_date)
         charts.write_if_changed(os.path.join(cdir, "_account.json"), ach, iso)

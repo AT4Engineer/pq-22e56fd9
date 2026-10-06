@@ -158,20 +158,22 @@ def stock_chart(symbol, intraday, daily, prev_close, live_price=None, trade_date
     return {"symbol": symbol, "kind": "stock", "ranges": ranges}, spark, (ranges.get("1D") or {}).get("base")
 
 
-def option_chart(contract, label, recorded, daily, prev_mark, mark, trade_date):
-    """recorded: [(dt, mark)] from data/intraday.json (this tracker's own ~15-min marks)."""
+def option_chart(contract, label, recorded, daily, prev_mark, mark, trade_date, interval="15m"):
+    """recorded: [(dt, mark)] - per-minute marks derived from data/intraday.json (interval "1m"), or this
+    tracker's own ~15-min marks from data/option_marks.json."""
     ranges = {}
     spark = []
     if recorded:
         day = recorded[-1][0].date()
         sess = [(d, v) for d, v in recorded if d.date() == day]
         so, sc = session_bounds(day)
-        r = _rng(sess, lambda d: int(d.timestamp()), base=prev_mark, interval="15m")
+        r = _rng(sess, lambda d: int(d.timestamp()), base=prev_mark, interval=interval)
         r["session_open"], r["session_close"] = so, sc
         r["session_date"] = day.isoformat()
         ranges["1D"] = r
-        spark = [[(d.hour * 60 + d.minute) - 570, _rd(v)] for d, v in sess]
-        r = _rng(recorded, lambda d: int(d.timestamp()), interval="15m")
+        spark = [[(d.hour * 60 + d.minute) - 570, _rd(v)] for d, v in (resample(sess, 5) if interval == "1m" else sess)]
+        wk = resample(recorded, 5) if interval == "1m" else recorded
+        r = _rng(wk, lambda d: int(d.timestamp()), interval="5m" if interval == "1m" else interval)
         if r and len(recorded) > len(sess):
             ranges["1W"] = r
     td = datetime.fromisoformat(trade_date).date() if trade_date else None
@@ -182,7 +184,8 @@ def option_chart(contract, label, recorded, daily, prev_mark, mark, trade_date):
     if "ALL" in dr:
         ranges["1Y"] = dr["ALL"]
     return {"symbol": contract, "label": label, "kind": "option", "ranges": ranges,
-            "note": "Option prices: daily = last trade of each day (thin trading); intraday = marks recorded by this tracker."}, spark
+            "note": "Option prices: 1D/1W = per-minute mark (latest bid/ask mid recorded by this tracker, held between runs, "
+                    "or a Yahoo trade print); 1M+ = last trade of each day (thin trading)."}, spark
 
 
 def write_if_changed(path, obj, stamp_iso):

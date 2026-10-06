@@ -232,6 +232,7 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
 .s-left { min-width: 0; }
 .s-sym { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .s-name { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.srow[data-kind="option"] .s-name { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; }
 .s-mid { display: flex; justify-content: center; }
 .spark { width: 64px; height: 30px; display: block; overflow: visible; }
 .spark .sp-line { fill: none; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }

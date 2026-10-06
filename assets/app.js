@@ -349,7 +349,9 @@
       var id = o.contract || o.key, q = Q[id] || {};
       var chg = isNum(o.prev_mark) ? o.mark - o.prev_mark : null;
       rows.push({ id: id, sym: q.display || (o.underlying + " " + o.strike + (o.type === "call" ? "C" : "P")),
-        name: (o.position === "short" ? "Short " : "Long ") + o.contracts + " · " + fmtDate(o.expiry, { month: "short", day: "numeric", year: "numeric" }) + " " + o.type,
+        name: (o.position === "short" ? "Short " : "Long ") + o.contracts + " · " + fmtDate(o.expiry, { month: "short", day: "numeric", year: "numeric" }) + " " + o.type +
+          (o.position === "short" ? " · you gain when price falls" : ""),
+        sign: o.position === "short" ? -1 : 1, posDay: o.day_change,
         kind: "option", held: true, q: q, opt: o, price: o.mark, chg: chg, pct: isNum(chg) && o.prev_mark ? chg / o.prev_mark * 100 : null,
         value: o.liability, spark: q.spark || [], base: o.prev_mark });
     });
@@ -369,7 +371,7 @@
     return null;
   }
 
-  function sparkSvg(pts, base) {
+  function sparkSvg(pts, base, sign) {
     var W = 64, H = 30, P = 2;
     if (!pts || pts.length < 2) return '<svg class="spark" viewBox="0 0 64 30" aria-hidden="true"><line class="sp-base" x1="0" x2="64" y1="15" y2="15"/></svg>';
     var vals = pts.map(function (p) { return p[1]; });
@@ -379,23 +381,24 @@
     var span = Math.max(390, pts[pts.length - 1][0]);
     function x(m) { return (m / span * W).toFixed(1); }
     function y(v) { return (P + (1 - (v - mn) / (mx - mn)) * (H - 2 * P)).toFixed(1); }
-    var last = pts[pts.length - 1][1], up = !isNum(base) || last >= base;
+    var last = pts[pts.length - 1][1], up = !isNum(base) || (sign === -1 ? last <= base : last >= base);
     var path = pts.map(function (p, i) { return (i ? "L" : "M") + x(p[0]) + "," + y(p[1]); }).join("");
     return '<svg class="spark ' + (up ? "up" : "down") + '" viewBox="0 0 64 30" preserveAspectRatio="none" aria-hidden="true">' +
       (isNum(base) ? '<line class="sp-base" x1="0" x2="64" y1="' + y(base) + '" y2="' + y(base) + '"/>' : "") +
       '<path class="sp-line" d="' + path + '"/></svg>';
   }
   function pillText(r) {
-    if (ui.pill === "chg") return isNum(r.chg) ? sMoney(r.chg) : "n/a";
+    if (ui.pill === "chg") { if (r.kind === "option") return isNum(r.posDay) ? sMoney(r.posDay) : "n/a"; return isNum(r.chg) ? sMoney(r.chg) : "n/a"; }
     if (ui.pill === "val") return r.held ? money(r.value) : (isNum(r.cap) ? abbr(r.cap, true) : "n/a");
     return isNum(r.pct) ? sPct(r.pct) : "n/a";
   }
   function pillTitle() { return ui.pill === "chg" ? "Day change ($)" : ui.pill === "val" ? "Market value (market cap for watchlist)" : "Day change (%)"; }
   function rowHtml(r) {
-    var dir = isNum(r.chg) ? (r.chg > 0 ? "up" : r.chg < 0 ? "down" : "flat") : "flat";
-    return '<li><div class="srow' + (ui.sel === r.id ? " sel" : "") + '" role="button" tabindex="0" data-id="' + esc(r.id) + '">' +
+    var pl = isNum(r.chg) ? r.chg * (r.sign || 1) : null;  // P/L impact to him (short: price up = loss)
+    var dir = isNum(pl) ? (pl > 0 ? "up" : pl < 0 ? "down" : "flat") : "flat";
+    return '<li><div class="srow' + (ui.sel === r.id ? " sel" : "") + '" role="button" tabindex="0" data-kind="' + r.kind + '" data-id="' + esc(r.id) + '">' +
       '<div class="s-left"><div class="s-sym">' + esc(r.sym) + '</div><div class="s-name">' + esc(r.name || "") + "</div></div>" +
-      '<div class="s-mid">' + (r.missing ? "" : sparkSvg(r.spark, r.base)) + "</div>" +
+      '<div class="s-mid">' + (r.missing ? "" : sparkSvg(r.spark, r.base, r.sign)) + "</div>" +
       '<div class="s-right"><div class="s-price">' + (r.missing ? "" : money(r.price)) + "</div>" +
       (r.missing ? "" : '<button type="button" class="pill ' + dir + '" data-pill="1" title="' + esc(pillTitle()) + '">' + esc(pillText(r)) + "</button>") +
       "</div></div></li>";
@@ -469,7 +472,8 @@
       return n <= 1 ? (pl + W - pr) / 2 : pl + i / (n - 1) * (W - pl - pr);
     }
     function y(v) { return pt + (1 - (v - mn) / (mx - mn)) * (H - pt - pb); }
-    var last = V[n - 1], up = !isNum(base) || last >= base;
+    var sg = opts.sign === -1 ? -1 : 1;
+    var last = V[n - 1], up = !isNum(base) || (sg < 0 ? last <= base : last >= base);
     var s = '<svg viewBox="0 0 ' + W + " " + H + '" class="' + (up ? "up" : "down") + '" role="img" aria-label="' + esc(opts.label || "Price chart") + '">';
     var step = niceStep(mx - mn, 4);
     for (var g = Math.ceil(mn / step) * step; g <= mx; g += step) {
@@ -506,7 +510,7 @@
     el.innerHTML = s;
     var rangeTxt = opts.rangeText || "";
     var first = isNum(base) ? base : V[0], ch = last - first;
-    var idle = '<span class="' + cls(ch) + '">' + sMoney(ch) + " (" + sPct(first ? ch / first * 100 : null) + ")</span> " + esc(rangeTxt);
+    var idle = '<span class="' + cls(ch * sg) + '">' + sMoney(ch) + " (" + sPct(first ? ch / first * 100 : null) + ")</span> " + esc(rangeTxt);
     readout.innerHTML = idle;
     var svg = el.querySelector("svg"), xl = svg.querySelector(".xhair"), xd = svg.querySelector(".xdot");
     function at(ev) {
@@ -524,7 +528,7 @@
       var intra = rg.interval && /m$/.test(rg.interval);
       var when = intra ? fmtTime(T[k], !timeScale) + " ET" : fmtDay(T[k], { month: "short", day: "numeric", year: "numeric" });
       var c = v - first;
-      readout.innerHTML = "<strong>" + esc(opts.valFmt ? opts.valFmt(v) : money(v)) + '</strong> <span class="' + cls(c) + '">' + sMoney(c) + " (" + sPct(first ? c / first * 100 : null) + ")</span> " +
+      readout.innerHTML = "<strong>" + esc(opts.valFmt ? opts.valFmt(v) : money(v)) + '</strong> <span class="' + cls(c * sg) + '">' + sMoney(c) + " (" + sPct(first ? c / first * 100 : null) + ")</span> " +
         '<span class="subtle">' + esc(when) + "</span>";
     }
     function hide() { xl.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); readout.innerHTML = idle; }
@@ -588,7 +592,8 @@
     $("d-sym").textContent = r.sym;
     $("d-name").textContent = r.kind === "option" ? r.opt.label : (r.q.long_name || r.name || "");
     $("d-price").textContent = r.missing ? "No quote" : money(r.price);
-    $("d-chg").innerHTML = r.missing ? "" : '<span class="' + cls(r.chg) + '">' + sMoney(r.chg) + " (" + sPct(r.pct) + ")</span> <span class=\"subtle\">today" + (r.kind === "option" ? ", per share" : "") + "</span>";
+    $("d-chg").innerHTML = r.missing ? "" : '<span class="' + cls(isNum(r.chg) ? r.chg * (r.sign || 1) : null) + '">' + sMoney(r.chg) + " (" + sPct(r.pct) + ")</span> <span class=\"subtle\">today" +
+      (r.kind === "option" ? ", per share" + (r.sign === -1 ? '</span> <span class="subtle">· your P/L </span><span class="' + cls(r.posDay) + '">' + sMoney(r.posDay) + "</span>" : "</span>") : "</span>");
     $("d-asof").textContent = r.kind === "option" ? "Mark: " + (r.opt.quote_reused ? "last good bid/ask mid" : (r.opt.mark_source || "")) + (d.quotes_as_of_et ? " · as of " + d.quotes_as_of_et : "") :
       ((r.q.quote_time_et ? "As of " + r.q.quote_time_et : "") + (r.q.exchange ? " · " + r.q.exchange : "") + (d.market_label ? " · " + d.market_label : ""));
     // stats
@@ -649,7 +654,7 @@
       return;
     }
     var R = c.ranges || {}, key = R[ui.range] ? ui.range : (R["1D"] ? "1D" : Object.keys(R)[0]);
-    priceChart(el, ro, R[key], { label: r.sym + " price", rangeKey: key, rangeText: RANGE_WORDS[ui.range] + (key !== ui.range ? " (" + key + " shown)" : "") });
+    priceChart(el, ro, R[key], { label: r.sym + " price", rangeKey: key, sign: r.sign, rangeText: RANGE_WORDS[ui.range] + (key !== ui.range ? " (" + key + " shown)" : "") });
     noteEl.textContent = c.note || "";
   }
 
