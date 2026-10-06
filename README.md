@@ -41,6 +41,7 @@ data/option_state.json      last good option bid/ask mid per contract (session d
 dist/dashboard.html         single self-contained offline file (CSS/JS/data inline)
 scripts/build_data.py       builds data/portfolio.json from live quotes
 scripts/history_csv.py      writes data/history.csv (for Google Sheets IMPORTDATA)
+scripts/current_csv.py      writes data/current.csv (per-holding price/mark, source, value, as-of; for Sheets IMPORTDATA)
 scripts/build_standalone.py builds dist/dashboard.html
 .github/workflows/update.yml scheduled data refresh
 ```
