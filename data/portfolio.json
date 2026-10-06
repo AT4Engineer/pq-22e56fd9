@@ -1,20 +1,20 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 10:28:24 ET",
-  "generated_at_iso": "2026-10-06T10:28:24-04:00",
+  "generated_at_et": "2026-10-06 10:31:01 ET",
+  "generated_at_iso": "2026-10-06T10:31:01-04:00",
   "trade_date": "2026-10-06",
-  "quotes_as_of_et": "2026-10-06 10:28 ET",
+  "quotes_as_of_et": "2026-10-06 10:31 ET",
   "market_state": "REGULAR",
   "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16810.86,
+    "total": 16779.76,
     "prev_total": 16658.06,
-    "day_change": 152.8,
-    "day_change_pct": 0.92,
-    "stocks_value": 16346.16,
+    "day_change": 121.7,
+    "day_change_pct": 0.73,
+    "stocks_value": 16315.06,
     "cash": 964.7,
-    "cash_share_pct": 5.74,
+    "cash_share_pct": 5.75,
     "option_liability": -500.0
   },
   "positions": [
@@ -24,18 +24,18 @@
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 4,
-      "price": 174.79,
+      "price": 174.89,
       "prev_close": 171.09,
-      "day_change_per_share": 3.7,
-      "day_change": 14.8,
-      "day_change_pct": 2.16,
-      "value": 699.16,
-      "quote_time_et": "2026-10-06 10:28 ET",
+      "day_change_per_share": 3.8,
+      "day_change": 15.2,
+      "day_change_pct": 2.22,
+      "value": 699.56,
+      "quote_time_et": "2026-10-06 10:31 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 4.16
+      "share_pct": 4.17
     },
     {
       "symbol": "UPRO",
@@ -43,18 +43,18 @@
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "shares": 100,
-      "price": 156.47,
+      "price": 156.16,
       "prev_close": 153.89,
-      "day_change_per_share": 2.58,
-      "day_change": 258.0,
-      "day_change_pct": 1.68,
-      "value": 15647.0,
-      "quote_time_et": "2026-10-06 10:28 ET",
+      "day_change_per_share": 2.27,
+      "day_change": 226.5,
+      "day_change_pct": 1.47,
+      "value": 15615.5,
+      "quote_time_et": "2026-10-06 10:30 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 93.08
+      "share_pct": 93.06
     }
   ],
   "options": [
@@ -71,9 +71,9 @@
       "expiry_close_iso": "2026-10-16T16:00:00-04:00",
       "dte": 10,
       "expired": false,
-      "spot": 156.47,
-      "distance": 2.47,
-      "distance_pct": 1.6,
+      "spot": 156.16,
+      "distance": 2.16,
+      "distance_pct": 1.4,
       "status": "ITM",
       "itm": true,
       "covered": true,
@@ -82,19 +82,19 @@
       "last": 3.98,
       "mark": 5.0,
       "mark_source": "mid of bid/ask",
-      "intrinsic": 2.47,
-      "extrinsic": 2.53,
+      "intrinsic": 2.155,
+      "extrinsic": 2.845,
       "liability": -500.0,
       "day_change": -120.0,
       "prev_mark": 3.8,
       "prev_mark_source": "recorded mark for prior session 2026-10-05",
-      "iv": 0.4146,
+      "iv": 0.4324,
       "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.5771,
+      "prob_finish_itm": 0.5619,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -104,7 +104,7 @@
   ],
   "stats": {
     "days_tracked": 2,
-    "all_time_high": 16810.86,
+    "all_time_high": 16779.76,
     "best_day": {
       "date": "2026-10-05",
       "change": 242.52,
@@ -112,8 +112,8 @@
     },
     "worst_day": {
       "date": "2026-10-06",
-      "change": 152.8,
-      "pct": 0.92
+      "change": 121.7,
+      "pct": 0.73
     }
   },
   "history": [
@@ -125,9 +125,9 @@
     },
     {
       "date": "2026-10-06",
-      "total": 16810.86,
-      "day_change": 152.8,
-      "day_change_pct": 0.92
+      "total": 16779.76,
+      "day_change": 121.7,
+      "day_change_pct": 0.73
     }
   ],
   "paper": {
