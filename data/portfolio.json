@@ -1,18 +1,18 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 12:31:19 ET",
-  "generated_at_iso": "2026-10-06T12:31:19-04:00",
+  "generated_at_et": "2026-10-06 12:46:23 ET",
+  "generated_at_iso": "2026-10-06T12:46:23-04:00",
   "trade_date": "2026-10-06",
-  "quotes_as_of_et": "2026-10-06 12:31 ET",
+  "quotes_as_of_et": "2026-10-06 12:46 ET",
   "market_state": "REGULAR",
   "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16824.1,
+    "total": 16837.52,
     "prev_total": 16658.06,
-    "day_change": 166.04,
-    "day_change_pct": 1.0,
-    "stocks_value": 16399.4,
+    "day_change": 179.46,
+    "day_change_pct": 1.08,
+    "stocks_value": 16412.82,
     "cash": 964.7,
     "cash_share_pct": 5.73,
     "option_liability": -540.0
@@ -28,13 +28,13 @@
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 4,
-      "price": 173.6,
+      "price": 173.83,
       "prev_close": 171.09,
-      "day_change_per_share": 2.51,
-      "day_change": 10.04,
-      "day_change_pct": 1.47,
-      "value": 694.4,
-      "quote_time_et": "2026-10-06 12:31 ET",
+      "day_change_per_share": 2.74,
+      "day_change": 10.96,
+      "day_change_pct": 1.6,
+      "value": 695.32,
+      "quote_time_et": "2026-10-06 12:46 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
@@ -51,13 +51,13 @@
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "shares": 100,
-      "price": 157.05,
+      "price": 157.18,
       "prev_close": 153.89,
-      "day_change_per_share": 3.16,
-      "day_change": 316.0,
-      "day_change_pct": 2.05,
-      "value": 15705.0,
-      "quote_time_et": "2026-10-06 12:30 ET",
+      "day_change_per_share": 3.29,
+      "day_change": 328.5,
+      "day_change_pct": 2.13,
+      "value": 15717.5,
+      "quote_time_et": "2026-10-06 12:46 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
@@ -82,30 +82,30 @@
       "expiry_close_iso": "2026-10-16T16:00:00-04:00",
       "dte": 10,
       "expired": false,
-      "spot": 157.05,
-      "distance": 3.05,
-      "distance_pct": 1.98,
+      "spot": 157.18,
+      "distance": 3.18,
+      "distance_pct": 2.06,
       "status": "ITM",
       "itm": true,
       "covered": true,
-      "bid": 4.4,
-      "ask": 6.4,
+      "bid": 4.5,
+      "ask": 6.3,
       "last": 3.98,
       "mark": 5.4,
       "mark_source": "mid of bid/ask",
-      "intrinsic": 3.05,
-      "extrinsic": 2.35,
+      "intrinsic": 3.175,
+      "extrinsic": 2.225,
       "liability": -540.0,
       "day_change": -160.0,
       "prev_mark": 3.8,
       "prev_mark_source": "recorded mark for prior session 2026-10-05",
-      "iv": 0.4382,
+      "iv": 0.4211,
       "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.5917,
+      "prob_finish_itm": 0.6009,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -115,7 +115,7 @@
   ],
   "stats": {
     "days_tracked": 2,
-    "all_time_high": 16824.1,
+    "all_time_high": 16837.52,
     "best_day": {
       "date": "2026-10-05",
       "change": 242.52,
@@ -123,8 +123,8 @@
     },
     "worst_day": {
       "date": "2026-10-06",
-      "change": 166.04,
-      "pct": 1.0
+      "change": 179.46,
+      "pct": 1.08
     }
   },
   "history": [
@@ -136,9 +136,9 @@
     },
     {
       "date": "2026-10-06",
-      "total": 16824.1,
-      "day_change": 166.04,
-      "day_change_pct": 1.0
+      "total": 16837.52,
+      "day_change": 179.46,
+      "day_change_pct": 1.08
     }
   ],
   "paper": {
@@ -277,21 +277,21 @@
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
-      "price": 173.6,
+      "price": 173.83,
       "prev_close": 171.09,
-      "change": 2.51,
-      "change_pct": 1.47,
-      "quote_time_et": "2026-10-06 12:31 ET",
+      "change": 2.74,
+      "change_pct": 1.6,
+      "quote_time_et": "2026-10-06 12:46 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 172.09,
         "day_high": 176.42,
         "day_low": 172.0,
-        "volume": 68458519.0,
+        "volume": 70287710.0,
         "avg_volume": 91955409.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 2288357212160.0,
+        "market_cap": 2291388907520.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -445,7 +445,19 @@
         ],
         [
           180,
-          173.6
+          173.84
+        ],
+        [
+          185,
+          174.11
+        ],
+        [
+          190,
+          173.86
+        ],
+        [
+          195,
+          173.83
         ]
       ],
       "spark_base": 171.09
@@ -456,17 +468,17 @@
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
-      "price": 157.05,
+      "price": 157.18,
       "prev_close": 153.89,
-      "change": 3.16,
-      "change_pct": 2.05,
-      "quote_time_et": "2026-10-06 12:30 ET",
+      "change": 3.29,
+      "change_pct": 2.13,
+      "quote_time_et": "2026-10-06 12:46 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 155.82,
         "day_high": 157.88,
         "day_low": 155.71,
-        "volume": 1036300.0,
+        "volume": 1052035.0,
         "avg_volume": 1935171.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -612,7 +624,7 @@
         ],
         [
           165,
-          157.32
+          157.3
         ],
         [
           170,
@@ -624,7 +636,19 @@
         ],
         [
           180,
-          157.05
+          157.19
+        ],
+        [
+          185,
+          157.01
+        ],
+        [
+          190,
+          157.21
+        ],
+        [
+          195,
+          157.18
         ]
       ],
       "spark_base": 153.89
@@ -635,17 +659,17 @@
       "name": "State Street SPDR S&P 500 ETF Trust",
       "long_name": "State Street SPDR S&P 500 ETF Trust",
       "exchange": "NYSEArca",
-      "price": 780.31,
+      "price": 780.46,
       "prev_close": 774.83,
-      "change": 5.48,
-      "change_pct": 0.71,
-      "quote_time_et": "2026-10-06 12:31 ET",
+      "change": 5.63,
+      "change_pct": 0.73,
+      "quote_time_et": "2026-10-06 12:46 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 778.15,
         "day_high": 781.62,
         "day_low": 777.96,
-        "volume": 14818216.0,
+        "volume": 15391252.0,
         "avg_volume": 44119376.0,
         "high_52w": 781.62,
         "low_52w": 629.28,
@@ -791,7 +815,7 @@
         ],
         [
           165,
-          780.66
+          780.67
         ],
         [
           170,
@@ -799,11 +823,23 @@
         ],
         [
           175,
-          780.29
+          780.3
         ],
         [
           180,
-          780.33
+          780.52
+        ],
+        [
+          185,
+          780.3
+        ],
+        [
+          190,
+          780.38
+        ],
+        [
+          195,
+          780.41
         ]
       ],
       "spark_base": 774.83
@@ -969,6 +1005,18 @@
         [
           180,
           5.4
+        ],
+        [
+          185,
+          5.4
+        ],
+        [
+          190,
+          5.4
+        ],
+        [
+          195,
+          5.4
         ]
       ],
       "spark_base": 3.8,
@@ -976,7 +1024,7 @@
     }
   },
   "caveats": [
-    "UPRO Oct 16 2026 $154 call: wide bid/ask (4.40 x 6.40); the mid-price mark is approximate.",
+    "UPRO Oct 16 2026 $154 call: wide bid/ask (4.50 x 6.30); the mid-price mark is approximate.",
     "Paper lab: showing saved snapshot (data through 2026-10-05).",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
