@@ -31,7 +31,7 @@ jobs:
         run: pip install yfinance pandas
 
       - name: Build data/portfolio.json
-        run: python scripts/build_data.py
+        run: python scripts/build_data.py && python scripts/history_csv.py
 
       - name: Build standalone dist/dashboard.html
         env:
