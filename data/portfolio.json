@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 18:48:37 ET",
-  "generated_at_iso": "2026-10-06T18:48:37-04:00",
+  "generated_at_et": "2026-10-06 19:24:26 ET",
+  "generated_at_iso": "2026-10-06T19:24:26-04:00",
   "trade_date": "2026-10-06",
   "quotes_as_of_et": "2026-10-06 16:00 ET",
   "market_state": "POST",
@@ -37,7 +37,7 @@
       "quote_time_et": "2026-10-06 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 169.75,
+      "ext_price": 170.05,
       "ext_label": "post-market",
       "share_pct": 4.08
     },
@@ -60,7 +60,7 @@
       "quote_time_et": "2026-10-06 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 156.87,
+      "ext_price": 156.96,
       "ext_label": "post-market",
       "share_pct": 92.83
     }
@@ -105,7 +105,7 @@
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.5759,
+      "prob_finish_itm": 0.576,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -142,6 +142,178 @@
     }
   ],
   "watchlist": [],
+  "roll": {
+    "history": {
+      "rows": [
+        {
+          "label": "UPRO Oct 16 2026 $154 call",
+          "underlying": "UPRO",
+          "expiry": "2026-10-16",
+          "strike": 154.0,
+          "opened": null,
+          "premium": null,
+          "premium_source": null,
+          "closed": null,
+          "close_action": "Open",
+          "close_cost": null,
+          "rolled_to": null,
+          "roll_id": null,
+          "open": true,
+          "net": null,
+          "cumulative": 0.0
+        }
+      ],
+      "premiums_total": 0.0,
+      "buybacks_total": 0.0,
+      "net_total": 0.0,
+      "missing_premium": true
+    },
+    "current": {
+      "label": "UPRO Oct 16 2026 $154 call",
+      "contract": "UPRO261016C00154000",
+      "key": "UPRO|2026-10-16|154|call",
+      "underlying": "UPRO",
+      "strike": 154.0,
+      "expiry": "2026-10-16",
+      "contracts": 1,
+      "multiplier": 100,
+      "spot": 156.41,
+      "itm": true,
+      "mark": 4.45,
+      "bid": 3.1,
+      "ask": 5.8,
+      "mid": 4.45,
+      "mark_source": "mid of bid/ask",
+      "quote_reused": false,
+      "quote_as_of_et": null,
+      "buyback_ask": 580.0,
+      "buyback_mid": 445.0,
+      "buyback_mark": 445.0,
+      "premium_received_per_share": null,
+      "premium_received": null,
+      "pl_if_closed_ask": null,
+      "pl_if_closed_mid": null,
+      "deadline_iso": "2026-10-16T16:00:00-04:00",
+      "deadline_text": "Buy to close before 4:00 PM ET Fri Oct 16 to keep your shares",
+      "expired": false
+    },
+    "next": {
+      "expiry": "2026-11-20",
+      "expiry_label": "Fri Nov 20 2026",
+      "days": 45,
+      "spot": 156.41,
+      "contracts": 1,
+      "multiplier": 100,
+      "quote_note": null,
+      "strikes": [
+        {
+          "strike": 154.0,
+          "contract": "UPRO261120C00154000",
+          "bid": 8.3,
+          "ask": 11.2,
+          "last": 9.8,
+          "iv": 0.453,
+          "oi": 15.0,
+          "volume": 1.0,
+          "last_trade_et": "2026-09-22 12:22 ET",
+          "mid": 9.75,
+          "atm": false
+        },
+        {
+          "strike": 155.0,
+          "contract": "UPRO261120C00155000",
+          "bid": 7.6,
+          "ask": 10.2,
+          "last": 8.0,
+          "iv": 0.4302,
+          "oi": 183.0,
+          "volume": 21.0,
+          "last_trade_et": "2026-10-05 12:43 ET",
+          "mid": 8.9,
+          "atm": false
+        },
+        {
+          "strike": 156.0,
+          "contract": "UPRO261120C00156000",
+          "bid": 7.0,
+          "ask": 10.9,
+          "last": 6.8,
+          "iv": 0.4839,
+          "oi": 14.0,
+          "volume": 4.0,
+          "last_trade_et": "2026-09-24 13:02 ET",
+          "mid": 8.95,
+          "atm": true
+        },
+        {
+          "strike": 157.0,
+          "contract": "UPRO261120C00157000",
+          "bid": 6.5,
+          "ask": 10.4,
+          "last": 8.62,
+          "iv": 0.4823,
+          "oi": 75.0,
+          "volume": 3.0,
+          "last_trade_et": "2026-10-06 14:20 ET",
+          "mid": 8.45,
+          "atm": false
+        },
+        {
+          "strike": 158.0,
+          "contract": "UPRO261120C00158000",
+          "bid": 6.0,
+          "ask": 8.3,
+          "last": 8.4,
+          "iv": 0.4078,
+          "oi": 60.0,
+          "volume": 1.0,
+          "last_trade_et": "2026-10-06 11:37 ET",
+          "mid": 7.15,
+          "atm": false
+        }
+      ],
+      "atm_strike": 156.0,
+      "contract": "UPRO261120C00156000",
+      "bid": 7.0,
+      "ask": 10.9,
+      "mid": 8.95,
+      "last": 6.8,
+      "iv": 0.4839,
+      "oi": 14.0,
+      "volume": 4.0,
+      "last_trade_et": "2026-09-24 13:02 ET",
+      "est_premium": 700.0,
+      "net_roll": 120.0,
+      "premium_pct": 4.48,
+      "annualized_pct": 36.3,
+      "breakeven": 149.41,
+      "called_away_value": 15600.0,
+      "max_gain_vs_today": 659.0,
+      "above_text": "Above $156 on Fri Nov 20 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $156 ($15,600.00). You keep $700.00 either way.",
+      "below_text": "Below $156: the call expires worthless. You keep $700.00 and the 100 shares, which are worth less if UPRO fell.",
+      "underlying": "UPRO",
+      "quote_time_et": "2026-10-06 16:00 ET"
+    },
+    "dividends": [
+      {
+        "ex_date": "2026-09-23",
+        "amount": 0.27
+      },
+      {
+        "ex_date": "2026-06-24",
+        "amount": 0.299
+      },
+      {
+        "ex_date": "2026-03-25",
+        "amount": 0.222
+      },
+      {
+        "ex_date": "2025-12-24",
+        "amount": 0.34
+      }
+    ],
+    "notes": []
+  },
   "quotes": {
     "SPCX": {
       "symbol": "SPCX",
@@ -159,7 +331,7 @@
         "open": 172.09,
         "day_high": 176.42,
         "day_low": 171.39,
-        "volume": 104751562.0,
+        "volume": 106392820.0,
         "avg_volume": 91955409.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
