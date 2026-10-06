@@ -1,10 +1,13 @@
 /* Portfolio Tracker service worker: cache the app shell, always go network-first for data/ files. */
-const CACHE = "pq-shell-v4";
+const CACHE = "pq-shell-v5";
 const SHELL = [
   "./",
   "index.html",
+  "display.html",
   "assets/style.css",
   "assets/app.js",
+  "assets/display.css",
+  "assets/display.js",
   "assets/favicon.svg",
   "assets/icons/icon-192.png",
   "assets/icons/icon-512.png",
@@ -47,13 +50,15 @@ self.addEventListener("fetch", (e) => {
 
   // Page navigations: network-first so updates show up, cached shell offline.
   if (req.mode === "navigate") {
+    const path = url.pathname;
+    const shellKey = /display\.html$/.test(path) ? "display.html" : "index.html";
     e.respondWith(
       fetch(req)
         .then((res) => {
-          if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put("index.html", copy)); }
+          if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(shellKey, copy)); }
           return res;
         })
-        .catch(() => caches.match("index.html").then((r) => r || caches.match("./")))
+        .catch(() => caches.match(shellKey).then((r) => r || caches.match("index.html").then((r2) => r2 || caches.match("./"))))
     );
     return;
   }

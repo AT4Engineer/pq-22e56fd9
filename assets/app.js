@@ -1,7 +1,7 @@
 /* Portfolio Tracker dashboard. Plain JS, no libraries, no external requests except its own data files.
  *
  * Views (hash routes): #stocks (iOS Stocks-style list, default on phones; #stocks/<SYMBOL> opens the detail
- * panel), #overview (summary, positions, covered call, history, paper trading; default on wide screens),
+ * panel), #overview (summary, positions, covered call, history; default on wide screens),
  * #transactions (data/transactions.json, newest first) and #edit (builds a prefilled GitHub issue that the
  * apply-trade workflow turns into a holdings update).
  *
@@ -294,47 +294,6 @@
     $("chart-foot").textContent = foot;
   }
 
-  // ------------------------------------------------------------------ paper trading
-  function renderPaper(d) {
-    var P = d.paper, panel = $("paper-panel");
-    if (!P || !P.champion || !P.buy_hold) { panel.hidden = true; return; }
-    panel.hidden = false;
-    var C = P.champion, B = P.buy_hold, R = P.readiness || {}, WF = P.walk_forward || {};
-    function row(name, f) {
-      var ret = isNum(f.return) ? f.return * 100 : null;
-      var posTxt = esc(f.position || "n/a");
-      return "<tr><td>" + esc(name) + '<div class="subtle show-m">Position: ' + posTxt + "</div></td>" +
-        '<td class="num">' + money0(f.equity) + '</td><td class="num"><span class="' + cls(ret) + '">' + sPct(ret) + "</span></td>" +
-        '<td class="num">' + (isNum(f.max_dd) ? pct(f.max_dd * 100, 1) : "n/a") + '</td><td class="hide-m">' + posTxt + "</td></tr>";
-    }
-    var html = '<p class="paper-meta">Trend strategy: ' + esc(C.label || C.id) + ". Started " + esc(P.start_date ? fmtDate(P.start_date, { month: "short", day: "numeric", year: "numeric" }) : "n/a") +
-      " · " + (P.forward_days || 0) + " forward trading day" + (P.forward_days === 1 ? "" : "s") +
-      " · data through " + esc(P.data_through || "n/a") + (isNum(P.spy_close) ? " · SPY close " + money(P.spy_close) : "") + "</p>";
-    html += '<div class="table-scroll"><table class="data compact"><thead><tr><th>Strategy</th><th class="num">Value</th><th class="num">Return</th><th class="num">Max drawdown</th><th class="hide-m">Position</th></tr></thead><tbody>' +
-      row("Trend strategy", C) + row("Buy-and-hold SPY", B) + "</tbody></table></div>";
-    if (C.target_next) html += '<p class="note">Next session target for the trend strategy: ' + esc(C.target_next) + (P.signal_change ? " (" + esc(P.signal_change) + ")" : "") + ".</p>";
-    if (P.forward_note) html += '<p class="note">' + esc(P.forward_note.charAt(0).toUpperCase() + P.forward_note.slice(1)) + ".</p>";
-
-    var crit = (R.criteria || []).map(function (c) {
-      return "<tr><td>" + esc(c.description) + '<div class="subtle">Needs ' + esc(c.threshold) + " · now " + esc(c.current) + "</div></td>" +
-        '<td class="num ' + (c.pass ? "crit-ok" : "crit-no") + '">' + (c.pass ? "Met" : "Not met") + "</td></tr>";
-    }).join("");
-    var status = String(R.status || "n/a").toLowerCase();
-    status = status.charAt(0).toUpperCase() + status.slice(1);
-    html += '<div class="paper-cols"><div><h3>Readiness for real money: <span class="ready-status">' + esc(status) + "</span> (criteria met " +
-      (R.passed != null ? R.passed : "?") + " of " + (R.total != null ? R.total : "?") + ")</h3>" +
-      '<div class="table-scroll"><table class="data compact"><tbody>' + crit + "</tbody></table></div></div>";
-    var wfRows = [
-      ["Annual return (CAGR)", isNum(WF.oos_cagr) ? pct(WF.oos_cagr * 100, 1) : "n/a", isNum(WF.oos_bh_cagr) ? pct(WF.oos_bh_cagr * 100, 1) : "n/a"],
-      ["Sharpe ratio", isNum(WF.oos_sharpe) ? WF.oos_sharpe.toFixed(2) : "n/a", isNum(WF.oos_bh_sharpe) ? WF.oos_bh_sharpe.toFixed(2) : "n/a"],
-      ["Max drawdown", isNum(WF.oos_max_dd) ? pct(WF.oos_max_dd * 100, 1) : "n/a", isNum(WF.oos_bh_max_dd) ? pct(WF.oos_bh_max_dd * 100, 1) : "n/a"]
-    ].map(function (r) { return "<tr><td>" + r[0] + '</td><td class="num">' + r[1] + '</td><td class="num">' + r[2] + "</td></tr>"; }).join("");
-    html += "<div><h3>Historical walk-forward test" + (isNum(WF.oos_years) ? " (" + WF.oos_years.toFixed(1) + " years, out of sample)" : "") + "</h3>" +
-      '<div class="table-scroll"><table class="data compact"><thead><tr><th></th><th class="num">Trend</th><th class="num">Buy-and-hold</th></tr></thead><tbody>' + wfRows + "</tbody></table></div>" +
-      '<p class="note">Windows won: ' + esc(WF.windows_won || "n/a") + (WF.overfit_flag ? " · flagged for possible overfitting" : "") + ".</p>" +
-      ((R.notes || []).length ? '<p class="note">' + esc(R.notes[0]) + "</p>" : "") + "</div></div>";
-    $("paper").innerHTML = html;
-  }
 
   // ================================================================== Stocks view (iOS Stocks-style)
   var BASE_URL = STANDALONE ? (CFG.remoteUrl ? CFG.remoteUrl.replace(/data\/portfolio\.json.*$/, "") : "") : "";
@@ -601,13 +560,18 @@
     var idle = '<span class="' + cls(ch * sg) + '">' + sMoney(ch) + " (" + sPct(first ? ch / first * 100 : null) + ")</span> " + esc(rangeTxt);
     readout.innerHTML = idle;
     var svg = el.querySelector("svg"), xl = svg.querySelector(".xhair"), xd = svg.querySelector(".xdot");
+    function clientXY(ev) {
+      if (ev.touches && ev.touches.length) return { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
+      if (ev.changedTouches && ev.changedTouches.length) return { x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY };
+      return { x: ev.clientX, y: ev.clientY };
+    }
     function at(ev) {
-      var rect = svg.getBoundingClientRect(), px = (ev.clientX - rect.left) * (W / rect.width);
+      var pt = clientXY(ev), rect = svg.getBoundingClientRect(), px = (pt.x - rect.left) * (W / rect.width);
       var bi = 0, bd = Infinity;
       for (var k = 0; k < n; k++) { var dd = Math.abs(x(k) - px); if (dd < bd) { bd = dd; bi = k; } }
       return bi;
     }
-    var shown = false;
+    var shown = false, dragging = false;
     function show(ev) {
       if (!n) return;
       var k = at(ev), v = V[k];
@@ -625,11 +589,63 @@
         '<span class="subtle">' + esc(when) + "</span>";
     }
     function hide() { shown = false; xl.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); readout.innerHTML = idle; }
-    svg.addEventListener("pointermove", show);
-    svg.addEventListener("pointerdown", show);
-    svg.addEventListener("pointerleave", hide);
-    svg.addEventListener("pointercancel", hide);
-    svg.addEventListener("pointerup", function (ev) { if (ev.pointerType !== "mouse") setTimeout(hide, 1500); });
+    function setDrag(on) {
+      dragging = on;
+      el.classList.toggle("dragging", on);
+      document.body.classList.toggle("chart-dragging", on);
+      // global flag so sheet swipe / pull-to-refresh ignore this gesture
+      window.__pqChartDrag = on ? (window.__pqChartDrag || 0) + 1 : Math.max(0, (window.__pqChartDrag || 1) - 1);
+      if (!window.__pqChartDrag) document.body.classList.remove("chart-dragging");
+    }
+    function onTouchStart(ev) {
+      if (!ev.touches || ev.touches.length !== 1) return;
+      if (ev.cancelable) ev.preventDefault();
+      setDrag(true);
+      show(ev);
+    }
+    function onTouchMove(ev) {
+      if (!dragging) return;
+      if (ev.cancelable) ev.preventDefault();
+      show(ev);
+    }
+    function onTouchEnd(ev) {
+      if (!dragging) return;
+      setDrag(false);
+      setTimeout(hide, 1500);
+    }
+    // Touch: lock vertical page scroll / sheet drag / pull-to-refresh while sliding the crosshair.
+    svg.addEventListener("touchstart", onTouchStart, { passive: false });
+    svg.addEventListener("touchmove", onTouchMove, { passive: false });
+    svg.addEventListener("touchend", onTouchEnd);
+    svg.addEventListener("touchcancel", onTouchEnd);
+    // Mouse / pen via Pointer Events (touch is handled above so we don't double-fire).
+    svg.addEventListener("pointerdown", function (ev) {
+      if (ev.pointerType === "touch") return;
+      setDrag(true);
+      show(ev);
+      try { svg.setPointerCapture(ev.pointerId); } catch (e) { /* older browsers */ }
+    });
+    svg.addEventListener("pointermove", function (ev) {
+      if (ev.pointerType === "touch") return;
+      if (ev.pointerType === "mouse" && ev.buttons === 0 && !dragging) { show(ev); return; } // hover
+      if (!dragging) return;
+      show(ev);
+    });
+    svg.addEventListener("pointerup", function (ev) {
+      if (ev.pointerType === "touch") return;
+      if (!dragging) return;
+      setDrag(false);
+      hide();
+    });
+    svg.addEventListener("pointercancel", function (ev) {
+      if (ev.pointerType === "touch") return;
+      if (dragging) setDrag(false);
+      hide();
+    });
+    svg.addEventListener("pointerleave", function (ev) {
+      if (ev.pointerType === "touch" || dragging) return;
+      hide();
+    });
   }
 
   // Resample a polyline to N points evenly spaced in x (for morphing between ranges).
@@ -733,7 +749,7 @@
   function sheetSwipeInit() {
     var panel = $("detail"), drag = null;
     panel.addEventListener("touchstart", function (e) {
-      if (wide() || e.touches.length !== 1 || panel.hidden) return;
+      if (wide() || e.touches.length !== 1 || panel.hidden || window.__pqChartDrag) return;
       var inBar = !!(e.target.closest && e.target.closest(".detail-bar"));
       if (!inBar && (panel.scrollTop > 0 || (e.target.closest && e.target.closest(".pchart, .ranges")))) return;
       drag = { y0: e.touches[0].clientY, x0: e.touches[0].clientX, t0: Date.now(), dy: 0, bar: inBar, on: false };
@@ -1150,7 +1166,7 @@
     function set(y, p, o) { el.style.setProperty("--ptr-y", y.toFixed(1) + "px"); el.style.setProperty("--ptr-p", p.toFixed(3)); el.style.opacity = o; }
     document.addEventListener("touchstart", function (e) {
       st = null;
-      if (busy || e.touches.length !== 1 || (window.scrollY || 0) > 0 || document.body.classList.contains("sheet-open")) return;
+      if (busy || e.touches.length !== 1 || window.__pqChartDrag || (window.scrollY || 0) > 0 || document.body.classList.contains("sheet-open")) return;
       if (e.target.closest && e.target.closest(".pchart, .detail, input, select, textarea, .tabs, .ranges")) return;
       st = { y0: e.touches[0].clientY, x0: e.touches[0].clientX, dy: 0, on: false };
     }, { passive: true });
@@ -1211,8 +1227,7 @@
     try {
       renderHeader(d); renderSummary(d); renderPositions(d); renderOption(d);
       renderChart(d, ui.view === "overview" && !ui.ovDrawn); if (ui.view === "overview") ui.ovDrawn = true;
-      renderPaper(d);
-      renderStocks(d); renderEditSide(d);
+            renderStocks(d); renderEditSide(d);
       ui.lastPrices = priceMap(d); ui.lastTotal = (d.account || {}).total;
       $("app").setAttribute("aria-busy", "false");
       var eb = $("render-error"); if (eb) eb.remove();

@@ -18,8 +18,9 @@ The page has four tabs (hash routes, so the browser Back button works):
 | Tab | Contents |
 |---|---|
 | **Stocks** (`#stocks`, default on phones) | iOS Stocks-style list: account value + day change on top; one row per holding (stocks and the short option) and per watchlist symbol with name, intraday sparkline, price and a change box. Tap the change box to cycle day change %, day change $ and market value (market cap for watchlist symbols). Tap a row for the detail panel (`#stocks/<SYMBOL>`; a full-screen sheet on phones, a side panel on wide screens): price chart with 1D / 1W / 1M / 3M / 1Y / ALL, hover/touch crosshair with exact time and value, stats (open, high, low, prev close, 52-week high/low, volume, market cap or net assets) and your position (shares, avg cost, market value, day gain, unrealized P/L). Below the list: account value chart with the same ranges. |
-| **Overview** (`#overview`, default on wide screens) | The original dashboard (summary, positions table, covered call, daily history, paper trading) |
+| **Overview** (`#overview`, default on wide screens) | Summary, positions table, covered call, daily history |
 | **Transactions** (`#transactions`) | Everything recorded through the Edit form, newest first (`data/transactions.json`) |
+| **Display** (`display.html`) | Full-screen second-monitor view: large total, day change, account chart, holdings strip. No navigation or edit. |
 | **Edit** (`#edit`) | Form to record a trade; opens a prefilled GitHub issue that a workflow applies (see below) |
 
 Everything refreshes every 60 s without reloading (the data itself changes when the update workflow runs).
@@ -68,7 +69,6 @@ Local (no GitHub) equivalent: `python scripts/apply_trade.py --txn trade.json [-
 | Positions | Symbol, name, qty, price, market value, day $, day %, % of portfolio (stocks, the short call, cash, total) |
 | Covered call | Plain-language assignment outcome, mark, bid/ask, liability, underlying vs strike and distance, in/out of the money, days to expiry, intrinsic/time value |
 | Account value history | Plain line chart, one point per trading day |
-| Paper trading | SPY trend strategy vs buy-and-hold (simulation): values, returns, readiness criteria met X of 7 |
 | Footer | Last updated time (ET), data-delay note, caveats |
 
 Green/red is used only for gains and losses.
@@ -88,7 +88,6 @@ data/charts/<SYMBOL>.json   precomputed price charts per symbol (1D 5m, 1W 30m, 
 data/intraday.json          account value every minute of the session, rolling 7 trading days (+ intraday.csv)
 data/option_marks.json      option bid/ask marks recorded on each regular-session run
 data/history.json           one point per trading day (appended/updated by the script)
-data/paper.json             snapshot of the SPY paper lab
 data/portfolio.json         the single file the page loads
 data/option_state.json      last good option bid/ask mid per contract (session date + timestamp)
 dist/dashboard.html         single self-contained offline file (CSS/JS/data inline)
@@ -109,7 +108,7 @@ tests/test_apply_trade.py   unit tests for every transaction type + the CI flow 
 
 ```bash
 pip install yfinance pandas
-python scripts/build_data.py          # refresh data/portfolio.json (+ history, paper snapshot)
+python scripts/build_data.py          # refresh data/portfolio.json (+ history)
 python scripts/build_standalone.py    # refresh dist/dashboard.html
 python -m http.server 8000            # then open http://localhost:8000
 ```
@@ -119,9 +118,6 @@ use the local server, GitHub Pages, or the standalone file.
 
 `build_data.py --force` rewrites the files even if no price changed (normally it skips writing
 when nothing but the timestamp would change, to avoid empty commits; the option odds and days-to-expiry still change over time).
-
-The paper-lab panel is rebuilt from a sibling `../spy-paper-lab` folder when it exists (or
-`PAPER_LAB_DIR`); otherwise the saved `data/paper.json` snapshot is used.
 
 ## Standalone offline file
 

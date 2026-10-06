@@ -139,13 +139,6 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
 .chart .series { fill: none; stroke: var(--line); stroke-width: 2; }
 .chart .pt { fill: var(--line); }
 
-/* paper trading */
-.paper-meta { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
-.paper-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
-.paper-cols h3 { font-size: 13px; margin: 0 0 8px; font-weight: 650; }
-.ready-status { font-weight: 650; }
-.crit-ok { font-weight: 600; }
-.crit-no { color: var(--muted); }
 
 /* footer */
 .foot { color: var(--muted); font-size: 12.5px; padding-top: 4px; padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
@@ -174,7 +167,6 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
   .stat-value.big { font-size: 26px; }
   .card { padding: 12px; }
   .kv-grid { grid-template-columns: 1fr; }
-  .paper-cols { grid-template-columns: 1fr; }
 
   /* positions table becomes one block per row */
   table.positions thead { display: none; }
@@ -260,7 +252,7 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
 .ranges button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
 .ranges button:disabled { opacity: 0.35; cursor: default; }
 .readout { min-height: 20px; font-size: 13.5px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pchart { width: 100%; min-height: 160px; touch-action: pan-y; }
+.pchart { width: 100%; min-height: 160px; touch-action: none; -ms-touch-action: none; }
 .pchart svg { display: block; width: 100%; height: auto; user-select: none; -webkit-user-select: none; }
 .pchart .gridline { stroke: var(--grid); stroke-width: 1; }
 .pchart .axis { fill: var(--muted); font-size: 11px; }
@@ -595,6 +587,11 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   .sk-bar, .sk-chart { animation: none !important; }
 }
 
+/* While a finger is sliding the chart crosshair, freeze page / sheet scroll */
+body.chart-dragging { overflow: hidden; overscroll-behavior: none; touch-action: none; }
+body.chart-dragging .detail { overscroll-behavior: none; }
+.pchart.dragging { touch-action: none; cursor: ew-resize; }
+
 </style>
 </head>
 <body>
@@ -641,7 +638,7 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
             <div class="pchart" id="ac-chart"><div class="sk-chart" aria-hidden="true"></div></div>
             <p class="note" id="ac-note"></p>
           </section>
-          <p class="more-link"><a href="#overview">Full overview: positions table, covered call, history, paper trading &rarr;</a></p>
+          <p class="more-link"><a href="#overview">Full overview: positions table, covered call, history &rarr;</a></p>
         </div>
 
         <aside class="detail" id="detail" aria-label="Symbol detail" hidden>
@@ -669,7 +666,7 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
       <div class="sheet-backdrop" id="sheet-backdrop" aria-hidden="true"></div>
     </div>
 
-    <!-- ============================== Overview (summary, positions, covered call, history, paper) -->
+    <!-- ============================== Overview (summary, positions, covered call, history) -->
     <div class="view" id="view-overview" data-view="overview" hidden>
     <p class="view-link"><a href="#stocks">Stocks view: list with charts for each holding and the watchlist &rarr;</a></p>
     <!-- Summary -->
@@ -734,11 +731,6 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
       <p class="note" id="chart-foot"></p>
     </section>
 
-    <!-- Paper trading -->
-    <section class="card" id="paper-panel" aria-labelledby="paper-title" hidden>
-      <h2 id="paper-title" class="card-title">Paper trading: trend strategy vs buy-and-hold <span class="card-sub">simulation only, no real money</span></h2>
-      <div id="paper"></div>
-    </section>
     </div>
 
     <!-- ============================== Transactions -->
@@ -857,13 +849,13 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   </footer>
 
   <noscript><p class="noscript">This dashboard needs JavaScript enabled.</p></noscript>
-  <script id="embedded-data" type="application/json">{"schema":2,"generated_at_et":"2026-10-06 18:17:43 ET","generated_at_iso":"2026-10-06T18:17:43-04:00","trade_date":"2026-10-06","quotes_as_of_et":"2026-10-06 16:00 ET","market_state":"POST","market_label":"After hours","delay_note":"Prices may be delayed ~15 minutes. Tracking only - not financial advice.","account":{"total":16848.38,"prev_total":16658.06,"day_change":190.32,"day_change_pct":1.14,"stocks_value":16328.68,"cash":964.7,"cash_share_pct":5.73,"option_liability":-445.0},"positions":[{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"SPCX","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","shares":4,"price":171.92,"prev_close":171.09,"day_change_per_share":0.83,"day_change":3.32,"day_change_pct":0.49,"value":687.68,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POST","price_source":"regular-session close","ext_price":172.57,"ext_label":"post-market","share_pct":4.08},{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"UPRO","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","shares":100,"price":156.41,"prev_close":153.89,"day_change_per_share":2.52,"day_change":252.0,"day_change_pct":1.64,"value":15641.0,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POST","price_source":"regular-session close","ext_price":156.96,"ext_label":"post-market","share_pct":92.83}],"options":[{"open_price":null,"unrealized":null,"key":"UPRO|2026-10-16|154|call","label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","underlying":"UPRO","type":"call","position":"short","contracts":1,"multiplier":100,"strike":154.0,"expiry":"2026-10-16","expiry_close_iso":"2026-10-16T16:00:00-04:00","dte":10,"expired":false,"spot":156.41,"distance":2.41,"distance_pct":1.56,"status":"ITM","itm":true,"covered":true,"bid":3.1,"ask":5.8,"last":3.98,"mark":4.45,"mark_source":"mid of bid/ask","intrinsic":2.41,"extrinsic":2.04,"liability":-445.0,"day_change":-65.0,"prev_mark":3.8,"prev_mark_source":"recorded mark for prior session 2026-10-05","iv":0.418,"open_interest":747.0,"volume":3.0,"last_trade_et":"2026-10-05 15:05 ET","assignment_risk":"HIGH","assignment_note":"In the money - likely assigned at expiry if it stays above the strike.","prob_finish_itm":0.5758,"assigned_proceeds":15400.0,"shares_at_risk":100,"quote_quality":3,"quote_reused":false,"quote_as_of_et":null}],"stats":{"days_tracked":2,"all_time_high":16848.38,"best_day":{"date":"2026-10-05","change":242.52,"pct":1.48},"worst_day":{"date":"2026-10-06","change":190.32,"pct":1.14}},"history":[{"date":"2026-10-05","total":16658.06,"day_change":242.52,"day_change_pct":1.48},{"date":"2026-10-06","total":16848.38,"day_change":190.32,"day_change_pct":1.14}],"paper":{"simulation_only":true,"source":"spy-paper-lab (state/paper_ledger.csv, champion.json, readiness.json)","data_through":"2026-10-05","start_date":"2026-10-05","forward_days":0,"spy_close":774.83,"signal_change":"START: target LONG at next open","champion":{"id":"trend_sma(n=100,freq=D,band=0.0)","label":"Trend filter: SPY above its 100-day average (daily check)","equity":100000.0,"return":0.0,"drawdown_now":0.0,"max_dd":0.0,"position":"CASH","target_next":"LONG SPY","trades":0,"sharpe":null,"installed":"2026-10-05"},"buy_hold":{"label":"Buy-and-hold SPY","equity":100000.0,"return":0.0,"drawdown_now":0.0,"max_dd":0.0,"position":"CASH (enters next open)","sharpe":null},"forward_note":"fewer than 20 forward days: risk metrics not meaningful yet","walk_forward":{"windows_won":"2/8","overfit_flag":true,"oos_cagr":0.096287,"oos_bh_cagr":0.10935,"oos_sharpe":0.667608,"oos_bh_sharpe":0.550929,"oos_max_dd":-0.212348,"oos_bh_max_dd":-0.551895,"oos_years":21.718254},"series":[{"date":"2026-10-05","champ":100000.0,"bh":100000.0}],"readiness":{"status":"NOT READY","passed":1,"total":7,"criteria":[{"id":"forward_time","description":"At least ~6 months of forward (live-data) paper trading","threshold":">= 126 trading days","current":"0","pass":false,"progress":{"current":0,"target":126,"unit":"trading days"}},{"id":"forward_risk_adjusted","description":"Champion forward Sharpe not worse than buy-and-hold (small tolerance)","threshold":"Sharpe(champ) - Sharpe(B&H) >= -0.1","current":"insufficient data (<20 days)","pass":false,"progress":null},{"id":"forward_drawdown","description":"Champion forward max drawdown within limit and not much worse than B&H","threshold":"|MDD| <= 20% and <= |MDD B&H| + 2%","current":"champ: 0, bh: 0","pass":false,"progress":null},{"id":"champion_stable","description":"No champion change in the last ~3 months (counted from install/last change)","threshold":">= 63 trading days","current":"0","pass":false,"progress":{"current":0,"target":63,"unit":"trading days"}},{"id":"walk_forward_majority","description":"Walk-forward OOS reward score > 0 (risk-adjusted beat of B&H) in a majority of windows, and stitched OOS Sharpe >= B&H","threshold":"share > 50%","current":"windows won: 2/8, oos sharpe: 0.668, bh sharpe: 0.551","pass":false,"progress":null},{"id":"not_overfit","description":"Champion family not flagged for overfitting (mean IS-OOS score gap)","threshold":"mean gap <= 0.25","current":"0.485","pass":false,"progress":null},{"id":"ledger_integrity","description":"Paper ledger has every trading day since start and is current","threshold":"missing_days == 0 and up to date","current":"missing days: 0, up to date: yes","pass":true,"progress":null}],"notes":["SIMULATION ONLY. READY would mean 'could consider' real money, not a recommendation.","Even if READY: start with a small fraction, keep the buy-and-hold core, re-check taxes (trend strategies realize gains), and keep paper-trading in parallel.","If the champion keeps failing the walk-forward criteria, the sensible real-money plan is plain buy-and-hold / DCA into an index fund."]}},"watchlist":[],"quotes":{"SPCX":{"symbol":"SPCX","kind":"stock","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","price":171.92,"prev_close":171.09,"change":0.83,"change_pct":0.49,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POST","stats":{"open":172.09,"day_high":176.42,"day_low":171.39,"volume":104751562.0,"avg_volume":91955409.0,"high_52w":225.64,"low_52w":104.83,"market_cap":2266211549184.0,"net_assets":null,"quote_type":"EQUITY"},"held":true,"watch":false,"chart":"data/charts/SPCX.json","spark":[[0,174.22],[5,174.91],[10,175.78],[15,175.03],[20,175.38],[25,174.84],[30,174.5],[35,175.43],[40,175.64],[45,174.82],[50,174.78],[55,174.75],[60,174.92],[65,175.45],[70,174.81],[75,175.02],[80,175.1],[85,175.2],[90,174.63],[95,174.6],[100,174.62],[105,174.08],[110,173.79],[115,173.69],[120,173.75],[125,173.99],[130,174.12],[135,174.12],[140,173.93],[145,173.87],[150,173.99],[155,173.18],[160,174.13],[165,173.84],[170,173.53],[175,173.52],[180,173.84],[185,174.11],[190,173.86],[195,173.83],[200,173.74],[205,173.68],[210,173.74],[215,173.8],[220,173.62],[225,173.14],[230,173.22],[235,172.7],[240,173.01],[245,173.63],[250,173.55],[255,173.07],[260,172.82],[265,172.88],[270,173.12],[275,172.99],[280,173.16],[285,172.85],[290,172.73],[295,172.29],[300,172.03],[305,171.87],[310,172.1],[315,172.25],[320,172.54],[325,172.41],[330,172.21],[335,171.68],[340,171.95],[345,172.49],[350,172.56],[355,172.95],[360,173.28],[365,173.0],[370,173.14],[375,173.17],[380,172.04],[385,171.99]],"spark_base":171.09},"UPRO":{"symbol":"UPRO","kind":"stock","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","price":156.41,"prev_close":153.89,"change":2.52,"change_pct":1.64,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POST","stats":{"open":155.82,"day_high":157.88,"day_low":155.71,"volume":1615318.0,"avg_volume":1935171.0,"high_52w":158.63,"low_52w":88.15,"market_cap":null,"net_assets":5276780032.0,"quote_type":"ETF"},"held":true,"watch":false,"chart":"data/charts/UPRO.json","spark":[[0,155.82],[5,155.99],[10,156.1],[15,156.36],[20,156.48],[25,156.79],[30,156.88],[35,157.15],[40,156.91],[45,156.7],[50,156.62],[55,156.22],[60,156.42],[65,156.71],[70,157.04],[75,156.83],[80,157.06],[85,157.16],[90,157.23],[95,157.41],[100,157.6],[105,157.75],[110,157.76],[115,157.68],[120,157.65],[125,157.73],[130,157.61],[135,157.65],[140,157.6],[145,157.57],[150,157.58],[155,157.34],[160,157.56],[165,157.3],[170,157.31],[175,157.1],[180,157.19],[185,157.01],[190,157.16],[195,156.96],[200,157.03],[205,156.92],[210,156.82],[215,156.8],[220,156.68],[225,156.45],[230,156.46],[235,156.73],[240,156.9],[245,156.85],[250,156.88],[255,156.92],[260,156.82],[265,156.74],[270,157.01],[275,157.03],[280,157.01],[285,156.9],[290,156.8],[295,156.77],[300,156.87],[305,156.75],[310,156.84],[315,156.88],[320,156.9],[325,156.98],[330,157.0],[335,156.76],[340,156.83],[345,156.77],[350,156.73],[355,156.71],[360,156.66],[365,156.66],[370,156.64],[375,156.65],[380,156.37],[385,156.38]],"spark_base":153.89},"UPRO261016C00154000":{"symbol":"UPRO261016C00154000","kind":"option","display":"UPRO 154C","name":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","price":4.45,"prev_close":3.8,"change":0.65,"change_pct":17.11,"held":true,"watch":false,"chart":"data/charts/UPRO261016C00154000.json","spark":[[0,3.8],[5,3.8],[10,3.8],[15,3.8],[20,3.8],[25,3.8],[30,3.8],[35,3.8],[40,3.8],[45,3.8],[50,3.8],[55,3.8],[60,3.8],[65,3.8],[70,3.8],[75,3.8],[80,3.8],[85,3.8],[90,3.8],[95,3.8],[100,3.8],[105,3.8],[110,3.8],[115,3.8],[120,3.8],[125,3.8],[130,3.8],[135,3.8],[140,3.8],[145,3.8],[150,5.4],[155,5.4],[160,5.4],[165,5.4],[170,5.4],[175,5.4],[180,5.4],[185,5.4],[190,5.4],[195,5.4],[200,5.4],[205,5.4],[210,5.4],[215,5.4],[220,5.4],[225,5.4],[230,5.4],[235,5.4],[240,5.4],[245,5.4],[250,5.4],[255,5.4],[260,5.4],[265,5.4],[270,5.4],[275,5.4],[280,5.4],[285,5.4],[290,5.4],[295,5.2],[300,5.2],[305,5.2],[310,5.2],[315,5.2],[320,5.2],[325,5.2],[330,5.2],[335,5.2],[340,5.2],[345,5.2],[350,5.2],[355,5.2],[360,5.2],[365,5.2],[370,5.2],[375,5.2],[380,5.2],[385,5.2]],"spark_base":3.8,"key":"UPRO|2026-10-16|154|call"}},"caveats":["UPRO Oct 16 2026 $154 call: wide bid/ask (3.10 x 5.80); the mid-price mark is approximate.","Paper lab: showing saved snapshot (data through 2026-10-05).","Market not in regular session (After hours): stocks valued at the regular-session close; extended-hours quotes are not used.","Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."]}</script>
-  <script>window.DASHBOARD_CONFIG = {"remoteUrl": "https://at4engineer.github.io/pq-22e56fd9/data/portfolio.json"};</script>
+  <script id="embedded-data" type="application/json">{"schema":2,"generated_at_et":"2026-10-06 18:17:43 ET","generated_at_iso":"2026-10-06T18:17:43-04:00","trade_date":"2026-10-06","quotes_as_of_et":"2026-10-06 16:00 ET","market_state":"POST","market_label":"After hours","delay_note":"Prices may be delayed ~15 minutes. Tracking only - not financial advice.","account":{"total":16848.38,"prev_total":16658.06,"day_change":190.32,"day_change_pct":1.14,"stocks_value":16328.68,"cash":964.7,"cash_share_pct":5.73,"option_liability":-445.0},"positions":[{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"SPCX","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","shares":4,"price":171.92,"prev_close":171.09,"day_change_per_share":0.83,"day_change":3.32,"day_change_pct":0.49,"value":687.68,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POST","price_source":"regular-session close","ext_price":172.57,"ext_label":"post-market","share_pct":4.08},{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"UPRO","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","shares":100,"price":156.41,"prev_close":153.89,"day_change_per_share":2.52,"day_change":252.0,"day_change_pct":1.64,"value":15641.0,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POST","price_source":"regular-session close","ext_price":156.96,"ext_label":"post-market","share_pct":92.83}],"options":[{"open_price":null,"unrealized":null,"key":"UPRO|2026-10-16|154|call","label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","underlying":"UPRO","type":"call","position":"short","contracts":1,"multiplier":100,"strike":154.0,"expiry":"2026-10-16","expiry_close_iso":"2026-10-16T16:00:00-04:00","dte":10,"expired":false,"spot":156.41,"distance":2.41,"distance_pct":1.56,"status":"ITM","itm":true,"covered":true,"bid":3.1,"ask":5.8,"last":3.98,"mark":4.45,"mark_source":"mid of bid/ask","intrinsic":2.41,"extrinsic":2.04,"liability":-445.0,"day_change":-65.0,"prev_mark":3.8,"prev_mark_source":"recorded mark for prior session 2026-10-05","iv":0.418,"open_interest":747.0,"volume":3.0,"last_trade_et":"2026-10-05 15:05 ET","assignment_risk":"HIGH","assignment_note":"In the money - likely assigned at expiry if it stays above the strike.","prob_finish_itm":0.5758,"assigned_proceeds":15400.0,"shares_at_risk":100,"quote_quality":3,"quote_reused":false,"quote_as_of_et":null}],"stats":{"days_tracked":2,"all_time_high":16848.38,"best_day":{"date":"2026-10-05","change":242.52,"pct":1.48},"worst_day":{"date":"2026-10-06","change":190.32,"pct":1.14}},"history":[{"date":"2026-10-05","total":16658.06,"day_change":242.52,"day_change_pct":1.48},{"date":"2026-10-06","total":16848.38,"day_change":190.32,"day_change_pct":1.14}],"watchlist":[],"quotes":{"SPCX":{"symbol":"SPCX","kind":"stock","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","price":171.92,"prev_close":171.09,"change":0.83,"change_pct":0.49,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POST","stats":{"open":172.09,"day_high":176.42,"day_low":171.39,"volume":104751562.0,"avg_volume":91955409.0,"high_52w":225.64,"low_52w":104.83,"market_cap":2266211549184.0,"net_assets":null,"quote_type":"EQUITY"},"held":true,"watch":false,"chart":"data/charts/SPCX.json","spark":[[0,174.22],[5,174.91],[10,175.78],[15,175.03],[20,175.38],[25,174.84],[30,174.5],[35,175.43],[40,175.64],[45,174.82],[50,174.78],[55,174.75],[60,174.92],[65,175.45],[70,174.81],[75,175.02],[80,175.1],[85,175.2],[90,174.63],[95,174.6],[100,174.62],[105,174.08],[110,173.79],[115,173.69],[120,173.75],[125,173.99],[130,174.12],[135,174.12],[140,173.93],[145,173.87],[150,173.99],[155,173.18],[160,174.13],[165,173.84],[170,173.53],[175,173.52],[180,173.84],[185,174.11],[190,173.86],[195,173.83],[200,173.74],[205,173.68],[210,173.74],[215,173.8],[220,173.62],[225,173.14],[230,173.22],[235,172.7],[240,173.01],[245,173.63],[250,173.55],[255,173.07],[260,172.82],[265,172.88],[270,173.12],[275,172.99],[280,173.16],[285,172.85],[290,172.73],[295,172.29],[300,172.03],[305,171.87],[310,172.1],[315,172.25],[320,172.54],[325,172.41],[330,172.21],[335,171.68],[340,171.95],[345,172.49],[350,172.56],[355,172.95],[360,173.28],[365,173.0],[370,173.14],[375,173.17],[380,172.04],[385,171.99]],"spark_base":171.09},"UPRO":{"symbol":"UPRO","kind":"stock","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","price":156.41,"prev_close":153.89,"change":2.52,"change_pct":1.64,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POST","stats":{"open":155.82,"day_high":157.88,"day_low":155.71,"volume":1615318.0,"avg_volume":1935171.0,"high_52w":158.63,"low_52w":88.15,"market_cap":null,"net_assets":5276780032.0,"quote_type":"ETF"},"held":true,"watch":false,"chart":"data/charts/UPRO.json","spark":[[0,155.82],[5,155.99],[10,156.1],[15,156.36],[20,156.48],[25,156.79],[30,156.88],[35,157.15],[40,156.91],[45,156.7],[50,156.62],[55,156.22],[60,156.42],[65,156.71],[70,157.04],[75,156.83],[80,157.06],[85,157.16],[90,157.23],[95,157.41],[100,157.6],[105,157.75],[110,157.76],[115,157.68],[120,157.65],[125,157.73],[130,157.61],[135,157.65],[140,157.6],[145,157.57],[150,157.58],[155,157.34],[160,157.56],[165,157.3],[170,157.31],[175,157.1],[180,157.19],[185,157.01],[190,157.16],[195,156.96],[200,157.03],[205,156.92],[210,156.82],[215,156.8],[220,156.68],[225,156.45],[230,156.46],[235,156.73],[240,156.9],[245,156.85],[250,156.88],[255,156.92],[260,156.82],[265,156.74],[270,157.01],[275,157.03],[280,157.01],[285,156.9],[290,156.8],[295,156.77],[300,156.87],[305,156.75],[310,156.84],[315,156.88],[320,156.9],[325,156.98],[330,157.0],[335,156.76],[340,156.83],[345,156.77],[350,156.73],[355,156.71],[360,156.66],[365,156.66],[370,156.64],[375,156.65],[380,156.37],[385,156.38]],"spark_base":153.89},"UPRO261016C00154000":{"symbol":"UPRO261016C00154000","kind":"option","display":"UPRO 154C","name":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","price":4.45,"prev_close":3.8,"change":0.65,"change_pct":17.11,"held":true,"watch":false,"chart":"data/charts/UPRO261016C00154000.json","spark":[[0,3.8],[5,3.8],[10,3.8],[15,3.8],[20,3.8],[25,3.8],[30,3.8],[35,3.8],[40,3.8],[45,3.8],[50,3.8],[55,3.8],[60,3.8],[65,3.8],[70,3.8],[75,3.8],[80,3.8],[85,3.8],[90,3.8],[95,3.8],[100,3.8],[105,3.8],[110,3.8],[115,3.8],[120,3.8],[125,3.8],[130,3.8],[135,3.8],[140,3.8],[145,3.8],[150,5.4],[155,5.4],[160,5.4],[165,5.4],[170,5.4],[175,5.4],[180,5.4],[185,5.4],[190,5.4],[195,5.4],[200,5.4],[205,5.4],[210,5.4],[215,5.4],[220,5.4],[225,5.4],[230,5.4],[235,5.4],[240,5.4],[245,5.4],[250,5.4],[255,5.4],[260,5.4],[265,5.4],[270,5.4],[275,5.4],[280,5.4],[285,5.4],[290,5.4],[295,5.2],[300,5.2],[305,5.2],[310,5.2],[315,5.2],[320,5.2],[325,5.2],[330,5.2],[335,5.2],[340,5.2],[345,5.2],[350,5.2],[355,5.2],[360,5.2],[365,5.2],[370,5.2],[375,5.2],[380,5.2],[385,5.2]],"spark_base":3.8,"key":"UPRO|2026-10-16|154|call"}},"caveats":["UPRO Oct 16 2026 $154 call: wide bid/ask (3.10 x 5.80); the mid-price mark is approximate.","Market not in regular session (After hours): stocks valued at the regular-session close; extended-hours quotes are not used.","Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."]}</script>
+  <script>window.DASHBOARD_CONFIG = {"remoteUrl": ""};</script>
   <script>
 /* Portfolio Tracker dashboard. Plain JS, no libraries, no external requests except its own data files.
  *
  * Views (hash routes): #stocks (iOS Stocks-style list, default on phones; #stocks/<SYMBOL> opens the detail
- * panel), #overview (summary, positions, covered call, history, paper trading; default on wide screens),
+ * panel), #overview (summary, positions, covered call, history; default on wide screens),
  * #transactions (data/transactions.json, newest first) and #edit (builds a prefilled GitHub issue that the
  * apply-trade workflow turns into a holdings update).
  *
@@ -1156,47 +1148,6 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
     $("chart-foot").textContent = foot;
   }
 
-  // ------------------------------------------------------------------ paper trading
-  function renderPaper(d) {
-    var P = d.paper, panel = $("paper-panel");
-    if (!P || !P.champion || !P.buy_hold) { panel.hidden = true; return; }
-    panel.hidden = false;
-    var C = P.champion, B = P.buy_hold, R = P.readiness || {}, WF = P.walk_forward || {};
-    function row(name, f) {
-      var ret = isNum(f.return) ? f.return * 100 : null;
-      var posTxt = esc(f.position || "n/a");
-      return "<tr><td>" + esc(name) + '<div class="subtle show-m">Position: ' + posTxt + "</div></td>" +
-        '<td class="num">' + money0(f.equity) + '</td><td class="num"><span class="' + cls(ret) + '">' + sPct(ret) + "</span></td>" +
-        '<td class="num">' + (isNum(f.max_dd) ? pct(f.max_dd * 100, 1) : "n/a") + '</td><td class="hide-m">' + posTxt + "</td></tr>";
-    }
-    var html = '<p class="paper-meta">Trend strategy: ' + esc(C.label || C.id) + ". Started " + esc(P.start_date ? fmtDate(P.start_date, { month: "short", day: "numeric", year: "numeric" }) : "n/a") +
-      " · " + (P.forward_days || 0) + " forward trading day" + (P.forward_days === 1 ? "" : "s") +
-      " · data through " + esc(P.data_through || "n/a") + (isNum(P.spy_close) ? " · SPY close " + money(P.spy_close) : "") + "</p>";
-    html += '<div class="table-scroll"><table class="data compact"><thead><tr><th>Strategy</th><th class="num">Value</th><th class="num">Return</th><th class="num">Max drawdown</th><th class="hide-m">Position</th></tr></thead><tbody>' +
-      row("Trend strategy", C) + row("Buy-and-hold SPY", B) + "</tbody></table></div>";
-    if (C.target_next) html += '<p class="note">Next session target for the trend strategy: ' + esc(C.target_next) + (P.signal_change ? " (" + esc(P.signal_change) + ")" : "") + ".</p>";
-    if (P.forward_note) html += '<p class="note">' + esc(P.forward_note.charAt(0).toUpperCase() + P.forward_note.slice(1)) + ".</p>";
-
-    var crit = (R.criteria || []).map(function (c) {
-      return "<tr><td>" + esc(c.description) + '<div class="subtle">Needs ' + esc(c.threshold) + " · now " + esc(c.current) + "</div></td>" +
-        '<td class="num ' + (c.pass ? "crit-ok" : "crit-no") + '">' + (c.pass ? "Met" : "Not met") + "</td></tr>";
-    }).join("");
-    var status = String(R.status || "n/a").toLowerCase();
-    status = status.charAt(0).toUpperCase() + status.slice(1);
-    html += '<div class="paper-cols"><div><h3>Readiness for real money: <span class="ready-status">' + esc(status) + "</span> (criteria met " +
-      (R.passed != null ? R.passed : "?") + " of " + (R.total != null ? R.total : "?") + ")</h3>" +
-      '<div class="table-scroll"><table class="data compact"><tbody>' + crit + "</tbody></table></div></div>";
-    var wfRows = [
-      ["Annual return (CAGR)", isNum(WF.oos_cagr) ? pct(WF.oos_cagr * 100, 1) : "n/a", isNum(WF.oos_bh_cagr) ? pct(WF.oos_bh_cagr * 100, 1) : "n/a"],
-      ["Sharpe ratio", isNum(WF.oos_sharpe) ? WF.oos_sharpe.toFixed(2) : "n/a", isNum(WF.oos_bh_sharpe) ? WF.oos_bh_sharpe.toFixed(2) : "n/a"],
-      ["Max drawdown", isNum(WF.oos_max_dd) ? pct(WF.oos_max_dd * 100, 1) : "n/a", isNum(WF.oos_bh_max_dd) ? pct(WF.oos_bh_max_dd * 100, 1) : "n/a"]
-    ].map(function (r) { return "<tr><td>" + r[0] + '</td><td class="num">' + r[1] + '</td><td class="num">' + r[2] + "</td></tr>"; }).join("");
-    html += "<div><h3>Historical walk-forward test" + (isNum(WF.oos_years) ? " (" + WF.oos_years.toFixed(1) + " years, out of sample)" : "") + "</h3>" +
-      '<div class="table-scroll"><table class="data compact"><thead><tr><th></th><th class="num">Trend</th><th class="num">Buy-and-hold</th></tr></thead><tbody>' + wfRows + "</tbody></table></div>" +
-      '<p class="note">Windows won: ' + esc(WF.windows_won || "n/a") + (WF.overfit_flag ? " · flagged for possible overfitting" : "") + ".</p>" +
-      ((R.notes || []).length ? '<p class="note">' + esc(R.notes[0]) + "</p>" : "") + "</div></div>";
-    $("paper").innerHTML = html;
-  }
 
   // ================================================================== Stocks view (iOS Stocks-style)
   var BASE_URL = STANDALONE ? (CFG.remoteUrl ? CFG.remoteUrl.replace(/data\/portfolio\.json.*$/, "") : "") : "";
@@ -1463,13 +1414,18 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
     var idle = '<span class="' + cls(ch * sg) + '">' + sMoney(ch) + " (" + sPct(first ? ch / first * 100 : null) + ")</span> " + esc(rangeTxt);
     readout.innerHTML = idle;
     var svg = el.querySelector("svg"), xl = svg.querySelector(".xhair"), xd = svg.querySelector(".xdot");
+    function clientXY(ev) {
+      if (ev.touches && ev.touches.length) return { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
+      if (ev.changedTouches && ev.changedTouches.length) return { x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY };
+      return { x: ev.clientX, y: ev.clientY };
+    }
     function at(ev) {
-      var rect = svg.getBoundingClientRect(), px = (ev.clientX - rect.left) * (W / rect.width);
+      var pt = clientXY(ev), rect = svg.getBoundingClientRect(), px = (pt.x - rect.left) * (W / rect.width);
       var bi = 0, bd = Infinity;
       for (var k = 0; k < n; k++) { var dd = Math.abs(x(k) - px); if (dd < bd) { bd = dd; bi = k; } }
       return bi;
     }
-    var shown = false;
+    var shown = false, dragging = false;
     function show(ev) {
       if (!n) return;
       var k = at(ev), v = V[k];
@@ -1487,11 +1443,63 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
         '<span class="subtle">' + esc(when) + "</span>";
     }
     function hide() { shown = false; xl.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); readout.innerHTML = idle; }
-    svg.addEventListener("pointermove", show);
-    svg.addEventListener("pointerdown", show);
-    svg.addEventListener("pointerleave", hide);
-    svg.addEventListener("pointercancel", hide);
-    svg.addEventListener("pointerup", function (ev) { if (ev.pointerType !== "mouse") setTimeout(hide, 1500); });
+    function setDrag(on) {
+      dragging = on;
+      el.classList.toggle("dragging", on);
+      document.body.classList.toggle("chart-dragging", on);
+      // global flag so sheet swipe / pull-to-refresh ignore this gesture
+      window.__pqChartDrag = on ? (window.__pqChartDrag || 0) + 1 : Math.max(0, (window.__pqChartDrag || 1) - 1);
+      if (!window.__pqChartDrag) document.body.classList.remove("chart-dragging");
+    }
+    function onTouchStart(ev) {
+      if (!ev.touches || ev.touches.length !== 1) return;
+      if (ev.cancelable) ev.preventDefault();
+      setDrag(true);
+      show(ev);
+    }
+    function onTouchMove(ev) {
+      if (!dragging) return;
+      if (ev.cancelable) ev.preventDefault();
+      show(ev);
+    }
+    function onTouchEnd(ev) {
+      if (!dragging) return;
+      setDrag(false);
+      setTimeout(hide, 1500);
+    }
+    // Touch: lock vertical page scroll / sheet drag / pull-to-refresh while sliding the crosshair.
+    svg.addEventListener("touchstart", onTouchStart, { passive: false });
+    svg.addEventListener("touchmove", onTouchMove, { passive: false });
+    svg.addEventListener("touchend", onTouchEnd);
+    svg.addEventListener("touchcancel", onTouchEnd);
+    // Mouse / pen via Pointer Events (touch is handled above so we don't double-fire).
+    svg.addEventListener("pointerdown", function (ev) {
+      if (ev.pointerType === "touch") return;
+      setDrag(true);
+      show(ev);
+      try { svg.setPointerCapture(ev.pointerId); } catch (e) { /* older browsers */ }
+    });
+    svg.addEventListener("pointermove", function (ev) {
+      if (ev.pointerType === "touch") return;
+      if (ev.pointerType === "mouse" && ev.buttons === 0 && !dragging) { show(ev); return; } // hover
+      if (!dragging) return;
+      show(ev);
+    });
+    svg.addEventListener("pointerup", function (ev) {
+      if (ev.pointerType === "touch") return;
+      if (!dragging) return;
+      setDrag(false);
+      hide();
+    });
+    svg.addEventListener("pointercancel", function (ev) {
+      if (ev.pointerType === "touch") return;
+      if (dragging) setDrag(false);
+      hide();
+    });
+    svg.addEventListener("pointerleave", function (ev) {
+      if (ev.pointerType === "touch" || dragging) return;
+      hide();
+    });
   }
 
   // Resample a polyline to N points evenly spaced in x (for morphing between ranges).
@@ -1595,7 +1603,7 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   function sheetSwipeInit() {
     var panel = $("detail"), drag = null;
     panel.addEventListener("touchstart", function (e) {
-      if (wide() || e.touches.length !== 1 || panel.hidden) return;
+      if (wide() || e.touches.length !== 1 || panel.hidden || window.__pqChartDrag) return;
       var inBar = !!(e.target.closest && e.target.closest(".detail-bar"));
       if (!inBar && (panel.scrollTop > 0 || (e.target.closest && e.target.closest(".pchart, .ranges")))) return;
       drag = { y0: e.touches[0].clientY, x0: e.touches[0].clientX, t0: Date.now(), dy: 0, bar: inBar, on: false };
@@ -2012,7 +2020,7 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
     function set(y, p, o) { el.style.setProperty("--ptr-y", y.toFixed(1) + "px"); el.style.setProperty("--ptr-p", p.toFixed(3)); el.style.opacity = o; }
     document.addEventListener("touchstart", function (e) {
       st = null;
-      if (busy || e.touches.length !== 1 || (window.scrollY || 0) > 0 || document.body.classList.contains("sheet-open")) return;
+      if (busy || e.touches.length !== 1 || window.__pqChartDrag || (window.scrollY || 0) > 0 || document.body.classList.contains("sheet-open")) return;
       if (e.target.closest && e.target.closest(".pchart, .detail, input, select, textarea, .tabs, .ranges")) return;
       st = { y0: e.touches[0].clientY, x0: e.touches[0].clientX, dy: 0, on: false };
     }, { passive: true });
@@ -2073,8 +2081,7 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
     try {
       renderHeader(d); renderSummary(d); renderPositions(d); renderOption(d);
       renderChart(d, ui.view === "overview" && !ui.ovDrawn); if (ui.view === "overview") ui.ovDrawn = true;
-      renderPaper(d);
-      renderStocks(d); renderEditSide(d);
+            renderStocks(d); renderEditSide(d);
       ui.lastPrices = priceMap(d); ui.lastTotal = (d.account || {}).total;
       $("app").setAttribute("aria-busy", "false");
       var eb = $("render-error"); if (eb) eb.remove();

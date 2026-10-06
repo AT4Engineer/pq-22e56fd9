@@ -127,13 +127,6 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
 .chart .series { fill: none; stroke: var(--line); stroke-width: 2; }
 .chart .pt { fill: var(--line); }
 
-/* paper trading */
-.paper-meta { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
-.paper-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
-.paper-cols h3 { font-size: 13px; margin: 0 0 8px; font-weight: 650; }
-.ready-status { font-weight: 650; }
-.crit-ok { font-weight: 600; }
-.crit-no { color: var(--muted); }
 
 /* footer */
 .foot { color: var(--muted); font-size: 12.5px; padding-top: 4px; padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
@@ -162,7 +155,6 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
   .stat-value.big { font-size: 26px; }
   .card { padding: 12px; }
   .kv-grid { grid-template-columns: 1fr; }
-  .paper-cols { grid-template-columns: 1fr; }
 
   /* positions table becomes one block per row */
   table.positions thead { display: none; }
@@ -248,7 +240,7 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
 .ranges button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
 .ranges button:disabled { opacity: 0.35; cursor: default; }
 .readout { min-height: 20px; font-size: 13.5px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pchart { width: 100%; min-height: 160px; touch-action: pan-y; }
+.pchart { width: 100%; min-height: 160px; touch-action: none; -ms-touch-action: none; }
 .pchart svg { display: block; width: 100%; height: auto; user-select: none; -webkit-user-select: none; }
 .pchart .gridline { stroke: var(--grid); stroke-width: 1; }
 .pchart .axis { fill: var(--muted); font-size: 11px; }
@@ -582,3 +574,8 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
   .sk-bar, .sk-chart { animation: none !important; }
 }
+
+/* While a finger is sliding the chart crosshair, freeze page / sheet scroll */
+body.chart-dragging { overflow: hidden; overscroll-behavior: none; touch-action: none; }
+body.chart-dragging .detail { overscroll-behavior: none; }
+.pchart.dragging { touch-action: none; cursor: ew-resize; }

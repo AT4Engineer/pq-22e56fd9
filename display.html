@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <title>Portfolio · Display</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/display.css">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body class="display">
+  <div class="disp-clock" id="clock" aria-live="off"></div>
+  <header class="disp-head">
+    <div class="disp-label">Account value</div>
+    <div class="disp-total" id="total">$--</div>
+    <div class="disp-day" id="day">--</div>
+    <div class="disp-sub" id="sub"></div>
+  </header>
+
+  <section class="disp-chart-card" aria-label="Account value chart">
+    <div class="ranges" id="ac-ranges" role="group" aria-label="Chart range"></div>
+    <div class="readout" id="ac-readout">&nbsp;</div>
+    <div class="pchart disp-chart" id="ac-chart"><div class="sk-chart" aria-hidden="true"></div></div>
+    <p class="note" id="ac-note" hidden></p>
+  </section>
+
+  <section class="disp-holdings" aria-label="Holdings">
+    <div class="disp-strip" id="holdings"></div>
+  </section>
+
+  <footer class="disp-foot">
+    <span id="updated">--</span>
+    <span class="sep">·</span>
+    <span id="refresh-state">waiting</span>
+  </footer>
+
+  <noscript><p class="noscript">This display needs JavaScript enabled.</p></noscript>
+  <script src="assets/display.js"></script>
+</body>
+</html>

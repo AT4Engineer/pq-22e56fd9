@@ -3,7 +3,7 @@
 
 Reads data/holdings.json, fetches quotes from Yahoo Finance via yfinance, values the
 account (stocks + cash - short option liability), upserts one point per trading day into
-data/history.json, attaches a small SPY paper-lab snapshot (data/paper.json), and writes data/portfolio.json.
+data/history.json, and writes data/portfolio.json.
 
 Never fabricates prices: if a stock quote cannot be fetched the script exits non-zero and
 leaves the existing files untouched.
@@ -19,7 +19,6 @@ Usage:
   python scripts/build_data.py            # normal run
   python scripts/build_data.py --force    # rewrite even if market data did not change
 Env:
-  PAPER_LAB_DIR   path to the spy-paper-lab folder (default: ../spy-paper-lab next to the repo)
   SEED_HISTORY_CSV  optional tracker history.csv used only when data/history.json is missing
 """
 import csv
@@ -310,96 +309,6 @@ def seed_history():
                             "updated_et": row.get("updated_et")})
     return out
 
-
-# ---------------------------------------------------------------- paper lab
-def _fmt_current(c):
-    if isinstance(c, dict):
-        return ", ".join(f"{k.replace('_', ' ')}: {_fmt_current(v)}" for k, v in c.items())
-    if isinstance(c, float):
-        return f"{c:.3f}".rstrip("0").rstrip(".") if c != 0 else "0"
-    if isinstance(c, bool):
-        return "yes" if c else "no"
-    return str(c)
-
-
-def build_paper_snapshot(lab):
-    ledger_p = os.path.join(lab, "state", "paper_ledger.csv")
-    champ = load_json(os.path.join(lab, "state", "champion.json"))
-    ready = load_json(os.path.join(lab, "state", "readiness.json"))
-    if not (os.path.exists(ledger_p) and champ and ready):
-        return None
-    with open(ledger_p, newline="") as f:
-        rows = list(csv.DictReader(f))
-    if not rows:
-        return None
-    last = rows[-1]
-    fwd = champ.get("forward", {})
-    wf = champ.get("walk_forward", {})
-    params = champ.get("params", {})
-
-    def pos_label(p, trade_hint=""):
-        p = num(p) or 0.0
-        return "LONG SPY" if p >= 0.999 else ("CASH" if p <= 0.001 else f"{p * 100:.0f}% SPY")
-
-    def nice_id():
-        fam = champ.get("family", "")
-        if fam == "trend_sma":
-            freq = {"D": "daily", "W": "weekly", "M": "monthly"}.get(params.get("freq"), params.get("freq"))
-            band = num(params.get("band")) or 0
-            return f"Trend filter: SPY above its {params.get('n')}-day average ({freq} check" + (
-                f", {band * 100:.1f}% band)" if band else ")")
-        return champ.get("id")
-
-    criteria = []
-    for c in ready.get("criteria", []):
-        prog = None
-        m = re.search(r">=\s*(\d+)\s*trading days", c.get("threshold", ""))
-        if m and isinstance(c.get("current"), (int, float)):
-            prog = {"current": c["current"], "target": int(m.group(1)), "unit": "trading days"}
-        criteria.append({"id": c.get("id"), "description": c.get("description"), "threshold": c.get("threshold"),
-                         "current": _fmt_current(c.get("current")), "pass": bool(c.get("pass")), "progress": prog})
-    target_next = num(last.get("champ_target_next"))
-    bh_pos = num(last.get("bh_position")) or 0.0
-    return {
-        "simulation_only": True,
-        "source": "spy-paper-lab (state/paper_ledger.csv, champion.json, readiness.json)",
-        "data_through": last.get("date"),
-        "start_date": fwd.get("start_date") or rows[0].get("date"),
-        "forward_days": fwd.get("forward_days", max(0, len(rows) - 1)),
-        "spy_close": num(last.get("spy_close")),
-        "signal_change": last.get("signal_change") or "",
-        "champion": {
-            "id": champ.get("id"), "label": nice_id(),
-            "equity": num(last.get("champ_equity")), "return": num(fwd.get("champ_return")),
-            "drawdown_now": num(last.get("champ_drawdown")), "max_dd": num(fwd.get("champ_max_dd")),
-            "position": pos_label(last.get("champ_position")),
-            "target_next": None if target_next is None else pos_label(target_next),
-            "trades": fwd.get("champ_trades"), "sharpe": num(fwd.get("champ_sharpe")),
-            "installed": champ.get("installed_data_date"),
-        },
-        "buy_hold": {
-            "label": "Buy-and-hold SPY", "equity": num(last.get("bh_equity")), "return": num(fwd.get("bh_return")),
-            "drawdown_now": num(last.get("bh_drawdown")), "max_dd": num(fwd.get("bh_max_dd")),
-            "position": pos_label(bh_pos) + ("" if bh_pos > 0.001 else " (enters next open)" if len(rows) == 1 else ""),
-            "sharpe": num(fwd.get("bh_sharpe")),
-        },
-        "forward_note": fwd.get("note"),
-        "walk_forward": {
-            "windows_won": wf.get("windows_won"), "overfit_flag": wf.get("overfit_flag"),
-            "oos_cagr": num(wf.get("oos", {}).get("cagr")), "oos_bh_cagr": num(wf.get("oos_bh", {}).get("cagr")),
-            "oos_sharpe": num(wf.get("oos", {}).get("sharpe")), "oos_bh_sharpe": num(wf.get("oos_bh", {}).get("sharpe")),
-            "oos_max_dd": num(wf.get("oos", {}).get("max_dd")), "oos_bh_max_dd": num(wf.get("oos_bh", {}).get("max_dd")),
-            "oos_years": num(wf.get("oos", {}).get("years")),
-        },
-        "series": [{"date": r["date"], "champ": num(r.get("champ_equity")), "bh": num(r.get("bh_equity"))} for r in rows],
-        "readiness": {
-            "status": ready.get("status"),
-            "passed": sum(1 for c in criteria if c["pass"]),
-            "total": len(criteria),
-            "criteria": criteria,
-            "notes": ready.get("notes", [])[:3],
-        },
-    }
 
 
 # ---------------------------------------------------------------- stocks list + charts
@@ -880,22 +789,8 @@ def main():
              f"{', reused off-hours snapshot' if point['quote_reused'] else ''}) is not better than the recorded "
              f"one (quality {old_q})")
 
-    # 5) paper lab
-    lab = os.environ.get("PAPER_LAB_DIR") or os.path.join(os.path.dirname(ROOT), "spy-paper-lab")
-    paper = None
-    if os.path.isdir(lab):
-        try:
-            paper = build_paper_snapshot(lab)
-            if paper:
-                write_json(D("paper.json"), paper)
-        except Exception as e:
-            warn(f"paper lab snapshot failed: {e}")
-    if paper is None:
-        paper = load_json(D("paper.json"))
-        if paper:
-            caveats.append(f"Paper lab: showing saved snapshot (data through {paper.get('data_through')}).")
 
-    # 6) summary stats
+    # 5) summary stats
     totals = [h["total"] for h in history]
     days_with_change = [h for h in history if h.get("day_change") is not None]
     best = max(days_with_change, key=lambda h: h["day_change"]) if days_with_change else None
@@ -931,7 +826,6 @@ def main():
         },
         "history": [{"date": h["date"], "total": h["total"], "day_change": h.get("day_change"),
                      "day_change_pct": h.get("day_change_pct")} for h in history],
-        "paper": paper,
         "watchlist": watch,
         "quotes": quote_map,
         "caveats": caveats,
