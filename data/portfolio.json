@@ -1,18 +1,18 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 12:17:25 ET",
-  "generated_at_iso": "2026-10-06T12:17:25-04:00",
+  "generated_at_et": "2026-10-06 12:27:43 ET",
+  "generated_at_iso": "2026-10-06T12:27:43-04:00",
   "trade_date": "2026-10-06",
-  "quotes_as_of_et": "2026-10-06 12:17 ET",
+  "quotes_as_of_et": "2026-10-06 12:27 ET",
   "market_state": "REGULAR",
   "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16837.84,
+    "total": 16838.9,
     "prev_total": 16658.06,
-    "day_change": 179.78,
-    "day_change_pct": 1.08,
-    "stocks_value": 16413.14,
+    "day_change": 180.84,
+    "day_change_pct": 1.09,
+    "stocks_value": 16414.2,
     "cash": 964.7,
     "cash_share_pct": 5.73,
     "option_liability": -540.0
@@ -28,13 +28,13 @@
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 4,
-      "price": 173.54,
+      "price": 173.55,
       "prev_close": 171.09,
-      "day_change_per_share": 2.45,
-      "day_change": 9.78,
-      "day_change_pct": 1.43,
-      "value": 694.14,
-      "quote_time_et": "2026-10-06 12:17 ET",
+      "day_change_per_share": 2.46,
+      "day_change": 9.84,
+      "day_change_pct": 1.44,
+      "value": 694.2,
+      "quote_time_et": "2026-10-06 12:27 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
@@ -51,13 +51,13 @@
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "shares": 100,
-      "price": 157.19,
+      "price": 157.2,
       "prev_close": 153.89,
-      "day_change_per_share": 3.3,
-      "day_change": 330.0,
-      "day_change_pct": 2.14,
-      "value": 15719.0,
-      "quote_time_et": "2026-10-06 12:17 ET",
+      "day_change_per_share": 3.31,
+      "day_change": 331.0,
+      "day_change_pct": 2.15,
+      "value": 15720.0,
+      "quote_time_et": "2026-10-06 12:27 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
@@ -82,9 +82,9 @@
       "expiry_close_iso": "2026-10-16T16:00:00-04:00",
       "dte": 10,
       "expired": false,
-      "spot": 157.19,
-      "distance": 3.19,
-      "distance_pct": 2.07,
+      "spot": 157.2,
+      "distance": 3.2,
+      "distance_pct": 2.08,
       "status": "ITM",
       "itm": true,
       "covered": true,
@@ -93,19 +93,19 @@
       "last": 3.98,
       "mark": 5.4,
       "mark_source": "mid of bid/ask",
-      "intrinsic": 3.19,
-      "extrinsic": 2.21,
+      "intrinsic": 3.2,
+      "extrinsic": 2.2,
       "liability": -540.0,
       "day_change": -160.0,
       "prev_mark": 3.8,
       "prev_mark_source": "recorded mark for prior session 2026-10-05",
-      "iv": 0.4299,
+      "iv": 0.4292,
       "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.5987,
+      "prob_finish_itm": 0.5993,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -115,7 +115,7 @@
   ],
   "stats": {
     "days_tracked": 2,
-    "all_time_high": 16837.84,
+    "all_time_high": 16838.9,
     "best_day": {
       "date": "2026-10-05",
       "change": 242.52,
@@ -123,8 +123,8 @@
     },
     "worst_day": {
       "date": "2026-10-06",
-      "change": 179.78,
-      "pct": 1.08
+      "change": 180.84,
+      "pct": 1.09
     }
   },
   "history": [
@@ -136,9 +136,9 @@
     },
     {
       "date": "2026-10-06",
-      "total": 16837.84,
-      "day_change": 179.78,
-      "day_change_pct": 1.08
+      "total": 16838.9,
+      "day_change": 180.84,
+      "day_change_pct": 1.09
     }
   ],
   "paper": {
@@ -277,21 +277,21 @@
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
-      "price": 173.54,
+      "price": 173.55,
       "prev_close": 171.09,
-      "change": 2.45,
-      "change_pct": 1.43,
-      "quote_time_et": "2026-10-06 12:17 ET",
+      "change": 2.46,
+      "change_pct": 1.44,
+      "quote_time_et": "2026-10-06 12:27 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 172.09,
         "day_high": 176.42,
         "day_low": 172.0,
-        "volume": 66905154.0,
+        "volume": 68162188.0,
         "avg_volume": 91955409.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 2287515992064.0,
+        "market_cap": 2286380122112.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -433,7 +433,15 @@
         ],
         [
           165,
-          173.54
+          173.84
+        ],
+        [
+          170,
+          173.53
+        ],
+        [
+          175,
+          173.55
         ]
       ],
       "spark_base": 171.09
@@ -444,17 +452,17 @@
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
-      "price": 157.19,
+      "price": 157.2,
       "prev_close": 153.89,
-      "change": 3.3,
-      "change_pct": 2.14,
-      "quote_time_et": "2026-10-06 12:17 ET",
+      "change": 3.31,
+      "change_pct": 2.15,
+      "quote_time_et": "2026-10-06 12:27 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 155.82,
         "day_high": 157.88,
         "day_low": 155.71,
-        "volume": 1015036.0,
+        "volume": 1027186.0,
         "avg_volume": 1935171.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -600,7 +608,15 @@
         ],
         [
           165,
-          157.19
+          157.32
+        ],
+        [
+          170,
+          157.31
+        ],
+        [
+          175,
+          157.2
         ]
       ],
       "spark_base": 153.89
@@ -611,17 +627,17 @@
       "name": "State Street SPDR S&P 500 ETF Trust",
       "long_name": "State Street SPDR S&P 500 ETF Trust",
       "exchange": "NYSEArca",
-      "price": 780.5,
+      "price": 780.42,
       "prev_close": 774.83,
-      "change": 5.67,
-      "change_pct": 0.73,
-      "quote_time_et": "2026-10-06 12:17 ET",
+      "change": 5.59,
+      "change_pct": 0.72,
+      "quote_time_et": "2026-10-06 12:27 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 778.15,
         "day_high": 781.62,
         "day_low": 777.96,
-        "volume": 14181982.0,
+        "volume": 14646136.0,
         "avg_volume": 44119376.0,
         "high_52w": 781.62,
         "low_52w": 629.28,
@@ -767,7 +783,15 @@
         ],
         [
           165,
-          780.51
+          780.66
+        ],
+        [
+          170,
+          780.69
+        ],
+        [
+          175,
+          780.42
         ]
       ],
       "spark_base": 774.83
@@ -787,7 +811,135 @@
       "chart": "data/charts/UPRO261016C00154000.json",
       "spark": [
         [
-          151,
+          0,
+          3.8
+        ],
+        [
+          5,
+          3.8
+        ],
+        [
+          10,
+          3.8
+        ],
+        [
+          15,
+          3.8
+        ],
+        [
+          20,
+          3.8
+        ],
+        [
+          25,
+          3.8
+        ],
+        [
+          30,
+          3.8
+        ],
+        [
+          35,
+          3.8
+        ],
+        [
+          40,
+          3.8
+        ],
+        [
+          45,
+          3.8
+        ],
+        [
+          50,
+          3.8
+        ],
+        [
+          55,
+          3.8
+        ],
+        [
+          60,
+          3.8
+        ],
+        [
+          65,
+          3.8
+        ],
+        [
+          70,
+          3.8
+        ],
+        [
+          75,
+          3.8
+        ],
+        [
+          80,
+          3.8
+        ],
+        [
+          85,
+          3.8
+        ],
+        [
+          90,
+          3.8
+        ],
+        [
+          95,
+          3.8
+        ],
+        [
+          100,
+          3.8
+        ],
+        [
+          105,
+          3.8
+        ],
+        [
+          110,
+          3.8
+        ],
+        [
+          115,
+          3.8
+        ],
+        [
+          120,
+          3.8
+        ],
+        [
+          125,
+          3.8
+        ],
+        [
+          130,
+          3.8
+        ],
+        [
+          135,
+          3.8
+        ],
+        [
+          140,
+          3.8
+        ],
+        [
+          145,
+          3.8
+        ],
+        [
+          150,
+          5.4
+        ],
+        [
+          155,
+          5.4
+        ],
+        [
+          160,
           5.4
         ],
         [
@@ -795,7 +947,11 @@
           5.4
         ],
         [
-          167,
+          170,
+          5.4
+        ],
+        [
+          175,
           5.4
         ]
       ],
