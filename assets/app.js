@@ -656,7 +656,7 @@
   // ---------------------------------------------------------------- transactions
   function txLine(t) {
     var extra = [];
-    if (isNum(t.cash_after)) extra.push("cash " + money(t.cash_before) + " → " + money(t.cash_after));
+    if (isNum(t.cash_after) && Math.abs(t.cash_after - (t.cash_before || 0)) > 0.004) extra.push("cash " + money(t.cash_before) + " → " + money(t.cash_after));
     if (isNum(t.realized_pl)) extra.push('realized <span class="' + cls(t.realized_pl) + '">' + sMoney(t.realized_pl) + "</span>");
     if (isNum(t.fees) && t.fees) extra.push("fees " + money(t.fees));
     return '<li class="tx"><div class="tx-top"><span class="tx-desc">' + esc(t.description || t.type) + '</span><span class="tx-date">' + esc(fmtDate(t.date, { month: "short", day: "numeric", year: "numeric" })) + "</span></div>" +
