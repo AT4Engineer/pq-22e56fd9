@@ -8,6 +8,13 @@ data/history.json, attaches a small SPY paper-lab snapshot (data/paper.json), an
 Never fabricates prices: if a stock quote cannot be fetched the script exits non-zero and
 leaves the existing files untouched.
 
+Off-hours option quotes: overnight/weekends Yahoo often returns bid = ask = 0 for the option. Such a
+run never degrades a good mark: the last good bid/ask mid (data/option_state.json, saved with its
+session date and timestamp) is reused, the option's day change is taken against the prior session's
+recorded mark (or the prior-close mark saved by the last good run of the same session), and a
+session's history row is only replaced by a run whose quotes are at least as good (bid/ask present),
+or when it is the first record for that session.
+
 Usage:
   python scripts/build_data.py            # normal run
   python scripts/build_data.py --force    # rewrite even if market data did not change
@@ -206,6 +213,67 @@ def assignment_risk(itm, dist_pct, dte, extrinsic):
     return "LOW", "Well below the strike."
 
 
+# ---------------------------------------------------------------- option quote quality / state
+Q_BIDASK, Q_LAST, Q_INTRINSIC = 3, 2, 1
+STATE_KEYS = ("mark", "bid", "ask", "last", "iv", "oi", "volume", "last_trade_et", "contract",
+              "session", "prev_mark", "prev_mark_source")
+
+
+def option_key(o):
+    return f"{o['underlying']}|{o['expiry']}|{float(o['strike']):g}|{o['type'].lower()}"
+
+
+def has_two_sided(oq):
+    b, a = oq.get("bid"), oq.get("ask")
+    return bool(b and a and b > 0 and a > 0 and a >= b)
+
+
+def resolve_option_mark(oq, good, trade_date, prev_hist):
+    """Pick the mark, its quality and the day-change basis for one option.
+
+    Returns dict(mark, mark_source, quality, prev_mark, prev_mark_source, reused, quote) where quote
+    holds the bid/ask/last/iv/... to display (live, or the reused last-good snapshot)."""
+    hist_prev = None
+    if prev_hist and num(prev_hist.get("option_mark")) is not None:
+        hist_prev = (num(prev_hist["option_mark"]), f"recorded mark for prior session {prev_hist['date']}")
+    live_q = {k: oq.get(k) for k in ("bid", "ask", "last", "iv", "oi", "volume", "contract")}
+    live_q["last_trade_et"] = et_str(oq.get("last_trade"))
+    if has_two_sided(oq):
+        if hist_prev:
+            pm, pms = hist_prev
+        elif oq.get("chain_prev_close") is not None:
+            pm, pms = oq["chain_prev_close"], "option's prior close (last - change)"
+        else:
+            pm, pms = None, None
+        return dict(mark=oq["mark"], mark_source=oq["mark_source"], quality=Q_BIDASK, prev_mark=pm,
+                    prev_mark_source=pms, reused=False, quote=live_q)
+    if good and num(good.get("mark")) is not None and not oq.get("expired") and good.get("session", "") <= trade_date:
+        same = good.get("session") == trade_date
+        last_today = bool(oq.get("last") and oq.get("last_trade") and oq["last_trade"].date().isoformat() == trade_date)
+        if same or not last_today:
+            if hist_prev:
+                pm, pms = hist_prev
+            elif same and good.get("prev_mark") is not None:
+                pm, pms = good["prev_mark"], good.get("prev_mark_source") or "prior-close mark saved with the last good quote"
+            else:
+                pm, pms = good["mark"], f"last good mark (session {good.get('session')}); no newer two-sided quote"
+            q = {k: good.get(k) for k in ("bid", "ask", "last", "iv", "oi", "volume", "contract", "last_trade_et")}
+            return dict(mark=good["mark"],
+                        mark_source=f"last good bid/ask mid (session {good.get('session')}, saved {good.get('as_of_et')}); no live bid/ask now",
+                        quality=Q_BIDASK if same else Q_LAST, prev_mark=pm, prev_mark_source=pms, reused=True,
+                        quote_as_of_et=good.get("as_of_et"), good_session=good.get("session"), quote=q)
+    # no good mark to fall back on: last trade or intrinsic (the original behaviour)
+    quality = Q_LAST if (oq.get("mark_source") or "").startswith("last trade") else Q_INTRINSIC
+    if hist_prev:
+        pm, pms = hist_prev
+    elif oq.get("chain_prev_close") is not None:
+        pm, pms = oq["chain_prev_close"], "option's prior close (last - change)"
+    else:
+        pm, pms = None, None
+    return dict(mark=oq["mark"], mark_source=oq["mark_source"], quality=quality, prev_mark=pm,
+                prev_mark_source=pms, reused=False, quote=live_q)
+
+
 # ---------------------------------------------------------------- history
 def seed_history():
     """Used only if data/history.json does not exist yet."""
@@ -381,17 +449,33 @@ def main():
 
     # 3) options
     options, opt_total, opt_day = [], 0.0, 0.0
+    state = load_json(D("option_state.json"), {}) or {}
+    new_state = json.loads(json.dumps(state))
+    qualities = []
     for o in H.get("options", []):
         spot = quotes[o["underlying"]]["price"]
         oq = get_option(o, spot, now)
+        key = option_key(o)
+        res = resolve_option_mark(oq, (state.get(key) or {}).get("last_good"), trade_date, prev_hist)
+        qualities.append(res["quality"])
+        oq["mark"], oq["mark_source"] = res["mark"], res["mark_source"]
+        for k in ("bid", "ask", "last", "iv", "oi", "volume"):
+            oq[k] = res["quote"].get(k)
+        if res["reused"]:
+            oq["warnings"] = [w for w in oq["warnings"] if not w.startswith("No option quote")]
+        if res["quality"] == Q_BIDASK and not res["reused"]:
+            snap = {"mark": r4(res["mark"]), "bid": oq["bid"], "ask": oq["ask"], "last": oq["last"], "iv": r4(oq["iv"]),
+                    "oi": oq["oi"], "volume": oq["volume"], "last_trade_et": res["quote"].get("last_trade_et"),
+                    "contract": oq["contract"], "session": trade_date, "prev_mark": r4(res["prev_mark"]),
+                    "prev_mark_source": res["prev_mark_source"]}
+            old = (state.get(key) or {}).get("last_good") or {}
+            if any(old.get(k) != snap.get(k) for k in STATE_KEYS):  # avoid churn: only the timestamp would change
+                snap["as_of_et"] = stamp
+                new_state[key] = {"last_good": snap}
         n, mult = float(o["contracts"]), float(o.get("multiplier", 100))
         sign = -1 if o.get("position", "short") == "short" else 1
         value = sign * oq["mark"] * mult * n
-        prev_mark, pm_src = None, None
-        if prev_hist and prev_hist.get("option_mark") is not None:
-            prev_mark, pm_src = num(prev_hist["option_mark"]), f"tracked mark on {prev_hist['date']}"
-        if prev_mark is None and oq["chain_prev_close"] is not None:
-            prev_mark, pm_src = oq["chain_prev_close"], "option's prior close (last - change)"
+        prev_mark, pm_src = res["prev_mark"], res["prev_mark_source"]
         dchg = sign * (oq["mark"] - prev_mark) * mult * n if prev_mark is not None else None
         opt_total += value
         opt_day += dchg or 0
@@ -418,6 +502,10 @@ def main():
         label = f"{o['underlying']} {exp.strftime('%b %d %Y')} ${strike:g} {typ}"
         for w in oq["warnings"]:
             caveats.append(f"{label}: {w}")
+        if res["reused"]:
+            caveats.append(f"{label}: no live bid/ask right now (market closed or no quotes); using the last good "
+                           f"bid/ask mid {res['mark']:.2f} from session {res.get('good_session')} "
+                           f"(saved {res.get('quote_as_of_et')}).")
         if spread is not None and oq["mark"] and spread / oq["mark"] > 0.25:
             caveats.append(f"{label}: wide bid/ask ({oq['bid']:.2f} x {oq['ask']:.2f}); the mid-price mark is approximate.")
         options.append({
@@ -433,7 +521,8 @@ def main():
             "iv": r4(oq["iv"]), "open_interest": oq["oi"], "volume": oq["volume"],
             "last_trade_et": et_str(oq["last_trade"]), "assignment_risk": risk, "assignment_note": risk_note,
             "prob_finish_itm": r4(p_itm), "assigned_proceeds": r2(strike * mult * n),
-            "shares_at_risk": int(mult * n),
+            "shares_at_risk": int(mult * n), "quote_quality": res["quality"], "quote_reused": res["reused"],
+            "quote_as_of_et": res.get("quote_as_of_et") if res["reused"] else None,
         })
 
     total = stock_total + cash + opt_total
@@ -448,10 +537,23 @@ def main():
     point = {"date": trade_date, "total": r2(total), "day_change": r2(day), "day_change_pct": r2(day_pct),
              "cash": r2(cash), "option_liability": r2(opt_total),
              "option_mark": r4(options[0]["mark"]) if options else None,
+             "option_mark_source": options[0]["mark_source"] if options else None,
+             "option_prev_mark": options[0]["prev_mark"] if options else None,
+             "quote_quality": min(qualities) if qualities else Q_BIDASK,
+             "quote_reused": any(o.get("quote_reused") for o in options),
              "positions": {p["symbol"]: {"value": p["value"], "day_pct": p["day_change_pct"]} for p in positions},
              "updated_et": stamp}
-    history = [h for h in history if h["date"] != trade_date] + [point]
-    history.sort(key=lambda h: h["date"])
+    existing = next((h for h in history if h["date"] == trade_date), None)
+    # replace a session's row only with strictly better quotes, or equally good LIVE quotes (never with a
+    # reused/off-hours snapshot of the same quality), or when it is the first record for the session
+    old_q = (existing or {}).get("quote_quality") or 0
+    if existing is None or point["quote_quality"] > old_q or (point["quote_quality"] == old_q and not point["quote_reused"]):
+        history = [h for h in history if h["date"] != trade_date] + [point]
+        history.sort(key=lambda h: h["date"])
+    else:
+        warn(f"history row {trade_date} kept: this run's option quote (quality {point['quote_quality']}"
+             f"{', reused off-hours snapshot' if point['quote_reused'] else ''}) is not better than the recorded "
+             f"one (quality {old_q})")
 
     # 5) paper lab
     lab = os.environ.get("PAPER_LAB_DIR") or os.path.join(os.path.dirname(ROOT), "spy-paper-lab")
@@ -510,10 +612,14 @@ def main():
 
     old = load_json(D("portfolio.json"))
     if not force and old and strip_volatile(old) == strip_volatile(out):
+        if new_state != state:
+            write_json(D("option_state.json"), new_state)
         print(f"[{stamp}] no market-data change (total {total:.2f}); files left as-is")
         return
     write_json(D("history.json"), history)
     write_json(D("portfolio.json"), out)
+    if new_state != state:
+        write_json(D("option_state.json"), new_state)
     print(f"[{stamp}] total={total:.2f} day={day:+.2f} ({day_pct:+.2f}%) trade_date={trade_date} "
           f"positions={len(positions)} options={len(options)}")
 

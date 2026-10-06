@@ -1,21 +1,21 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 00:35:16 ET",
-  "generated_at_iso": "2026-10-06T00:35:16-04:00",
+  "generated_at_et": "2026-10-06 00:42:14 ET",
+  "generated_at_iso": "2026-10-06T00:42:14-04:00",
   "trade_date": "2026-10-05",
   "quotes_as_of_et": "2026-10-05 16:00 ET",
   "market_state": "PREPRE",
   "market_label": "Closed (overnight)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16640.06,
-    "prev_total": 16290.54,
-    "day_change": 349.52,
-    "day_change_pct": 2.15,
+    "total": 16658.06,
+    "prev_total": 16415.54,
+    "day_change": 242.52,
+    "day_change_pct": 1.48,
     "stocks_value": 16073.36,
     "cash": 964.7,
-    "cash_share_pct": 5.8,
-    "option_liability": -398.0
+    "cash_share_pct": 5.79,
+    "option_liability": -380.0
   },
   "positions": [
     {
@@ -54,7 +54,7 @@
       "price_source": "regular-session close",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 92.48
+      "share_pct": 92.38
     }
   ],
   "options": [
@@ -77,48 +77,51 @@
       "status": "OTM",
       "itm": false,
       "covered": true,
-      "bid": 0.0,
-      "ask": 0.0,
+      "bid": 3.0,
+      "ask": 4.6,
       "last": 3.98,
-      "mark": 3.98,
-      "mark_source": "last trade (no two-sided quote)",
+      "mark": 3.8,
+      "mark_source": "last good bid/ask mid (session 2026-10-05, saved 2026-10-06 00:12:07 ET); no live bid/ask now",
       "intrinsic": 0.0,
-      "extrinsic": 3.98,
-      "liability": -398.0,
-      "day_change": -0.0,
-      "prev_mark": 3.98,
+      "extrinsic": 3.8,
+      "liability": -380.0,
+      "day_change": -107.0,
+      "prev_mark": 2.73,
       "prev_mark_source": "option's prior close (last - change)",
-      "iv": 0.002,
-      "open_interest": 0.0,
+      "iv": 0.4367,
+      "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "AT THE STRIKE",
       "assignment_note": "Right at the strike - a small move up puts it in the money.",
-      "prob_finish_itm": null,
+      "prob_finish_itm": 0.4813,
       "assigned_proceeds": 15400.0,
-      "shares_at_risk": 100
+      "shares_at_risk": 100,
+      "quote_quality": 3,
+      "quote_reused": true,
+      "quote_as_of_et": "2026-10-06 00:12:07 ET"
     }
   ],
   "stats": {
     "days_tracked": 1,
-    "all_time_high": 16640.06,
+    "all_time_high": 16658.06,
     "best_day": {
       "date": "2026-10-05",
-      "change": 349.52,
-      "pct": 2.15
+      "change": 242.52,
+      "pct": 1.48
     },
     "worst_day": {
       "date": "2026-10-05",
-      "change": 349.52,
-      "pct": 2.15
+      "change": 242.52,
+      "pct": 1.48
     }
   },
   "history": [
     {
       "date": "2026-10-05",
-      "total": 16640.06,
-      "day_change": 349.52,
-      "day_change_pct": 2.15
+      "total": 16658.06,
+      "day_change": 242.52,
+      "day_change_pct": 1.48
     }
   ],
   "paper": {
@@ -248,7 +251,8 @@
     }
   },
   "caveats": [
-    "Paper lab: showing saved snapshot (data through 2026-10-05).",
+    "UPRO Oct 16 2026 $154 call: no live bid/ask right now (market closed or no quotes); using the last good bid/ask mid 3.80 from session 2026-10-05 (saved 2026-10-06 00:12:07 ET).",
+    "UPRO Oct 16 2026 $154 call: wide bid/ask (3.00 x 4.60); the mid-price mark is approximate.",
     "Market not in regular session (Closed (overnight)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]

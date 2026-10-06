@@ -37,6 +37,7 @@ data/holdings.json          positions (edit this when you trade)
 data/history.json           one point per trading day (appended/updated by the script)
 data/paper.json             snapshot of the SPY paper lab
 data/portfolio.json         the single file the page loads
+data/option_state.json      last good option bid/ask mid per contract (session date + timestamp)
 dist/dashboard.html         single self-contained offline file (CSS/JS/data inline)
 scripts/build_data.py       builds data/portfolio.json from live quotes
 scripts/history_csv.py      writes data/history.csv (for Google Sheets IMPORTDATA)
@@ -104,8 +105,9 @@ Each run commits `data/` and `dist/` only if something changed.
   cloud IPs, and can break when Yahoo changes things. A failed run leaves the last good data.
 - Holiday closures are not special-cased; on those days the data simply doesn't change.
 - Option marks use the bid/ask midpoint (or last trade, or intrinsic value as a fallback); wide
-  spreads make that approximate. Outside market hours Yahoo often reports no bid/ask, so the mark
-  falls back to the last trade. Assignment risk and the market-implied chance are rough guides, not forecasts.
+  spreads make that approximate. Outside market hours Yahoo often reports no bid/ask; the script then
+  reuses the last good bid/ask mid saved in `data/option_state.json` (never the last trade), and an
+  off-hours run never overwrites a session's history row recorded with live bid/ask quotes. Assignment risk and the market-implied chance are rough guides, not forecasts.
 - A public repository makes the holdings and values visible to anyone with the link.
 
 ## Install on a phone (PWA)
