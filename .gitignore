@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+node_modules/
+screenshots/

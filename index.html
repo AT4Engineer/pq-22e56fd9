@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f1e">
+  <meta name="robots" content="noindex">
+  <title>Portfolio Quest</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">◆</span>
+      <span class="brand-name">PORTFOLIO<span class="accent">QUEST</span></span>
+    </div>
+    <div class="status">
+      <span class="pill" id="market-pill"><span class="dot"></span><span id="market-label">Loading…</span></span>
+      <span class="updated">Updated <strong id="updated">--</strong></span>
+    </div>
+  </header>
+
+  <main id="app" class="grid" aria-busy="true">
+    <!-- HERO: level / value / XP + today's heal-damage -->
+    <section class="panel hero" aria-labelledby="hero-title">
+      <h2 id="hero-title" class="sr-only">Account</h2>
+      <div class="hero-left">
+        <div class="level-badge" aria-label="Level"><span class="lv">LV</span><span id="level">--</span></div>
+        <div class="hero-value">
+          <div class="label">Total account value</div>
+          <div class="big-value" id="total" aria-live="polite">$--</div>
+          <div class="xp">
+            <div class="xp-head">
+              <span>XP <span id="xp-text">--</span></span>
+              <span id="xp-next">--</span>
+            </div>
+            <div class="bar xp-bar" role="progressbar" aria-label="Progress to next level" aria-valuemin="0" aria-valuemax="100" id="xp-bar-wrap">
+              <div class="bar-fill" id="xp-fill"></div>
+              <div class="bar-shine"></div>
+            </div>
+            <div class="xp-sub" id="xp-sub">Level up every $1,000 of total value</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="label" id="dmg-label">Today</div>
+        <div class="dmg" id="dmg">--</div>
+        <div class="dmg-sub" id="dmg-sub">--</div>
+        <div class="mini-stats">
+          <div class="ms"><span class="ms-k">Streak</span><span class="ms-v" id="streak">--</span></div>
+          <div class="ms"><span class="ms-k">Prev close</span><span class="ms-v" id="prev-total">--</span></div>
+          <div class="ms"><span class="ms-k">Cash</span><span class="ms-v" id="cash">--</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTY -->
+    <section class="panel party" aria-labelledby="party-title">
+      <h2 id="party-title" class="panel-title"><span>Party</span><small>positions</small></h2>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <!-- BOSS -->
+    <section class="panel boss" id="boss-panel" aria-labelledby="boss-title" hidden>
+      <h2 id="boss-title" class="panel-title boss-title"><span>Boss battle</span><small>covered call</small></h2>
+      <div id="boss"></div>
+    </section>
+
+    <!-- CHART -->
+    <section class="panel chart-panel" aria-labelledby="chart-title">
+      <h2 id="chart-title" class="panel-title"><span>Journey</span><small>account value by day</small></h2>
+      <div id="chart" class="chart"></div>
+      <div class="chart-foot" id="chart-foot"></div>
+    </section>
+
+    <!-- ACHIEVEMENTS -->
+    <section class="panel ach-panel" aria-labelledby="ach-title">
+      <h2 id="ach-title" class="panel-title"><span>Achievements</span><small id="ach-count"></small></h2>
+      <div class="badges" id="badges"></div>
+    </section>
+
+    <!-- QUEST -->
+    <section class="panel quest" id="quest-panel" aria-labelledby="quest-title" hidden>
+      <h2 id="quest-title" class="panel-title"><span>Side quest</span><small>SPY paper lab · simulation only</small></h2>
+      <div id="quest"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="delay" id="delay-note">Prices may be delayed ~15 minutes. Tracking only - not financial advice.</p>
+    <ul class="caveats" id="caveats"></ul>
+    <p class="refresh">Auto-refresh every 60 s · <span id="refresh-state">waiting</span></p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript">This dashboard needs JavaScript enabled.</p></noscript>
+  <script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "as_of": "2026-10-05",
+  "note": "Tracking only. No trades, no brokerage connection. Edit this file when positions change.",
+  "cash": 964.70,
+  "stocks": [
+    {"symbol": "SPCX", "shares": 4, "exchange": "Nasdaq", "display_name": "SpaceX", "class": "Rocket Ranger", "icon": "🚀"},
+    {"symbol": "UPRO", "shares": 100, "exchange": "NYSE Arca", "display_name": "ProShares UltraPro S&P 500 (3x)", "class": "3x Berserker", "icon": "⚔️"}
+  ],
+  "options": [
+    {
+      "underlying": "UPRO",
+      "type": "call",
+      "position": "short",
+      "contracts": 1,
+      "multiplier": 100,
+      "strike": 154.0,
+      "expiry": "2026-10-16",
+      "boss_name": "The $154 Strike Warden"
+    }
+  ],
+  "settings": {
+    "use_extended_hours_price": false
+  }
+}

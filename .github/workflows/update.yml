@@ -1,0 +1,54 @@
+name: Update portfolio data
+
+on:
+  schedule:
+    # GitHub cron is UTC. US market hours are 9:30-16:00 ET = 13:30-20:00 UTC (EDT) / 14:30-21:00 UTC (EST).
+    # Every 15 min, 13:00-20:45 UTC, Mon-Fri (covers the whole session in EDT, and to 15:45 ET in EST):
+    - cron: "*/15 13-20 * * 1-5"
+    # Once after the close: 21:10 UTC = 17:10 EDT / 16:10 EST, Mon-Fri:
+    - cron: "10 21 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-portfolio-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install yfinance pandas
+
+      - name: Build data/portfolio.json
+        run: python scripts/build_data.py
+
+      - name: Build standalone dist/dashboard.html
+        env:
+          # Optional repo variable (Settings > Secrets and variables > Actions > Variables), e.g.
+          # https://<user>.github.io/<repo>/data/portfolio.json - lets the offline file try for fresher data.
+          DASHBOARD_REMOTE_URL: ${{ vars.DASHBOARD_REMOTE_URL }}
+        run: python scripts/build_standalone.py
+
+      - name: Commit data changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data dist
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          git commit -m "data: update $(TZ=America/New_York date '+%Y-%m-%d %H:%M ET')"
+          git pull --rebase --autostash
+          git push

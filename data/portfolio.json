@@ -1,0 +1,336 @@
+{
+  "schema": 1,
+  "generated_at_et": "2026-10-06 00:03:43 ET",
+  "generated_at_iso": "2026-10-06T00:03:43-04:00",
+  "trade_date": "2026-10-05",
+  "quotes_as_of_et": "2026-10-05 16:00 ET",
+  "market_state": "PREPRE",
+  "market_label": "Closed (overnight)",
+  "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
+  "account": {
+    "total": 16658.06,
+    "prev_total": 16415.54,
+    "day_change": 242.52,
+    "day_change_pct": 1.48,
+    "stocks_value": 16073.36,
+    "cash": 964.7,
+    "cash_share_pct": 5.79,
+    "option_liability": -380.0
+  },
+  "level": {
+    "level": 16,
+    "step": 1000.0,
+    "xp": 658.06,
+    "xp_to_next": 341.94,
+    "next_level_at": 17000.0
+  },
+  "positions": [
+    {
+      "symbol": "SPCX",
+      "name": "SpaceX",
+      "long_name": "Space Exploration Technologies Corp.",
+      "exchange": "Nasdaq",
+      "class": "Rocket Ranger",
+      "icon": "🚀",
+      "shares": 4,
+      "price": 171.09,
+      "prev_close": 158.96,
+      "day_change_per_share": 12.13,
+      "day_change": 48.52,
+      "day_change_pct": 7.63,
+      "value": 684.36,
+      "quote_time_et": "2026-10-05 16:00 ET",
+      "market_state": "PREPRE",
+      "price_source": "regular-session close",
+      "ext_price": null,
+      "ext_label": "",
+      "share_pct": 4.11
+    },
+    {
+      "symbol": "UPRO",
+      "name": "ProShares UltraPro S&P 500 (3x)",
+      "long_name": "ProShares UltraPro S&P500",
+      "exchange": "NYSE Arca",
+      "class": "3x Berserker",
+      "icon": "⚔️",
+      "shares": 100,
+      "price": 153.89,
+      "prev_close": 150.88,
+      "day_change_per_share": 3.01,
+      "day_change": 301.0,
+      "day_change_pct": 1.99,
+      "value": 15389.0,
+      "quote_time_et": "2026-10-05 16:00 ET",
+      "market_state": "PREPRE",
+      "price_source": "regular-session close",
+      "ext_price": null,
+      "ext_label": "",
+      "share_pct": 92.38
+    }
+  ],
+  "options": [
+    {
+      "label": "UPRO Oct 16 2026 $154 call",
+      "boss_name": "The $154 Strike Warden",
+      "contract": "UPRO261016C00154000",
+      "underlying": "UPRO",
+      "type": "call",
+      "position": "short",
+      "contracts": 1,
+      "multiplier": 100,
+      "strike": 154.0,
+      "expiry": "2026-10-16",
+      "expiry_close_iso": "2026-10-16T16:00:00-04:00",
+      "dte": 10,
+      "expired": false,
+      "spot": 153.89,
+      "distance": -0.11,
+      "distance_pct": -0.07,
+      "status": "OTM",
+      "itm": false,
+      "covered": true,
+      "bid": 3.0,
+      "ask": 4.6,
+      "last": 3.98,
+      "mark": 3.8,
+      "mark_source": "mid of bid/ask",
+      "intrinsic": 0.0,
+      "extrinsic": 3.8,
+      "liability": -380.0,
+      "day_change": -107.0,
+      "prev_mark": 2.73,
+      "prev_mark_source": "option's prior close (last - change)",
+      "iv": 0.4367,
+      "open_interest": 747.0,
+      "volume": 3.0,
+      "last_trade_et": "2026-10-05 15:05 ET",
+      "assignment_risk": "COIN FLIP",
+      "assignment_note": "Right at the strike - a small move up puts it in the money.",
+      "prob_finish_itm": 0.4813,
+      "assigned_proceeds": 15400.0,
+      "shares_at_risk": 100
+    }
+  ],
+  "stats": {
+    "streak_up": 1,
+    "streak_down": 0,
+    "best_streak_up": 1,
+    "days_tracked": 1,
+    "all_time_high": 16658.06,
+    "best_day": {
+      "date": "2026-10-05",
+      "change": 242.52,
+      "pct": 1.48
+    },
+    "worst_day": {
+      "date": "2026-10-05",
+      "change": 242.52,
+      "pct": 1.48
+    }
+  },
+  "achievements": [
+    {
+      "id": "club_10000",
+      "icon": "💰",
+      "title": "$10K Club",
+      "desc": "Account value reached $10,000.",
+      "date": "2026-10-05"
+    },
+    {
+      "id": "club_15000",
+      "icon": "💰",
+      "title": "$15K Club",
+      "desc": "Account value reached $15,000.",
+      "date": "2026-10-05"
+    },
+    {
+      "id": "green_day",
+      "icon": "🌱",
+      "title": "Green Day",
+      "desc": "Finished a trading day up.",
+      "date": "2026-10-05"
+    },
+    {
+      "id": "big_heal",
+      "icon": "💚",
+      "title": "Big Heal",
+      "desc": "A day of +1% or more for the whole account.",
+      "date": "2026-10-05"
+    },
+    {
+      "id": "crit_hit",
+      "icon": "⚡",
+      "title": "Critical Hit",
+      "desc": "A single position gained 5%+ in one day.",
+      "date": "2026-10-05"
+    },
+    {
+      "id": "shield",
+      "icon": "🛡️",
+      "title": "Shield Wall",
+      "desc": "Every short call is covered by shares you own.",
+      "date": "2026-10-05"
+    },
+    {
+      "id": "party",
+      "icon": "🧑‍🤝‍🧑",
+      "title": "Party Assembled",
+      "desc": "Holding 2 or more different stocks.",
+      "date": "2026-10-05"
+    },
+    {
+      "id": "potion",
+      "icon": "🧪",
+      "title": "Potion Reserve",
+      "desc": "Keeping at least 5% of the account in cash.",
+      "date": "2026-10-05"
+    },
+    {
+      "id": "quest",
+      "icon": "🗺️",
+      "title": "Quest Accepted",
+      "desc": "Started forward paper-trading in the SPY lab.",
+      "date": "2026-10-05"
+    }
+  ],
+  "achievements_locked": 11,
+  "history": [
+    {
+      "date": "2026-10-05",
+      "total": 16658.06,
+      "day_change": 242.52,
+      "day_change_pct": 1.48
+    }
+  ],
+  "paper": {
+    "simulation_only": true,
+    "source": "spy-paper-lab (state/paper_ledger.csv, champion.json, readiness.json)",
+    "data_through": "2026-10-05",
+    "start_date": "2026-10-05",
+    "forward_days": 0,
+    "spy_close": 774.83,
+    "signal_change": "START: target LONG at next open",
+    "champion": {
+      "id": "trend_sma(n=100,freq=D,band=0.0)",
+      "label": "Trend filter: SPY above its 100-day average (daily check)",
+      "equity": 100000.0,
+      "return": 0.0,
+      "drawdown_now": 0.0,
+      "max_dd": 0.0,
+      "position": "CASH",
+      "target_next": "LONG SPY",
+      "trades": 0,
+      "sharpe": null,
+      "installed": "2026-10-05"
+    },
+    "buy_hold": {
+      "label": "Buy-and-hold SPY",
+      "equity": 100000.0,
+      "return": 0.0,
+      "drawdown_now": 0.0,
+      "max_dd": 0.0,
+      "position": "CASH (enters next open)",
+      "sharpe": null
+    },
+    "forward_note": "fewer than 20 forward days: risk metrics not meaningful yet",
+    "walk_forward": {
+      "windows_won": "2/8",
+      "overfit_flag": true,
+      "oos_cagr": 0.096287,
+      "oos_bh_cagr": 0.10935,
+      "oos_sharpe": 0.667608,
+      "oos_bh_sharpe": 0.550929,
+      "oos_max_dd": -0.212348,
+      "oos_bh_max_dd": -0.551895,
+      "oos_years": 21.718254
+    },
+    "series": [
+      {
+        "date": "2026-10-05",
+        "champ": 100000.0,
+        "bh": 100000.0
+      }
+    ],
+    "readiness": {
+      "status": "NOT READY",
+      "passed": 1,
+      "total": 7,
+      "criteria": [
+        {
+          "id": "forward_time",
+          "description": "At least ~6 months of forward (live-data) paper trading",
+          "threshold": ">= 126 trading days",
+          "current": "0",
+          "pass": false,
+          "progress": {
+            "current": 0,
+            "target": 126,
+            "unit": "trading days"
+          }
+        },
+        {
+          "id": "forward_risk_adjusted",
+          "description": "Champion forward Sharpe not worse than buy-and-hold (small tolerance)",
+          "threshold": "Sharpe(champ) - Sharpe(B&H) >= -0.1",
+          "current": "insufficient data (<20 days)",
+          "pass": false,
+          "progress": null
+        },
+        {
+          "id": "forward_drawdown",
+          "description": "Champion forward max drawdown within limit and not much worse than B&H",
+          "threshold": "|MDD| <= 20% and <= |MDD B&H| + 2%",
+          "current": "champ: 0, bh: 0",
+          "pass": false,
+          "progress": null
+        },
+        {
+          "id": "champion_stable",
+          "description": "No champion change in the last ~3 months (counted from install/last change)",
+          "threshold": ">= 63 trading days",
+          "current": "0",
+          "pass": false,
+          "progress": {
+            "current": 0,
+            "target": 63,
+            "unit": "trading days"
+          }
+        },
+        {
+          "id": "walk_forward_majority",
+          "description": "Walk-forward OOS reward score > 0 (risk-adjusted beat of B&H) in a majority of windows, and stitched OOS Sharpe >= B&H",
+          "threshold": "share > 50%",
+          "current": "windows won: 2/8, oos sharpe: 0.668, bh sharpe: 0.551",
+          "pass": false,
+          "progress": null
+        },
+        {
+          "id": "not_overfit",
+          "description": "Champion family not flagged for overfitting (mean IS-OOS score gap)",
+          "threshold": "mean gap <= 0.25",
+          "current": "0.485",
+          "pass": false,
+          "progress": null
+        },
+        {
+          "id": "ledger_integrity",
+          "description": "Paper ledger has every trading day since start and is current",
+          "threshold": "missing_days == 0 and up to date",
+          "current": "missing days: 0, up to date: yes",
+          "pass": true,
+          "progress": null
+        }
+      ],
+      "notes": [
+        "SIMULATION ONLY. READY would mean 'could consider' real money, not a recommendation.",
+        "Even if READY: start with a small fraction, keep the buy-and-hold core, re-check taxes (trend strategies realize gains), and keep paper-trading in parallel.",
+        "If the champion keeps failing the walk-forward criteria, the sensible real-money plan is plain buy-and-hold / DCA into an index fund."
+      ]
+    }
+  },
+  "caveats": [
+    "UPRO Oct 16 2026 $154 call: wide bid/ask (3.00 x 4.60); the mid-price mark is approximate.",
+    "Market not in regular session (Closed (overnight)): stocks valued at the regular-session close; extended-hours quotes are not used.",
+    "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
+  ]
+}

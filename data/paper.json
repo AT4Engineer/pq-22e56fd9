@@ -1,0 +1,126 @@
+{
+  "simulation_only": true,
+  "source": "spy-paper-lab (state/paper_ledger.csv, champion.json, readiness.json)",
+  "data_through": "2026-10-05",
+  "start_date": "2026-10-05",
+  "forward_days": 0,
+  "spy_close": 774.83,
+  "signal_change": "START: target LONG at next open",
+  "champion": {
+    "id": "trend_sma(n=100,freq=D,band=0.0)",
+    "label": "Trend filter: SPY above its 100-day average (daily check)",
+    "equity": 100000.0,
+    "return": 0.0,
+    "drawdown_now": 0.0,
+    "max_dd": 0.0,
+    "position": "CASH",
+    "target_next": "LONG SPY",
+    "trades": 0,
+    "sharpe": null,
+    "installed": "2026-10-05"
+  },
+  "buy_hold": {
+    "label": "Buy-and-hold SPY",
+    "equity": 100000.0,
+    "return": 0.0,
+    "drawdown_now": 0.0,
+    "max_dd": 0.0,
+    "position": "CASH (enters next open)",
+    "sharpe": null
+  },
+  "forward_note": "fewer than 20 forward days: risk metrics not meaningful yet",
+  "walk_forward": {
+    "windows_won": "2/8",
+    "overfit_flag": true,
+    "oos_cagr": 0.096287,
+    "oos_bh_cagr": 0.10935,
+    "oos_sharpe": 0.667608,
+    "oos_bh_sharpe": 0.550929,
+    "oos_max_dd": -0.212348,
+    "oos_bh_max_dd": -0.551895,
+    "oos_years": 21.718254
+  },
+  "series": [
+    {
+      "date": "2026-10-05",
+      "champ": 100000.0,
+      "bh": 100000.0
+    }
+  ],
+  "readiness": {
+    "status": "NOT READY",
+    "passed": 1,
+    "total": 7,
+    "criteria": [
+      {
+        "id": "forward_time",
+        "description": "At least ~6 months of forward (live-data) paper trading",
+        "threshold": ">= 126 trading days",
+        "current": "0",
+        "pass": false,
+        "progress": {
+          "current": 0,
+          "target": 126,
+          "unit": "trading days"
+        }
+      },
+      {
+        "id": "forward_risk_adjusted",
+        "description": "Champion forward Sharpe not worse than buy-and-hold (small tolerance)",
+        "threshold": "Sharpe(champ) - Sharpe(B&H) >= -0.1",
+        "current": "insufficient data (<20 days)",
+        "pass": false,
+        "progress": null
+      },
+      {
+        "id": "forward_drawdown",
+        "description": "Champion forward max drawdown within limit and not much worse than B&H",
+        "threshold": "|MDD| <= 20% and <= |MDD B&H| + 2%",
+        "current": "champ: 0, bh: 0",
+        "pass": false,
+        "progress": null
+      },
+      {
+        "id": "champion_stable",
+        "description": "No champion change in the last ~3 months (counted from install/last change)",
+        "threshold": ">= 63 trading days",
+        "current": "0",
+        "pass": false,
+        "progress": {
+          "current": 0,
+          "target": 63,
+          "unit": "trading days"
+        }
+      },
+      {
+        "id": "walk_forward_majority",
+        "description": "Walk-forward OOS reward score > 0 (risk-adjusted beat of B&H) in a majority of windows, and stitched OOS Sharpe >= B&H",
+        "threshold": "share > 50%",
+        "current": "windows won: 2/8, oos sharpe: 0.668, bh sharpe: 0.551",
+        "pass": false,
+        "progress": null
+      },
+      {
+        "id": "not_overfit",
+        "description": "Champion family not flagged for overfitting (mean IS-OOS score gap)",
+        "threshold": "mean gap <= 0.25",
+        "current": "0.485",
+        "pass": false,
+        "progress": null
+      },
+      {
+        "id": "ledger_integrity",
+        "description": "Paper ledger has every trading day since start and is current",
+        "threshold": "missing_days == 0 and up to date",
+        "current": "missing days: 0, up to date: yes",
+        "pass": true,
+        "progress": null
+      }
+    ],
+    "notes": [
+      "SIMULATION ONLY. READY would mean 'could consider' real money, not a recommendation.",
+      "Even if READY: start with a small fraction, keep the buy-and-hold core, re-check taxes (trend strategies realize gains), and keep paper-trading in parallel.",
+      "If the champion keeps failing the walk-forward criteria, the sensible real-money plan is plain buy-and-hold / DCA into an index fund."
+    ]
+  }
+}
