@@ -3,8 +3,7 @@
 
 Reads data/holdings.json, fetches quotes from Yahoo Finance via yfinance, values the
 account (stocks + cash - short option liability), upserts one point per trading day into
-data/history.json, attaches a small SPY paper-lab snapshot (data/paper.json), computes
-streak / level / achievements, and writes data/portfolio.json.
+data/history.json, attaches a small SPY paper-lab snapshot (data/paper.json), and writes data/portfolio.json.
 
 Never fabricates prices: if a stock quote cannot be fetched the script exits non-zero and
 leaves the existing files untouched.
@@ -29,8 +28,6 @@ ET = ZoneInfo("America/New_York")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 D = lambda name: os.path.join(DATA, name)
-LEVEL_STEP = 1000.0
-MILESTONES = [5000, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 75000, 100000]
 
 
 # ---------------------------------------------------------------- helpers
@@ -201,7 +198,7 @@ def assignment_risk(itm, dist_pct, dte, extrinsic):
         return "HIGH", "In the money - likely assigned at expiry if it stays above the strike."
     gap = -dist_pct  # how far below the strike, in %
     if gap <= 1.0:
-        return "COIN FLIP", "Right at the strike - a small move up puts it in the money."
+        return "AT THE STRIKE", "Right at the strike - a small move up puts it in the money."
     if gap <= 3.0:
         return "ELEVATED", "Close to the strike - a normal UPRO day could push it above."
     if gap <= 7.0:
@@ -321,81 +318,6 @@ def build_paper_snapshot(lab):
     }
 
 
-# ---------------------------------------------------------------- game stats
-def compute_streak(history):
-    up = down = 0
-    for h in reversed(history):
-        dc = h.get("day_change")
-        if dc is None:
-            break
-        if dc > 0 and down == 0:
-            up += 1
-        elif dc < 0 and up == 0:
-            down += 1
-        else:
-            break
-    best = cur = 0
-    for h in history:
-        cur = cur + 1 if (h.get("day_change") or 0) > 0 else 0
-        best = max(best, cur)
-    return {"up": up, "down": down, "best_up": best}
-
-
-def compute_achievements(history, positions, options, cash, total, paper):
-    earned, locked = [], 0
-
-    def first_date(pred):
-        for h in history:
-            if pred(h):
-                return h["date"]
-        return None
-
-    def add(key, icon, title, desc, when, cond=True):
-        nonlocal locked
-        if cond and when:
-            earned.append({"id": key, "icon": icon, "title": title, "desc": desc, "date": when})
-        else:
-            locked += 1
-
-    reached = [m for m in MILESTONES if any((h.get("total") or 0) >= m for h in history)]
-    for m in MILESTONES:
-        if m in reached:
-            add(f"club_{m}", "💰", f"${m // 1000}K Club", f"Account value reached ${m:,.0f}.",
-                first_date(lambda h, m=m: (h.get("total") or 0) >= m))
-        else:
-            locked += 1
-    # only keep the top 2 milestone badges visible to avoid clutter; lower ones are implied
-    clubs = [a for a in earned if a["id"].startswith("club_")]
-    for a in clubs[:-2]:
-        earned.remove(a)
-    add("green_day", "🌱", "Green Day", "Finished a trading day up.",
-        first_date(lambda h: (h.get("day_change") or 0) > 0))
-    add("big_heal", "💚", "Big Heal", "A day of +1% or more for the whole account.",
-        first_date(lambda h: (h.get("day_change_pct") or 0) >= 1.0))
-    add("crit_hit", "⚡", "Critical Hit", "A single position gained 5%+ in one day.",
-        first_date(lambda h: any((p.get("day_pct") or 0) >= 5.0 for p in (h.get("positions") or {}).values())))
-    st = compute_streak(history)
-    add("streak_3", "🔥", "On Fire", "3 green days in a row.", history[-1]["date"] if st["best_up"] >= 3 else None)
-    add("streak_5", "☄️", "Unstoppable", "5 green days in a row.", history[-1]["date"] if st["best_up"] >= 5 else None)
-    covered = [o for o in options if o.get("covered")]
-    add("shield", "🛡️", "Shield Wall", "Every short call is covered by shares you own.",
-        history[-1]["date"] if options and len(covered) == len(options) else None)
-    add("party", "🧑‍🤝‍🧑", "Party Assembled", "Holding 2 or more different stocks.",
-        history[-1]["date"] if len(positions) >= 2 else None)
-    add("potion", "🧪", "Potion Reserve", "Keeping at least 5% of the account in cash.",
-        history[-1]["date"] if total and cash / total >= 0.05 else None)
-    if len(history) >= 2:
-        prev_max = max(h["total"] for h in history[:-1])
-        add("new_high", "🏔️", "New Peak", "Closed at a new all-time high (tracked history).",
-            history[-1]["date"] if history[-1]["total"] > prev_max else None)
-    else:
-        locked += 1
-    add("veteran", "🎖️", "Veteran", "Tracked 20 trading days.", history[19]["date"] if len(history) >= 20 else None)
-    add("quest", "🗺️", "Quest Accepted", "Started forward paper-trading in the SPY lab.",
-        paper.get("start_date") if paper else None)
-    return earned, locked
-
-
 # ---------------------------------------------------------------- main
 def strip_volatile(obj):
     o = json.loads(json.dumps(obj))
@@ -450,8 +372,7 @@ def main():
         stock_day += dchg or 0
         positions.append({
             "symbol": s["symbol"], "name": s.get("display_name") or q["name"], "long_name": q["name"],
-            "exchange": s.get("exchange") or q["exchange"], "class": s.get("class") or "Adventurer",
-            "icon": s.get("icon") or "🎯", "shares": int(qty) if qty.is_integer() else qty,
+            "exchange": s.get("exchange") or q["exchange"], "shares": int(qty) if qty.is_integer() else qty,
             "price": r2(q["price"]), "prev_close": r2(q["prev_close"]), "day_change_per_share": r2(unit),
             "day_change": r2(dchg), "day_change_pct": r2(dpct), "value": r2(mv),
             "quote_time_et": et_str(q["quote_time"]), "market_state": q["market_state"], "price_source": q["source"],
@@ -500,7 +421,7 @@ def main():
         if spread is not None and oq["mark"] and spread / oq["mark"] > 0.25:
             caveats.append(f"{label}: wide bid/ask ({oq['bid']:.2f} x {oq['ask']:.2f}); the mid-price mark is approximate.")
         options.append({
-            "label": label, "boss_name": o.get("boss_name") or f"The ${strike:g} Warden", "contract": oq["contract"],
+            "label": label, "contract": oq["contract"],
             "underlying": o["underlying"], "type": typ, "position": o.get("position", "short"),
             "contracts": int(n) if n.is_integer() else n, "multiplier": int(mult), "strike": strike,
             "expiry": o["expiry"], "expiry_close_iso": exp_close.isoformat(), "dte": dte, "expired": oq["expired"],
@@ -547,11 +468,7 @@ def main():
         if paper:
             caveats.append(f"Paper lab: showing saved snapshot (data through {paper.get('data_through')}).")
 
-    # 6) game layer
-    level = int(total // LEVEL_STEP)
-    xp = total - level * LEVEL_STEP
-    streak = compute_streak(history)
-    achievements, locked = compute_achievements(history, positions, options, cash, total, paper)
+    # 6) summary stats
     totals = [h["total"] for h in history]
     days_with_change = [h for h in history if h.get("day_change") is not None]
     best = max(days_with_change, key=lambda h: h["day_change"]) if days_with_change else None
@@ -565,7 +482,7 @@ def main():
     caveats.append("Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes.")
 
     out = {
-        "schema": 1,
+        "schema": 2,
         "generated_at_et": stamp,
         "generated_at_iso": now.isoformat(timespec="seconds"),
         "trade_date": trade_date,
@@ -578,18 +495,13 @@ def main():
             "stocks_value": r2(stock_total), "cash": r2(cash), "cash_share_pct": cash_share,
             "option_liability": r2(opt_total),
         },
-        "level": {"level": level, "step": LEVEL_STEP, "xp": r2(xp), "xp_to_next": r2(LEVEL_STEP - xp),
-                  "next_level_at": (level + 1) * LEVEL_STEP},
         "positions": positions,
         "options": options,
         "stats": {
-            "streak_up": streak["up"], "streak_down": streak["down"], "best_streak_up": streak["best_up"],
             "days_tracked": len(history), "all_time_high": max(totals) if totals else None,
             "best_day": {"date": best["date"], "change": best["day_change"], "pct": best.get("day_change_pct")} if best else None,
             "worst_day": {"date": worst["date"], "change": worst["day_change"], "pct": worst.get("day_change_pct")} if worst else None,
         },
-        "achievements": achievements,
-        "achievements_locked": locked,
         "history": [{"date": h["date"], "total": h["total"], "day_change": h.get("day_change"),
                      "day_change_pct": h.get("day_change_pct")} for h in history],
         "paper": paper,
@@ -603,7 +515,7 @@ def main():
     write_json(D("history.json"), history)
     write_json(D("portfolio.json"), out)
     print(f"[{stamp}] total={total:.2f} day={day:+.2f} ({day_pct:+.2f}%) trade_date={trade_date} "
-          f"level={level} streak={streak['up']}")
+          f"positions={len(positions)} options={len(options)}")
 
 
 if __name__ == "__main__":

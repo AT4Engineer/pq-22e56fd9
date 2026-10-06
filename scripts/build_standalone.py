@@ -59,7 +59,7 @@ def main():
     html = re.sub(r"[ \t]*<!-- pwa:start.*?<!-- pwa:end -->\n?", "", html, flags=re.S)
     html = html.replace('<link rel="stylesheet" href="assets/style.css">', "<style>\n" + css + "\n</style>")
     html = html.replace('href="assets/favicon.svg" type="image/svg+xml"', f'href="data:image/svg+xml;base64,{icon}" type="image/svg+xml"')
-    html = html.replace("<title>Portfolio Quest</title>", f"<title>Portfolio Quest - snapshot {snap}</title>")
+    html = re.sub(r"<title>(.*?)</title>", lambda m: f"<title>{m.group(1)} - snapshot {snap}</title>", html, count=1)
     inline = (f'<script id="embedded-data" type="application/json">{data_json}</script>\n'
               f"  <script>window.DASHBOARD_CONFIG = {cfg};</script>\n"
               f"  <script>\n{safe_script(js)}\n</script>")

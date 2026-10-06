@@ -1,5 +1,5 @@
 {
-  "schema": 1,
+  "schema": 2,
   "generated_at_et": "2026-10-06 00:12:07 ET",
   "generated_at_iso": "2026-10-06T00:12:07-04:00",
   "trade_date": "2026-10-05",
@@ -17,21 +17,12 @@
     "cash_share_pct": 5.79,
     "option_liability": -380.0
   },
-  "level": {
-    "level": 16,
-    "step": 1000.0,
-    "xp": 658.06,
-    "xp_to_next": 341.94,
-    "next_level_at": 17000.0
-  },
   "positions": [
     {
       "symbol": "SPCX",
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
-      "class": "Rocket Ranger",
-      "icon": "🚀",
       "shares": 4,
       "price": 171.09,
       "prev_close": 158.96,
@@ -51,8 +42,6 @@
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
-      "class": "3x Berserker",
-      "icon": "⚔️",
       "shares": 100,
       "price": 153.89,
       "prev_close": 150.88,
@@ -71,7 +60,6 @@
   "options": [
     {
       "label": "UPRO Oct 16 2026 $154 call",
-      "boss_name": "The $154 Strike Warden",
       "contract": "UPRO261016C00154000",
       "underlying": "UPRO",
       "type": "call",
@@ -104,7 +92,7 @@
       "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
-      "assignment_risk": "COIN FLIP",
+      "assignment_risk": "AT THE STRIKE",
       "assignment_note": "Right at the strike - a small move up puts it in the money.",
       "prob_finish_itm": 0.4813,
       "assigned_proceeds": 15400.0,
@@ -112,9 +100,6 @@
     }
   ],
   "stats": {
-    "streak_up": 1,
-    "streak_down": 0,
-    "best_streak_up": 1,
     "days_tracked": 1,
     "all_time_high": 16658.06,
     "best_day": {
@@ -128,72 +113,6 @@
       "pct": 1.48
     }
   },
-  "achievements": [
-    {
-      "id": "club_10000",
-      "icon": "💰",
-      "title": "$10K Club",
-      "desc": "Account value reached $10,000.",
-      "date": "2026-10-05"
-    },
-    {
-      "id": "club_15000",
-      "icon": "💰",
-      "title": "$15K Club",
-      "desc": "Account value reached $15,000.",
-      "date": "2026-10-05"
-    },
-    {
-      "id": "green_day",
-      "icon": "🌱",
-      "title": "Green Day",
-      "desc": "Finished a trading day up.",
-      "date": "2026-10-05"
-    },
-    {
-      "id": "big_heal",
-      "icon": "💚",
-      "title": "Big Heal",
-      "desc": "A day of +1% or more for the whole account.",
-      "date": "2026-10-05"
-    },
-    {
-      "id": "crit_hit",
-      "icon": "⚡",
-      "title": "Critical Hit",
-      "desc": "A single position gained 5%+ in one day.",
-      "date": "2026-10-05"
-    },
-    {
-      "id": "shield",
-      "icon": "🛡️",
-      "title": "Shield Wall",
-      "desc": "Every short call is covered by shares you own.",
-      "date": "2026-10-05"
-    },
-    {
-      "id": "party",
-      "icon": "🧑‍🤝‍🧑",
-      "title": "Party Assembled",
-      "desc": "Holding 2 or more different stocks.",
-      "date": "2026-10-05"
-    },
-    {
-      "id": "potion",
-      "icon": "🧪",
-      "title": "Potion Reserve",
-      "desc": "Keeping at least 5% of the account in cash.",
-      "date": "2026-10-05"
-    },
-    {
-      "id": "quest",
-      "icon": "🗺️",
-      "title": "Quest Accepted",
-      "desc": "Started forward paper-trading in the SPY lab.",
-      "date": "2026-10-05"
-    }
-  ],
-  "achievements_locked": 11,
   "history": [
     {
       "date": "2026-10-05",

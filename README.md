@@ -1,8 +1,9 @@
-# Portfolio Quest
+# Portfolio Tracker
 
-A game-style (arcade / RPG HUD) dashboard for a small portfolio, built as a fully static site:
+A plain, professional dashboard for a small portfolio, built as a fully static site:
 plain HTML + CSS + JavaScript, no build step, no frameworks, no CDNs, no web fonts. It works on
-locked-down school Chromebooks / Windows browsers and on phones.
+locked-down school Chromebooks / Windows browsers and on phones (light or dark, following the
+device setting).
 
 All numbers come from `data/portfolio.json`, which `scripts/build_data.py` computes from real
 quotes (Yahoo Finance via `yfinance`). Nothing is made up: if quotes cannot be fetched the script
@@ -12,16 +13,16 @@ fails and leaves the last good data in place.
 
 ## What's on the screen
 
-| Game element | Real meaning |
+| Section | Contents |
 |---|---|
-| Level + XP bar | Total account value; one level per $1,000, the bar fills toward the next $1,000 |
-| Heal / damage number | Today's (or the last session's) $ and % change |
-| Streak | Consecutive up days in the tracked history |
-| Party (character cards) | Positions: value, price, day %, day $, share of portfolio, plus cash |
-| Boss battle | The covered call: underlying vs strike meter, countdown to expiry, ITM/OTM, assignment risk, market-implied odds, plain-English outcome |
-| Journey | Inline SVG chart of the account value, one point per trading day |
-| Achievements | Badges computed from the data; only earned ones are shown |
-| Side quest | SPY paper-trading lab (simulation): champion vs buy-and-hold and the real-money readiness checklist |
+| Summary | Total account value, day change ($ and %), cash, short call liability |
+| Positions | Symbol, name, qty, price, market value, day $, day %, % of portfolio (stocks, the short call, cash, total) |
+| Covered call | Plain-language assignment outcome, mark, bid/ask, liability, underlying vs strike and distance, in/out of the money, days to expiry, intrinsic/time value |
+| Account value history | Plain line chart, one point per trading day |
+| Paper trading | SPY trend strategy vs buy-and-hold (simulation): values, returns, readiness criteria met X of 7 |
+| Footer | Last updated time (ET), data-delay note, caveats |
+
+Green/red is used only for gains and losses.
 
 Account value = stocks + cash - current value of the short option (a liability).
 
@@ -29,7 +30,7 @@ Account value = stocks + cash - current value of the short option (a liability).
 
 ```
 index.html                  page shell
-assets/style.css            styles (dark HUD, responsive)
+assets/style.css            styles (light/dark, responsive)
 assets/app.js               rendering, auto-refresh every 60 s (no full reload)
 assets/favicon.svg
 data/holdings.json          positions (edit this when you trade)
@@ -38,6 +39,7 @@ data/paper.json             snapshot of the SPY paper lab
 data/portfolio.json         the single file the page loads
 dist/dashboard.html         single self-contained offline file (CSS/JS/data inline)
 scripts/build_data.py       builds data/portfolio.json from live quotes
+scripts/history_csv.py      writes data/history.csv (for Google Sheets IMPORTDATA)
 scripts/build_standalone.py builds dist/dashboard.html
 .github/workflows/update.yml scheduled data refresh
 ```
@@ -64,7 +66,7 @@ The paper-lab panel is rebuilt from a sibling `../spy-paper-lab` folder when it 
 
 `dist/dashboard.html` is one file with everything inline and the latest data embedded, so it works
 with no network (for example downloaded from an email and opened in a browser). It shows
-"SNAPSHOT as of ..." at the top.
+"Offline snapshot as of ..." at the top.
 
 ```bash
 python scripts/build_standalone.py --refresh     # fetch fresh quotes, then build
@@ -102,12 +104,13 @@ Each run commits `data/` and `dist/` only if something changed.
   cloud IPs, and can break when Yahoo changes things. A failed run leaves the last good data.
 - Holiday closures are not special-cased; on those days the data simply doesn't change.
 - Option marks use the bid/ask midpoint (or last trade, or intrinsic value as a fallback); wide
-  spreads make that approximate. Assignment risk and "odds" are rough guides, not forecasts.
+  spreads make that approximate. Outside market hours Yahoo often reports no bid/ask, so the mark
+  falls back to the last trade. Assignment risk and the market-implied chance are rough guides, not forecasts.
 - A public repository makes the holdings and values visible to anyone with the link.
 
 ## Install on a phone (PWA)
 
-The hosted site ships `manifest.webmanifest` ("Portfolio Quest" / "PQuest", standalone, dark theme),
+The hosted site ships `manifest.webmanifest` ("Portfolio Tracker" / "Portfolio", standalone),
 PNG icons (`assets/icons/`), Apple home-screen meta tags and a small service worker (`sw.js`).
 The service worker caches the app shell for offline launch but always fetches `data/portfolio.json`
 network-first (cached copy only when offline). iPhone: open the Pages URL in Safari > Share >
