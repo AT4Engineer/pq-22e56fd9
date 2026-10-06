@@ -24,6 +24,18 @@ The page has four tabs (hash routes, so the browser Back button works):
 
 Everything refreshes every 60 s without reloading (the data itself changes when the update workflow runs).
 
+## Look and motion
+
+- Always dark (iOS Stocks palette): black background, #1c1c1e cards, #2c2c2e separators, white / #8e8e93 text,
+  green #30d158 and red #ff453a. The status bar is black-translucent when installed on a phone.
+- Phones (700 px wide or less): large title that collapses into a compact bar on scroll, bottom tab bar
+  (Stocks, Overview, Transactions, Edit), bottom-sheet detail (swipe down or tap outside to close),
+  pull to refresh (re-fetches the data now), and skeleton placeholders sized like the real content.
+- Animations are plain CSS plus requestAnimationFrame, with no libraries: totals and prices count to the new
+  value on refresh and briefly tint green or red, sparklines and charts draw left to right, chart ranges
+  morph into each other, rows fade in on first load, the range control and tabs slide, buttons scale when
+  pressed and the crosshair glides. All of it is switched off when the system setting "Reduce motion" is on.
+
 ## Editing the portfolio from the site
 
 A static site can't save anything, so the Edit form goes through a GitHub issue:

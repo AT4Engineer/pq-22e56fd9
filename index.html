@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)">
-  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex">
   <meta name="trade-repo" content="AT4Engineer/pq-22e56fd9">
   <title>Portfolio Tracker</title>
@@ -15,7 +14,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Portfolio">
   <meta name="application-name" content="Portfolio">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
@@ -28,21 +27,23 @@
   <!-- pwa:end -->
 </head>
 <body>
+  <div class="navbar" id="navbar" aria-hidden="true"><div class="navbar-title" id="nav-title">Stocks</div></div>
   <header class="topbar">
     <div class="wrap topbar-inner">
-      <h1 class="brand">Portfolio Tracker</h1>
+      <h1 class="brand"><span class="brand-full">Portfolio Tracker</span><span class="brand-view" id="view-title">Stocks</span></h1>
       <div class="status">
         <span class="market" id="market-pill"><span class="dot" aria-hidden="true"></span><span id="market-label">Loading</span></span>
         <span class="updated">Last updated <strong id="updated">--</strong></span>
       </div>
     </div>
     <nav class="wrap tabs" aria-label="Views">
-      <a href="#stocks" data-tab="stocks">Stocks</a>
-      <a href="#overview" data-tab="overview">Overview</a>
-      <a href="#transactions" data-tab="transactions">Transactions</a>
-      <a href="#edit" data-tab="edit">Edit</a>
+      <a href="#stocks" data-tab="stocks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg><span class="tl">Stocks</span></a>
+      <a href="#overview" data-tab="overview"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span class="tl">Overview</span></a>
+      <a href="#transactions" data-tab="transactions"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span class="tl">Transactions</span></a>
+      <a href="#edit" data-tab="edit"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span class="tl">Edit</span></a>
     </nav>
   </header>
+  <div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="ptr-track" cx="12" cy="12" r="9"/><circle class="ptr-arc" cx="12" cy="12" r="9"/></svg></div>
 
   <main id="app" class="wrap" aria-busy="true">
     <!-- ============================== Stocks view (iOS Stocks-style list) -->
@@ -51,22 +52,22 @@
         <div class="stocks-col">
           <section class="acct-head" aria-label="Account summary">
             <div class="acct-label">Account value</div>
-            <div class="acct-total" id="s-total">$--</div>
-            <div class="acct-day" id="s-day">--</div>
-            <div class="acct-sub" id="s-sub"></div>
+            <div class="acct-total" id="s-total"><span class="sk-bar sk-total"></span></div>
+            <div class="acct-day" id="s-day"><span class="sk-bar sk-day"></span></div>
+            <div class="acct-sub" id="s-sub"><span class="sk-bar sk-sub"></span><span class="sk-bar sk-sub2"></span></div>
           </section>
 
           <h2 class="list-head">Holdings</h2>
-          <ul class="slist" id="s-held" aria-label="Holdings"></ul>
+          <ul class="slist" id="s-held" aria-label="Holdings"><li class="sk-row" aria-hidden="true"><div class="srow sk"><div class="s-left"><span class="sk-bar sk-sym"></span><span class="sk-bar sk-name"></span></div><div class="s-mid"><span class="sk-bar sk-spark"></span></div><div class="s-right"><span class="sk-bar sk-price"></span><span class="sk-bar sk-pill"></span></div></div></li><li class="sk-row" aria-hidden="true"><div class="srow sk"><div class="s-left"><span class="sk-bar sk-sym"></span><span class="sk-bar sk-name"></span></div><div class="s-mid"><span class="sk-bar sk-spark"></span></div><div class="s-right"><span class="sk-bar sk-price"></span><span class="sk-bar sk-pill"></span></div></div></li><li class="sk-row" aria-hidden="true"><div class="srow sk"><div class="s-left"><span class="sk-bar sk-sym"></span><span class="sk-bar sk-name"></span></div><div class="s-mid"><span class="sk-bar sk-spark"></span></div><div class="s-right"><span class="sk-bar sk-price"></span><span class="sk-bar sk-pill"></span></div></div></li></ul>
           <h2 class="list-head">Watchlist <a class="list-edit" href="#edit/watchlist">Edit</a></h2>
-          <ul class="slist" id="s-watch" aria-label="Watchlist"></ul>
+          <ul class="slist" id="s-watch" aria-label="Watchlist"><li class="sk-row" aria-hidden="true"><div class="srow sk"><div class="s-left"><span class="sk-bar sk-sym"></span><span class="sk-bar sk-name"></span></div><div class="s-mid"><span class="sk-bar sk-spark"></span></div><div class="s-right"><span class="sk-bar sk-price"></span><span class="sk-bar sk-pill"></span></div></div></li></ul>
           <p class="note">Tap a change box to switch between day change %, day change $ and market value.</p>
 
           <section class="card acct-chart-card" aria-labelledby="ac-title">
             <h2 id="ac-title" class="card-title">Account value</h2>
             <div class="ranges" id="ac-ranges" role="group" aria-label="Account chart range"></div>
             <div class="readout" id="ac-readout">&nbsp;</div>
-            <div class="pchart" id="ac-chart"></div>
+            <div class="pchart" id="ac-chart"><div class="sk-chart" aria-hidden="true"></div></div>
             <p class="note" id="ac-note"></p>
           </section>
           <p class="more-link"><a href="#overview">Full overview: positions table, covered call, history, paper trading &rarr;</a></p>
@@ -74,6 +75,7 @@
 
         <aside class="detail" id="detail" aria-label="Symbol detail" hidden>
           <div class="detail-bar">
+            <div class="grabber" aria-hidden="true"></div>
             <div class="detail-title"><span class="d-sym" id="d-sym"></span> <span class="d-name" id="d-name"></span></div>
             <button type="button" class="detail-close" id="d-close" aria-label="Close detail">Done</button>
           </div>
@@ -93,6 +95,7 @@
           </div>
         </aside>
       </div>
+      <div class="sheet-backdrop" id="sheet-backdrop" aria-hidden="true"></div>
     </div>
 
     <!-- ============================== Overview (summary, positions, covered call, history, paper) -->
@@ -102,22 +105,22 @@
     <section class="summary" aria-label="Account summary">
       <div class="stat stat-main">
         <div class="stat-label">Total account value</div>
-        <div class="stat-value big" id="total" aria-live="polite">$--</div>
+        <div class="stat-value big" id="total"><span class="sk-bar sk-stat"></span></div>
         <div class="stat-sub" id="total-sub">--</div>
       </div>
       <div class="stat stat-day">
         <div class="stat-label">Day change</div>
-        <div class="stat-value" id="day-change">--</div>
+        <div class="stat-value" id="day-change"><span class="sk-bar sk-stat"></span></div>
         <div class="stat-sub" id="day-sub">--</div>
       </div>
       <div class="stat">
         <div class="stat-label">Cash</div>
-        <div class="stat-value" id="cash">--</div>
+        <div class="stat-value" id="cash"><span class="sk-bar sk-stat"></span></div>
         <div class="stat-sub" id="cash-sub">--</div>
       </div>
       <div class="stat">
         <div class="stat-label">Short call liability</div>
-        <div class="stat-value" id="opt-liab">--</div>
+        <div class="stat-value" id="opt-liab"><span class="sk-bar sk-stat"></span></div>
         <div class="stat-sub" id="opt-sub">--</div>
       </div>
     </section>

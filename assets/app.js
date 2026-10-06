@@ -61,6 +61,36 @@
     return s + (text != null ? ">" + text + "</" + tag + ">" : "/>");
   }
 
+  // ------------------------------------------------------------------ motion (CSS + requestAnimationFrame, no libraries)
+  var RM = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  function motion() { return !RM.matches; }
+  function ease3(t) { return 1 - Math.pow(1 - t, 3); }
+  function easeIO(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  // Animate a number from `from` to `to`, writing fmt(value) into el each frame.
+  function countUp(el, from, to, fmt, dur) {
+    if (!el) return;
+    if (el._cu) cancelAnimationFrame(el._cu);
+    if (!motion() || !isNum(from) || !isNum(to) || from === to) { el.textContent = fmt(to); return; }
+    dur = dur || 700;
+    var t0 = null;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur), v = from + (to - from) * ease3(k);
+      el.textContent = fmt(k >= 1 ? to : v);
+      el._cu = k < 1 ? requestAnimationFrame(step) : null;
+    }
+    el.textContent = fmt(from);
+    el._cu = requestAnimationFrame(step);
+  }
+  // Briefly tint a cell green or red after its value changed.
+  function flash(el, up, textOnly) {
+    if (!el || !motion()) return;
+    var on = textOnly ? (up ? "flash-up-text" : "flash-down-text") : (up ? "flash-up" : "flash-down");
+    el.classList.remove("flash-up", "flash-down", "flash-up-text", "flash-down-text");
+    void el.offsetWidth;
+    el.classList.add(on);
+  }
+
   // ------------------------------------------------------------------ header / footer
   function renderHeader(d) {
     var st = d.market_state || "";
@@ -87,6 +117,9 @@
   function renderSummary(d) {
     var a = d.account || {};
     $("total").textContent = money(a.total);
+    if (isNum(ui.animFrom) && isNum(a.total) && Math.abs(ui.animFrom - a.total) > 0.004) {
+      countUp($("total"), ui.animFrom, a.total, money); flash($("total"), a.total > ui.animFrom, true);
+    }
     $("total-sub").textContent = "Stocks " + money(a.stocks_value) + " + cash " + money(a.cash) +
       (isNum(a.option_liability) && a.option_liability !== 0 ? " − short call " + money(Math.abs(a.option_liability)) : "");
     var dc = $("day-change");
@@ -220,7 +253,7 @@
     var raw = range / Math.max(1, ticks), mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / mag;
     return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * mag;
   }
-  function renderChart(d) {
+  function renderChart(d, anim) {
     var H = (d.history || []).filter(function (h) { return isNum(h.total); });
     var el = $("chart");
     if (!H.length) { el.innerHTML = '<p class="note">No history yet.</p>'; $("chart-foot").textContent = ""; return; }
@@ -240,7 +273,7 @@
       s += svgEl("text", { "class": "axis", x: pl - 8, y: (y(g) + 4).toFixed(1), "text-anchor": "end" }, esc(money0(g)));
     }
     var path = H.map(function (h, i) { return (i ? "L" : "M") + x(i).toFixed(1) + "," + y(h.total).toFixed(1); }).join("");
-    if (H.length > 1) s += svgEl("path", { "class": "series", d: path });
+    if (H.length > 1) s += svgEl("path", { "class": "series" + (anim && motion() ? " draw" : ""), d: path });
     if (H.length <= 40) H.forEach(function (h, i) { s += svgEl("circle", { "class": "pt", cx: x(i).toFixed(1), cy: y(h.total).toFixed(1), r: H.length === 1 ? 4 : 2.5 }, "<title>" + esc(h.date + ": " + money(h.total)) + "</title>"); });
     var idx = H.length <= 2 ? H.map(function (_, i) { return i; }) : [0, Math.floor((H.length - 1) / 2), H.length - 1];
     idx.forEach(function (i) {
@@ -311,7 +344,8 @@
   var PILL_MODES = ["pct", "chg", "val"];
   var ui = {
     view: null, sel: null, pill: lsGet("pq-pill", "pct"), range: lsGet("pq-range", "1D"), acRange: lsGet("pq-ac-range", "1D"),
-    charts: {}, tx: null, txAt: 0
+    charts: {}, tx: null, txAt: 0,
+    listShown: false, pillSwap: false, rowFrom: null, lastPrices: null, animFrom: null, lastTotal: null, closeTok: 0
   };
   if (PILL_MODES.indexOf(ui.pill) < 0) ui.pill = "pct";
   function lsGet(k, d) { try { return localStorage.getItem(k) || d; } catch (e) { return d; } }
@@ -371,7 +405,7 @@
     return null;
   }
 
-  function sparkSvg(pts, base, sign) {
+  function sparkSvg(pts, base, sign, delay) {
     var W = 64, H = 30, P = 2;
     if (!pts || pts.length < 2) return '<svg class="spark" viewBox="0 0 64 30" aria-hidden="true"><line class="sp-base" x1="0" x2="64" y1="15" y2="15"/></svg>';
     var vals = pts.map(function (p) { return p[1]; });
@@ -383,7 +417,8 @@
     function y(v) { return (P + (1 - (v - mn) / (mx - mn)) * (H - 2 * P)).toFixed(1); }
     var last = pts[pts.length - 1][1], up = !isNum(base) || (sign === -1 ? last <= base : last >= base);
     var path = pts.map(function (p, i) { return (i ? "L" : "M") + x(p[0]) + "," + y(p[1]); }).join("");
-    return '<svg class="spark ' + (up ? "up" : "down") + '" viewBox="0 0 64 30" preserveAspectRatio="none" aria-hidden="true">' +
+    var drawCls = isNum(delay) && motion() ? " draw" : "", st = drawCls ? ' style="animation-delay:' + delay + 'ms"' : "";
+    return '<svg class="spark ' + (up ? "up" : "down") + drawCls + '"' + st + ' viewBox="0 0 64 30" preserveAspectRatio="none" aria-hidden="true">' +
       (isNum(base) ? '<line class="sp-base" x1="0" x2="64" y1="' + y(base) + '" y2="' + y(base) + '"/>' : "") +
       '<path class="sp-line" d="' + path + '"/></svg>';
   }
@@ -393,30 +428,45 @@
     return isNum(r.pct) ? sPct(r.pct) : "n/a";
   }
   function pillTitle() { return ui.pill === "chg" ? "Day change ($)" : ui.pill === "val" ? "Market value (market cap for watchlist)" : "Day change (%)"; }
-  function rowHtml(r) {
+  function rowHtml(r, i, stag) {
     var pl = isNum(r.chg) ? r.chg * (r.sign || 1) : null;  // P/L impact to him (short: price up = loss)
     var dir = isNum(pl) ? (pl > 0 ? "up" : pl < 0 ? "down" : "flat") : "flat";
-    return '<li><div class="srow' + (ui.sel === r.id ? " sel" : "") + '" role="button" tabindex="0" data-kind="' + r.kind + '" data-id="' + esc(r.id) + '">' +
+    var li = stag ? '<li class="row-in" style="animation-delay:' + (i * 45) + 'ms">' : "<li>";
+    return li + '<div class="srow' + (ui.sel === r.id ? " sel" : "") + '" role="button" tabindex="0" data-kind="' + r.kind + '" data-id="' + esc(r.id) + '">' +
       '<div class="s-left"><div class="s-sym">' + esc(r.sym) + '</div><div class="s-name">' + esc(r.name || "") + "</div></div>" +
-      '<div class="s-mid">' + (r.missing ? "" : sparkSvg(r.spark, r.base, r.sign)) + "</div>" +
+      '<div class="s-mid">' + (r.missing ? "" : sparkSvg(r.spark, r.base, r.sign, stag ? i * 45 + 140 : null)) + "</div>" +
       '<div class="s-right"><div class="s-price">' + (r.missing ? "" : money(r.price)) + "</div>" +
-      (r.missing ? "" : '<button type="button" class="pill ' + dir + '" data-pill="1" title="' + esc(pillTitle()) + '">' + esc(pillText(r)) + "</button>") +
+      (r.missing ? "" : '<button type="button" class="pill ' + dir + '" data-pill="1" title="' + esc(pillTitle()) + '"><span class="pv"><span class="pt' + (ui.pillSwap && motion() ? " swap" : "") + '">' + esc(pillText(r)) + "</span></span></button>") +
       "</div></div></li>";
   }
   function renderStocks(d) {
     var a = d.account || {}, rows = stockRows(d);
     $("s-total").textContent = money(a.total);
+    if (isNum(ui.animFrom) && isNum(a.total) && Math.abs(ui.animFrom - a.total) > 0.004) {
+      countUp($("s-total"), ui.animFrom, a.total, money); flash($("s-total"), a.total > ui.animFrom, true);
+    }
     var day = $("s-day");
     day.innerHTML = '<span class="' + cls(a.day_change) + '">' + sMoney(a.day_change) + " (" + sPct(a.day_change_pct) + ")</span> <span class=\"subtle\">today</span>";
     var o = (d.options || [])[0];
     $("s-sub").textContent = "Stocks " + money(a.stocks_value) + " · Cash " + money(a.cash) +
       (o ? " · Short call " + money(a.option_liability) : "") + " · " + (d.market_label || "") + ", as of " + (d.quotes_as_of_et || "n/a");
-    $("s-held").innerHTML = rows.held.map(rowHtml).join("");
-    $("s-watch").innerHTML = rows.watch.length ? rows.watch.map(rowHtml).join("") : '<li class="note s-empty">No watchlist symbols. Add some under Edit.</li>';
+    var stag = ui.view === "stocks" && !ui.listShown && motion(), nh = rows.held.length;
+    if (ui.view === "stocks") ui.listShown = true;
+    $("s-held").innerHTML = rows.held.map(function (r, i) { return rowHtml(r, i, stag); }).join("");
+    $("s-watch").innerHTML = rows.watch.length ? rows.watch.map(function (r, i) { return rowHtml(r, nh + i, stag); }).join("") : '<li class="note s-empty">No watchlist symbols. Add some under Edit.</li>';
+    // price cells: count to the new value and flash green/red when it changed since the last refresh
+    if (ui.rowFrom) rows.held.concat(rows.watch).forEach(function (r) {
+      var p = ui.rowFrom[r.id];
+      if (!isNum(p) || !isNum(r.price) || Math.abs(p - r.price) < 1e-9) return;
+      var row = document.querySelector('.srow[data-id="' + (window.CSS && CSS.escape ? CSS.escape(r.id) : r.id) + '"] .s-price');
+      if (!row) return;
+      countUp(row, p, r.price, money, 650);
+      flash(row, (r.price - p) * (r.sign || 1) > 0);
+    });
     if (ui.view === "stocks") {
       renderRanges("ac-ranges", ui.acRange, chartFor("ACCOUNT"));
-      drawAccount();
-      if (ui.sel) renderDetail(d);
+      drawAccount("morph");
+      if (ui.sel) renderDetail(d, "morph");
       else if (wide()) { var first = rows.held[0] || rows.watch[0]; if (first) openDetail(first.id, true); }
     }
   }
@@ -446,21 +496,51 @@
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
       .finally(function () { clearTimeout(to); });
   }
+  // Segmented range control. Buttons are built once; a single indicator slides to the active one.
   function renderRanges(elId, active, chart) {
-    var R = (chart && chart.ranges) || {};
-    $(elId).innerHTML = RANGES.map(function (k) {
-      var has = !chart || !!R[k];
-      return '<button type="button" data-range="' + k + '"' + (k === active ? ' class="on" aria-pressed="true"' : ' aria-pressed="false"') + (has ? "" : " disabled") + ">" + k + "</button>";
-    }).join("");
+    var box = $(elId), R = (chart && chart.ranges) || {}, on = null;
+    if (!box._built) {
+      box.innerHTML = '<span class="rg-ind" aria-hidden="true"></span>' +
+        RANGES.map(function (k) { return '<button type="button" data-range="' + k + '">' + k + "</button>"; }).join("");
+      box._built = true;
+    }
+    var btns = box.querySelectorAll("button");
+    for (var i = 0; i < btns.length; i++) {
+      var k = btns[i].getAttribute("data-range"), has = !chart || !!R[k];
+      btns[i].disabled = !has;
+      btns[i].classList.toggle("on", k === active);
+      btns[i].setAttribute("aria-pressed", k === active ? "true" : "false");
+      if (k === active) on = btns[i];
+    }
+    placeInd(box, on);
   }
+  function placeInd(box, on) {
+    var ind = box.querySelector(".rg-ind");
+    if (!ind) return;
+    if (!on || !box.offsetWidth) { ind.style.opacity = "0"; box._indPlaced = false; return; }
+    var first = !box._indPlaced || !motion();
+    if (first) ind.style.transition = "none";
+    ind.style.width = on.offsetWidth + "px";
+    ind.style.transform = "translateX(" + on.offsetLeft + "px)";
+    ind.style.opacity = "1";
+    if (first) { void ind.offsetWidth; ind.style.transition = ""; box._indPlaced = true; }
+  }
+  function chartH(el) { return (el.clientWidth || 600) < 500 ? 210 : 260; }
+  function chartSkeleton(el) { el.innerHTML = '<div class="sk-chart" aria-hidden="true" style="height:' + chartH(el) + 'px"></div>'; }
 
   // Price chart: line (green/red vs the range's starting value), dashed baseline, right-hand price axis,
   // and a crosshair readout on hover/touch (exact time and value).
+  // opts.anim: "draw" (line draws in left to right), "morph" (line morphs from the previous one), or none.
   function priceChart(el, readout, rg, opts) {
     opts = opts || {};
-    if (!rg || !rg.t || rg.t.length < 1) { el.innerHTML = '<p class="note chart-empty">' + esc(opts.empty || "No chart data for this range.") + "</p>"; readout.innerHTML = "&nbsp;"; return; }
+    var cw = el.clientWidth;
+    if (!cw) { el._sig = null; return; }  // hidden: drawn when shown
+    if (!rg || !rg.t || rg.t.length < 1) { el._sig = null; el._line = null; el.innerHTML = '<p class="note chart-empty" style="min-height:' + chartH(el) + 'px">' + esc(opts.empty || "No chart data for this range.") + "</p>"; readout.innerHTML = "&nbsp;"; return; }
     var T = rg.t, V = rg.v, n = T.length, base = rg.base;
-    var W = Math.max(280, Math.round(el.clientWidth || 600)), H = opts.height || (W < 500 ? 210 : 260);
+    var W = Math.max(280, Math.round(cw)), H = opts.height || (W < 500 ? 210 : 260);
+    var sig = [opts.rangeKey, opts.sign, opts.label, W, n, T[0], T[n - 1], V[n - 1], base].join("|");
+    var anim = motion() ? opts.anim : null;
+    if (sig === el._sig && el.querySelector("svg")) { if (anim !== "draw") return; }
     var pl = 6, pr = W < 500 ? 58 : 70, pt = 10, pb = 24;
     var vals = V.filter(isNum).concat(isNum(base) ? [base] : []);
     var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
@@ -474,7 +554,10 @@
     function y(v) { return pt + (1 - (v - mn) / (mx - mn)) * (H - pt - pb); }
     var sg = opts.sign === -1 ? -1 : 1;
     var last = V[n - 1], up = !isNum(base) || (sg < 0 ? last <= base : last >= base);
-    var s = '<svg viewBox="0 0 ' + W + " " + H + '" class="' + (up ? "up" : "down") + '" role="img" aria-label="' + esc(opts.label || "Price chart") + '">';
+    var pts = [];
+    for (var pi = 0; pi < n; pi++) if (isNum(V[pi])) pts.push([x(pi), y(V[pi])]);
+    if (anim === "morph" && !(el._line && el._line.length > 1 && el._W === W && pts.length > 1)) anim = el._line ? null : "draw";
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" class="' + (up ? "up" : "down") + (anim ? " fade" : "") + '" role="img" aria-label="' + esc(opts.label || "Price chart") + '">';
     var step = niceStep(mx - mn, 4);
     for (var g = Math.ceil(mn / step) * step; g <= mx; g += step) {
       s += svgEl("line", { "class": "gridline", x1: pl, x2: W - pr, y1: y(g).toFixed(1), y2: y(g).toFixed(1) });
@@ -484,8 +567,10 @@
     var path = "";
     for (var i = 0; i < n; i++) if (isNum(V[i])) path += (path ? "L" : "M") + x(i).toFixed(1) + "," + y(V[i]).toFixed(1);
     if (n > 1) {
+      s += '<g class="plot' + (anim === "draw" ? " draw" : "") + '">';
       s += svgEl("path", { "class": "area", d: path + "L" + x(n - 1).toFixed(1) + "," + (H - pb) + "L" + x(0).toFixed(1) + "," + (H - pb) + "Z" });
       s += svgEl("path", { "class": "pline", d: path });
+      s += "</g>";
     } else {
       s += svgEl("circle", { "class": "pdot", cx: x(0).toFixed(1), cy: y(V[0]).toFixed(1), r: 3 });
     }
@@ -507,7 +592,10 @@
     s += '<line class="xhair" x1="0" x2="0" y1="' + pt + '" y2="' + (H - pb) + '" visibility="hidden"/><circle class="xdot" r="4" cx="0" cy="0" visibility="hidden"/>';
     s += svgEl("rect", { "class": "hit", x: 0, y: 0, width: W, height: H, fill: "transparent" });
     s += "</svg>";
+    var oldLine = el._line;
     el.innerHTML = s;
+    el._sig = sig; el._line = pts; el._W = W;
+    if (anim === "morph" && n > 1) morphLine(el, oldLine, pts, H - pb);
     var rangeTxt = opts.rangeText || "";
     var first = isNum(base) ? base : V[0], ch = last - first;
     var idle = '<span class="' + cls(ch * sg) + '">' + sMoney(ch) + " (" + sPct(first ? ch / first * 100 : null) + ")</span> " + esc(rangeTxt);
@@ -519,19 +607,24 @@
       for (var k = 0; k < n; k++) { var dd = Math.abs(x(k) - px); if (dd < bd) { bd = dd; bi = k; } }
       return bi;
     }
+    var shown = false;
     function show(ev) {
       if (!n) return;
       var k = at(ev), v = V[k];
       if (!isNum(v)) return;
-      xl.setAttribute("x1", x(k).toFixed(1)); xl.setAttribute("x2", x(k).toFixed(1)); xl.setAttribute("visibility", "visible");
-      xd.setAttribute("cx", x(k).toFixed(1)); xd.setAttribute("cy", y(v).toFixed(1)); xd.setAttribute("visibility", "visible");
+      // crosshair glides between points (CSS transition on transform); jumps straight there on first show
+      if (!shown) { xl.classList.add("snap"); xd.classList.add("snap"); }
+      xl.style.transform = "translate(" + x(k).toFixed(1) + "px,0)";
+      xd.style.transform = "translate(" + x(k).toFixed(1) + "px," + y(v).toFixed(1) + "px)";
+      xl.setAttribute("visibility", "visible"); xd.setAttribute("visibility", "visible");
+      if (!shown) { void xl.getBoundingClientRect(); xl.classList.remove("snap"); xd.classList.remove("snap"); shown = true; }
       var intra = rg.interval && /m$/.test(rg.interval);
       var when = intra ? fmtTime(T[k], !timeScale) + " ET" : fmtDay(T[k], { month: "short", day: "numeric", year: "numeric" });
       var c = v - first;
       readout.innerHTML = "<strong>" + esc(opts.valFmt ? opts.valFmt(v) : money(v)) + '</strong> <span class="' + cls(c * sg) + '">' + sMoney(c) + " (" + sPct(first ? c / first * 100 : null) + ")</span> " +
         '<span class="subtle">' + esc(when) + "</span>";
     }
-    function hide() { xl.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); readout.innerHTML = idle; }
+    function hide() { shown = false; xl.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); readout.innerHTML = idle; }
     svg.addEventListener("pointermove", show);
     svg.addEventListener("pointerdown", show);
     svg.addEventListener("pointerleave", hide);
@@ -539,18 +632,52 @@
     svg.addEventListener("pointerup", function (ev) { if (ev.pointerType !== "mouse") setTimeout(hide, 1500); });
   }
 
-  function drawAccount() {
+  // Resample a polyline to N points evenly spaced in x (for morphing between ranges).
+  function resample(P, N) {
+    var out = [], x0 = P[0][0], x1 = P[P.length - 1][0], j = 0;
+    for (var k = 0; k < N; k++) {
+      var xs = x0 + (x1 - x0) * k / (N - 1);
+      while (j < P.length - 2 && P[j + 1][0] < xs) j++;
+      var p = P[j], q = P[Math.min(j + 1, P.length - 1)], f = q[0] === p[0] ? 0 : (xs - p[0]) / (q[0] - p[0]);
+      f = Math.max(0, Math.min(1, f));
+      out.push([xs, p[1] + (q[1] - p[1]) * f]);
+    }
+    return out;
+  }
+  function morphLine(el, from, to, bottom) {
+    var line = el.querySelector(".pline"), area = el.querySelector(".area");
+    if (!line || !from || from.length < 2) return;
+    var N = 160, A = resample(from, N), B = resample(to, N), dLine = line.getAttribute("d"), dArea = area ? area.getAttribute("d") : null;
+    var t0 = null, dur = 420, tok = (el._mt || 0) + 1; el._mt = tok;
+    function frame(ts) {
+      if (el._mt !== tok || !line.isConnected) return;
+      if (t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur), e = easeIO(k);
+      if (k >= 1) { line.setAttribute("d", dLine); if (area) area.setAttribute("d", dArea); return; }
+      var d = "";
+      for (var i = 0; i < N; i++) d += (i ? "L" : "M") + (A[i][0] + (B[i][0] - A[i][0]) * e).toFixed(1) + "," + (A[i][1] + (B[i][1] - A[i][1]) * e).toFixed(1);
+      line.setAttribute("d", d);
+      if (area) {
+        var xa = A[0][0] + (B[0][0] - A[0][0]) * e, xb = A[N - 1][0] + (B[N - 1][0] - A[N - 1][0]) * e;
+        area.setAttribute("d", d + "L" + xb.toFixed(1) + "," + bottom + "L" + xa.toFixed(1) + "," + bottom + "Z");
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function drawAccount(anim) {
     var c = chartFor("ACCOUNT");
     var el = $("ac-chart"), ro = $("ac-readout");
     if (!c) {
-      el.innerHTML = '<p class="note chart-empty">' + (CAN_FETCH_EXTRA ? "Loading chart..." : "Charts aren't included in the offline snapshot.") + "</p>";
-      if (CAN_FETCH_EXTRA) loadChart("ACCOUNT", null).then(function (j) { if (j) { renderRanges("ac-ranges", ui.acRange, j); drawAccount(); } else el.innerHTML = '<p class="note chart-empty">Account chart not available yet.</p>'; });
+      if (CAN_FETCH_EXTRA) chartSkeleton(el); else el.innerHTML = '<p class="note chart-empty">Charts aren\'t included in the offline snapshot.</p>';
+      if (CAN_FETCH_EXTRA) loadChart("ACCOUNT", null).then(function (j) { if (j) { renderRanges("ac-ranges", ui.acRange, j); drawAccount("draw"); } else el.innerHTML = '<p class="note chart-empty">Account chart not available yet.</p>'; });
       return;
     }
     var R = c.ranges || {};
     if (!R[ui.acRange]) ui.acRange = R["1D"] ? "1D" : Object.keys(R)[0];
     var rg = R[ui.acRange];
-    priceChart(el, ro, rg, { label: "Account value", rangeKey: ui.acRange, rangeText: RANGE_WORDS[ui.acRange],
+    priceChart(el, ro, rg, { anim: anim, label: "Account value", rangeKey: ui.acRange, rangeText: RANGE_WORDS[ui.acRange],
       axisFmt: function (g) { return money0(g); }, empty: "No account history for this range yet." });
     var daily = rg && rg.interval && !/m$/.test(rg.interval);
     $("ac-note").textContent = (daily && rg.t.length < 5 ? "Only " + rg.t.length + " trading day" + (rg.t.length === 1 ? "" : "s") + " recorded so far; longer ranges fill in over time. " : "") + (c.note || "");
@@ -559,31 +686,96 @@
   // ---------------------------------------------------------------- detail panel
   function wide() { return window.matchMedia && window.matchMedia("(min-width: 960px)").matches; }
   function openDetail(id, quiet) {
-    if (ui.sel !== id) $("detail").scrollTop = 0;
+    if (!id) return;
+    var fresh = ui.sel !== id;
+    if (fresh) $("detail").scrollTop = 0;
+    cancelClose();
     ui.sel = id;
     var want = "#stocks/" + encodeURIComponent(id);
     if (!quiet && location.hash !== want) {
       if (wide() || /^#stocks\//.test(location.hash)) history.replaceState(history.state, "", want); else history.pushState({ sheet: 1 }, "", want);
     }
-    renderDetail(state.data);
+    renderDetail(state.data, fresh ? "draw" : "morph");
     markSelected();
   }
+  // Phones: the sheet slides down before it is hidden. Wide screens: hidden at once.
   function closeDetail(fromNav) {
     if (!ui.sel) return;
     ui.sel = null;
-    $("detail").hidden = true;
-    document.body.classList.remove("sheet-open");
+    var panel = $("detail");
+    if (!wide() && motion() && !panel.hidden) {
+      var tok = ++ui.closeTok;
+      panel.classList.add("closing");
+      document.body.classList.add("sheet-closing");
+      setTimeout(function () { if (ui.closeTok === tok) finishClose(); }, 270);
+    } else finishClose();
     markSelected();
     if (!fromNav && /^#stocks\//.test(location.hash)) {
       if (history.state && history.state.sheet) history.back(); else history.replaceState(null, "", "#stocks");
     }
+  }
+  function finishClose() {
+    var panel = $("detail");
+    if (ui.sel) return;
+    panel.hidden = true;
+    panel.classList.remove("closing", "dragging");
+    panel.style.transform = ""; panel.style.transition = "";
+    document.body.classList.remove("sheet-open", "sheet-closing");
+  }
+  function cancelClose() {
+    ui.closeTok++;
+    var panel = $("detail");
+    panel.classList.remove("closing");
+    panel.style.transform = ""; panel.style.transition = "";
+    document.body.classList.remove("sheet-closing");
+  }
+  // Swipe down on the sheet's top bar (or anywhere when scrolled to the top) to close it.
+  function sheetSwipeInit() {
+    var panel = $("detail"), drag = null;
+    panel.addEventListener("touchstart", function (e) {
+      if (wide() || e.touches.length !== 1 || panel.hidden) return;
+      var inBar = !!(e.target.closest && e.target.closest(".detail-bar"));
+      if (!inBar && (panel.scrollTop > 0 || (e.target.closest && e.target.closest(".pchart, .ranges")))) return;
+      drag = { y0: e.touches[0].clientY, x0: e.touches[0].clientX, t0: Date.now(), dy: 0, bar: inBar, on: false };
+    }, { passive: true });
+    panel.addEventListener("touchmove", function (e) {
+      if (!drag) return;
+      var dy = e.touches[0].clientY - drag.y0, dx = Math.abs(e.touches[0].clientX - drag.x0);
+      if (!drag.on) {
+        if (dy > 6 && dy > dx && (drag.bar || panel.scrollTop <= 0)) { drag.on = true; drag.t0 = Date.now(); panel.classList.add("dragging"); }
+        else if (dy < -6 || dx > 10) { drag = null; return; }
+        else return;
+      }
+      e.preventDefault();
+      drag.dy = Math.max(0, dy);
+      panel.style.transform = "translateY(" + drag.dy.toFixed(1) + "px)";
+    }, { passive: false });
+    function end() {
+      if (!drag) return;
+      var d = drag; drag = null;
+      if (!d.on) return;
+      var v = d.dy / Math.max(1, Date.now() - d.t0);
+      panel.classList.remove("dragging");
+      if (d.dy > 110 || (v > 0.5 && d.dy > 30)) {
+        closeDetail();                 // adds .closing (transition), then let it run from the dragged position
+        panel.style.transform = "";
+        if (panel.hidden || !panel.classList.contains("closing")) finishClose();
+      } else {
+        panel.style.transition = "transform .45s var(--spring)";
+        panel.style.transform = "";
+        setTimeout(function () { panel.style.transition = ""; }, 460);
+      }
+    }
+    panel.addEventListener("touchend", end);
+    panel.addEventListener("touchcancel", end);
+    $("sheet-backdrop").addEventListener("click", function () { closeDetail(); });
   }
   function markSelected() {
     var els = document.querySelectorAll(".srow");
     for (var i = 0; i < els.length; i++) els[i].classList.toggle("sel", els[i].getAttribute("data-id") === ui.sel);
   }
   function stat(k, v) { return '<div class="kv"><span class="k">' + esc(k) + '</span><span class="v">' + v + "</span></div>"; }
-  function renderDetail(d) {
+  function renderDetail(d, anim) {
     if (!d || !ui.sel) return;
     var r = findRow(d, ui.sel), panel = $("detail");
     if (!r) { closeDetail(true); return; }
@@ -592,6 +784,10 @@
     $("d-sym").textContent = r.sym;
     $("d-name").textContent = r.kind === "option" ? r.opt.label : (r.q.long_name || r.name || "");
     $("d-price").textContent = r.missing ? "No quote" : money(r.price);
+    var pf = ui.rowFrom && ui.rowFrom[r.id];
+    if (!r.missing && isNum(pf) && isNum(r.price) && Math.abs(pf - r.price) > 1e-9) {
+      countUp($("d-price"), pf, r.price, money); flash($("d-price"), (r.price - pf) * (r.sign || 1) > 0, true);
+    }
     $("d-chg").innerHTML = r.missing ? "" : '<span class="' + cls(isNum(r.chg) ? r.chg * (r.sign || 1) : null) + '">' + sMoney(r.chg) + " (" + sPct(r.pct) + ")</span> <span class=\"subtle\">today" +
       (r.kind === "option" ? ", per share" + (r.sign === -1 ? '</span> <span class="subtle">· your P/L </span><span class="' + cls(r.posDay) + '">' + sMoney(r.posDay) + "</span>" : "</span>") : "</span>");
     $("d-asof").textContent = r.kind === "option" ? "Mark: " + (r.opt.quote_reused ? "last good bid/ask mid" : (r.opt.mark_source || "")) + (d.quotes_as_of_et ? " · as of " + d.quotes_as_of_et : "") :
@@ -640,21 +836,25 @@
     // chart
     var c = chartFor(r.id);
     renderRanges("d-ranges", ui.range, c);
-    drawDetailChart(r);
+    if (anim === "draw") $("d-chart")._line = null;
+    drawDetailChart(r, anim);
     if (!c || Date.now() - (ui.charts[r.id] || {}).at > REFRESH_MS - 2000) {
-      loadChart(r.id, r).then(function () { if (ui.sel === r.id) { renderRanges("d-ranges", ui.range, chartFor(r.id)); drawDetailChart(r); } });
+      var had = !!c;
+      loadChart(r.id, r).then(function () { if (ui.sel === r.id) { renderRanges("d-ranges", ui.range, chartFor(r.id)); drawDetailChart(r, had ? "morph" : "draw"); } });
     }
   }
-  function drawDetailChart(r) {
+  function drawDetailChart(r, anim) {
     var c = chartFor(r.id), el = $("d-chart"), ro = $("d-readout"), noteEl = $("d-chart-note");
     if (!c) {
       var st = ui.charts[r.id] || {};
-      el.innerHTML = '<p class="note chart-empty">' + (!CAN_FETCH_EXTRA ? "Charts aren't included in the offline snapshot." : st.failed || !chartUrl(r.id, r) ? "No chart available for " + esc(r.sym) + " yet." : "Loading chart...") + "</p>";
+      el._sig = null; el._line = null;
+      if (CAN_FETCH_EXTRA && !st.failed && chartUrl(r.id, r)) chartSkeleton(el);
+      else el.innerHTML = '<p class="note chart-empty" style="min-height:' + chartH(el) + 'px">' + (!CAN_FETCH_EXTRA ? "Charts aren't included in the offline snapshot." : "No chart available for " + esc(r.sym) + " yet.") + "</p>";
       ro.innerHTML = "&nbsp;"; noteEl.textContent = "";
       return;
     }
     var R = c.ranges || {}, key = R[ui.range] ? ui.range : (R["1D"] ? "1D" : Object.keys(R)[0]);
-    priceChart(el, ro, R[key], { label: r.sym + " price", rangeKey: key, sign: r.sign, rangeText: RANGE_WORDS[ui.range] + (key !== ui.range ? " (" + key + " shown)" : "") });
+    priceChart(el, ro, R[key], { anim: anim, label: r.sym + " price", rangeKey: key, sign: r.sign, rangeText: RANGE_WORDS[ui.range] + (key !== ui.range ? " (" + key + " shown)" : "") });
     noteEl.textContent = c.note || "";
   }
 
@@ -858,14 +1058,22 @@
   }
 
   // ================================================================== views / router
+  var TAB_ORDER = ["stocks", "overview", "transactions", "edit"];
+  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", transactions: "Transactions", edit: "Edit portfolio" };
   function route() {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, "")), parts = h.split("/");
     var v = parts[0];
     if (["stocks", "overview", "transactions", "edit"].indexOf(v) < 0) v = window.matchMedia("(max-width: 700px)").matches ? "stocks" : "overview";
-    var changed = ui.view !== v;
+    var changed = ui.view !== v, prevView = ui.view;
     ui.view = v;
     var views = document.querySelectorAll(".view");
     for (var i = 0; i < views.length; i++) views[i].hidden = views[i].getAttribute("data-view") !== v;
+    $("view-title").textContent = $("nav-title").textContent = VIEW_TITLES[v];
+    if (changed && prevView && motion()) {
+      var ve = document.querySelector('.view[data-view="' + v + '"]');
+      ve.style.setProperty("--vx", (TAB_ORDER.indexOf(v) > TAB_ORDER.indexOf(prevView) ? 18 : -18) + "px");
+      ve.classList.remove("view-in"); void ve.offsetWidth; ve.classList.add("view-in");
+    }
     var tabs = document.querySelectorAll(".tabs a");
     for (var k = 0; k < tabs.length; k++) {
       var on = tabs[k].getAttribute("data-tab") === v;
@@ -881,7 +1089,7 @@
       renderStocks(d);
       if (ui.sel) { renderDetail(d); markSelected(); }
     } else if (v === "overview" && d && changed) {
-      renderChart(d);
+      renderChart(d, true);
     } else if (v === "transactions") {
       renderTx(false);
     } else if (v === "edit") {
@@ -900,16 +1108,16 @@
       if (pill) {
         ev.stopPropagation();
         ui.pill = PILL_MODES[(PILL_MODES.indexOf(ui.pill) + 1) % PILL_MODES.length]; lsSet("pq-pill", ui.pill);
-        if (state.data) { var y = window.scrollY; renderStocks(state.data); window.scrollTo(0, y); }
+        if (state.data) { var y = window.scrollY; ui.pillSwap = true; renderStocks(state.data); ui.pillSwap = false; window.scrollTo(0, y); }
         return;
       }
       var row = t.closest && t.closest(".srow");
-      if (row) { openDetail(row.getAttribute("data-id")); return; }
+      if (row) { if (row.getAttribute("data-id")) openDetail(row.getAttribute("data-id")); return; }
       var rb = t.closest && t.closest("[data-range]");
       if (rb && !rb.disabled) {
         var grp = rb.parentNode.id, k = rb.getAttribute("data-range");
-        if (grp === "ac-ranges") { ui.acRange = k; lsSet("pq-ac-range", k); renderRanges("ac-ranges", k, chartFor("ACCOUNT")); drawAccount(); }
-        else if (grp === "d-ranges") { ui.range = k; lsSet("pq-range", k); var r = state.data && findRow(state.data, ui.sel); renderRanges("d-ranges", k, r && chartFor(r.id)); if (r) drawDetailChart(r); }
+        if (grp === "ac-ranges") { ui.acRange = k; lsSet("pq-ac-range", k); renderRanges("ac-ranges", k, chartFor("ACCOUNT")); drawAccount("morph"); }
+        else if (grp === "d-ranges") { ui.range = k; lsSet("pq-range", k); var r = state.data && findRow(state.data, ui.sel); renderRanges("d-ranges", k, r && chartFor(r.id)); if (r) drawDetailChart(r, "morph"); }
       }
     });
     document.addEventListener("keydown", function (ev) {
@@ -917,33 +1125,102 @@
       if (ev.key === "Escape" && ui.sel && !wide()) closeDetail();
     });
     $("d-close").addEventListener("click", function () { closeDetail(); });
+    sheetSwipeInit();
     edInit();
     route();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    ptrInit();
+  }
+  // Large title fades into the compact bar as the page scrolls (--nt: 0..1).
+  var scQueued = false;
+  function onScroll() {
+    if (scQueued) return;
+    scQueued = true;
+    requestAnimationFrame(function () {
+      scQueued = false;
+      var y = window.scrollY || 0, t = Math.min(1, Math.max(0, (y - 16) / 28));
+      document.documentElement.style.setProperty("--nt", t.toFixed(3));
+      document.body.classList.toggle("scrolled", y > 4);
+    });
+  }
+  // Pull to refresh (touch screens): pull down at the top of the page to re-fetch the data now.
+  function ptrInit() {
+    var el = $("ptr"), st = null, busy = false, TH = 64;
+    function set(y, p, o) { el.style.setProperty("--ptr-y", y.toFixed(1) + "px"); el.style.setProperty("--ptr-p", p.toFixed(3)); el.style.opacity = o; }
+    document.addEventListener("touchstart", function (e) {
+      st = null;
+      if (busy || e.touches.length !== 1 || (window.scrollY || 0) > 0 || document.body.classList.contains("sheet-open")) return;
+      if (e.target.closest && e.target.closest(".pchart, .detail, input, select, textarea, .tabs, .ranges")) return;
+      st = { y0: e.touches[0].clientY, x0: e.touches[0].clientX, dy: 0, on: false };
+    }, { passive: true });
+    document.addEventListener("touchmove", function (e) {
+      if (!st) return;
+      var dy = e.touches[0].clientY - st.y0, dx = Math.abs(e.touches[0].clientX - st.x0);
+      if (!st.on) {
+        if (dy > 8 && dy > dx && (window.scrollY || 0) <= 0) { st.on = true; el.classList.remove("settle"); el.classList.add("pulling"); }
+        else if (dy < -4 || dx > 12) { st = null; return; }
+        else return;
+      }
+      if (e.cancelable) e.preventDefault();
+      st.dy = dy;
+      var pull = Math.min(120, dy * 0.5);
+      set(pull - 44, Math.min(1, pull / TH), Math.min(1, pull / 28));
+    }, { passive: false });
+    function end() {
+      if (!st) return;
+      var s = st; st = null;
+      if (!s.on) return;
+      var pull = Math.min(120, s.dy * 0.5);
+      el.classList.remove("pulling"); el.classList.add("settle");
+      if (pull >= TH) {
+        busy = true; el.classList.add("loading"); set(24, 1, 1);
+        var t0 = Date.now();
+        var fin = function () {
+          setTimeout(function () { el.classList.remove("loading"); set(-44, 0, 0); busy = false; }, Math.max(0, 650 - (Date.now() - t0)));
+        };
+        doRefresh().then(fin, fin);
+      } else set(-44, 0, 0);
+    }
+    document.addEventListener("touchend", end);
+    document.addEventListener("touchcancel", end);
   }
   // periodic extras: charts for what's on screen, transactions list
   function refreshExtras() {
-    if (!CAN_FETCH_EXTRA || document.hidden) return;
+    if (!CAN_FETCH_EXTRA || document.hidden) return Promise.resolve();
+    var jobs = [];
     if (ui.view === "stocks") {
-      loadChart("ACCOUNT", null, true).then(function (j) { if (j && ui.view === "stocks") { renderRanges("ac-ranges", ui.acRange, j); drawAccount(); } });
+      jobs.push(loadChart("ACCOUNT", null, true).then(function (j) { if (j && ui.view === "stocks") { renderRanges("ac-ranges", ui.acRange, j); drawAccount("morph"); } }));
       if (ui.sel && state.data) {
         var r = findRow(state.data, ui.sel);
-        if (r) loadChart(r.id, r, true).then(function () { if (ui.sel === r.id) { renderRanges("d-ranges", ui.range, chartFor(r.id)); drawDetailChart(r); } });
+        if (r) jobs.push(loadChart(r.id, r, true).then(function () { if (ui.sel === r.id) { renderRanges("d-ranges", ui.range, chartFor(r.id)); drawDetailChart(r, "morph"); } }));
       }
     } else if (ui.view === "transactions") renderTx(true);
+    return Promise.all(jobs);
   }
 
   // ------------------------------------------------------------------ main render / refresh
+  function priceMap(d) {
+    var m = {}, r = stockRows(d);
+    r.held.concat(r.watch).forEach(function (x) { if (isNum(x.price)) m[x.id] = x.price; });
+    return m;
+  }
   function render(d) {
     state.data = d;
+    ui.rowFrom = ui.lastPrices; ui.animFrom = ui.lastTotal;
     try {
-      renderHeader(d); renderSummary(d); renderPositions(d); renderOption(d); renderChart(d); renderPaper(d);
+      renderHeader(d); renderSummary(d); renderPositions(d); renderOption(d);
+      renderChart(d, ui.view === "overview" && !ui.ovDrawn); if (ui.view === "overview") ui.ovDrawn = true;
+      renderPaper(d);
       renderStocks(d); renderEditSide(d);
+      ui.lastPrices = priceMap(d); ui.lastTotal = (d.account || {}).total;
       $("app").setAttribute("aria-busy", "false");
       var eb = $("render-error"); if (eb) eb.remove();
     } catch (e) {
       if (window.console) console.warn(e);
       if (!$("render-error")) $("app").insertAdjacentHTML("afterbegin", '<div class="card error-box" id="render-error">Could not render dashboard data: ' + esc(e.message) + "</div>");
     }
+    ui.rowFrom = null; ui.animFrom = null;
   }
   function isNewer(a, b) {
     if (!b) return true;
@@ -959,18 +1236,19 @@
       .then(function (j) { if (!j || !j.account || j.account.total == null) throw new Error("bad data"); return j; })
       .finally(function () { clearTimeout(to); });
   }
-  function refresh() {
+  function refresh(force) {
     state.lastCheck = new Date();
     state.nextAt = Date.now() + REFRESH_MS;
-    if (!DATA_URL) return;
-    fetchJSON(DATA_URL).then(function (j) {
+    if (!DATA_URL) return Promise.resolve();
+    return fetchJSON(DATA_URL).then(function (j) {
       state.fetchError = false;
       if (STANDALONE) {
         if (isNewer(j, state.data)) { state.source = "remote"; render(j); }
-      } else if (!state.data || j.generated_at_iso !== state.data.generated_at_iso) {
+      } else if (force || !state.data || j.generated_at_iso !== state.data.generated_at_iso) {
         render(j);
       }
-      refreshExtras();
+      tickStatus();
+      return refreshExtras();
     }).catch(function (e) {
       state.fetchError = true;
       if (!state.data && !STANDALONE) {
@@ -988,12 +1266,18 @@
       "last check " + last + (state.fetchError ? (STANDALONE ? " (no fresher data reachable)" : " (failed, keeping last data)") : "") + " · next in " + left + "s";
   }
 
+  // Manual refresh (pull to refresh): data, charts on screen and the transaction list.
+  function doRefresh() { return refresh(true); }
+  window.PQ = { refresh: doRefresh };
+
   var rsT = null, lastW = window.innerWidth;
   window.addEventListener("resize", function () {
     clearTimeout(rsT);
     rsT = setTimeout(function () {
       if (state.data && window.innerWidth !== lastW) {
         lastW = window.innerWidth; renderChart(state.data);
+        renderRanges("ac-ranges", ui.acRange, chartFor("ACCOUNT"));
+        if (ui.sel) { var rr = findRow(state.data, ui.sel); renderRanges("d-ranges", ui.range, rr && chartFor(rr.id)); }
         if (ui.view === "stocks") { drawAccount(); var r = ui.sel && findRow(state.data, ui.sel); if (r) drawDetailChart(r); if (wide()) document.body.classList.remove("sheet-open"); else if (ui.sel) document.body.classList.add("sheet-open"); }
       }
     }, 200);
