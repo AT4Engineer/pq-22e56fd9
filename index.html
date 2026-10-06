@@ -92,6 +92,7 @@
             <h3 class="d-h" id="d-pos-h">Your position</h3>
             <div class="d-stats" id="d-pos"></div>
             <p class="note" id="d-pos-note"></p>
+            <div id="d-roll" hidden></div>
           </div>
         </aside>
       </div>
@@ -150,6 +151,11 @@
     </section>
 
     <!-- Covered call -->
+    <section class="card roll-card" id="roll-panel" aria-labelledby="roll-title" hidden>
+      <h2 id="roll-title" class="card-title">Monthly roll plan <span class="card-sub">covered call</span></h2>
+      <div id="roll-body"></div>
+    </section>
+
     <section class="card" id="option-panel" aria-labelledby="opt-title" hidden>
       <h2 id="opt-title" class="card-title">Covered call <span class="card-sub" id="opt-label"></span></h2>
       <p class="plain" id="opt-plain"></p>
@@ -191,6 +197,8 @@
                 <option value="buy_to_close">Buy to close option</option>
                 <option value="option_expired">Option expired</option>
                 <option value="option_assigned">Option assigned</option>
+                <option value="roll">Roll (buy to close + sell to open)</option>
+                <option value="set_option_premium">Set option premium received</option>
               </optgroup>
               <optgroup label="Cash">
                 <option value="deposit">Deposit</option>
@@ -221,11 +229,14 @@
           <label class="f" data-for="amount"><span id="ed-amount-l">Amount</span>
             <input id="ed-amount" name="amount" type="text" inputmode="decimal" placeholder="0.00">
           </label>
-          <label class="f" data-for="fees">Fees
+          <label class="f" data-for="price2">New premium per share (sell)
+            <input id="ed-price2" name="price2" type="text" inputmode="decimal" placeholder="0.00">
+          </label>
+          <label class="f" data-for="fees"><span id="ed-fees-l">Fees</span>
             <input id="ed-fees" name="fees" type="text" inputmode="decimal" placeholder="0.00">
           </label>
           <fieldset class="f f-wide opt-fields" data-for="option">
-            <legend>Option</legend>
+            <legend id="ed-opt-legend">Option</legend>
             <div class="seg" role="radiogroup" aria-label="Call or put">
               <label><input type="radio" name="right" value="call" checked> Call</label>
               <label><input type="radio" name="right" value="put"> Put</label>
@@ -237,6 +248,8 @@
               <input id="ed-expiry" name="expiry" type="date">
             </label>
           </fieldset>
+          <p class="f-wide note ed-hint" id="ed-roll-hint" hidden>Prefilled from the latest quotes: buy back at the current ask, sell the next monthly call nearest the share price at its bid. Change them to your actual fill prices. Saved as two linked trades.</p>
+          <p class="f-wide note ed-hint" id="ed-prem-hint" hidden>The premium you got when you sold this call, per share (e.g. 3.80 = $380 for 1 contract). It only changes P/L and the roll history, not cash.</p>
           <label class="f" data-for="date">Trade date
             <input id="ed-date" name="date" type="date">
           </label>

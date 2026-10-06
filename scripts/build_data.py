@@ -32,6 +32,7 @@ from zoneinfo import ZoneInfo
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import charts  # noqa: E402
+import roll_plan  # noqa: E402
 
 ET = ZoneInfo("America/New_York")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -592,6 +593,82 @@ def build_quotes_and_charts(H, quotes, wquotes, watch, positions, options, trade
     return out
 
 
+# ---------------------------------------------------------------- covered-call roll plan
+def build_roll(H, options, quotes, trade_date, now, stamp, caveats):
+    """'This month' + 'next roll preview' (real Yahoo chain for the next monthly expiry) + roll history.
+
+    Off-hours fallback mirrors the option mark: when the next-month chain has no two-sided quote at the
+    at-the-money strike, the last good chain snapshot (data/roll_state.json, with its session date) is
+    reused and labelled. Never fatal; missing numbers stay null."""
+    txns = load_json(D("transactions.json"), []) or []
+    hold_opts = [o for o in H.get("options", []) if o.get("type", "call").lower() == "call"
+                 and o.get("position", "short") == "short"]
+    out = {"history": roll_plan.history(txns, H), "current": None, "next": None, "dividends": [], "notes": []}
+    state = load_json(D("roll_state.json"), {}) or {}
+    new_state = json.loads(json.dumps(state))
+    cur = None
+    if hold_opts and options:
+        h = hold_opts[0]
+        o = next((x for x in options if x["key"] == option_key(h)), None)
+        if o:
+            cur = roll_plan.this_month(o, num(h.get("open_price")), now)
+            out["current"] = cur
+    und = (hold_opts[0]["underlying"] if hold_opts else
+           next((s["symbol"] for s in H.get("stocks", []) if float(s["shares"]) >= 100), None))
+    if und and und in quotes:
+        spot = quotes[und]["price"]
+        after = date.fromisoformat(cur["expiry"]) if cur else now.date()
+        target = roll_plan.next_monthly_expiry(after)
+        try:
+            listed = roll_plan.listed_expiries(und)
+            expiry, note = roll_plan.choose_expiry(listed, target)
+            if note:
+                out["notes"].append(note)
+            rows = roll_plan.fetch_calls(und, expiry) if expiry else []
+        except Exception as e:  # noqa: BLE001
+            warn(f"roll preview: chain fetch failed ({e})")
+            expiry, rows = target.isoformat(), []
+            out["notes"].append(f"The {und} option chain could not be fetched just now ({e.__class__.__name__}).")
+        qnote = None
+        atm, _ = roll_plan.pick_atm(rows, spot)
+        skey = f"{und}|{expiry}"
+        good = (state.get(skey) or {})
+        if atm and roll_plan.two_sided(atm):
+            snap = {"session": trade_date, "rows": rows, "spot": r2(spot)}
+            if good.get("rows") != rows or good.get("session") != trade_date:
+                snap["as_of_et"] = stamp
+                new_state = {k: v for k, v in new_state.items() if k == skey or not k.startswith(f"{und}|")}
+                new_state[skey] = snap
+        elif good.get("rows"):
+            rows = good["rows"]
+            qnote = (f"No live bid/ask right now; using the last good {expiry} chain from session "
+                     f"{good.get('session')} (saved {good.get('as_of_et')}).")
+        elif rows:
+            qnote = "No two-sided quote at the at-the-money strike right now."
+        if expiry and rows:
+            mult = float(hold_opts[0].get("multiplier", 100)) if hold_opts else 100.0
+            n = hold_opts[0]["contracts"] if hold_opts else 1
+            out["next"] = roll_plan.preview(rows, spot, n, mult, cur["buyback_ask"] if cur else None, expiry,
+                                            now.date(), qnote)
+            out["next"]["underlying"] = und
+            out["next"]["quote_time_et"] = et_str(quotes[und]["quote_time"])
+        elif expiry:
+            out["notes"].append(f"No {und} {expiry} call quotes available right now.")
+        if qnote:
+            caveats.append(f"Next roll preview: {qnote}")
+        try:
+            import yfinance as yf
+            dv = yf.Ticker(und).dividends
+            if dv is not None and len(dv):
+                out["dividends"] = [{"ex_date": i.tz_convert(ET).date().isoformat() if i.tzinfo else i.date().isoformat(),
+                                     "amount": r4(float(v))} for i, v in dv.tail(4).items()][::-1]
+        except Exception as e:  # noqa: BLE001
+            warn(f"roll: dividends unavailable ({e})")
+    if new_state != state:
+        write_json(D("roll_state.json"), new_state)
+    return out
+
+
 # ---------------------------------------------------------------- main
 def strip_volatile(obj):
     o = json.loads(json.dumps(obj))
@@ -767,6 +844,13 @@ def main():
     quote_map = build_quotes_and_charts(H, quotes, wquotes, watch, positions, options, trade_date, now,
                                         history, total, prev_total, cash, caveats)
 
+    # 3c) covered-call roll plan (never fatal)
+    try:
+        roll = build_roll(H, options, quotes, trade_date, now, stamp, caveats)
+    except Exception as e:  # noqa: BLE001
+        warn(f"roll plan failed ({e})")
+        roll = None
+
     # 4) history upsert (one point per trading day)
     point = {"date": trade_date, "total": r2(total), "day_change": r2(day), "day_change_pct": r2(day_pct),
              "cash": r2(cash), "option_liability": r2(opt_total),
@@ -827,6 +911,7 @@ def main():
         "history": [{"date": h["date"], "total": h["total"], "day_change": h.get("day_change"),
                      "day_change_pct": h.get("day_change_pct")} for h in history],
         "watchlist": watch,
+        "roll": roll,
         "quotes": quote_map,
         "caveats": caveats,
     }

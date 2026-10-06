@@ -43,6 +43,7 @@ jobs:
             python scripts/build_data.py
             python scripts/history_csv.py
             python scripts/current_csv.py
+            python scripts/roll_csv.py
             python scripts/intraday_csv.py
             python scripts/build_standalone.py
             git add data dist

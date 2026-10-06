@@ -248,6 +248,157 @@
     $("opt-grid").innerHTML = g.join("");
   }
 
+  // ------------------------------------------------------------------ monthly roll plan
+  function timeLeft(iso) {
+    var ms = Date.parse(iso) - Date.now();
+    if (!isFinite(ms)) return "n/a";
+    if (ms <= 0) return "closed";
+    var m = Math.floor(ms / 60000), dd = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mi = m % 60;
+    if (dd > 0) return dd + " day" + (dd === 1 ? "" : "s") + " " + h + " hr";
+    if (h > 0) return h + " hr " + mi + " min";
+    return mi + " min";
+  }
+  function tickDeadlines() {
+    var els = document.querySelectorAll("[data-deadline]");
+    for (var i = 0; i < els.length; i++) {
+      var t = timeLeft(els[i].getAttribute("data-deadline"));
+      if (els[i].textContent !== t) els[i].textContent = t;
+    }
+  }
+  function shortDate(ymd) { return ymd ? fmtDate(ymd, { month: "short", day: "numeric" }) : ""; }
+  function netWord(x) { return isNum(x) ? (x >= 0 ? "credit" : "debit") : ""; }
+  function tile(id, label, val, sub, klass) {
+    return '<div class="rtile"><div class="rt-k">' + esc(label) + '</div><div class="rt-v ' + (klass || "") + '" id="' + id + '">' + val +
+      '</div><div class="rt-sub">' + sub + "</div></div>";
+  }
+  function rollTiles(c, n) {
+    var tiles = tile("rt-buy", "Buyback cost now", money(c ? c.buyback_ask : null), c ? "at the ask · mid " + money(c.buyback_mid) : "no open call") +
+      tile("rt-prem", "Next premium (est.)", money(n ? n.est_premium : null), n && isNum(n.atm_strike) ? shortDate(n.expiry) + " $" + n.atm_strike + " call, at the bid" : "n/a") +
+      tile("rt-net", "Net roll", n && isNum(n.net_roll) ? sMoney(n.net_roll) : "n/a", n && isNum(n.net_roll) ? netWord(n.net_roll) + ": new premium − buyback" : "needs both quotes", n ? cls(n.net_roll) : "");
+    return '<div class="rtiles">' + tiles + "</div>";
+  }
+  function animateTiles(c, n) {
+    var prev = ui.rollPrev || {}, now = { buy: c && c.buyback_ask, prem: n && n.est_premium, net: n && n.net_roll };
+    if (motion()) {
+      [["rt-buy", "buy", money], ["rt-prem", "prem", money], ["rt-net", "net", sMoney]].forEach(function (a) {
+        var el = $(a[0]), to = now[a[1]], from = prev[a[1]];
+        if (!el || !isNum(to)) return;
+        if (!isNum(from)) countUp(el, 0, to, a[2], 700);
+        else if (Math.abs(from - to) > 0.004) { countUp(el, from, to, a[2]); flash(el, a[1] === "buy" ? to < from : to > from, true); }
+      });
+    }
+    ui.rollPrev = now;
+  }
+  function strikeTable(n, c) {
+    if (!n || !n.strikes || !n.strikes.length) return "";
+    var size = (n.contracts || 1) * (n.multiplier || 100), buy = c ? c.buyback_ask : null;
+    var rows = n.strikes.map(function (s, i) {
+      var prem = isNum(s.bid) && s.bid > 0 ? s.bid * size : null, net = isNum(prem) && isNum(buy) ? prem - buy : null;
+      return '<tr class="' + (s.atm ? "atm " : "") + 'row-in" style="animation-delay:' + (i * 40) + 'ms"><td>$' + esc(s.strike) + (s.atm ? ' <span class="tag">nearest</span>' : "") + "</td>" +
+        '<td class="num">' + money(s.bid) + '</td><td class="num">' + money(s.ask) + '</td><td class="num">' + money(s.mid) + "</td>" +
+        '<td class="num">' + money(prem) + '</td><td class="num ' + cls(net) + '">' + (isNum(net) ? sMoney(net) : "n/a") + "</td></tr>";
+    }).join("");
+    return '<div class="table-scroll"><table class="data compact strikes"><thead><tr><th>Strike</th><th class="num">Bid</th><th class="num">Ask</th><th class="num">Mid</th>' +
+      '<th class="num">Premium</th><th class="num">Net roll</th></tr></thead><tbody>' + rows + "</tbody></table></div>" +
+      '<p class="note">Premium = bid × ' + size + " shares. Net roll = premium − buyback at the ask (" + money(buy) + ").</p>";
+  }
+  function historyTable(h) {
+    var R = (h && h.rows) || [];
+    if (!R.length) return '<p class="note">No covered calls recorded yet.</p>';
+    var rows = R.map(function (r, i) {
+      var sold = isNum(r.premium) ? money(r.premium) + ' <span class="subtle">' + (r.premium_source === "entered" ? "entered" : esc(shortDate(r.opened))) + "</span>" : '<span class="subtle">not set</span>';
+      var closed = r.open ? '<span class="subtle">open</span>' : (isNum(r.close_cost) && r.close_action === "Bought back" ? money(r.close_cost) + ' <span class="subtle">' + esc(shortDate(r.closed)) + "</span>" : esc(r.close_action || ""));
+      if (r.rolled_to) closed += '<div class="subtle">rolled to ' + esc(r.rolled_to.replace(/^\S+ /, "")) + "</div>";
+      return '<tr class="row-in" style="animation-delay:' + (i * 40) + 'ms"><td>' + esc(r.label.replace(/^\S+ /, "")) + "</td><td class=\"num\">" + sold + '</td><td class="num">' + closed +
+        '</td><td class="num ' + cls(r.net) + '">' + (isNum(r.net) ? sMoney(r.net) : "–") + '</td><td class="num">' + money(r.cumulative) + "</td></tr>";
+    }).join("");
+    return '<div class="table-scroll"><table class="data compact rhist"><thead><tr><th>Call</th><th class="num">Sold for</th><th class="num">Bought back</th><th class="num">Net</th><th class="num">Cumulative</th></tr></thead><tbody>' +
+      rows + '</tbody><tfoot><tr><td>Total</td><td class="num">' + money(h.premiums_total) + '</td><td class="num">' + money(h.buybacks_total) + '</td><td class="num ' + cls(h.net_total) + '">' +
+      sMoney(h.net_total) + '</td><td class="num"></td></tr></tfoot></table></div>' +
+      '<p class="note">Cumulative = premiums received minus buyback costs, from Edit trades (Sell to open, Buy to close, Roll).' +
+      (h.missing_premium ? ' A premium is missing: <a href="#edit/set_option_premium">set the premium received</a>.' : "") + "</p>";
+  }
+  function howItWorks(roll) {
+    var dv = (roll && roll.dividends) || [];
+    var dvText = dv.length ? " Recent " + esc(roll.next ? roll.next.underlying : "UPRO") + " ex-dividend dates: " + dv.map(function (x) { return esc(fmtDate(x.ex_date, { month: "short", day: "numeric", year: "numeric" })) + " (" + money(x.amount) + "/share)"; }).join(", ") + "." : "";
+    return '<details class="how" id="roll-how"><summary>How this works</summary><div class="how-body">' +
+      "<h4>What a covered call is</h4><p>You own 100 shares and sell someone the right to buy them from you at the strike price until the expiry date. You are paid a premium up front and keep it whatever happens. It is “covered” because your shares back the promise.</p>" +
+      "<h4>Bid, ask and mid</h4><p>The bid is what buyers pay; the ask is what sellers want. Buying back usually fills near the ask and selling near the bid, so this page uses the ask for the buyback and the bid for the new premium. The mid is halfway between.</p>" +
+      "<h4>Why buying back costs more when the stock rises</h4><p>A call’s price follows the stock. Once the stock is well above the strike, each $1 it rises adds close to $1 per share ($100 per contract) to the buyback cost. That loss on the call is offset by the gain on your shares, which is why the call alone can show a loss while the account is up.</p>" +
+      "<h4>Rolling</h4><p>A roll is two trades: buy to close the current call, then sell to open a later one. If the new premium is more than the buyback cost it is a net credit; if less, a net debit.</p>" +
+      "<h4>Assignment risk</h4><p>If the call is above the strike at expiry, your shares will most likely be sold at the strike. Options on ETFs like UPRO can be exercised any day before expiry, not just the last day. Early exercise is most likely when the call is deep in the money with little time value left, and on the day before an ex-dividend date, when the call owner exercises to collect the dividend. UPRO pays a small dividend about four times a year." + dvText +
+      " Options can also be exercised for a short time after the 4:00 PM close on expiry day, so a call just below the strike at the close can still be assigned if the price moves after hours.</p>" +
+      "<h4>The tradeoff: capped upside</h4><p>While the call is open you give up gains above the strike. If UPRO jumps 15% in a month, you still earn only up to the strike plus the premium; the rest goes to the call owner (or to the buyback cost if you roll).</p>" +
+      "<h4>A 3x leveraged ETF moves fast both ways</h4><p>UPRO aims for 3 times the S&P 500’s daily move, so a 2% index day is roughly 6% for UPRO. That is why its premiums are large, and also why the shares can drop much further than the premium cushions. Because it resets daily, it can also lose value in choppy, sideways markets.</p>" +
+      '<p class="subtle">Educational only, not advice. Quotes from Yahoo Finance, may be delayed ~15 minutes.</p></div></details>';
+  }
+  function renderRoll(d) {
+    var roll = d.roll, panel = $("roll-panel");
+    if (!panel) return;
+    if (!roll || (!roll.current && !roll.next)) { panel.hidden = true; return; }
+    panel.hidden = false;
+    var c = roll.current, n = roll.next, h = roll.history;
+    var und = (c && c.underlying) || (n && n.underlying) || "UPRO";
+    var html = "";
+    if (c) {
+      html += '<p class="plain roll-plan">Plan: if ' + esc(und) + " is above $" + esc(c.strike) + " near expiry, buy the " + esc(shortDate(c.expiry)) + " $" + esc(c.strike) +
+        " call back before 4:00 PM ET to keep the shares, then sell the " + (n ? esc(shortDate(n.expiry)) : "next month’s") + " call nearest the share price. Repeat each month.</p>";
+    }
+    html += rollTiles(c, n);
+    if (c) {
+      var pr = isNum(c.premium_received) ? money(c.premium_received) + ' <span class="subtle">' + money(c.premium_received_per_share) + "/sh</span>" : 'not set <a class="mini-link" href="#edit/set_option_premium">Set</a>';
+      var pl = isNum(c.pl_if_closed_ask) ? '<span class="' + cls(c.pl_if_closed_ask) + '">' + sMoney(c.pl_if_closed_ask) + "</span>" + (isNum(c.pl_if_closed_mid) ? ' <span class="subtle">mid ' + sMoney(c.pl_if_closed_mid) + "</span>" : "") : '<span class="subtle">needs premium received</span>';
+      var vs = isNum(c.spot) ? money(c.spot) + ' <span class="subtle">' + (c.spot > c.strike ? money(c.spot - c.strike) + " above strike" : c.spot < c.strike ? money(c.strike - c.spot) + " below strike" : "at the strike") + "</span>" : "n/a";
+      html += '<h3 class="r-h">This month <span class="card-sub">' + esc(c.label) + "</span></h3>" +
+        '<div class="deadline' + (c.expired ? " past" : "") + '"><span class="dl-left" data-deadline="' + esc(c.deadline_iso) + '">' + esc(timeLeft(c.deadline_iso)) + '</span><span class="dl-text">' + esc(c.deadline_text) + "</span></div>" +
+        '<div class="kv-grid">' +
+        kv("Call mark", money(c.mark) + ' <span class="subtle">/ share</span>') +
+        kv("Bid / ask", isNum(c.bid) && isNum(c.ask) ? money(c.bid) + " / " + money(c.ask) : "n/a") +
+        kv("Buyback cost now", money(c.buyback_ask) + ' <span class="subtle">ask · mid ' + money(c.buyback_mid) + "</span>") +
+        kv("Premium received", pr) +
+        kv("P/L on the call if closed now", pl) +
+        kv(und + " now", vs) + "</div>" +
+        (c.quote_reused ? '<p class="note">No live bid/ask right now; showing the last good quote' + (c.quote_as_of_et ? " (" + esc(c.quote_as_of_et) + ")" : "") + ".</p>" : "");
+    }
+    if (n) {
+      html += '<h3 class="r-h">Next roll preview <span class="card-sub">' + esc(n.expiry_label) + " monthly</span></h3>";
+      if (isNum(n.atm_strike)) {
+        html += '<div class="kv-grid">' +
+          kv("Strike nearest " + money(n.spot), "$" + esc(n.atm_strike) + " call") +
+          kv("Bid / ask / mid", money(n.bid) + " / " + money(n.ask) + " / " + money(n.mid)) +
+          kv("Estimated premium", money(n.est_premium) + ' <span class="subtle">bid × ' + ((n.contracts || 1) * (n.multiplier || 100)) + "</span>") +
+          kv("Net roll", isNum(n.net_roll) ? '<span class="' + cls(n.net_roll) + '">' + sMoney(n.net_roll) + " " + netWord(n.net_roll) + "</span>" : "n/a") +
+          kv("Premium vs share value", pct(n.premium_pct) + ' <span class="subtle">' + (isNum(n.annualized_pct) ? pct(n.annualized_pct, 1) + " annualized, " + n.days + " days" : "") + "</span>") +
+          kv("Breakeven", money(n.breakeven) + ' <span class="subtle">price − premium</span>') + "</div>" +
+          '<div class="outcomes"><p><span class="oc oc-up">Above $' + esc(n.atm_strike) + "</span>" + esc(n.above_text.replace(/^Above \$[\d.]+ on [^:]+: /, "")) + "</p>" +
+          '<p><span class="oc oc-down">Below $' + esc(n.atm_strike) + "</span>" + esc(n.below_text.replace(/^Below \$[\d.]+: /, "")) + "</p></div>" +
+          strikeTable(n, c);
+      }
+      var notes = [n.quote_note, n.note].concat(roll.notes || []).filter(Boolean);
+      if (notes.length) html += '<p class="note">' + notes.map(esc).join(" ") + "</p>";
+    }
+    html += '<h3 class="r-h">Roll history</h3>' + historyTable(h);
+    html += '<div class="r-actions"><a class="btn-plain" href="#edit/roll">Record a roll</a><a class="btn-plain" href="#edit/set_option_premium">Set premium received</a></div>';
+    var wasOpen = $("roll-how") && $("roll-how").open;
+    $("roll-body").innerHTML = html + howItWorks(roll);
+    if (wasOpen) $("roll-how").open = true;
+    animateTiles(c, n);
+  }
+  function rollCompact(d) {
+    var roll = d.roll || {}, c = roll.current, n = roll.next;
+    if (!c && !n) return "";
+    var h = "";
+    if (c) h += '<div class="deadline sm"><span class="dl-left" data-deadline="' + esc(c.deadline_iso) + '">' + esc(timeLeft(c.deadline_iso)) + '</span><span class="dl-text">' + esc(c.deadline_text) + "</span></div>";
+    h += '<div class="d-stats">' +
+      (c ? stat("Buyback now", money(c.buyback_ask) + ' <span class="subtle">ask</span>') + stat("Buyback at mid", money(c.buyback_mid)) +
+        stat("Premium received", isNum(c.premium_received) ? money(c.premium_received) : "not set") +
+        stat("P/L if closed", isNum(c.pl_if_closed_ask) ? '<span class="' + cls(c.pl_if_closed_ask) + '">' + sMoney(c.pl_if_closed_ask) + "</span>" : "n/a") : "") +
+      (n && isNum(n.atm_strike) ? stat("Next: " + shortDate(n.expiry), "$" + esc(n.atm_strike) + " call") + stat("Bid / ask", money(n.bid) + " / " + money(n.ask)) +
+        stat("Est. premium", money(n.est_premium)) + stat("Net roll", isNum(n.net_roll) ? '<span class="' + cls(n.net_roll) + '">' + sMoney(n.net_roll) + "</span>" : "n/a") : "") +
+      "</div>";
+    return '<h3 class="d-h">Monthly roll</h3>' + h + '<p class="note"><a href="#overview/roll">Full roll plan and how it works</a> · <a href="#edit/roll">Record a roll</a></p>';
+  }
+
   // ------------------------------------------------------------------ chart
   function niceStep(range, ticks) {
     var raw = range / Math.max(1, ticks), mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / mag;
@@ -838,17 +989,19 @@
     } else if (r.kind === "option") {
       var oo = r.opt, n = oo.contracts;
       ph = stat("Position", esc((oo.position === "short" ? "Short " : "Long ") + n + " contract" + (n === 1 ? "" : "s"))) +
-        stat("Shares covered", String(oo.shares_at_risk || n * oo.multiplier)) + stat("Opened at", isNum(oo.open_price) ? money(oo.open_price) + " / share" : "not set") +
+        stat("Shares covered", String(oo.shares_at_risk || n * oo.multiplier)) + stat("Premium received", isNum(oo.open_price) ? money(oo.open_price) + " / share" : '<a href="#edit/set_option_premium">not set</a>') +
         stat("Market value", money(oo.liability)) + stat("Day gain", '<span class="' + cls(oo.day_change) + '">' + sMoney(oo.day_change) + "</span>") +
         stat("Unrealized P/L", isNum(oo.unrealized) ? '<span class="' + cls(oo.unrealized) + '">' + sMoney(oo.unrealized) + "</span>" : "n/a") +
         stat("If assigned", money(oo.assigned_proceeds) + " for " + (oo.shares_at_risk || n * oo.multiplier) + " sh");
-      note = "Short option: its market value is a liability (negative). The day gain is from your side of the trade. <a href=\"#overview\">Covered call details</a>";
+      note = "Short option: its market value is a liability (negative). The day gain is from your side of the trade.";
     } else {
       note = "On the watchlist (not held). <a href=\"#edit/watchlist_remove/" + encodeURIComponent(r.sym) + "\">Remove from watchlist</a>";
     }
     $("d-pos-h").hidden = !ph;
     $("d-pos").innerHTML = ph;
     $("d-pos-note").innerHTML = note;
+    var dr = $("d-roll"), rh = r.kind === "option" && r.opt.position === "short" ? rollCompact(d) : "";
+    dr.hidden = !rh; dr.innerHTML = rh;
     // chart
     var c = chartFor(r.id);
     renderRanges("d-ranges", ui.range, c);
@@ -900,7 +1053,8 @@
   var REPO = (document.querySelector('meta[name="trade-repo"]') || {}).content || "AT4Engineer/pq-22e56fd9";
   var TYPE_LABEL = { buy: "Buy", sell: "Sell", sell_to_open: "Sell to open", buy_to_close: "Buy to close", option_expired: "Option expired",
     option_assigned: "Option assigned", deposit: "Deposit", withdraw: "Withdraw", dividend: "Dividend", set_cash: "Set cash",
-    set_cost_basis: "Set cost basis", watchlist_add: "Watchlist add", watchlist_remove: "Watchlist remove" };
+    set_cost_basis: "Set cost basis", watchlist_add: "Watchlist add", watchlist_remove: "Watchlist remove",
+    roll: "Roll", set_option_premium: "Set premium received" };
   // which inputs each type uses
   var FIELDS = {
     buy: ["symbol", "qty", "price", "fees", "date", "note"], sell: ["symbol", "qty", "price", "fees", "date", "note"],
@@ -910,8 +1064,11 @@
     option_assigned: ["openopt", "symbol", "qty", "fees", "option", "date", "note"],
     deposit: ["amount", "date", "note"], withdraw: ["amount", "date", "note"], dividend: ["symbol", "amount", "date", "note"],
     set_cash: ["amount", "date", "note"], set_cost_basis: ["symbol", "price", "date", "note"],
-    watchlist_add: ["symbol"], watchlist_remove: ["symbol"]
+    watchlist_add: ["symbol"], watchlist_remove: ["symbol"],
+    roll: ["openopt", "symbol", "qty", "price", "price2", "fees", "option", "date", "note"],
+    set_option_premium: ["openopt", "symbol", "price", "option", "note"]
   };
+  var OPT_RE = /open|close|expired|assigned|roll|premium/;
   function todayET() { return new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); }
   function fv(id) { return ($(id).value || "").trim(); }
   function pnum(s) { if (s === "" || s == null) return null; var x = Number(String(s).replace(/[$,\s]/g, "")); return isFinite(x) ? x : NaN; }
@@ -922,9 +1079,14 @@
     var t = edType(), f = FIELDS[t] || [];
     var nodes = document.querySelectorAll("#ed-form [data-for]");
     for (var i = 0; i < nodes.length; i++) nodes[i].hidden = f.indexOf(nodes[i].getAttribute("data-for")) < 0;
-    var isOpt = /open|close|expired|assigned/.test(t);
+    var isOpt = OPT_RE.test(t);
     $("ed-qty-l").textContent = isOpt ? "Contracts" : "Shares";
-    $("ed-price-l").textContent = t === "set_cost_basis" ? "Average cost per share" : isOpt ? "Price per share (premium)" : "Price per share";
+    $("ed-price-l").textContent = t === "set_cost_basis" ? "Average cost per share" : t === "roll" ? "Buy-back price per share" :
+      t === "set_option_premium" ? "Premium received per share" : isOpt ? "Price per share (premium)" : "Price per share";
+    $("ed-fees-l").textContent = t === "roll" ? "Fees per leg" : "Fees";
+    $("ed-opt-legend").textContent = t === "roll" ? "New option (sell to open)" : "Option";
+    $("ed-roll-hint").hidden = t !== "roll";
+    $("ed-prem-hint").hidden = t !== "set_option_premium";
     $("ed-amount-l").textContent = t === "set_cash" ? "New cash balance" : t === "dividend" ? "Dividend amount" : "Amount";
     $("ed-symbol-l").textContent = isOpt ? "Underlying symbol" : "Symbol";
     $("ed-qty").placeholder = isOpt ? "1" : "0";
@@ -936,12 +1098,30 @@
         : '<option value="">No open options</option>';
       edPickOpt();
     }
+    if (t === "roll") edRollPrefill();
+    if (t === "set_option_premium") {
+      var so = opts[+$("ed-openopt").value];
+      $("ed-price").value = so && isNum(so.open_price) ? so.open_price : "";
+    }
     edPreview();
   }
+  // Roll: buy back at the current ask, sell the next monthly call nearest the share price at its bid (editable).
+  function edRollPrefill() {
+    var roll = (state.data || {}).roll || {}, c = roll.current, n = roll.next;
+    if (c && isNum(c.ask) && c.ask > 0) $("ed-price").value = c.ask;
+    if (n && isNum(n.atm_strike)) {
+      $("ed-strike").value = n.atm_strike; $("ed-expiry").value = n.expiry;
+      $("ed-price2").value = isNum(n.bid) && n.bid > 0 ? n.bid : "";
+      var rc = document.querySelector('#ed-form input[name="right"][value="call"]'); if (rc) rc.checked = true;
+    }
+    if (c && c.expiry && c.expiry >= todayET()) $("ed-date").value = todayET();
+  }
+  function edOpenOpt() { var d = state.data || {}; return $("ed-openopt").value === "" ? null : (d.options || [])[+$("ed-openopt").value] || null; }
   function edPickOpt() {
     var d = state.data || {}, o = (d.options || [])[+$("ed-openopt").value];
     if ($("ed-openopt").value === "" || !o) return;
     $("ed-symbol").value = o.underlying;
+    if (edType() === "roll") { $("ed-qty").value = o.contracts; return; }  // the option fields are the NEW contract
     $("ed-strike").value = o.strike;
     $("ed-expiry").value = o.expiry;
     var r = document.querySelector('#ed-form input[name="right"][value="' + o.type + '"]'); if (r) r.checked = true;
@@ -961,27 +1141,38 @@
     }
     if (f.indexOf("symbol") >= 0) {
       var sym = fv("ed-symbol").toUpperCase();
-      if (!sym && !/close|expired|assigned/.test(t) && t !== "dividend") err.push("Symbol is required.");
+      if (!sym && !/close|expired|assigned|roll|premium/.test(t) && t !== "dividend") err.push("Symbol is required.");
       else if (sym && !/^[A-Z0-9^][A-Z0-9.\-=^]{0,14}$/.test(sym)) err.push("Symbol doesn't look like a ticker.");
       if (sym) txn.symbol = sym;
     }
-    var isOpt = /open|close|expired|assigned/.test(t);
+    var isOpt = OPT_RE.test(t);
     if (f.indexOf("qty") >= 0) {
       if (t === "option_expired" || t === "option_assigned") { if (fv("ed-qty")) txn.qty = need("ed-qty", "Contracts", true, true); }
       else txn.qty = need("ed-qty", isOpt ? "Contracts" : "Shares", true, isOpt);
     }
-    if (f.indexOf("price") >= 0) txn.price = need("ed-price", t === "set_cost_basis" ? "Average cost" : "Price", t !== "buy_to_close" && t !== "set_cost_basis");
+    if (f.indexOf("price") >= 0) txn.price = need("ed-price", t === "set_cost_basis" ? "Average cost" : t === "roll" ? "Buy-back price" : t === "set_option_premium" ? "Premium received" : "Price",
+      t !== "buy_to_close" && t !== "set_cost_basis" && t !== "roll");
     if (f.indexOf("amount") >= 0) txn.amount = need("ed-amount", "Amount", t !== "set_cash");
     if (f.indexOf("fees") >= 0) { txn.fees = fv("ed-fees") ? need("ed-fees", "Fees", false) : 0; }
     if (f.indexOf("option") >= 0) {
       var right = (document.querySelector('#ed-form input[name="right"]:checked') || {}).value || "call";
       var o = { right: right };
-      if (fv("ed-strike")) o.strike = need("ed-strike", "Strike", true); else if (t === "sell_to_open") err.push("Strike is required.");
-      if (fv("ed-expiry")) o.expiry = fv("ed-expiry"); else if (t === "sell_to_open") err.push("Expiry is required.");
+      var needNew = t === "sell_to_open" || t === "roll";
+      if (fv("ed-strike")) o.strike = need("ed-strike", "Strike", true); else if (needNew) err.push((t === "roll" ? "New strike" : "Strike") + " is required.");
+      if (fv("ed-expiry")) o.expiry = fv("ed-expiry"); else if (needNew) err.push((t === "roll" ? "New expiry" : "Expiry") + " is required.");
       txn.option = o;
     }
     if (f.indexOf("date") >= 0) txn.date = fv("ed-date") || todayET();
     if (f.indexOf("note") >= 0 && fv("ed-note")) txn.note = fv("ed-note");
+    if (t === "roll") {
+      var cur = edOpenOpt(), p2 = need("ed-price2", "New premium", true);
+      if (!cur) err.push("Pick the open option to roll.");
+      var cl = cur ? { right: cur.type, strike: cur.strike, expiry: cur.expiry } : {};
+      if (cur && txn.option && txn.option.expiry && txn.option.expiry <= cur.expiry && txn.option.strike === cur.strike) err.push("The new option must be a later expiry or a different strike.");
+      txn = { v: 1, type: "roll", symbol: txn.symbol || (cur && cur.underlying), qty: txn.qty, fees: txn.fees,
+        close: { option: cl, price: txn.price }, open: { option: txn.option, price: p2 }, date: txn.date, note: txn.note };
+      if (!txn.note) delete txn.note;
+    }
     return { txn: txn, err: err };
   }
   function edDescribe(x) {
@@ -994,6 +1185,11 @@
       case "dividend": return "Dividend " + money(x.amount) + (x.symbol ? " from " + x.symbol : "");
       case "set_cash": return "Set cash to " + money(x.amount);
       case "set_cost_basis": return "Set cost basis " + (x.symbol || "?") + " = " + money(x.price);
+      case "set_option_premium": return "Set premium received " + optLabel(x.symbol, o) + " = " + money(x.price) + "/share" + (isNum(x.price) ? " (" + money(x.price * 100 * (edOpenOpt() ? edOpenOpt().contracts : 1)) + ")" : "");
+      case "roll": {
+        var c = x.close || {}, n = x.open || {}, co = c.option || {}, no = n.option || {};
+        return "Roll " + q(x.qty) + " " + optLabel(x.symbol, co) + " → " + optLabel("", no) + " (buy back @ " + money(c.price) + ", sell @ " + money(n.price) + ")";
+      }
       default: return TYPE_LABEL[t] + " " + (x.symbol || "?");
     }
   }
@@ -1014,6 +1210,11 @@
       case "deposit": case "dividend": return cash + x.amount;
       case "withdraw": return cash - x.amount;
       case "set_cash": return x.amount;
+      case "roll": {
+        var c = x.close || {}, n = x.open || {};
+        if (!isNum(c.price) || !isNum(n.price) || !isNum(x.qty)) return null;
+        return cash - x.qty * c.price * mult - f + x.qty * n.price * mult - f;
+      }
       default: return cash;
     }
   }
@@ -1023,6 +1224,9 @@
     if (b.err.length) { el.innerHTML = '<span class="subtle">' + esc(edDescribe(x)) + "</span>"; return; }
     var after = isNum(cash) ? edCashAfter(x, cash) : null;
     el.innerHTML = "<strong>" + esc(edDescribe(x)) + "</strong>" +
+      (x.type === "roll" && isNum(after) ? '<div>Net ' + netWord(after - cash) + ' <span class="' + cls(after - cash) + '">' + sMoney(after - cash) + "</span>" +
+        ' <span class="subtle">saved as two linked trades: buy to close, then sell to open</span></div>' : "") +
+      (x.type === "set_option_premium" ? '<div class="subtle">Cash doesn\'t change (the premium is already in cash). Used for P/L and roll history.</div>' : "") +
       (isNum(after) && Math.abs(after - cash) > 0.004 ? '<div class="subtle">Cash ' + money(cash) + " → " + money(after) + " (estimate; GitHub checks it)</div>" : "");
   }
   function edIssueUrl(x) {
@@ -1059,6 +1263,7 @@
       return '<li><span>' + esc(s) + '</span><a href="#edit/watchlist_remove/' + encodeURIComponent(s) + '" aria-label="Remove ' + esc(s) + ' from watchlist">Remove</a></li>';
     }).join("") : '<li class="note">Empty</li>') + '<li class="chip-add"><a href="#edit/watchlist_add">+ Add symbol</a></li>';
     if (!$("ed-date").value) $("ed-date").value = todayET();
+    if (!ui.edReady) { ui.edReady = true; edSetup(); }  // first data: fill the open-option picker / roll prefill
     if (ui.view === "edit") edPreview();
   }
   function edInit() {
@@ -1113,7 +1318,9 @@
       else if (parts[1] && FIELDS[parts[1]]) edPrefill(parts[1], parts[2] || "");
       if (d) renderEditSide(d);
     }
-    if (changed) window.scrollTo(0, 0);
+    if (v === "overview" && parts[1] === "roll" && $("roll-panel") && !$("roll-panel").hidden) {
+      setTimeout(function () { $("roll-panel").scrollIntoView({ behavior: motion() ? "smooth" : "auto", block: "start" }); }, changed ? 60 : 0);
+    } else if (changed) window.scrollTo(0, 0);
   }
   function uiInit() {
     window.addEventListener("hashchange", route);
@@ -1225,7 +1432,7 @@
     state.data = d;
     ui.rowFrom = ui.lastPrices; ui.animFrom = ui.lastTotal;
     try {
-      renderHeader(d); renderSummary(d); renderPositions(d); renderOption(d);
+      renderHeader(d); renderSummary(d); renderPositions(d); renderOption(d); renderRoll(d);
       renderChart(d, ui.view === "overview" && !ui.ovDrawn); if (ui.view === "overview") ui.ovDrawn = true;
             renderStocks(d); renderEditSide(d);
       ui.lastPrices = priceMap(d); ui.lastTotal = (d.account || {}).total;
@@ -1302,6 +1509,7 @@
   refresh();
   setInterval(refresh, REFRESH_MS);
   setInterval(tickStatus, 1000); tickStatus();
+  setInterval(tickDeadlines, 30000);
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden && state.nextAt && Date.now() > state.nextAt - REFRESH_MS + 15000) refresh();
   });

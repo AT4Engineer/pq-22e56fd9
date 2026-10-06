@@ -579,3 +579,57 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
 body.chart-dragging { overflow: hidden; overscroll-behavior: none; touch-action: none; }
 body.chart-dragging .detail { overscroll-behavior: none; }
 .pchart.dragging { touch-action: none; cursor: ew-resize; }
+
+/* ---------------------------------------------------------------- monthly roll plan */
+.roll-plan { font-size: 14px; }
+.rtiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0 0 6px; }
+.rtile { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; min-width: 0; animation: row-in .42s var(--ease-out) backwards; }
+.rtile:nth-child(2) { animation-delay: 60ms; } .rtile:nth-child(3) { animation-delay: 120ms; }
+.rt-k { color: var(--muted); font-size: 12px; }
+.rt-v { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; margin: 3px 0 2px; white-space: nowrap; border-radius: 4px; }
+.rt-sub { color: var(--muted); font-size: 11.5px; line-height: 1.3; }
+.r-h { font-size: 15px; font-weight: 650; margin: 22px 0 8px; }
+.r-h .card-sub { margin-left: 4px; }
+.deadline { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 0 0 10px; padding: 10px 12px; border-radius: 10px;
+  background: rgba(255, 159, 10, .12); border-left: 3px solid #ff9f0a; animation: fade-in .4s ease backwards; }
+.deadline .dl-left { font-weight: 700; color: #ff9f0a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.deadline .dl-text { font-size: 13.5px; }
+.deadline.past { background: var(--surface-2); border-left-color: var(--muted); }
+.deadline.past .dl-left { color: var(--muted); }
+.deadline.sm { margin: 4px 0 6px; padding: 8px 10px; }
+.outcomes { margin: 12px 0 4px; display: grid; gap: 8px; }
+.outcomes p { margin: 0; font-size: 13.5px; line-height: 1.45; }
+.oc { display: inline-block; font-size: 11.5px; font-weight: 650; padding: 2px 8px; border-radius: 999px; margin-right: 8px; }
+.oc-up { background: rgba(48, 209, 88, .15); color: var(--pos); }
+.oc-down { background: rgba(255, 69, 58, .15); color: var(--neg); }
+table.strikes tr.atm td { background: rgba(10, 132, 255, .12); }
+table.strikes tr.atm td:first-child { box-shadow: inset 3px 0 0 var(--accent); padding-left: 8px; }
+.tag { display: inline-block; font-size: 10.5px; font-weight: 650; color: var(--accent); background: rgba(10, 132, 255, .15); padding: 1px 6px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; }
+table.rhist td .subtle { display: block; }
+.r-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
+.r-actions .btn-plain { text-decoration: none; display: inline-flex; align-items: center; font-size: 14px; padding: 9px 14px; }
+.mini-link { color: var(--accent); text-decoration: none; font-weight: 600; margin-left: 6px; }
+details.how { margin-top: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); }
+details.how summary { cursor: pointer; list-style: none; padding: 13px 16px; font-weight: 650; display: flex; align-items: center; justify-content: space-between; min-height: 44px; box-sizing: border-box; }
+details.how summary::-webkit-details-marker { display: none; }
+details.how summary::after { content: ""; width: 8px; height: 8px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .25s var(--ease-out); margin-right: 4px; }
+details.how[open] summary::after { transform: rotate(-135deg); }
+details.how .how-body { padding: 0 16px 14px; }
+details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards; }
+@keyframes how-open { from { opacity: 0; transform: translateY(-6px); } }
+.how-body h4 { margin: 14px 0 4px; font-size: 14px; }
+.how-body p { margin: 0 0 6px; font-size: 13.5px; line-height: 1.5; color: #d1d1d6; }
+.how-body p.subtle { color: var(--muted); margin-top: 12px; }
+#d-roll .d-stats { margin-top: 2px; }
+.ed-hint { margin: 0; }
+@media (max-width: 700px) {
+  .rtiles { gap: 8px; }
+  .rtile { padding: 10px; border-radius: 10px; }
+  .rt-v { font-size: 17px; }
+  .rt-sub { font-size: 11px; }
+}
+@media (max-width: 360px) { .rt-v { font-size: 15px; } }
+@media (prefers-reduced-motion: reduce) {
+  .rtile, .deadline, details.how[open] .how-body { animation: none; }
+  details.how summary::after { transition: none; }
+}

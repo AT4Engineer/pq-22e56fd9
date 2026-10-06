@@ -41,8 +41,11 @@ Everything refreshes every 60 s without reloading (the data itself changes when 
 
 A static site can't save anything, so the Edit form goes through a GitHub issue:
 
-1. Pick a type (Buy, Sell, Sell to open option, Buy to close option, Option expired, Option assigned, Deposit,
-   Withdraw, Dividend, Set cash, Set cost basis, Watchlist add/remove) and fill in the fields.
+1. Pick a type (Buy, Sell, Sell to open option, Buy to close option, Option expired, Option assigned, Roll,
+   Set option premium received, Deposit, Withdraw, Dividend, Set cash, Set cost basis, Watchlist add/remove) and
+   fill in the fields. **Roll** is a buy to close plus a sell to open in one issue (prefilled with the current ask
+   and the next monthly at-the-money bid); it is saved as two linked transactions (`roll_id`). **Set option premium
+   received** records what you were paid for an open short call (per share); it changes P/L, not cash.
 2. **Continue on GitHub** opens `github.com/AT4Engineer/pq-22e56fd9/issues/new` with title `trade: ...`, label
    `trade` and the transaction as a fenced JSON block in the body. Tap **Submit new issue** (signed in as AT4Engineer).
 3. `.github/workflows/apply-trade.yml` runs on issues opened/labeled `trade` **whose author is AT4Engineer**
@@ -67,6 +70,7 @@ Local (no GitHub) equivalent: `python scripts/apply_trade.py --txn trade.json [-
 |---|---|
 | Summary | Total account value, day change ($ and %), cash, short call liability |
 | Positions | Symbol, name, qty, price, market value, day $, day %, % of portfolio (stocks, the short call, cash, total) |
+| Monthly roll plan | This month (call mark, buyback cost at the ask and mid, premium received, P/L if closed now, live countdown to the 4:00 PM ET expiry close), next roll preview from the real next-monthly chain (at-the-money strike, bid/ask/mid, premium at the bid, net roll credit/debit, % and annualized, breakeven, nearby strikes), roll history from transactions, and a collapsible "How this works" |
 | Covered call | Plain-language assignment outcome, mark, bid/ask, liability, underlying vs strike and distance, in/out of the money, days to expiry, intrinsic/time value |
 | Account value history | Plain line chart, one point per trading day |
 | Footer | Last updated time (ET), data-delay note, caveats |
@@ -90,10 +94,14 @@ data/option_marks.json      option bid/ask marks recorded on each regular-sessio
 data/history.json           one point per trading day (appended/updated by the script)
 data/portfolio.json         the single file the page loads
 data/option_state.json      last good option bid/ask mid per contract (session date + timestamp)
+data/roll_state.json        last good next-monthly call chain (reused off-hours when Yahoo has no bid/ask)
+data/roll.csv               roll plan key/values for Sheets IMPORTDATA (buyback_ask, next_atm_strike, est_premium, net_roll, ...)
 dist/dashboard.html         single self-contained offline file (CSS/JS/data inline)
 scripts/build_data.py       builds data/portfolio.json from live quotes
 scripts/history_csv.py      writes data/history.csv (for Google Sheets IMPORTDATA)
 scripts/current_csv.py      writes data/current.csv (per-holding price/mark, source, value, as-of; for Sheets IMPORTDATA)
+scripts/roll_plan.py        monthly covered-call roll plan (pure functions + yfinance chain fetch)
+scripts/roll_csv.py         writes data/roll.csv
 scripts/intraday_csv.py     writes data/intraday.csv (minute account values, for Sheets IMPORTDATA)
 scripts/charts.py           chart helpers used by build_data.py
 scripts/trade_logic.py      validation + holdings math for transactions (pure functions)

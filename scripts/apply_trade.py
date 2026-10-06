@@ -6,7 +6,8 @@ CI mode (the workflow):
     1. parses the fenced ```json block in the issue body
     2. git fetch + reset to origin/main, skips if this issue was already applied (duplicate event)
     3. validates and applies it to data/holdings.json (scripts/trade_logic.py), appends data/transactions.json
-    4. reruns build_data.py --force, history_csv.py, current_csv.py, intraday_csv.py, build_standalone.py
+    4. reruns build_data.py --force, history_csv.py, current_csv.py, roll_csv.py, intraday_csv.py,
+       build_standalone.py
     5. commits and pushes (retrying from a fresh origin/main if another run pushed first)
     6. comments a before/after summary on the issue and closes it
   On a validation error it comments the error, closes the issue as "not planned" and changes nothing.
@@ -108,9 +109,21 @@ def rebuild():
     if r.returncode != 0:
         return ("Prices could not be fetched just now, so the dashboard numbers will catch up on the next "
                 "scheduled update (holdings are already saved).")
-    for s in ("history_csv.py", "current_csv.py", "intraday_csv.py", "build_standalone.py"):
+    for s in ("history_csv.py", "current_csv.py", "roll_csv.py", "intraday_csv.py", "build_standalone.py"):
         subprocess.run([py, f"scripts/{s}"], cwd=ROOT, check=True)
     return ""
+
+
+def records(rec, base_id, extra):
+    """One transactions.json record, or two linked ones for a roll (buy to close + sell to open)."""
+    if rec.get("type") != "roll":
+        return [{"id": base_id, **rec, **extra}]
+    rid = f"R{base_id.lstrip('TL')}"
+    out = []
+    for i, (suffix, leg) in enumerate(zip("ab", rec["legs"])):
+        out.append({"id": f"{base_id}{suffix}", **leg, "roll_id": rid, "roll_leg": i + 1,
+                    "roll_description": rec["description"], **extra})
+    return out
 
 
 def table(before, after):
@@ -167,9 +180,9 @@ def ci(event_path):
                                         f"`{json.dumps(txn)}`</sub>", "not planned")
             return 0
         stamp = datetime.now(ET).strftime("%Y-%m-%d %H:%M:%S ET")
-        rec = {"id": f"T{num}", **rec, "issue": num, "issue_url": url, "applied_at_et": stamp}
+        new_recs = records(rec, f"T{num}", {"issue": num, "issue_url": url, "applied_at_et": stamp})
         dump(hp, newH)
-        dump(tp, txns + [rec])
+        dump(tp, txns + new_recs)
         note = rebuild()
         sh("git", "add", "data", "dist")
         sh("git", "commit", "-m", f"trade: {rec['description']} (#{num})")
@@ -187,6 +200,9 @@ def ci(event_path):
     total = (port.get("account") or {}).get("total")
     lines = [f"**Applied:** {rec['description']} (trade date {rec['date']})", "",
              table(summarize(H), summarize(newH)), ""]
+    if rec.get("type") == "roll":
+        lines += [f"- Leg 1: {rec['legs'][0]['description']}", f"- Leg 2: {rec['legs'][1]['description']}",
+                  f"- Net {'credit' if rec['net_credit'] >= 0 else 'debit'}: ${abs(rec['net_credit']):,.2f}", ""]
     if rec.get("realized_pl") is not None:
         lines.append(f"Realized P/L: {'+' if rec['realized_pl'] >= 0 else '-'}${abs(rec['realized_pl']):,.2f}")
     if rec.get("fees"):
@@ -218,7 +234,7 @@ def local(args):
         stamp = datetime.now(ET).strftime("%Y-%m-%d %H:%M:%S ET")
         txns = load(tp, [])
         dump(hp, newH)
-        dump(tp, txns + [{"id": f"L{int(datetime.now().timestamp())}", **rec, "applied_at_et": stamp, "source": "manual"}])
+        dump(tp, txns + records(rec, f"L{int(datetime.now().timestamp())}", {"applied_at_et": stamp, "source": "manual"}))
         print("saved")
     return 0
 

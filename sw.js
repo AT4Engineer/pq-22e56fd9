@@ -1,5 +1,5 @@
 /* Portfolio Tracker service worker: cache the app shell, always go network-first for data/ files. */
-const CACHE = "pq-shell-v5";
+const CACHE = "pq-shell-v6";
 const SHELL = [
   "./",
   "index.html",

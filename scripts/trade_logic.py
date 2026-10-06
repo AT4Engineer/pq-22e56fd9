@@ -11,7 +11,17 @@ Transaction JSON (what the site's "Edit portfolio" form puts in the GitHub issue
    "date": "2026-10-06", "note": "optional text"}
 
 Types: buy, sell, sell_to_open, buy_to_close, option_expired, option_assigned, deposit, withdraw,
-       dividend, set_cash, set_cost_basis, watchlist_add, watchlist_remove
+       dividend, set_cash, set_cost_basis, set_option_premium, roll, watchlist_add, watchlist_remove
+
+set_option_premium: records the premium originally received for an open short option (per share, so
+  3.80 = $380 for 1 contract). Stored as the option's open_price; cash is not changed (the premium is
+  already in cash).
+roll: a buy to close of an open short option and a sell to open of a new one, in one issue:
+  {"type": "roll", "symbol": "UPRO", "qty": 1, "fees": 0.65,              # fees are per leg
+   "close": {"option": {"right": "call", "strike": 154, "expiry": "2026-10-16"}, "price": 5.80},
+   "open":  {"option": {"right": "call", "strike": 156, "expiry": "2026-11-20"}, "price": 7.00}}
+  The result record carries "legs": [buy_to_close record, sell_to_open record]; apply_trade.py saves
+  them as two linked transactions. Cash only has to be non-negative after both legs.
 Cash rules (multiplier = 100 for options, 1 for stock):
   buy / buy_to_close:  cash -= qty * price * multiplier + fees
   sell / sell_to_open: cash += qty * price * multiplier - fees
@@ -28,8 +38,12 @@ import re
 from datetime import date, timedelta
 
 TYPES = ("buy", "sell", "sell_to_open", "buy_to_close", "option_expired", "option_assigned",
-         "deposit", "withdraw", "dividend", "set_cash", "set_cost_basis", "watchlist_add", "watchlist_remove")
+         "deposit", "withdraw", "dividend", "set_cash", "set_cost_basis", "set_option_premium", "roll",
+         "watchlist_add", "watchlist_remove")
 ALIASES = {
+    "set_option_premium": "set_option_premium", "set_premium": "set_option_premium",
+    "premium_received": "set_option_premium", "set_option_premium_received": "set_option_premium",
+    "roll": "roll", "roll_option": "roll",
     "buy": "buy", "sell": "sell",
     "sell_to_open": "sell_to_open", "sto": "sell_to_open", "sell_to_open_option": "sell_to_open",
     "buy_to_close": "buy_to_close", "btc": "buy_to_close", "buy_to_close_option": "buy_to_close",
@@ -129,13 +143,17 @@ def normalize(txn, today):
         if not pat.match(sym):
             raise TradeError(f"{sym!r} does not look like a ticker symbol.")
 
-    opt_types = ("sell_to_open", "buy_to_close", "option_expired", "option_assigned")
+    opt_types = ("sell_to_open", "buy_to_close", "option_expired", "option_assigned", "set_option_premium")
     if typ in ("buy", "sell"):
         t["qty"] = _num(t, "qty", required=True, positive=True)
         t["price"] = _num(t, "price", required=True, positive=True)
     elif typ in opt_types:
         t["qty"] = _num(t, "qty", required=typ in ("sell_to_open", "buy_to_close"), positive=True, integer=True,
                         label="qty (contracts)")
+        if typ == "set_option_premium":
+            if t.get("price") in (None, "") and t.get("amount") not in (None, ""):
+                t["price"] = _num(t, "amount", positive=True, label="premium received (total)") / 100.0
+            t["price"] = _num(t, "price", required=True, positive=True, label="premium received per share")
         if typ == "sell_to_open":
             t["price"] = _num(t, "price", required=True, positive=True, label="price (premium per share)")
         elif typ == "buy_to_close":
@@ -237,6 +255,10 @@ def describe(t):
         return f"Dividend {money(t['amount'])}" + (f" from {t['symbol']}" if t.get("symbol") else "")
     if typ == "set_cash":
         return f"Set cash to {money(t['amount'])}"
+    if typ == "set_option_premium":
+        m = (t.get("option") or {}).get("multiplier") or 100
+        n = t.get("qty") or 1
+        return f"Set premium received {opt_label(t)} = {money(t['price'])}/share ({money(t['price'] * m * n)})"
     if typ == "set_cost_basis":
         return f"Set cost basis {t['symbol']}" + (f" {opt_label(t)}" if t.get("option") else "") + f" = {money(t['price'])}"
     if typ == "watchlist_add":
@@ -261,10 +283,62 @@ def summarize(H):
 
 
 # ------------------------------------------------------------------ apply
-def apply_transaction(holdings, txn, today=None, check=None):
+def _leg(txn, side):
+    leg = txn.get(side)
+    if not isinstance(leg, dict):
+        raise TradeError(f"A roll needs a '{side}' object with the option and price.")
+    return leg
+
+
+def apply_roll(holdings, txn, today, check=None):
+    """Buy to close one short option and sell to open another, as one all-or-nothing step."""
+    if not isinstance(txn, dict):
+        raise TradeError("The transaction must be a JSON object.")
+    close, opn = _leg(txn, "close"), _leg(txn, "open")
+    common = {k: txn.get(k) for k in ("symbol", "date", "fees") if txn.get(k) not in (None, "")}
+    note = str(txn.get("note") or "").strip()
+    btc = {**common, "type": "buy_to_close", "qty": close.get("qty", txn.get("qty")), "price": close.get("price"),
+           "option": close.get("option") or {}, "note": note}
+    if close.get("fees") not in (None, ""):
+        btc["fees"] = close["fees"]
+    H1, r1 = apply_transaction(holdings, btc, today=today, check=None, _allow_negative_cash=True)
+    sto = {**common, "type": "sell_to_open", "symbol": r1["symbol"], "qty": opn.get("qty", txn.get("qty") or r1["qty"]),
+           "price": opn.get("price"), "option": opn.get("option") or {}, "note": note}
+    if opn.get("fees") not in (None, ""):
+        sto["fees"] = opn["fees"]
+    o2 = sto["option"]
+    if isinstance(o2, dict) and not (o2.get("right") or o2.get("type")):
+        sto["option"] = {**o2, "right": r1["option"]["right"]}
+    o1 = r1["option"]
+    if isinstance(sto["option"], dict) and str(sto["option"].get("expiry") or "") and \
+            str(sto["option"]["expiry"]) <= o1["expiry"] and \
+            abs(float(sto["option"].get("strike") or 0) - o1["strike"]) < 1e-6:
+        raise TradeError("The new option is the same contract (or an earlier expiry at the same strike) as the one "
+                         "being closed; a roll moves to a later expiry and/or a different strike.")
+    H2, r2 = apply_transaction(H1, sto, today=today, check=check)
+    cash0, cash = float(holdings.get("cash", 0)), float(H2["cash"])
+    if cash < -0.005:
+        raise TradeError(f"Not enough cash: this roll would take cash from {money(cash0)} to {money(cash)}.")
+    net = cash - cash0
+    mult = float(o1.get("multiplier") or 100)
+    desc = (f"Roll {r1['qty']:g} {r1['symbol']} {date.fromisoformat(o1['expiry']).strftime('%b %d %Y')} ${o1['strike']:g} "
+            f"{o1['right']} -> {date.fromisoformat(r2['option']['expiry']).strftime('%b %d %Y')} "
+            f"${r2['option']['strike']:g} {r2['option']['right']} (net {'credit' if net >= 0 else 'debit'} {money(abs(net))})")
+    rec = {"type": "roll", "date": r1["date"], "symbol": r1["symbol"], "fees": _r2(r1.get("fees", 0) + r2.get("fees", 0)),
+           "note": note, "description": desc, "cash_before": _r2(cash0), "cash_after": H2["cash"],
+           "net_credit": _r2(net), "realized_pl": r1.get("realized_pl"), "legs": [r1, r2],
+           "buyback_cost": _r2(r1["price"] * r1["qty"] * mult + r1.get("fees", 0)),
+           "new_premium": _r2(r2["price"] * r2["qty"] * mult - r2.get("fees", 0))}
+    rec = {k: v for k, v in rec.items() if v is not None and v != ""}
+    return H2, rec
+
+
+def apply_transaction(holdings, txn, today=None, check=None, _allow_negative_cash=False):
     """check(kind, t) is an optional callback ("symbol" / "option") that raises TradeError for unknown
     symbols/contracts; tests pass None (no network)."""
     today = today or date.today()
+    if isinstance(txn, dict) and re.sub(r"[^a-z]+", "_", str(txn.get("type") or "").strip().lower()).strip("_") in ("roll", "roll_option"):
+        return apply_roll(holdings, txn, today, check)
     t = normalize(txn, today)
     H = copy.deepcopy(holdings)
     H.setdefault("stocks", [])
@@ -347,6 +421,18 @@ def apply_transaction(holdings, txn, today=None, check=None):
                                  "multiplier": _clean_num(mult), "strike": o["strike"], "expiry": o["expiry"],
                                  "open_price": round(px, 4)})
         rec.update(qty=qty, price=px, option=o)
+
+    elif typ == "set_option_premium":
+        x = _match_option(H, t)
+        mult = float(x.get("multiplier", 100))
+        t["symbol"] = rec["symbol"] = x["underlying"].upper()
+        t["option"] = {"right": x["type"].lower(), "strike": float(x["strike"]), "expiry": x["expiry"], "multiplier": mult}
+        t["qty"] = float(x["contracts"])
+        if x.get("open_price") is not None:
+            rec["previous_price"] = float(x["open_price"])
+        x["open_price"] = round(t["price"], 4)
+        rec.update(price=t["price"], qty=t["qty"], option=t["option"],
+                   premium_total=_r2(t["price"] * mult * t["qty"]))
 
     elif typ in ("buy_to_close", "option_expired", "option_assigned"):
         x = _match_option(H, t)
@@ -441,11 +527,12 @@ def apply_transaction(holdings, txn, today=None, check=None):
             raise TradeError(f"{sym} is not on the watchlist (it has: {', '.join(H['watchlist']) or 'nothing'}).")
         H["watchlist"] = [w for w in H["watchlist"] if w.upper() != sym]
 
-    if typ in ("buy", "buy_to_close", "withdraw", "option_assigned", "option_expired") and cash < -0.005:
+    if typ in ("buy", "buy_to_close", "withdraw", "option_assigned", "option_expired") and cash < -0.005 \
+            and not _allow_negative_cash:
         raise TradeError(f"Not enough cash: this would take cash from {money(cash0)} to {money(cash)}. "
                          f"If cash is out of date, submit a Deposit or Set cash first.")
     H["cash"] = _r2(cash)
-    if typ not in ("watchlist_add", "watchlist_remove"):
+    if typ not in ("watchlist_add", "watchlist_remove", "set_option_premium"):
         H["as_of"] = max(str(H.get("as_of") or ""), t["date"])
     rec.update(description=describe(t), cash_before=_r2(cash0), cash_after=H["cash"],
                realized_pl=None if realized is None else _r2(realized))
