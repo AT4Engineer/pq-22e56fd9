@@ -1,64 +1,75 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 12:01:16 ET",
-  "generated_at_iso": "2026-10-06T12:01:16-04:00",
+  "generated_at_et": "2026-10-06 12:15:21 ET",
+  "generated_at_iso": "2026-10-06T12:15:21-04:00",
   "trade_date": "2026-10-06",
-  "quotes_as_of_et": "2026-10-06 12:01 ET",
+  "quotes_as_of_et": "2026-10-06 12:15 ET",
   "market_state": "REGULAR",
   "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16880.26,
+    "total": 16871.9,
     "prev_total": 16658.06,
-    "day_change": 222.2,
-    "day_change_pct": 1.33,
-    "stocks_value": 16455.56,
+    "day_change": 213.84,
+    "day_change_pct": 1.28,
+    "stocks_value": 16447.2,
     "cash": 964.7,
-    "cash_share_pct": 5.71,
+    "cash_share_pct": 5.72,
     "option_liability": -540.0
   },
   "positions": [
     {
+      "avg_cost": null,
+      "cost_basis": null,
+      "unrealized": null,
+      "unrealized_pct": null,
       "symbol": "SPCX",
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 4,
-      "price": 173.89,
+      "price": 174.3,
       "prev_close": 171.09,
-      "day_change_per_share": 2.8,
-      "day_change": 11.2,
-      "day_change_pct": 1.64,
-      "value": 695.56,
-      "quote_time_et": "2026-10-06 12:01 ET",
+      "day_change_per_share": 3.21,
+      "day_change": 12.84,
+      "day_change_pct": 1.88,
+      "value": 697.2,
+      "quote_time_et": "2026-10-06 12:15 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 4.12
+      "share_pct": 4.13
     },
     {
+      "avg_cost": null,
+      "cost_basis": null,
+      "unrealized": null,
+      "unrealized_pct": null,
       "symbol": "UPRO",
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "shares": 100,
-      "price": 157.6,
+      "price": 157.5,
       "prev_close": 153.89,
-      "day_change_per_share": 3.71,
-      "day_change": 371.0,
-      "day_change_pct": 2.41,
-      "value": 15760.0,
-      "quote_time_et": "2026-10-06 12:01 ET",
+      "day_change_per_share": 3.61,
+      "day_change": 361.0,
+      "day_change_pct": 2.35,
+      "value": 15750.0,
+      "quote_time_et": "2026-10-06 12:15 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 93.36
+      "share_pct": 93.35
     }
   ],
   "options": [
     {
+      "open_price": null,
+      "unrealized": null,
+      "key": "UPRO|2026-10-16|154|call",
       "label": "UPRO Oct 16 2026 $154 call",
       "contract": "UPRO261016C00154000",
       "underlying": "UPRO",
@@ -71,9 +82,9 @@
       "expiry_close_iso": "2026-10-16T16:00:00-04:00",
       "dte": 10,
       "expired": false,
-      "spot": 157.6,
-      "distance": 3.6,
-      "distance_pct": 2.34,
+      "spot": 157.5,
+      "distance": 3.5,
+      "distance_pct": 2.27,
       "status": "ITM",
       "itm": true,
       "covered": true,
@@ -82,19 +93,19 @@
       "last": 3.98,
       "mark": 5.4,
       "mark_source": "mid of bid/ask",
-      "intrinsic": 3.6,
-      "extrinsic": 1.8,
+      "intrinsic": 3.5,
+      "extrinsic": 1.9,
       "liability": -540.0,
       "day_change": -160.0,
       "prev_mark": 3.8,
       "prev_mark_source": "recorded mark for prior session 2026-10-05",
-      "iv": 0.4047,
+      "iv": 0.4109,
       "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.6211,
+      "prob_finish_itm": 0.6155,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -104,7 +115,7 @@
   ],
   "stats": {
     "days_tracked": 2,
-    "all_time_high": 16880.26,
+    "all_time_high": 16871.9,
     "best_day": {
       "date": "2026-10-05",
       "change": 242.52,
@@ -112,8 +123,8 @@
     },
     "worst_day": {
       "date": "2026-10-06",
-      "change": 222.2,
-      "pct": 1.33
+      "change": 213.84,
+      "pct": 1.28
     }
   },
   "history": [
@@ -125,9 +136,9 @@
     },
     {
       "date": "2026-10-06",
-      "total": 16880.26,
-      "day_change": 222.2,
-      "day_change_pct": 1.33
+      "total": 16871.9,
+      "day_change": 213.84,
+      "day_change_pct": 1.28
     }
   ],
   "paper": {
@@ -254,6 +265,538 @@
         "Even if READY: start with a small fraction, keep the buy-and-hold core, re-check taxes (trend strategies realize gains), and keep paper-trading in parallel.",
         "If the champion keeps failing the walk-forward criteria, the sensible real-money plan is plain buy-and-hold / DCA into an index fund."
       ]
+    }
+  },
+  "watchlist": [
+    "SPY"
+  ],
+  "quotes": {
+    "SPCX": {
+      "symbol": "SPCX",
+      "kind": "stock",
+      "name": "SpaceX",
+      "long_name": "Space Exploration Technologies Corp.",
+      "exchange": "Nasdaq",
+      "price": 174.3,
+      "prev_close": 171.09,
+      "change": 3.21,
+      "change_pct": 1.88,
+      "quote_time_et": "2026-10-06 12:15 ET",
+      "market_state": "REGULAR",
+      "stats": {
+        "open": 172.09,
+        "day_high": 176.42,
+        "day_low": 172.0,
+        "volume": 66478812.0,
+        "avg_volume": 91955409.0,
+        "high_52w": 225.64,
+        "low_52w": 104.83,
+        "market_cap": 2296260853760.0,
+        "net_assets": null,
+        "quote_type": "EQUITY"
+      },
+      "held": true,
+      "watch": false,
+      "chart": "data/charts/SPCX.json",
+      "spark": [
+        [
+          0,
+          174.22
+        ],
+        [
+          5,
+          174.91
+        ],
+        [
+          10,
+          175.78
+        ],
+        [
+          15,
+          175.03
+        ],
+        [
+          20,
+          175.38
+        ],
+        [
+          25,
+          174.84
+        ],
+        [
+          30,
+          174.5
+        ],
+        [
+          35,
+          175.43
+        ],
+        [
+          40,
+          175.64
+        ],
+        [
+          45,
+          174.82
+        ],
+        [
+          50,
+          174.78
+        ],
+        [
+          55,
+          174.75
+        ],
+        [
+          60,
+          174.92
+        ],
+        [
+          65,
+          175.45
+        ],
+        [
+          70,
+          174.81
+        ],
+        [
+          75,
+          175.02
+        ],
+        [
+          80,
+          175.1
+        ],
+        [
+          85,
+          175.2
+        ],
+        [
+          90,
+          174.63
+        ],
+        [
+          95,
+          174.6
+        ],
+        [
+          100,
+          174.62
+        ],
+        [
+          105,
+          174.08
+        ],
+        [
+          110,
+          173.79
+        ],
+        [
+          115,
+          173.69
+        ],
+        [
+          120,
+          173.75
+        ],
+        [
+          125,
+          173.99
+        ],
+        [
+          130,
+          174.12
+        ],
+        [
+          135,
+          174.12
+        ],
+        [
+          140,
+          173.93
+        ],
+        [
+          145,
+          173.87
+        ],
+        [
+          150,
+          173.99
+        ],
+        [
+          155,
+          173.18
+        ],
+        [
+          160,
+          174.13
+        ],
+        [
+          165,
+          174.28
+        ]
+      ],
+      "spark_base": 171.09
+    },
+    "UPRO": {
+      "symbol": "UPRO",
+      "kind": "stock",
+      "name": "ProShares UltraPro S&P 500 (3x)",
+      "long_name": "ProShares UltraPro S&P500",
+      "exchange": "NYSE Arca",
+      "price": 157.5,
+      "prev_close": 153.89,
+      "change": 3.61,
+      "change_pct": 2.35,
+      "quote_time_et": "2026-10-06 12:15 ET",
+      "market_state": "REGULAR",
+      "stats": {
+        "open": 155.82,
+        "day_high": 157.88,
+        "day_low": 155.71,
+        "volume": 1009650.0,
+        "avg_volume": 1935171.0,
+        "high_52w": 158.63,
+        "low_52w": 88.15,
+        "market_cap": null,
+        "net_assets": 5276780032.0,
+        "quote_type": "ETF"
+      },
+      "held": true,
+      "watch": false,
+      "chart": "data/charts/UPRO.json",
+      "spark": [
+        [
+          0,
+          155.82
+        ],
+        [
+          5,
+          155.99
+        ],
+        [
+          10,
+          156.1
+        ],
+        [
+          15,
+          156.36
+        ],
+        [
+          20,
+          156.48
+        ],
+        [
+          25,
+          156.79
+        ],
+        [
+          30,
+          156.88
+        ],
+        [
+          35,
+          157.15
+        ],
+        [
+          40,
+          156.91
+        ],
+        [
+          45,
+          156.7
+        ],
+        [
+          50,
+          156.62
+        ],
+        [
+          55,
+          156.22
+        ],
+        [
+          60,
+          156.42
+        ],
+        [
+          65,
+          156.71
+        ],
+        [
+          70,
+          157.04
+        ],
+        [
+          75,
+          156.83
+        ],
+        [
+          80,
+          157.06
+        ],
+        [
+          85,
+          157.16
+        ],
+        [
+          90,
+          157.23
+        ],
+        [
+          95,
+          157.41
+        ],
+        [
+          100,
+          157.6
+        ],
+        [
+          105,
+          157.75
+        ],
+        [
+          110,
+          157.76
+        ],
+        [
+          115,
+          157.68
+        ],
+        [
+          120,
+          157.65
+        ],
+        [
+          125,
+          157.73
+        ],
+        [
+          130,
+          157.61
+        ],
+        [
+          135,
+          157.65
+        ],
+        [
+          140,
+          157.6
+        ],
+        [
+          145,
+          157.57
+        ],
+        [
+          150,
+          157.58
+        ],
+        [
+          155,
+          157.34
+        ],
+        [
+          160,
+          157.56
+        ],
+        [
+          165,
+          157.5
+        ]
+      ],
+      "spark_base": 153.89
+    },
+    "SPY": {
+      "symbol": "SPY",
+      "kind": "stock",
+      "name": "State Street SPDR S&P 500 ETF Trust",
+      "long_name": "State Street SPDR S&P 500 ETF Trust",
+      "exchange": "NYSEArca",
+      "price": 780.88,
+      "prev_close": 774.83,
+      "change": 6.05,
+      "change_pct": 0.78,
+      "quote_time_et": "2026-10-06 12:15 ET",
+      "market_state": "REGULAR",
+      "stats": {
+        "open": 778.15,
+        "day_high": 781.62,
+        "day_low": 777.96,
+        "volume": 14023193.0,
+        "avg_volume": 44119376.0,
+        "high_52w": 781.62,
+        "low_52w": 629.28,
+        "market_cap": null,
+        "net_assets": 809216114688.0,
+        "quote_type": "ETF"
+      },
+      "held": false,
+      "watch": true,
+      "chart": "data/charts/SPY.json",
+      "spark": [
+        [
+          0,
+          778.12
+        ],
+        [
+          5,
+          778.41
+        ],
+        [
+          10,
+          778.65
+        ],
+        [
+          15,
+          779.04
+        ],
+        [
+          20,
+          779.28
+        ],
+        [
+          25,
+          779.79
+        ],
+        [
+          30,
+          780.01
+        ],
+        [
+          35,
+          780.49
+        ],
+        [
+          40,
+          780.03
+        ],
+        [
+          45,
+          779.64
+        ],
+        [
+          50,
+          779.55
+        ],
+        [
+          55,
+          778.85
+        ],
+        [
+          60,
+          779.18
+        ],
+        [
+          65,
+          779.7
+        ],
+        [
+          70,
+          780.22
+        ],
+        [
+          75,
+          779.87
+        ],
+        [
+          80,
+          780.32
+        ],
+        [
+          85,
+          780.42
+        ],
+        [
+          90,
+          780.52
+        ],
+        [
+          95,
+          780.75
+        ],
+        [
+          100,
+          781.14
+        ],
+        [
+          105,
+          781.36
+        ],
+        [
+          110,
+          781.42
+        ],
+        [
+          115,
+          781.34
+        ],
+        [
+          120,
+          781.22
+        ],
+        [
+          125,
+          781.41
+        ],
+        [
+          130,
+          781.19
+        ],
+        [
+          135,
+          781.24
+        ],
+        [
+          140,
+          781.1
+        ],
+        [
+          145,
+          781.1
+        ],
+        [
+          150,
+          781.09
+        ],
+        [
+          155,
+          780.8
+        ],
+        [
+          160,
+          781.02
+        ],
+        [
+          165,
+          780.87
+        ]
+      ],
+      "spark_base": 774.83
+    },
+    "UPRO261016C00154000": {
+      "symbol": "UPRO261016C00154000",
+      "kind": "option",
+      "display": "UPRO 154C",
+      "name": "UPRO Oct 16 2026 $154 call",
+      "underlying": "UPRO",
+      "price": 5.4,
+      "prev_close": 3.8,
+      "change": 1.6,
+      "change_pct": 42.11,
+      "held": true,
+      "watch": false,
+      "chart": "data/charts/UPRO261016C00154000.json",
+      "spark": [
+        [
+          151,
+          5.4
+        ],
+        [
+          165,
+          5.4
+        ]
+      ],
+      "spark_base": 3.8,
+      "key": "UPRO|2026-10-16|154|call"
     }
   },
   "caveats": [
