@@ -31,7 +31,6 @@
     "use_extended_hours_price": false
   },
   "watchlist": [
-    "SPY",
-    "QQQ"
+    "SPY"
   ]
 }
