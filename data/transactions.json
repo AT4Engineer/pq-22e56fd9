@@ -37,5 +37,18 @@
     "issue": 3,
     "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/3",
     "applied_at_et": "2026-10-06 13:48:34 ET"
+  },
+  {
+    "id": "T4",
+    "type": "watchlist_remove",
+    "date": "2026-10-06",
+    "symbol": "SPY",
+    "fees": 0.0,
+    "description": "Watchlist remove SPY",
+    "cash_before": 964.7,
+    "cash_after": 964.7,
+    "issue": 4,
+    "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/4",
+    "applied_at_et": "2026-10-06 13:58:32 ET"
   }
 ]
