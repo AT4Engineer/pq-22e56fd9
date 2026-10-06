@@ -1,20 +1,20 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 11:01:06 ET",
-  "generated_at_iso": "2026-10-06T11:01:06-04:00",
+  "generated_at_et": "2026-10-06 11:16:04 ET",
+  "generated_at_iso": "2026-10-06T11:16:04-04:00",
   "trade_date": "2026-10-06",
-  "quotes_as_of_et": "2026-10-06 11:01 ET",
+  "quotes_as_of_et": "2026-10-06 11:16 ET",
   "market_state": "REGULAR",
   "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16892.66,
+    "total": 16932.46,
     "prev_total": 16658.06,
-    "day_change": 234.6,
-    "day_change_pct": 1.41,
-    "stocks_value": 16427.96,
+    "day_change": 274.4,
+    "day_change_pct": 1.65,
+    "stocks_value": 16467.76,
     "cash": 964.7,
-    "cash_share_pct": 5.71,
+    "cash_share_pct": 5.7,
     "option_liability": -500.0
   },
   "positions": [
@@ -24,18 +24,18 @@
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 4,
-      "price": 175.24,
+      "price": 174.44,
       "prev_close": 171.09,
-      "day_change_per_share": 4.15,
-      "day_change": 16.6,
-      "day_change_pct": 2.43,
-      "value": 700.96,
-      "quote_time_et": "2026-10-06 11:01 ET",
+      "day_change_per_share": 3.35,
+      "day_change": 13.4,
+      "day_change_pct": 1.96,
+      "value": 697.76,
+      "quote_time_et": "2026-10-06 11:16 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 4.15
+      "share_pct": 4.12
     },
     {
       "symbol": "UPRO",
@@ -43,18 +43,18 @@
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "shares": 100,
-      "price": 157.27,
+      "price": 157.7,
       "prev_close": 153.89,
-      "day_change_per_share": 3.38,
-      "day_change": 338.0,
-      "day_change_pct": 2.2,
-      "value": 15727.0,
-      "quote_time_et": "2026-10-06 11:00 ET",
+      "day_change_per_share": 3.81,
+      "day_change": 381.0,
+      "day_change_pct": 2.48,
+      "value": 15770.0,
+      "quote_time_et": "2026-10-06 11:16 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 93.1
+      "share_pct": 93.13
     }
   ],
   "options": [
@@ -71,30 +71,30 @@
       "expiry_close_iso": "2026-10-16T16:00:00-04:00",
       "dte": 10,
       "expired": false,
-      "spot": 157.27,
-      "distance": 3.27,
-      "distance_pct": 2.12,
+      "spot": 157.7,
+      "distance": 3.7,
+      "distance_pct": 2.4,
       "status": "ITM",
       "itm": true,
       "covered": true,
-      "bid": 4.2,
-      "ask": 5.8,
+      "bid": 4.4,
+      "ask": 5.6,
       "last": 3.98,
       "mark": 5.0,
       "mark_source": "mid of bid/ask",
-      "intrinsic": 3.27,
-      "extrinsic": 1.73,
+      "intrinsic": 3.7,
+      "extrinsic": 1.3,
       "liability": -500.0,
       "day_change": -120.0,
       "prev_mark": 3.8,
       "prev_mark_source": "recorded mark for prior session 2026-10-05",
-      "iv": 0.3667,
+      "iv": 0.3186,
       "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.6225,
+      "prob_finish_itm": 0.6625,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -104,16 +104,16 @@
   ],
   "stats": {
     "days_tracked": 2,
-    "all_time_high": 16892.66,
+    "all_time_high": 16932.46,
     "best_day": {
+      "date": "2026-10-06",
+      "change": 274.4,
+      "pct": 1.65
+    },
+    "worst_day": {
       "date": "2026-10-05",
       "change": 242.52,
       "pct": 1.48
-    },
-    "worst_day": {
-      "date": "2026-10-06",
-      "change": 234.6,
-      "pct": 1.41
     }
   },
   "history": [
@@ -125,9 +125,9 @@
     },
     {
       "date": "2026-10-06",
-      "total": 16892.66,
-      "day_change": 234.6,
-      "day_change_pct": 1.41
+      "total": 16932.46,
+      "day_change": 274.4,
+      "day_change_pct": 1.65
     }
   ],
   "paper": {
@@ -257,7 +257,6 @@
     }
   },
   "caveats": [
-    "UPRO Oct 16 2026 $154 call: wide bid/ask (4.20 x 5.80); the mid-price mark is approximate.",
     "Paper lab: showing saved snapshot (data through 2026-10-05).",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
