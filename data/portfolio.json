@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 18:17:43 ET",
-  "generated_at_iso": "2026-10-06T18:17:43-04:00",
+  "generated_at_et": "2026-10-06 18:27:38 ET",
+  "generated_at_iso": "2026-10-06T18:27:38-04:00",
   "trade_date": "2026-10-06",
   "quotes_as_of_et": "2026-10-06 16:00 ET",
   "market_state": "POST",
@@ -37,7 +37,7 @@
       "quote_time_et": "2026-10-06 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 172.57,
+      "ext_price": 172.61,
       "ext_label": "post-market",
       "share_pct": 4.08
     },
