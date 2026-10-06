@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "id": "T1",
+    "type": "watchlist_add",
+    "date": "2026-10-06",
+    "symbol": "QQQ",
+    "fees": 0.0,
+    "description": "Watchlist add QQQ",
+    "cash_before": 964.7,
+    "cash_after": 964.7,
+    "issue": 1,
+    "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/1",
+    "applied_at_et": "2026-10-06 12:16:07 ET"
+  }
+]
