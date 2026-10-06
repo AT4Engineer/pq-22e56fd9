@@ -1,0 +1,64 @@
+name: Apply trade from issue
+
+# The site's "Edit portfolio" form opens a prefilled GitHub issue (title "trade: ...", label "trade",
+# body = fenced JSON). This workflow applies it to data/holdings.json, rebuilds the data, commits,
+# comments a before/after summary and closes the issue. Only issues written by the repo owner are applied.
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+# One run per issue at a time (an issue created with a label fires both "opened" and "labeled"; the second
+# run sees the trade already recorded in data/transactions.json and does nothing). Runs for different
+# issues may overlap; apply_trade.py retries its push from a fresh origin/main.
+concurrency:
+  group: apply-trade-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    if: >-
+      github.event.issue.user.login == 'AT4Engineer' &&
+      github.event.issue.state == 'open' &&
+      ((github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'trade')) ||
+       (github.event.action == 'labeled' && github.event.label.name == 'trade'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install yfinance pandas
+
+      - name: Validate, apply, rebuild, commit, comment, close
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DASHBOARD_REMOTE_URL: ${{ vars.DASHBOARD_REMOTE_URL }}
+        # The issue body is read from the event JSON file by Python (never interpolated into the shell).
+        run: python scripts/apply_trade.py --event "$GITHUB_EVENT_PATH"
+
+  reject:
+    # A collaborator labelled someone else's issue "trade": refuse it, change nothing.
+    if: >-
+      github.event.issue.user.login != 'AT4Engineer' &&
+      github.event.issue.state == 'open' &&
+      ((github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'trade')) ||
+       (github.event.action == 'labeled' && github.event.label.name == 'trade'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment and close
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUM: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$NUM" -R "$GITHUB_REPOSITORY" --body "Not applied: only trades opened by @AT4Engineer are applied to this portfolio. Holdings were not changed."
+          gh issue close "$NUM" -R "$GITHUB_REPOSITORY" --reason "not planned"

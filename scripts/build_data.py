@@ -31,6 +31,9 @@ import sys
 from datetime import date, datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import charts  # noqa: E402
+
 ET = ZoneInfo("America/New_York")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
@@ -131,8 +134,21 @@ def get_quote(symbol, use_ext):
     used, source = price, ("live regular session" if state == "REGULAR" else "regular-session close")
     if use_ext and ext_price is not None:
         used, source = ext_price, ext_label
+    stats = {
+        "open": num(info.get("regularMarketOpen")) or num(info.get("open")),
+        "day_high": num(info.get("regularMarketDayHigh")) or num(info.get("dayHigh")),
+        "day_low": num(info.get("regularMarketDayLow")) or num(info.get("dayLow")),
+        "volume": num(info.get("regularMarketVolume")) or num(info.get("volume")),
+        "avg_volume": num(info.get("averageVolume")),
+        "high_52w": num(info.get("fiftyTwoWeekHigh")),
+        "low_52w": num(info.get("fiftyTwoWeekLow")),
+        "market_cap": num(info.get("marketCap")),
+        "net_assets": num(info.get("totalAssets")),
+        "quote_type": info.get("quoteType") or "",
+    }
     return {
         "symbol": symbol,
+        "stats": stats,
         "name": info.get("longName") or info.get("shortName") or symbol,
         "exchange": info.get("fullExchangeName") or info.get("exchange") or "",
         "price": used,
@@ -386,6 +402,276 @@ def build_paper_snapshot(lab):
     }
 
 
+# ---------------------------------------------------------------- stocks list + charts
+MARKS_KEEP_DAYS = 10
+INTRADAY_KEEP_SESSIONS = 7
+REFRESH_TAIL_MIN = 5  # recompute the last few stored minutes each run (the newest 1m bar may still be forming)
+
+
+def _stats(st):
+    return {k: (r2(v) if isinstance(v, float) and k not in ("volume", "avg_volume", "market_cap", "net_assets") else v)
+            for k, v in (st or {}).items()}
+
+
+def record_option_marks(now, regular, options):
+    """Append this run's live bid/ask option marks to data/option_marks.json (regular session only)."""
+    path = D("option_marks.json")
+    data = load_json(path, {}) or {}
+    pts = data.get("points", [])
+    ts = int(now.timestamp())
+    pts = [p for p in pts if p.get("t", 0) >= ts - MARKS_KEEP_DAYS * 86400]
+    # keep the previous run's last good bid/ask mid too (option_state.json only holds the latest one)
+    for key, v in (load_json(D("option_state.json"), {}) or {}).items():
+        lg = (v or {}).get("last_good") or {}
+        try:
+            t0 = int(datetime.strptime(str(lg.get("as_of_et", ""))[:19], "%Y-%m-%d %H:%M:%S").replace(tzinfo=ET).timestamp())
+        except ValueError:
+            continue
+        if num(lg.get("mark")) is not None and t0 >= ts - MARKS_KEEP_DAYS * 86400 and \
+                not any(abs(p["t"] - t0) < 60 and key in p.get("marks", {}) for p in pts):
+            pts.append({"t": t0, "et": et_str(datetime.fromtimestamp(t0, ET)), "marks": {key: num(lg["mark"])}})
+    pts.sort(key=lambda p: p["t"])
+    live = [o for o in options if not o.get("quote_reused") and o.get("quote_quality") == Q_BIDASK]
+    if regular and live and time(9, 30) <= now.time() < time(16, 0) and (not pts or ts - pts[-1]["t"] >= 120):
+        pts.append({"t": ts, "et": et_str(now), "marks": {o["key"]: o["mark"] for o in live}})
+    new = {"note": "Option bid/ask mid marks recorded by build_data.py on each regular-session run.", "points": pts}
+    if new != data:
+        write_json(path, new)
+    return pts
+
+
+def _bars_1m(symbol):
+    """{minute datetime ET: close} for regular-hours 1-minute bars (yfinance keeps ~7 days of 1m data)."""
+    import yfinance as yf
+
+    h = yf.Ticker(symbol).history(period="7d", interval="1m", prepost=False, auto_adjust=False)
+    out = {}
+    for ts, row in h.iterrows():
+        v = num(row.get("Close"))
+        if v is None:
+            continue
+        d = ts.tz_convert(ET).to_pydatetime().replace(second=0, microsecond=0)
+        if time(9, 30) <= d.time() < time(16, 0):
+            out[d] = v
+    return out
+
+
+def build_intraday(H, options, cash, marks_log, history, now):
+    """Per-minute account value (current quantities x 1m closes + cash - option liability) -> data/intraday.json.
+
+    Minutes already stored are kept as recorded (so a later trade doesn't rewrite the past); each run appends
+    every minute since the last stored one (re-doing the newest few). Rolling 7 trading days.
+    Returns (rows, option_method) where rows = [[iso_et, total, stocks, cash, option_liability], ...]."""
+    path = D("intraday.json")
+    old = load_json(path, {}) or {}
+    rows = [r for r in old.get("rows", []) if isinstance(r, list) and len(r) >= 2]
+    held = [s for s in H["stocks"]]
+    bars = {}
+    for s in held:
+        b = _bars_1m(s["symbol"])
+        if not b:
+            raise RuntimeError(f"no 1m bars for {s['symbol']}")
+        bars[s["symbol"]] = b
+
+    # Option value per minute: one timeline of known prices for the contract, and each minute uses the latest
+    # one at or before it: Yahoo 1m option trade prints (if any), bid/ask marks recorded by this tracker
+    # (held constant between runs), the last good bid/ask mid in option_state.json, the recorded daily marks
+    # in history.json, and Yahoo daily closes for older days. Falls back to the current mark.
+    methods, timelines = [], {}
+    state = load_json(D("option_state.json"), {}) or {}
+    for o in options:
+        tl, n_prints = [], 0
+        if o.get("contract"):
+            try:
+                ob = _bars_1m(o["contract"])
+                n_prints = len(ob)
+                tl += [(d.timestamp(), v) for d, v in ob.items()]
+            except Exception as e:  # noqa: BLE001
+                warn(f"{o['contract']}: 1m option bars failed ({e})")
+            try:
+                import yfinance as yf
+                h = yf.Ticker(o["contract"]).history(period="1mo", interval="1d", auto_adjust=False)
+                tl += [(datetime.combine(ts.date(), time(16, 0), ET).timestamp() - 1, float(r["Close"]))
+                       for ts, r in h.iterrows() if num(r.get("Close")) is not None]
+            except Exception as e:  # noqa: BLE001
+                warn(f"{o['contract']}: daily option bars failed ({e})")
+        if len(options) == 1:
+            tl += [(datetime.combine(date.fromisoformat(h["date"]), time(16, 0), ET).timestamp(), num(h["option_mark"]))
+                   for h in history if num(h.get("option_mark")) is not None]
+        lg = (state.get(o["key"]) or {}).get("last_good") or {}
+        if num(lg.get("mark")) is not None and lg.get("as_of_et"):
+            try:
+                t0 = datetime.strptime(lg["as_of_et"][:19], "%Y-%m-%d %H:%M:%S").replace(tzinfo=ET).timestamp()
+                tl.append((t0, num(lg["mark"])))
+            except ValueError:
+                pass
+        tl += [(p["t"], p["marks"][o["key"]]) for p in marks_log if o["key"] in p.get("marks", {})]
+        timelines[o["key"]] = sorted(tl)
+        methods.append(f"{o['label']}: each minute uses the latest known option price at or before that minute - "
+                       f"a bid/ask mark recorded by this tracker (held constant between runs, ~15 min apart), or a "
+                       f"Yahoo 1-minute trade print ({n_prints} in the last 7 days; the contract trades thinly), or "
+                       f"the previous day's mark")
+
+    def mark_at(o, d):
+        ts = d.timestamp() + 59  # value at the end of the minute
+        best = None
+        for t, m in timelines.get(o["key"], []):
+            if t > ts:
+                break
+            best = m
+        return best if best is not None else o["mark"]
+
+    minutes = sorted(set().union(*[set(b) for b in bars.values()]))
+    computed, last, day = [], {}, None
+    for d in minutes:
+        if d.date() != day:
+            day, last = d.date(), {}
+        for sym, b in bars.items():
+            if d in b:
+                last[sym] = b[d]
+        if len(last) < len(bars):
+            continue
+        stocks = sum(float(s["shares"]) * last[s["symbol"]] for s in held)
+        opt = 0.0
+        for o in options:
+            sign = -1 if o["position"] == "short" else 1
+            opt += sign * mark_at(o, d) * o["multiplier"] * o["contracts"]
+        computed.append([d.isoformat(timespec="minutes"), r2(stocks + cash + opt), r2(stocks), r2(cash), r2(opt)])
+
+    if rows:
+        cutoff = (datetime.fromisoformat(rows[-1][0]) - timedelta(minutes=REFRESH_TAIL_MIN)).isoformat(timespec="minutes")
+        keep = [r for r in rows if r[0] <= cutoff]
+        known = {r[0] for r in keep}
+        # keep stored minutes; add new minutes (and fill any gaps) from this run's reconstruction
+        merged = {r[0]: r for r in keep}
+        for r in computed:
+            if r[0] > cutoff or r[0] not in known:
+                merged[r[0]] = r
+        rows = [merged[k] for k in sorted(merged)]
+    else:
+        rows = computed
+    days = sorted({r[0][:10] for r in rows})[-INTRADAY_KEEP_SESSIONS:]
+    rows = [r for r in rows if r[0][:10] >= days[0]] if days else []
+    new = {"note": "Account value each minute of the regular session, ET. Stocks = quantity held at the time of the run "
+                   "x 1-minute close; total = stocks + cash + option value (a short option is negative). "
+                   "Rolling 7 trading days; filled in each time the update workflow runs (~every 15 min).",
+           "option_mark_method": methods, "columns": ["time_et", "total", "stocks", "cash", "option_liability"],
+           "rows": rows}
+    if {k: v for k, v in new.items()} != old:
+        tmp = path + ".tmp"
+        with open(tmp, "w") as f:
+            json.dump(new, f, separators=(",", ":"))
+            f.write("\n")
+        os.replace(tmp, path)
+    return rows, methods
+
+
+def account_chart(rows, methods, history, total, prev_total, trade_date):
+    """1D: 1-minute values of the latest session; 1W: 5-minute values over the stored 7 sessions;
+    1M and longer: the recorded daily account values."""
+    ranges = {}
+    if rows:
+        pts = [(datetime.fromisoformat(r[0]), r[1]) for r in rows if r[1] is not None]
+        day = pts[-1][0].date()
+        one = [(d, v) for d, v in pts if d.date() == day]
+        so, sc = charts.session_bounds(day)
+        prior = [h for h in history if h["date"] < day.isoformat() and num(h.get("total")) is not None]
+        base = prev_total if day.isoformat() == trade_date else (prior[-1]["total"] if prior else one[0][1])
+        ranges["1D"] = {"interval": "1m", "t": [int(d.timestamp()) for d, _ in one], "v": [v for _, v in one],
+                        "base": r2(base), "session_open": so, "session_close": sc, "session_date": day.isoformat()}
+        wk = charts.resample(pts, 5)
+        ranges["1W"] = {"interval": "5m", "t": [int(d.timestamp()) for d, _ in wk], "v": [v for _, v in wk],
+                        "base": wk[0][1]}
+    daily = [(datetime.combine(date.fromisoformat(h["date"]), time(16, 0), ET), h["total"])
+             for h in history if num(h.get("total")) is not None]
+    ranges.update(charts.daily_ranges(daily, total, date.fromisoformat(trade_date)))
+    return {"symbol": "ACCOUNT", "kind": "account", "ranges": ranges,
+            "note": "1D and 1W: minute-by-minute account value from data/intraday.json (quantities held at each update; "
+                    "fills in every minute since the previous update each time the data refreshes, ~every 15 min). "
+                    "1M and longer: the recorded daily account values." +
+                    (" Option: " + "; ".join(methods) + "." if methods else "")}
+
+
+def build_quotes_and_charts(H, quotes, wquotes, watch, positions, options, trade_date, now, history, total,
+                            prev_total, cash, caveats):
+    cdir = D("charts")
+    os.makedirs(cdir, exist_ok=True)
+    iso = now.isoformat(timespec="seconds")
+    held = {p["symbol"]: p for p in positions}
+    order = list(dict.fromkeys([p["symbol"] for p in positions] + [o["underlying"] for o in options] + watch))
+    out, series, keep = {}, {}, {"_account.json"}
+    for sym in order:
+        q = quotes.get(sym) or wquotes.get(sym)
+        if not q:
+            continue
+        p = held.get(sym)
+        chg = q["price"] - q["prev_close"] if q["prev_close"] else None
+        e = {"symbol": sym, "kind": "stock", "name": (p or {}).get("name") or q["name"], "long_name": q["name"],
+             "exchange": (p or {}).get("exchange") or q["exchange"], "price": r2(q["price"]),
+             "prev_close": r2(q["prev_close"]), "change": r2(chg),
+             "change_pct": r2(chg / q["prev_close"] * 100) if chg is not None else None,
+             "quote_time_et": et_str(q["quote_time"]), "market_state": q["market_state"],
+             "stats": _stats(q.get("stats")), "held": p is not None, "watch": sym in watch,
+             "chart": f"data/charts/{charts.safe_name(sym)}.json", "spark": [], "spark_base": r2(q["prev_close"])}
+        try:
+            intr, daily = charts.fetch_series(sym)
+            ch, spark, base = charts.stock_chart(sym, intr, daily, q["prev_close"], q["price"], trade_date)
+            ch["name"], ch["prev_close"] = e["name"], r2(q["prev_close"])
+            charts.write_if_changed(os.path.join(cdir, charts.safe_name(sym) + ".json"), ch, iso)
+            e["spark"], e["spark_base"] = spark, r2(base) if base is not None else e["spark_base"]
+            series[sym] = intr
+        except Exception as ex:  # noqa: BLE001
+            warn(f"{sym}: chart failed ({ex})")
+        if os.path.exists(os.path.join(cdir, charts.safe_name(sym) + ".json")):
+            keep.add(charts.safe_name(sym) + ".json")
+        else:
+            e["chart"] = None
+        out[sym] = e
+
+    recorded_all = record_option_marks(now, any(q["market_state"] == "REGULAR" for q in quotes.values()), options)
+    for o in options:
+        cid = o["contract"] or o["key"]
+        rec = [(datetime.fromtimestamp(p["t"], ET), p["marks"][o["key"]]) for p in recorded_all
+               if o["key"] in p.get("marks", {})]
+        daily = []
+        if o["contract"]:
+            try:
+                import yfinance as yf
+                h = yf.Ticker(o["contract"]).history(period="max", interval="1d", auto_adjust=False)
+                daily = [(ts.tz_convert(ET).to_pydatetime(), float(r["Close"])) for ts, r in h.iterrows()
+                         if num(r.get("Close")) is not None]
+            except Exception as ex:  # noqa: BLE001
+                warn(f"{cid}: option daily history failed ({ex})")
+        ch, spark = charts.option_chart(cid, o["label"], rec, daily, o["prev_mark"], o["mark"], trade_date)
+        fname = charts.safe_name(cid) + ".json"
+        if ch["ranges"]:
+            charts.write_if_changed(os.path.join(cdir, fname), ch, iso)
+            keep.add(fname)
+        chg = o["mark"] - o["prev_mark"] if o["prev_mark"] is not None else None
+        t = "C" if o["type"] == "call" else "P"
+        out[cid] = {"symbol": cid, "kind": "option", "display": f"{o['underlying']} {o['strike']:g}{t}",
+                    "name": o["label"], "underlying": o["underlying"], "price": o["mark"], "prev_close": o["prev_mark"],
+                    "change": r4(chg), "change_pct": r2(chg / o["prev_mark"] * 100) if chg is not None and o["prev_mark"] else None,
+                    "held": True, "watch": False, "chart": f"data/charts/{fname}" if ch["ranges"] else None,
+                    "spark": spark, "spark_base": o["prev_mark"], "key": o["key"]}
+    rows, methods = [], []
+    try:
+        rows, methods = build_intraday(H, options, cash, recorded_all, history, now)
+    except Exception as ex:  # noqa: BLE001
+        warn(f"intraday 1m account values failed ({ex}); keeping data/intraday.json as it was")
+        old = load_json(D("intraday.json"), {}) or {}
+        rows, methods = old.get("rows", []), old.get("option_mark_method", [])
+    try:
+        ach = account_chart(rows, methods, history, total, prev_total, trade_date)
+        charts.write_if_changed(os.path.join(cdir, "_account.json"), ach, iso)
+    except Exception as ex:  # noqa: BLE001
+        warn(f"account chart failed ({ex})")
+    for f in os.listdir(cdir):
+        if f.endswith(".json") and f not in keep:
+            os.remove(os.path.join(cdir, f))
+    return out
+
+
 # ---------------------------------------------------------------- main
 def strip_volatile(obj):
     o = json.loads(json.dumps(obj))
@@ -419,6 +705,22 @@ def main():
         print(f"[error] quote fetch failed: {e}. Leaving data files unchanged.", file=sys.stderr)
         sys.exit(1)
 
+    # watchlist quotes are optional: a bad watchlist symbol never blocks the account update
+    watch = []
+    for w in H.get("watchlist", []) or []:
+        w = str(w).strip().upper()
+        if w and w not in watch:
+            watch.append(w)
+    wquotes = {}
+    for w in watch:
+        if w in quotes:
+            continue
+        try:
+            wquotes[w] = get_quote(w, use_ext)
+        except Exception as e:  # noqa: BLE001
+            warn(f"watchlist {w}: quote failed ({e})")
+            caveats.append(f"Watchlist {w}: no quote available right now.")
+
     trade_date = max(q["quote_time"] for q in quotes.values()).date().isoformat()
     history = load_json(D("history.json"))
     if history is None:
@@ -438,7 +740,12 @@ def main():
         dpct = unit / q["prev_close"] * 100 if unit is not None else None
         stock_total += mv
         stock_day += dchg or 0
+        avg = num(s.get("avg_cost"))
+        cost = avg * qty if avg is not None else None
+        unreal = mv - cost if cost is not None else None
         positions.append({
+            "avg_cost": r4(avg), "cost_basis": r2(cost), "unrealized": r2(unreal),
+            "unrealized_pct": r2(unreal / cost * 100) if cost else None,
             "symbol": s["symbol"], "name": s.get("display_name") or q["name"], "long_name": q["name"],
             "exchange": s.get("exchange") or q["exchange"], "shares": int(qty) if qty.is_integer() else qty,
             "price": r2(q["price"]), "prev_close": r2(q["prev_close"]), "day_change_per_share": r2(unit),
@@ -508,7 +815,10 @@ def main():
                            f"(saved {res.get('quote_as_of_et')}).")
         if spread is not None and oq["mark"] and spread / oq["mark"] > 0.25:
             caveats.append(f"{label}: wide bid/ask ({oq['bid']:.2f} x {oq['ask']:.2f}); the mid-price mark is approximate.")
+        open_px = num(o.get("open_price"))
+        unreal = sign * (oq["mark"] - open_px) * mult * n if open_px is not None else None
         options.append({
+            "open_price": r4(open_px), "unrealized": r2(unreal), "key": key,
             "label": label, "contract": oq["contract"],
             "underlying": o["underlying"], "type": typ, "position": o.get("position", "short"),
             "contracts": int(n) if n.is_integer() else n, "multiplier": int(mult), "strike": strike,
@@ -532,6 +842,10 @@ def main():
     for p in positions:
         p["share_pct"] = r2(p["value"] / total * 100) if total else None
     cash_share = r2(cash / total * 100) if total else None
+
+    # 3b) quotes for the Stocks list + precomputed charts (data/charts/<SYMBOL>.json); never fatal
+    quote_map = build_quotes_and_charts(H, quotes, wquotes, watch, positions, options, trade_date, now,
+                                        history, total, prev_total, cash, caveats)
 
     # 4) history upsert (one point per trading day)
     point = {"date": trade_date, "total": r2(total), "day_change": r2(day), "day_change_pct": r2(day_pct),
@@ -607,6 +921,8 @@ def main():
         "history": [{"date": h["date"], "total": h["total"], "day_change": h.get("day_change"),
                      "day_change_pct": h.get("day_change_pct")} for h in history],
         "paper": paper,
+        "watchlist": watch,
+        "quotes": quote_map,
         "caveats": caveats,
     }
 

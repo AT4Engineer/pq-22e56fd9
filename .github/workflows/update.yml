@@ -30,25 +30,30 @@ jobs:
       - name: Install dependencies
         run: pip install yfinance pandas
 
-      - name: Build data/portfolio.json, history.csv, current.csv
-        run: python scripts/build_data.py && python scripts/history_csv.py && python scripts/current_csv.py
-
-      - name: Build standalone dist/dashboard.html
+      - name: Build data and commit (retries from a fresh origin/main if a trade landed meanwhile)
         env:
           # Optional repo variable (Settings > Secrets and variables > Actions > Variables), e.g.
           # https://<user>.github.io/<repo>/data/portfolio.json - lets the offline file try for fresher data.
           DASHBOARD_REMOTE_URL: ${{ vars.DASHBOARD_REMOTE_URL }}
-        run: python scripts/build_standalone.py
-
-      - name: Commit data changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data dist
-          if git diff --cached --quiet; then
-            echo "No data changes."
-            exit 0
-          fi
-          git commit -m "data: update $(TZ=America/New_York date '+%Y-%m-%d %H:%M ET')"
-          git pull --rebase --autostash
-          git push
+          for attempt in 1 2 3; do
+            # bash -e: a failed quote fetch fails the run and leaves the last good data in place
+            python scripts/build_data.py
+            python scripts/history_csv.py
+            python scripts/current_csv.py
+            python scripts/intraday_csv.py
+            python scripts/build_standalone.py
+            git add data dist
+            if git diff --cached --quiet; then
+              echo "No data changes."
+              exit 0
+            fi
+            git commit -m "data: update $(TZ=America/New_York date '+%Y-%m-%d %H:%M ET')"
+            if git push origin HEAD:main; then exit 0; fi
+            echo "Push rejected (attempt $attempt); rebuilding on top of origin/main"
+            git fetch origin main
+            git reset --hard origin/main
+          done
+          exit 1

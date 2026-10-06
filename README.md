@@ -11,7 +11,44 @@ fails and leaves the last good data in place.
 
 **Tracking only. Not financial advice. Quotes may be delayed ~15 minutes.**
 
-## What's on the screen
+## Views
+
+The page has four tabs (hash routes, so the browser Back button works):
+
+| Tab | Contents |
+|---|---|
+| **Stocks** (`#stocks`, default on phones) | iOS Stocks-style list: account value + day change on top; one row per holding (stocks and the short option) and per watchlist symbol with name, intraday sparkline, price and a change box. Tap the change box to cycle day change %, day change $ and market value (market cap for watchlist symbols). Tap a row for the detail panel (`#stocks/<SYMBOL>`; a full-screen sheet on phones, a side panel on wide screens): price chart with 1D / 1W / 1M / 3M / 1Y / ALL, hover/touch crosshair with exact time and value, stats (open, high, low, prev close, 52-week high/low, volume, market cap or net assets) and your position (shares, avg cost, market value, day gain, unrealized P/L). Below the list: account value chart with the same ranges. |
+| **Overview** (`#overview`, default on wide screens) | The original dashboard (summary, positions table, covered call, daily history, paper trading) |
+| **Transactions** (`#transactions`) | Everything recorded through the Edit form, newest first (`data/transactions.json`) |
+| **Edit** (`#edit`) | Form to record a trade; opens a prefilled GitHub issue that a workflow applies (see below) |
+
+Everything refreshes every 60 s without reloading (the data itself changes when the update workflow runs).
+
+## Editing the portfolio from the site
+
+A static site can't save anything, so the Edit form goes through a GitHub issue:
+
+1. Pick a type (Buy, Sell, Sell to open option, Buy to close option, Option expired, Option assigned, Deposit,
+   Withdraw, Dividend, Set cash, Set cost basis, Watchlist add/remove) and fill in the fields.
+2. **Continue on GitHub** opens `github.com/AT4Engineer/pq-22e56fd9/issues/new` with title `trade: ...`, label
+   `trade` and the transaction as a fenced JSON block in the body. Tap **Submit new issue** (signed in as AT4Engineer).
+3. `.github/workflows/apply-trade.yml` runs on issues opened/labeled `trade` **whose author is AT4Engineer**
+   (others are ignored; a `trade` label on someone else's issue gets a refusal comment). It runs
+   `scripts/apply_trade.py`, which validates the JSON (`scripts/trade_logic.py`), applies it to
+   `data/holdings.json`, appends `data/transactions.json`, reruns `build_data.py` and the CSV/standalone scripts,
+   commits, comments a before/after table on the issue and closes it.
+4. On a validation error (e.g. selling more than you hold, an uncovered call, not enough cash, unknown symbol)
+   it comments the reason, closes the issue as "not planned" and changes nothing.
+
+Cash rules: buys and buy-to-close subtract `qty x price x multiplier + fees`; sells and sell-to-open add
+`qty x price x multiplier - fees` (multiplier 100 for options); assignment of a covered call removes 100 shares
+per contract and adds `strike x 100`; expiry just removes the option. Buys keep a weighted average cost (fees
+included); sells report realized P/L when the average cost is known. Run the tests with
+`python -m unittest discover -s tests -v` (they never touch the real holdings).
+
+Local (no GitHub) equivalent: `python scripts/apply_trade.py --txn trade.json [--dry-run]`.
+
+## What's on the Overview tab
 
 | Section | Contents |
 |---|---|
@@ -33,7 +70,11 @@ index.html                  page shell
 assets/style.css            styles (light/dark, responsive)
 assets/app.js               rendering, auto-refresh every 60 s (no full reload)
 assets/favicon.svg
-data/holdings.json          positions (edit this when you trade)
+data/holdings.json          positions, cash, avg costs, watchlist (updated by the Edit flow, or by hand)
+data/transactions.json      every transaction applied from an issue
+data/charts/<SYMBOL>.json   precomputed price charts per symbol (1D 5m, 1W 30m, then daily) + _account.json
+data/intraday.json          account value every minute of the session, rolling 7 trading days (+ intraday.csv)
+data/option_marks.json      option bid/ask marks recorded on each regular-session run
 data/history.json           one point per trading day (appended/updated by the script)
 data/paper.json             snapshot of the SPY paper lab
 data/portfolio.json         the single file the page loads
@@ -42,8 +83,14 @@ dist/dashboard.html         single self-contained offline file (CSS/JS/data inli
 scripts/build_data.py       builds data/portfolio.json from live quotes
 scripts/history_csv.py      writes data/history.csv (for Google Sheets IMPORTDATA)
 scripts/current_csv.py      writes data/current.csv (per-holding price/mark, source, value, as-of; for Sheets IMPORTDATA)
+scripts/intraday_csv.py     writes data/intraday.csv (minute account values, for Sheets IMPORTDATA)
+scripts/charts.py           chart helpers used by build_data.py
+scripts/trade_logic.py      validation + holdings math for transactions (pure functions)
+scripts/apply_trade.py      applies a trade issue (CI) or a local JSON file
 scripts/build_standalone.py builds dist/dashboard.html
+tests/test_apply_trade.py   unit tests for every transaction type + the CI flow (fake git remote and gh)
 .github/workflows/update.yml scheduled data refresh
+.github/workflows/apply-trade.yml applies "trade" issues
 ```
 
 ## Run locally
@@ -97,6 +144,18 @@ download the attachment and open it in the browser.
 
 Each run commits `data/` and `dist/` only if something changed.
 
+## Minute-by-minute account value
+
+Each run of `build_data.py` rebuilds the session's account value per minute from Yahoo 1-minute bars
+(`interval=1m`, last 7 days) for every stock, using the quantities held at that run, plus cash, plus the
+option's value (negative for the short call). Minutes already stored are kept as recorded; each run adds every
+minute since the previous one, so although the page only changes as often as the workflow runs (~15 min), no
+minute is skipped. The option contract trades thinly, so its per-minute value is the latest known price at or
+before that minute: a bid/ask mark recorded by this tracker (held constant between runs), a Yahoo 1-minute trade
+print, or the previous day's mark. Expect small steps in the line when a new mark is recorded.
+`data/intraday.csv` has the same rows for Google Sheets:
+`=IMPORTDATA("https://at4engineer.github.io/pq-22e56fd9/data/intraday.csv")`.
+
 ## Caveats
 
 - GitHub's scheduled workflows are best-effort: runs are often delayed 5-30+ minutes, can be
@@ -109,7 +168,10 @@ Each run commits `data/` and `dist/` only if something changed.
   spreads make that approximate. Outside market hours Yahoo often reports no bid/ask; the script then
   reuses the last good bid/ask mid saved in `data/option_state.json` (never the last trade), and an
   off-hours run never overwrites a session's history row recorded with live bid/ask quotes. Assignment risk and the market-implied chance are rough guides, not forecasts.
-- A public repository makes the holdings and values visible to anyone with the link.
+- A public repository makes the holdings and values visible to anyone with the link, and trade issues
+  (amounts, prices, notes) are public too.
+- 1W charts and the account 1D/1W lines value the current holdings; the account history is only as long as
+  this tracker has been running (1M+ ranges fill in day by day).
 
 ## Install on a phone (PWA)
 

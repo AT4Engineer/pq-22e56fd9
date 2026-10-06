@@ -1,6 +1,6 @@
 {
   "as_of": "2026-10-05",
-  "note": "Tracking only. No trades, no brokerage connection. Edit this file when positions change.",
+  "note": "Tracking only. No brokerage connection. Updated by the 'Edit portfolio' form on the site (GitHub issue -> apply-trade workflow), or edit by hand.",
   "cash": 964.7,
   "stocks": [
     {
@@ -29,5 +29,8 @@
   ],
   "settings": {
     "use_extended_hours_price": false
-  }
+  },
+  "watchlist": [
+    "SPY"
+  ]
 }

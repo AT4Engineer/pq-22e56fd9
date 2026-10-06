@@ -1,5 +1,5 @@
-/* Portfolio Tracker service worker: cache the app shell, always go network-first for data. */
-const CACHE = "pq-shell-v2";
+/* Portfolio Tracker service worker: cache the app shell, always go network-first for data/ files. */
+const CACHE = "pq-shell-v3";
 const SHELL = [
   "./",
   "index.html",
@@ -30,9 +30,10 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  // Data: network-first (never stale when online); last good copy only when offline.
-  if (url.pathname.endsWith("/data/portfolio.json")) {
-    const key = new URL("data/portfolio.json", self.registration.scope).href;
+  // Data (portfolio.json, charts, transactions, csv): network-first (never stale when online);
+  // last good copy (stored without the cache-busting query) only when offline.
+  if (url.pathname.indexOf("/data/") >= 0) {
+    const key = url.origin + url.pathname;
     e.respondWith(
       fetch(req, { cache: "no-store" })
         .then((res) => {
