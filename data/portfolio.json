@@ -1,18 +1,18 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 12:16:07 ET",
-  "generated_at_iso": "2026-10-06T12:16:07-04:00",
+  "generated_at_et": "2026-10-06 12:16:24 ET",
+  "generated_at_iso": "2026-10-06T12:16:24-04:00",
   "trade_date": "2026-10-06",
   "quotes_as_of_et": "2026-10-06 12:16 ET",
   "market_state": "REGULAR",
   "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16854.63,
+    "total": 16855.02,
     "prev_total": 16658.06,
-    "day_change": 196.57,
+    "day_change": 196.96,
     "day_change_pct": 1.18,
-    "stocks_value": 16429.93,
+    "stocks_value": 16430.32,
     "cash": 964.7,
     "cash_share_pct": 5.72,
     "option_liability": -540.0
@@ -28,18 +28,18 @@
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 4,
-      "price": 173.74,
+      "price": 173.83,
       "prev_close": 171.09,
-      "day_change_per_share": 2.65,
-      "day_change": 10.58,
-      "day_change_pct": 1.55,
-      "value": 694.94,
+      "day_change_per_share": 2.74,
+      "day_change": 10.97,
+      "day_change_pct": 1.6,
+      "value": 695.33,
       "quote_time_et": "2026-10-06 12:16 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 4.12
+      "share_pct": 4.13
     },
     {
       "avg_cost": null,
@@ -62,7 +62,7 @@
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 93.36
+      "share_pct": 93.35
     }
   ],
   "options": [
@@ -115,7 +115,7 @@
   ],
   "stats": {
     "days_tracked": 2,
-    "all_time_high": 16854.63,
+    "all_time_high": 16855.02,
     "best_day": {
       "date": "2026-10-05",
       "change": 242.52,
@@ -123,7 +123,7 @@
     },
     "worst_day": {
       "date": "2026-10-06",
-      "change": 196.57,
+      "change": 196.96,
       "pct": 1.18
     }
   },
@@ -136,8 +136,8 @@
     },
     {
       "date": "2026-10-06",
-      "total": 16854.63,
-      "day_change": 196.57,
+      "total": 16855.02,
+      "day_change": 196.96,
       "day_change_pct": 1.18
     }
   ],
@@ -278,21 +278,21 @@
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
-      "price": 173.74,
+      "price": 173.83,
       "prev_close": 171.09,
-      "change": 2.65,
-      "change_pct": 1.55,
+      "change": 2.74,
+      "change_pct": 1.6,
       "quote_time_et": "2026-10-06 12:16 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 172.09,
         "day_high": 176.42,
         "day_low": 172.0,
-        "volume": 66718008.0,
+        "volume": 66772494.0,
         "avg_volume": 91955409.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 2290136645632.0,
+        "market_cap": 2291417743360.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -434,7 +434,7 @@
         ],
         [
           165,
-          173.79
+          173.82
         ]
       ],
       "spark_base": 171.09
@@ -455,7 +455,7 @@
         "open": 155.82,
         "day_high": 157.88,
         "day_low": 155.71,
-        "volume": 1013022.0,
+        "volume": 1013057.0,
         "avg_volume": 1935171.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -612,9 +612,9 @@
       "name": "State Street SPDR S&P 500 ETF Trust",
       "long_name": "State Street SPDR S&P 500 ETF Trust",
       "exchange": "NYSEArca",
-      "price": 780.73,
+      "price": 780.74,
       "prev_close": 774.83,
-      "change": 5.9,
+      "change": 5.91,
       "change_pct": 0.76,
       "quote_time_et": "2026-10-06 12:16 ET",
       "market_state": "REGULAR",
@@ -622,7 +622,7 @@
         "open": 778.15,
         "day_high": 781.62,
         "day_low": 777.96,
-        "volume": 14064058.0,
+        "volume": 14075969.0,
         "avg_volume": 44119376.0,
         "high_52w": 781.62,
         "low_52w": 629.28,
@@ -768,7 +768,7 @@
         ],
         [
           165,
-          780.71
+          780.72
         ]
       ],
       "spark_base": 774.83
@@ -779,9 +779,9 @@
       "name": "Invesco QQQ Trust",
       "long_name": "Invesco QQQ Trust",
       "exchange": "NasdaqGM",
-      "price": 761.08,
+      "price": 761.12,
       "prev_close": 756.2,
-      "change": 4.88,
+      "change": 4.91,
       "change_pct": 0.65,
       "quote_time_et": "2026-10-06 12:16 ET",
       "market_state": "REGULAR",
@@ -789,7 +789,7 @@
         "open": 760.54,
         "day_high": 762.86,
         "day_low": 759.1,
-        "volume": 13013950.0,
+        "volume": 13029660.0,
         "avg_volume": 35333573.0,
         "high_52w": 762.86,
         "low_52w": 555.6,
@@ -935,7 +935,7 @@
         ],
         [
           165,
-          761.07
+          761.08
         ]
       ],
       "spark_base": 756.2
