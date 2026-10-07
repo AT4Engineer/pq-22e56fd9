@@ -195,22 +195,28 @@ function render(data, stale) {
   const rows = buildRows(data);
   const note = callNote(data);
 
-  const upro = (data.positions||[]).find(p => p.symbol==="UPRO") || (data.positions||[])[0];
-  const opt = (data.options||[]).find(o => !o.expired);
-  const smallExtra = upro ? `<div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px"><span style="font-weight:700">${upro.symbol}</span><span>${price(upro.price)} <span class="${cls(upro.day_change_pct)}">${signedPct(upro.day_change_pct)}</span></span></div>` : "";
-  const smallNote = opt
-    ? `${opt.underlying} $${opt.strike}C  ${price(opt.mark??opt.last)}  ${money(opt.liability)}`
-    : (a.cash!=null ? `Cash  ${money(a.cash)}` : "");
+  const histVals = (data.history||[]).map(h => h.total).filter(n => n!=null);
+  const sparkPts = histVals.length >= 2 ? histVals : [a.total];
+  const sparkMin = Math.min(...sparkPts), sparkMax = Math.max(...sparkPts);
+  const sparkRange = sparkMax - sparkMin || 1;
+  const sparkW = 130, sparkH = 56;
+  const sparkPath = sparkPts.map((v,i) => {
+    const x = sparkPts.length===1 ? sparkW/2 : (i/(sparkPts.length-1))*sparkW;
+    const y = 4 + (sparkH-8) - ((v-sparkMin)/sparkRange)*(sparkH-8);
+    return (i===0?"M":"L")+x.toFixed(1)+" "+y.toFixed(1);
+  }).join(" ");
+  const sparkFill = sparkPath + ` L${sparkW} ${sparkH} L0 ${sparkH} Z`;
+  const sparkClr = (a.day_change||0) >= 0 ? "#30d158" : "#ff453a";
   const small = `
     <div class="col"><div class="label">Small</div>
     <div class="widget w-small" id="shot-small"><div class="stack-fill">
-      <div class="t-label" style="display:flex;justify-content:space-between"><span>Portfolio${stale?" · stale":""}</span><span style="font-size:9px">${(data.market_label||"").slice(0,18)}</span></div>
-      <div class="t-total" style="font-size:20px">${money(a.total)}</div>
+      <div class="t-total" style="font-size:22px">${money(a.total)}</div>
       <div class="t-chg ${cls(a.day_change)}">${day}</div>
-      ${smallExtra}
-      ${smallNote?`<div class="t-foot" style="margin-top:4px">${smallNote}</div>`:""}
       <div class="spacer"></div>
-      <div class="t-foot">${foot}</div>
+      <svg width="${sparkW}" height="${sparkH}" viewBox="0 0 ${sparkW} ${sparkH}" style="width:100%;height:56px;display:block;margin-top:4px">
+        <path d="${sparkFill}" fill="${sparkClr}" fill-opacity="0.2"/>
+        <path d="${sparkPath}" fill="none" stroke="${sparkClr}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div></div></div>`;
 
   const medRows = rows.slice(0,4).map(rowHtml).join("");

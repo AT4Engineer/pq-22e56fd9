@@ -7,6 +7,8 @@
 // Lock Screen (iOS 16+): accessoryCircular / accessoryRectangular / accessoryInline.
 
 const DATA_URL = "https://at4engineer.github.io/pq-22e56fd9/data/portfolio.json"
+const HISTORY_URL = "https://at4engineer.github.io/pq-22e56fd9/data/history.csv"
+const ACCOUNT_CHART_URL = "https://at4engineer.github.io/pq-22e56fd9/data/charts/_account.json"
 const SITE_URL = "https://at4engineer.github.io/pq-22e56fd9/"
 const CACHE_KEY = "pq22_portfolio_json"
 const CACHE_FILE = "pq22-portfolio-cache.json"
@@ -66,7 +68,7 @@ async function buildWidget(data, fam, isStale, err) {
     return buildAccessory(data, fam, isStale, err)
   }
   if (!data) return buildErrorWidget(err || "No data")
-  if (fam === "small") return buildSmall(data, isStale)
+  if (fam === "small") return await buildSmall(data, isStale)
   if (fam === "large") return buildLarge(data, isStale)
   return buildMedium(data, isStale)
 }
@@ -87,95 +89,148 @@ function buildErrorWidget(msg) {
   return w
 }
 
-function buildSmall(data, isStale) {
+// Small: total + tracked-history sparkline + day $/%
+async function buildSmall(data, isStale) {
   const w = new ListWidget()
-  styleHome(w, 10, 12)
+  styleHome(w, 12, 14)
   const acct = data.account
 
-  const titleRow = w.addStack()
-  titleRow.layoutHorizontally()
-  titleRow.centerAlignContent()
-  const title = titleRow.addText("Portfolio" + (isStale ? " · stale" : ""))
-  title.font = Font.systemFont(11)
-  title.textColor = LABEL
-  titleRow.addSpacer()
-  const mkt = titleRow.addText(shortMarketLabel(data))
-  mkt.font = Font.systemFont(9)
-  mkt.textColor = LABEL
-  mkt.lineLimit = 1
-
-  w.addSpacer(3)
-
   const total = w.addText(fmtMoney(acct.total))
-  total.font = Font.boldSystemFont(20)
+  total.font = Font.boldSystemFont(22)
   total.textColor = WHITE
   total.minimumScaleFactor = 0.65
   total.lineLimit = 1
 
   const ch = w.addText(fmtDayChange(acct.day_change, acct.day_change_pct))
-  ch.font = Font.boldSystemFont(12)
+  ch.font = Font.boldSystemFont(13)
   ch.textColor = changeColor(acct.day_change)
   ch.minimumScaleFactor = 0.7
   ch.lineLimit = 1
-
-  w.addSpacer(6)
-
-  // Top holding (prefer UPRO) — price + day change
-  const upro = findPosition(data, "UPRO") || (data.positions && data.positions[0])
-  if (upro) {
-    const row = w.addStack()
-    row.layoutHorizontally()
-    row.centerAlignContent()
-    const sym = row.addText(upro.symbol)
-    sym.font = Font.boldSystemFont(11)
-    sym.textColor = WHITE
-    row.addSpacer()
-    const px = row.addText(fmtPrice(upro.price))
-    px.font = Font.systemFont(11)
-    px.textColor = WHITE
-    const pct = row.addText("  " + fmtSignedPct(upro.day_change_pct))
-    pct.font = Font.systemFont(11)
-    pct.textColor = changeColor(upro.day_change_pct)
+  if (isStale) {
+    const st = w.addText("stale")
+    st.font = Font.systemFont(9)
+    st.textColor = LABEL
   }
 
-  w.addSpacer(3)
+  w.addSpacer(8)
 
-  // One-liner: open short call mark, else cash
-  const opt = ((data.options || []).filter((o) => !o.expired)[0]) || null
-  let line = ""
-  if (opt) {
-    const strike = opt.strike != null ? trimNum(opt.strike) : "?"
-    line =
-      (opt.underlying || "OPT") +
-      " $" +
-      strike +
-      "C  " +
-      fmtPrice(opt.mark != null ? opt.mark : opt.last) +
-      "  " +
-      fmtMoney(opt.liability)
-  } else if (acct.cash != null) {
-    line = "Cash  " + fmtMoney(acct.cash)
-  }
-  if (line) {
-    const note = w.addText(line)
-    note.font = Font.systemFont(10)
-    note.textColor = LABEL
-    note.lineLimit = 1
-    note.minimumScaleFactor = 0.75
-  }
+  const series = await loadHistorySeries(data)
+  const lineColor = series.length >= 2 && series[series.length - 1] >= series[0] ? GREEN : RED
+  // Prefer day-change color when it matches the story of today
+  const sparkColor = acct.day_change == null ? lineColor : changeColor(acct.day_change)
+  const img = drawSparkline(series, 320, 140, sparkColor)
+  const image = w.addImage(img)
+  image.centerAlignImage()
+  image.applyFillingContentMode()
 
-  w.addSpacer()
-
-  addFooter(w, data, false, 9) // stale already in title
   return w
 }
 
-function findPosition(data, symbol) {
-  const list = data.positions || []
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].symbol === symbol) return list[i]
+async function loadHistorySeries(data) {
+  const fromPayload = []
+  const hist = data.history || []
+  for (let i = 0; i < hist.length; i++) {
+    if (hist[i] && hist[i].total != null && !isNaN(hist[i].total)) fromPayload.push(+hist[i].total)
   }
-  return null
+  if (fromPayload.length >= 2) return fromPayload
+
+  try {
+    const req = new Request(HISTORY_URL)
+    req.timeoutInterval = 8
+    const text = await req.loadString()
+    const lines = text.trim().split("\n")
+    const vals = []
+    for (let i = 1; i < lines.length; i++) {
+      const parts = lines[i].split(",")
+      if (parts.length >= 2) {
+        const n = parseFloat(parts[1])
+        if (!isNaN(n)) vals.push(n)
+      }
+    }
+    if (vals.length >= 1) return vals
+  } catch (_) {}
+
+  try {
+    const req = new Request(ACCOUNT_CHART_URL)
+    req.timeoutInterval = 8
+    const json = await req.loadJSON()
+    const v = (json.ranges && json.ranges.ALL && json.ranges.ALL.v) || []
+    if (v.length) return v.map((n) => +n).filter((n) => !isNaN(n))
+  } catch (_) {}
+
+  if (data.account && data.account.total != null) return [+data.account.total]
+  return []
+}
+
+function drawSparkline(values, width, height, color) {
+  const dc = new DrawContext()
+  dc.size = new Size(width, height)
+  dc.opaque = false
+  dc.respectScreenScale = true
+
+  if (!values || values.length === 0) {
+    return dc.getImage()
+  }
+
+  let min = values[0]
+  let max = values[0]
+  for (let i = 1; i < values.length; i++) {
+    if (values[i] < min) min = values[i]
+    if (values[i] > max) max = values[i]
+  }
+  const range = max - min || 1
+  const padY = 6
+  const usable = height - padY * 2
+
+  // Soft fill under the line
+  if (values.length >= 2) {
+    const fill = new Path()
+    for (let i = 0; i < values.length; i++) {
+      const x = (i / (values.length - 1)) * width
+      const y = padY + usable - ((values[i] - min) / range) * usable
+      if (i === 0) fill.move(new Point(x, y))
+      else fill.addLine(new Point(x, y))
+    }
+    fill.addLine(new Point(width, height))
+    fill.addLine(new Point(0, height))
+    fill.closeSubpath()
+    // Alpha wash of the stroke color (Scriptable Color(hex, alpha))
+    const fillColor =
+      color === GREEN ? new Color("#30d158", 0.2) : color === RED ? new Color("#ff453a", 0.2) : new Color("#8e8e93", 0.2)
+    dc.setFillColor(fillColor)
+    dc.addPath(fill)
+    dc.fillPath()
+  }
+
+  const path = new Path()
+  if (values.length === 1) {
+    const y = padY + usable / 2
+    path.move(new Point(0, y))
+    path.addLine(new Point(width, y))
+  } else {
+    for (let i = 0; i < values.length; i++) {
+      const x = (i / (values.length - 1)) * width
+      const y = padY + usable - ((values[i] - min) / range) * usable
+      if (i === 0) path.move(new Point(x, y))
+      else path.addLine(new Point(x, y))
+    }
+  }
+  dc.setStrokeColor(color)
+  dc.setLineWidth(3)
+  dc.addPath(path)
+  dc.strokePath()
+
+  // End dot
+  const last = values[values.length - 1]
+  const lx = values.length === 1 ? width : width
+  const ly =
+    values.length === 1
+      ? padY + usable / 2
+      : padY + usable - ((last - min) / range) * usable
+  dc.setFillColor(color)
+  dc.fillEllipse(new Rect(lx - 4, ly - 4, 8, 8))
+
+  return dc.getImage()
 }
 
 function buildMedium(data, isStale) {
