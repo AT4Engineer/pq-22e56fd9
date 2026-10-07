@@ -1,14 +1,15 @@
-/* Portfolio Tracker service worker: cache the app shell, always go network-first for data/ files. */
-const CACHE = "pq-shell-v9";
+/* Portfolio Tracker service worker: cache the app shell, always go network-first for data/ files.
+   Scripts and styles are network-first too, so a new tab in the HTML cannot run an older router. */
+const CACHE = "pq-shell-v10";
 const SHELL = [
   "./",
   "index.html",
   "display.html",
-  "assets/style.css",
-  "assets/app.js",
-  "assets/projection.js",
-  "assets/display.css",
-  "assets/display.js",
+  "assets/style.css?v=10",
+  "assets/app.js?v=10",
+  "assets/projection.js?v=10",
+  "assets/display.css?v=10",
+  "assets/display.js?v=10",
   "assets/favicon.svg",
   "assets/icons/icon-192.png",
   "assets/icons/icon-512.png",
@@ -27,6 +28,14 @@ self.addEventListener("activate", (e) => {
       .then(() => self.clients.claim())
   );
 });
+
+function store(req, res) {
+  if (res && res.ok) {
+    const copy = res.clone();
+    caches.open(CACHE).then((c) => c.put(req, copy));
+  }
+  return res;
+}
 
 self.addEventListener("fetch", (e) => {
   const req = e.request;
@@ -55,11 +64,17 @@ self.addEventListener("fetch", (e) => {
     const shellKey = /display\.html$/.test(path) ? "display.html" : "index.html";
     e.respondWith(
       fetch(req)
-        .then((res) => {
-          if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(shellKey, copy)); }
-          return res;
-        })
+        .then((res) => store(shellKey, res))
         .catch(() => caches.match(shellKey).then((r) => r || caches.match("index.html").then((r2) => r2 || caches.match("./"))))
+    );
+    return;
+  }
+
+  // Scripts and styles: network-first. A stale app.js still routes #guide to Stocks/Overview
+  // while the fresh HTML already shows the Guide button.
+  if (/\.(js|css)$/.test(url.pathname)) {
+    e.respondWith(
+      fetch(req).then((res) => store(req, res)).catch(() => caches.match(req).then((r) => r || Response.error()))
     );
     return;
   }
@@ -67,10 +82,7 @@ self.addEventListener("fetch", (e) => {
   // Other shell assets: stale-while-revalidate.
   e.respondWith(
     caches.match(req).then((cached) => {
-      const net = fetch(req).then((res) => {
-        if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
-        return res;
-      }).catch(() => cached);
+      const net = fetch(req).then((res) => store(req, res)).catch(() => cached);
       return cached || net;
     })
   );

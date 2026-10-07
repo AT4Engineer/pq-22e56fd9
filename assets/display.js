@@ -237,22 +237,44 @@
       if (ev.changedTouches && ev.changedTouches.length) return { x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY };
       return { x: ev.clientX, y: ev.clientY };
     }
-    function at(ev) {
-      var pt = clientXY(ev), rect = svg.getBoundingClientRect(), px = (pt.x - rect.left) * (W / rect.width);
-      var bi = 0, bd = Infinity;
-      for (var k = 0; k < n; k++) { var dd = Math.abs(x(k) - px); if (dd < bd) { bd = dd; bi = k; } }
-      return bi;
+    function svgX(ev) {
+      var p = clientXY(ev), rect = svg.getBoundingClientRect();
+      if (!rect.width) return x(0);
+      return (p.x - rect.left) * (W / rect.width);
+    }
+    function onCurve(px) {
+      var idx = [];
+      for (var k = 0; k < n; k++) if (isNum(V[k])) idx.push(k);
+      if (!idx.length) return null;
+      var a0 = idx[0], aN = idx[idx.length - 1];
+      if (idx.length === 1 || px <= x(a0)) return { x: x(a0), y: y(V[a0]), v: V[a0], i: a0 };
+      if (px >= x(aN)) return { x: x(aN), y: y(V[aN]), v: V[aN], i: aN };
+      for (var p = 0; p < idx.length - 1; p++) {
+        var a = idx[p], b = idx[p + 1], x0 = x(a), x1 = x(b);
+        if (px <= x1 || p === idx.length - 2) {
+          var f = x1 - x0 > 0.01 ? (px - x0) / (x1 - x0) : 0;
+          if (f < 0) f = 0; else if (f > 1) f = 1;
+          var v = V[a] + (V[b] - V[a]) * f;
+          return { x: x0 + (x1 - x0) * f, y: y(v), v: v, i: f < 0.5 ? a : b };
+        }
+      }
+      return { x: x(aN), y: y(V[aN]), v: V[aN], i: aN };
+    }
+    function place(hit) {
+      var X = hit.x.toFixed(1), Y = hit.y.toFixed(1);
+      xl.setAttribute("x1", X); xl.setAttribute("x2", X);
+      xd.setAttribute("cx", X); xd.setAttribute("cy", Y);
+      xl.style.transform = "none"; xd.style.transform = "none";
+      xl.setAttribute("visibility", "visible"); xd.setAttribute("visibility", "visible");
     }
     var shown = false, dragging = false;
     function show(ev) {
       if (!n) return;
-      var k = at(ev), v = V[k];
-      if (!isNum(v)) return;
-      if (!shown) { xl.classList.add("snap"); xd.classList.add("snap"); }
-      xl.style.transform = "translate(" + x(k).toFixed(1) + "px,0)";
-      xd.style.transform = "translate(" + x(k).toFixed(1) + "px," + y(v).toFixed(1) + "px)";
-      xl.setAttribute("visibility", "visible"); xd.setAttribute("visibility", "visible");
-      if (!shown) { void xl.getBoundingClientRect(); xl.classList.remove("snap"); xd.classList.remove("snap"); shown = true; }
+      var hit = onCurve(svgX(ev));
+      if (!hit) return;
+      place(hit);
+      shown = true;
+      var k = hit.i, v = hit.v;
       var intra = rg.interval && /m$/.test(rg.interval);
       var when = intra ? fmtTime(T[k], !timeScale) + " ET" : fmtDay(T[k], { month: "short", day: "numeric", year: "numeric" });
       var c = v - first;
