@@ -13,7 +13,8 @@
       "symbol": "UPRO",
       "shares": 100,
       "exchange": "NYSE Arca",
-      "display_name": "ProShares UltraPro S&P 500 (3x)"
+      "display_name": "ProShares UltraPro S&P 500 (3x)",
+      "avg_cost": 154.155
     }
   ],
   "options": [
@@ -24,7 +25,8 @@
       "contracts": 1,
       "multiplier": 100,
       "strike": 154.0,
-      "expiry": "2026-10-16"
+      "expiry": "2026-10-16",
+      "open_price": 5.3647
     }
   ],
   "settings": {

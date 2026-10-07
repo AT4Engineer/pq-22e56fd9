@@ -102,5 +102,41 @@
     "issue": 11,
     "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/11",
     "applied_at_et": "2026-10-07 11:38:51 ET"
+  },
+  {
+    "id": "L1791406406",
+    "type": "set_option_premium",
+    "date": "2026-09-22",
+    "symbol": "UPRO",
+    "fees": 0.0,
+    "note": "E*Trade: sold short 1 UPRO 10/16/26 154 call at $5.37, net $536.47 after fees",
+    "price": 5.3647,
+    "qty": 1.0,
+    "option": {
+      "right": "call",
+      "strike": 154.0,
+      "expiry": "2026-10-16",
+      "multiplier": 100.0
+    },
+    "premium_total": 536.47,
+    "description": "Set premium received UPRO Oct 16 2026 $154 call = $5.36/share ($536.47)",
+    "cash_before": 964.7,
+    "cash_after": 964.7,
+    "applied_at_et": "2026-10-07 16:53:26 ET",
+    "source": "manual"
+  },
+  {
+    "id": "L1791406406",
+    "type": "set_cost_basis",
+    "date": "2026-09-22",
+    "symbol": "UPRO",
+    "fees": 0.0,
+    "note": "E*Trade: bought 100 UPRO at $154.155, $15,415.50 total",
+    "price": 154.155,
+    "description": "Set cost basis UPRO = $154.16",
+    "cash_before": 964.7,
+    "cash_after": 964.7,
+    "applied_at_et": "2026-10-07 16:53:26 ET",
+    "source": "manual"
   }
 ]
