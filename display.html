@@ -14,8 +14,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body class="display">
-  <div class="disp-clock" id="clock" aria-live="off"></div>
   <header class="disp-head">
+    <div class="disp-clock" id="clock" aria-live="off"></div>
     <div class="disp-label">Account value</div>
     <div class="disp-total" id="total">$--</div>
     <div class="disp-day" id="day">--</div>
@@ -29,7 +29,8 @@
     <p class="note" id="ac-note" hidden></p>
   </section>
 
-  <section class="disp-holdings" aria-label="Holdings">
+  <section class="disp-holdings" aria-labelledby="disp-hold-title">
+    <h2 id="disp-hold-title" class="disp-h">Holdings</h2>
     <div class="disp-strip" id="holdings"></div>
   </section>
 
