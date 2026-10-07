@@ -572,15 +572,15 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
     gap: 1px;
     height: 49px; min-height: 49px; max-height: 49px;
     margin: 0; padding: 6px 0 0; border: 0; border-bottom: 0;
-    color: var(--muted); font-size: 10px; font-weight: 500; letter-spacing: -0.08px;
+    color: var(--muted); font-size: 9px; font-weight: 500; letter-spacing: -0.08px;
     box-sizing: border-box; -webkit-tap-highlight-color: transparent;
     text-decoration: none;
   }
   .tabs a:first-child { padding-left: 0; }
   .tabs .tl {
-    display: block; width: auto; max-width: 100%;
-    margin: 0; padding: 0 2px;
-    font-size: 10px; font-weight: 500; line-height: 12px;
+    display: block; width: auto; max-width: calc(100% - 4px);
+    margin: 0; padding: 0;
+    font-size: 9px; font-weight: 500; line-height: 11px; letter-spacing: -0.1px;
     text-align: center; white-space: nowrap; overflow: hidden; text-overflow: clip;
   }
   .tabs a.on { color: var(--accent); }
