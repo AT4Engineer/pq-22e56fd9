@@ -89,39 +89,47 @@ function buildErrorWidget(msg) {
   return w
 }
 
-// Small: total + tracked-history sparkline + day $/%
+// Small: total + day $/% + history sparkline — sized for ~155×155 home-screen box
 async function buildSmall(data, isStale) {
   const w = new ListWidget()
-  styleHome(w, 12, 14)
+  // Tight inset so content clears the rounded mask
+  styleHome(w, 10, 12)
   const acct = data.account
 
   const total = w.addText(fmtMoney(acct.total))
-  total.font = Font.boldSystemFont(22)
+  total.font = Font.boldSystemFont(17)
   total.textColor = WHITE
-  total.minimumScaleFactor = 0.65
+  total.minimumScaleFactor = 0.55
   total.lineLimit = 1
 
   const ch = w.addText(fmtDayChange(acct.day_change, acct.day_change_pct))
-  ch.font = Font.boldSystemFont(13)
+  ch.font = Font.boldSystemFont(11)
   ch.textColor = changeColor(acct.day_change)
-  ch.minimumScaleFactor = 0.7
+  ch.minimumScaleFactor = 0.6
   ch.lineLimit = 1
+
   if (isStale) {
     const st = w.addText("stale")
-    st.font = Font.systemFont(9)
+    st.font = Font.systemFont(8)
     st.textColor = LABEL
+    st.lineLimit = 1
   }
 
-  w.addSpacer(8)
+  w.addSpacer(6)
 
   const series = await loadHistorySeries(data)
   const lineColor = series.length >= 2 && series[series.length - 1] >= series[0] ? GREEN : RED
-  // Prefer day-change color when it matches the story of today
   const sparkColor = acct.day_change == null ? lineColor : changeColor(acct.day_change)
-  const img = drawSparkline(series, 320, 140, sparkColor)
+
+  // Draw at 2× for sharpness; display size matches leftover space in a small widget
+  const drawW = 300
+  const drawH = 150
+  const img = drawSparkline(series, drawW, drawH, sparkColor, 2.5)
   const image = w.addImage(img)
+  // ~131×66 pt inside 155 box with 10/12 padding — forces fit, no clip
+  image.imageSize = new Size(131, 66)
   image.centerAlignImage()
-  image.applyFillingContentMode()
+  image.applyFittingContentMode()
 
   return w
 }
@@ -162,7 +170,7 @@ async function loadHistorySeries(data) {
   return []
 }
 
-function drawSparkline(values, width, height, color) {
+function drawSparkline(values, width, height, color, lineWidth) {
   const dc = new DrawContext()
   dc.size = new Size(width, height)
   dc.opaque = false
@@ -179,7 +187,7 @@ function drawSparkline(values, width, height, color) {
     if (values[i] > max) max = values[i]
   }
   const range = max - min || 1
-  const padY = 6
+  const padY = 4
   const usable = height - padY * 2
 
   // Soft fill under the line
@@ -215,20 +223,21 @@ function drawSparkline(values, width, height, color) {
       else path.addLine(new Point(x, y))
     }
   }
+  const lw = lineWidth == null ? 3 : lineWidth
   dc.setStrokeColor(color)
-  dc.setLineWidth(3)
+  dc.setLineWidth(lw)
   dc.addPath(path)
   dc.strokePath()
 
-  // End dot
+  // End dot (scales lightly with stroke)
   const last = values[values.length - 1]
-  const lx = values.length === 1 ? width : width
   const ly =
     values.length === 1
       ? padY + usable / 2
       : padY + usable - ((last - min) / range) * usable
+  const dot = Math.max(3, lw + 1)
   dc.setFillColor(color)
-  dc.fillEllipse(new Rect(lx - 4, ly - 4, 8, 8))
+  dc.fillEllipse(new Rect(width - dot, ly - dot / 2, dot, dot))
 
   return dc.getImage()
 }
