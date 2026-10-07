@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex">
   <meta name="trade-repo" content="AT4Engineer/pq-22e56fd9">
-  <title>Portfolio Tracker - snapshot 2026-10-06 20:35:48 ET</title>
+  <title>Portfolio Tracker - snapshot 2026-10-07 09:56:47 ET</title>
   <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzFmM2E1NiIvPjxwYXRoIGQ9Ik03IDI0VjhNNyAyNGgxOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGZhOWMyIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTkuNSAyMC41bDQuNS01IDMuNSAzIDYtNy41IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4K" type="image/svg+xml">
   <style>
 /* Portfolio Tracker - plain, professional finance layout. No web fonts, no external assets. */
@@ -32,7 +32,7 @@
   --flat-bg: #3a3a3c;
   --seg-bg: #1c1c1e;
   --seg-on: #3a3a3c;
-  --radius: 12px;
+  --radius: 16px;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --ease-out: cubic-bezier(.22, .61, .36, 1);
   --spring: cubic-bezier(.32, 1.22, .48, 1);
@@ -54,13 +54,13 @@ body {
 
 /* top bar */
 .topbar {
-  background: var(--surface);
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding-top: env(safe-area-inset-top);
 }
-.topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 12px; padding-bottom: 12px; }
-.brand { margin: 0; font-size: 18px; font-weight: 650; letter-spacing: -0.01em; }
-.status { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+.topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 16px; padding-bottom: 8px; }
+.brand { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+.status { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; color: var(--muted); font-size: 13px; line-height: 1.3; }
 .status strong { color: var(--text); font-weight: 600; }
 .market { display: inline-flex; align-items: center; gap: 6px; }
 .market .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
@@ -75,34 +75,34 @@ body {
 .snapshot-banner > div { max-width: 1120px; margin: 0 auto; padding: 8px 16px; }
 .snapshot-banner strong { color: var(--text); }
 
-main { padding-top: 16px; padding-bottom: 8px; }
+main { padding-top: 18px; padding-bottom: 8px; }
 
 /* summary */
-.summary { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.summary { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; align-items: stretch; }
 .stat {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 14px 16px;
+  padding: 16px 16px 14px;
   min-width: 0;
 }
-.stat-label { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-.stat-value { font-size: 22px; font-weight: 650; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.stat-value.big { font-size: 30px; letter-spacing: -0.01em; }
-.stat-sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.stat-label { color: var(--muted); font-size: 12px; font-weight: 650; text-transform: uppercase; letter-spacing: 0.05em; }
+.stat-value { font-size: 22px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.2; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-value.big { font-size: 34px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; }
+.stat-sub { color: var(--muted); font-size: 13px; margin-top: 4px; line-height: 1.35; }
 
 /* cards */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 16px;
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  margin-bottom: 14px;
   min-width: 0;
 }
-.card-title { margin: 0 0 12px; font-size: 15px; font-weight: 650; }
-.card-sub { color: var(--muted); font-weight: 400; font-size: 13px; margin-left: 6px; }
-.note { color: var(--muted); font-size: 12.5px; margin: 10px 0 0; }
+.card-title { margin: 0 0 14px; font-size: 17px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.25; }
+.card-sub { color: var(--muted); font-weight: 500; font-size: 13px; margin-left: 6px; letter-spacing: 0; }
+.note { color: var(--muted); font-size: 12.5px; line-height: 1.45; margin: 12px 0 0; }
 .note:empty { display: none; }
 
 .pos { color: var(--pos); }
@@ -111,11 +111,13 @@ main { padding-top: 16px; padding-bottom: 8px; }
 /* tables */
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 table.data { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-table.data th, table.data td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+table.data th, table.data td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: middle; }
 table.data thead th {
-  color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
+  color: var(--muted); font-size: 11px; font-weight: 650; text-transform: uppercase; letter-spacing: 0.04em;
   background: var(--surface-2); border-bottom: 1px solid var(--border); white-space: nowrap;
 }
+table.data thead th:first-child { border-radius: 8px 0 0 0; }
+table.data thead th:last-child { border-radius: 0 8px 0 0; }
 table.data .num { text-align: right; white-space: nowrap; }
 table.data tbody tr:hover { background: var(--surface-2); }
 table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px solid var(--border); }
@@ -123,13 +125,13 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
 .subtle { color: var(--muted); font-size: 12px; }
 
 /* option */
-.plain { margin: 0 0 14px; padding: 12px 14px; background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 4px; }
-.plain p { margin: 0 0 6px; }
+.plain { margin: 0 0 14px; padding: 14px 16px; background: var(--bg); border-left: 3px solid var(--accent); border-radius: 10px; line-height: 1.5; }
+.plain p { margin: 0 0 8px; }
 .plain p:last-child { margin-bottom: 0; }
-.kv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 24px; }
-.kv { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--border); min-width: 0; }
+.kv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; }
+.kv { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); min-width: 0; }
 .kv .k { color: var(--muted); }
-.kv .v { font-weight: 600; text-align: right; }
+.kv .v { font-weight: 600; text-align: right; letter-spacing: -0.01em; }
 
 /* chart */
 .chart { width: 100%; min-height: 220px; }
@@ -141,8 +143,8 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
 
 
 /* footer */
-.foot { color: var(--muted); font-size: 12.5px; padding-top: 4px; padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
-.foot p { margin: 6px 0; }
+.foot { color: var(--muted); font-size: 12.5px; line-height: 1.45; padding-top: 8px; padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
+.foot p { margin: 8px 0; }
 .delay { color: var(--text); }
 .caveats { margin: 6px 0; padding-left: 18px; }
 .caveats li { margin: 2px 0; }
@@ -188,12 +190,13 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
   table.compact td:first-child { padding-left: 0; }
 }
 /* ================================================================ views / tabs */
-.tabs { display: flex; gap: 4px; padding-top: 0; padding-bottom: 0; overflow-x: auto; scrollbar-width: none; }
+.tabs { display: flex; gap: 0; padding-top: 0; padding-bottom: 0; overflow-x: auto; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
 .tabs a {
-  flex: 0 0 auto; padding: 9px 12px 10px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: 14px;
-  border-bottom: 2px solid transparent; white-space: nowrap;
+  flex: 0 0 auto; padding: 11px 16px 12px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: 14px;
+  letter-spacing: -0.01em; border-bottom: 2px solid transparent; white-space: nowrap;
 }
+.tabs a:first-child { padding-left: 2px; }
 .tabs a:hover { color: var(--text); }
 .tabs a.on { color: var(--text); border-bottom-color: var(--accent); }
 .view[hidden] { display: none !important; }
@@ -203,16 +206,16 @@ table.data tfoot td { font-weight: 650; border-bottom: none; border-top: 2px sol
 
 /* ================================================================ Stocks view */
 .stocks-layout { display: block; }
-.acct-head { padding: 4px 2px 14px; }
-.acct-label { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-.acct-total { font-size: 34px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-top: 2px; }
-.acct-day { font-size: 16px; font-weight: 600; margin-top: 2px; }
-.acct-day .subtle { font-weight: 400; font-size: 13px; }
-.acct-sub { color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+.acct-head { padding: 2px 0 18px; }
+.acct-label { color: var(--muted); font-size: 12px; font-weight: 650; text-transform: uppercase; letter-spacing: 0.05em; }
+.acct-total { font-size: 34px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; margin-top: 4px; }
+.acct-day { font-size: 16px; font-weight: 600; margin-top: 6px; letter-spacing: -0.01em; }
+.acct-day .subtle { font-weight: 500; font-size: 13px; }
+.acct-sub { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: 8px; }
 .list-head {
   display: flex; justify-content: space-between; align-items: baseline;
-  margin: 6px 2px 0; padding-bottom: 6px; font-size: 13px; font-weight: 650; color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--border);
+  margin: 8px 0 0; padding-bottom: 8px; font-size: 12px; font-weight: 650; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border);
 }
 .list-edit { font-size: 13px; text-transform: none; letter-spacing: 0; font-weight: 600; }
 .slist { list-style: none; margin: 0 0 14px; padding: 0; }
@@ -321,8 +324,8 @@ body.sheet-open { overflow: hidden; }
 .tx-sub a { color: var(--accent); text-decoration: none; }
 
 /* ================================================================ Edit form */
-.plain-note { margin: 0 0 14px; color: var(--muted); }
-.ed-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+.plain-note { margin: 0 0 16px; color: var(--muted); line-height: 1.5; max-width: 68ch; }
+.ed-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
 .ed-form .f { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); min-width: 0; }
 .ed-form .f[hidden], .ed-form fieldset[hidden] { display: none; }
 .ed-form .f-wide { grid-column: 1 / -1; }
@@ -340,9 +343,10 @@ body.sheet-open { overflow: hidden; }
 .opt-fields[hidden] { display: none !important; }
 .opt-fields legend { padding: 0 4px; font-size: 13px; font-weight: 650; color: var(--text); }
 .seg { grid-column: 1 / -1; display: flex; gap: 2px; background: var(--surface-2); border-radius: 8px; padding: 2px; }
-.seg label { flex: 1 1 0; text-align: center; padding: 7px 0; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--muted); font-size: 14px; }
-.seg input { position: absolute; opacity: 0; pointer-events: none; }
-.seg label:has(input:checked) { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
+.seg label { position: relative; flex: 1 1 0; text-align: center; padding: 7px 0; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--muted); font-size: 14px; }
+/* Hidden, but still hit-tested. pointer-events:none here drops the tap on iOS, so the rate control never changes. */
+.seg input { position: absolute; opacity: 0; margin: 0; inset: 0; width: 100%; height: 100%; }
+.seg label:has(input:checked), .seg label.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
 .ed-preview { min-height: 20px; }
 .ed-error { color: var(--neg); font-size: 13.5px; }
 .ed-error[hidden] { display: none; }
@@ -350,7 +354,7 @@ body.sheet-open { overflow: hidden; }
 .btn-primary, .btn-plain { font: inherit; font-weight: 650; font-size: 15px; padding: 11px 18px; border-radius: 8px; cursor: pointer; }
 .btn-primary { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
 .btn-plain { background: transparent; color: var(--text); border: 1px solid var(--border); }
-.ed-done { margin-top: 14px; padding: 12px 14px; background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 4px; }
+.ed-done { margin-top: 16px; padding: 14px 16px; background: var(--bg); border-left: 3px solid var(--accent); border-radius: 10px; line-height: 1.5; }
 .ed-done[hidden] { display: none; }
 .ed-done p { margin: 0 0 8px; }
 .ed-done a { color: var(--accent); }
@@ -360,7 +364,7 @@ body.sheet-open { overflow: hidden; }
 .chips li a { color: var(--accent); text-decoration: none; font-size: 12.5px; font-weight: 600; padding: 2px 6px; }
 .chips li.chip-add { border-style: dashed; padding-left: 6px; }
 .how { margin: 0; padding-left: 20px; }
-.how li { margin: 4px 0; }
+.how li { margin: 6px 0; line-height: 1.45; }
 code { font-family: var(--mono); font-size: 0.92em; }
 
 @media (max-width: 640px) {
@@ -383,7 +387,6 @@ code { font-family: var(--mono); font-size: 0.92em; }
 
 /* ================================================================ Dark theme refinements, mobile layout, motion */
 body { background: var(--bg); }
-.topbar { background: var(--bg); }
 .card, .stat { border-color: transparent; }
 .card.error-box { border-color: var(--neg); }
 .navbar, .ti, .brand-view, .grabber, .sheet-backdrop { display: none; }
@@ -447,8 +450,7 @@ main { min-height: 100vh; }
 /* charts */
 .pchart .pline { transition: stroke .3s ease; }
 .pchart .area { opacity: 0.12; transition: fill .3s ease; }
-.pchart .xhair, .pchart .xdot { transition: transform .09s linear; }
-.pchart .xhair.snap, .pchart .xdot.snap { transition: none; }
+.pchart .xhair, .pchart .xdot { transition: none; }
 .pchart .xhair { stroke: #8e8e93; opacity: 0.8; }
 .pchart .xdot { fill: #fff; stroke: var(--surface); }
 .chart .series { stroke: var(--accent); }
@@ -471,6 +473,8 @@ main { min-height: 100vh; }
 .row-in { animation: row-in .42s var(--ease-out) backwards; }
 @keyframes row-in { from { opacity: 0; transform: translateY(10px); } }
 .view.view-in > *:not(.stocks-layout):not(.sheet-backdrop), .view.view-in .stocks-col { animation: view-in .26s var(--ease-out) backwards; }
+/* A transform on an ancestor makes iOS drop the projections canvas bitmap. Keep that view still. */
+#view-projections.view-in > * { animation: none; }
 @keyframes view-in { from { opacity: 0; transform: translateX(var(--vx, 18px)); } }
 
 /* press feedback */
@@ -539,7 +543,7 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
 /* phones: large title that collapses into a compact bar, bottom tab bar */
 @media (max-width: 700px) {
   html, body { overscroll-behavior-y: contain; }
-  body { padding-bottom: calc(52px + env(safe-area-inset-bottom)); }
+  body { padding-bottom: calc(49px + env(safe-area-inset-bottom)); }
   .wrap { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
   .navbar {
     display: block; position: fixed; z-index: 45; top: 0; left: 0; right: 0; height: calc(44px + env(safe-area-inset-top));
@@ -563,20 +567,44 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   .brand-full { display: none; }
   .brand-view { display: inline; }
   .status { font-size: 13px; gap: 10px; opacity: calc(1 - var(--nt, 0)); }
+  /* iOS Tab Bar rhythm: 49px content row + home-indicator safe area; equal columns */
   .tabs {
-    position: fixed; z-index: 46; left: 0; right: 0; bottom: 0; max-width: none; margin: 0; gap: 0; overflow: visible;
-    display: flex; justify-content: space-around; height: calc(52px + env(safe-area-inset-bottom));
+    position: fixed; z-index: 46; left: 0; right: 0; bottom: 0; max-width: none; margin: 0; gap: 0;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    height: calc(49px + env(safe-area-inset-bottom));
     padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    background: rgba(22,22,24,.9); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
-    border-top: 1px solid rgba(84,84,88,.45);
+    overflow: hidden;
+    background: rgba(22,22,24,.92); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+    border-top: 0.5px solid rgba(84,84,88,.55);
+    box-sizing: border-box;
   }
   .tabs a {
-    flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-    min-height: 52px; padding: 4px 0 2px; border-bottom: 0; color: var(--muted); font-size: 10.5px; font-weight: 600; letter-spacing: .01em;
+    flex: 1 1 0; min-width: 0; max-width: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    gap: 1px;
+    height: 49px; min-height: 49px; max-height: 49px;
+    margin: 0; padding: 6px 0 0; border: 0; border-bottom: 0;
+    color: var(--muted); font-size: 9px; font-weight: 500; letter-spacing: -0.08px;
+    box-sizing: border-box; -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+  }
+  .tabs a:first-child { padding-left: 0; }
+  .tabs .tl {
+    display: block; width: auto; max-width: calc(100% - 4px);
+    margin: 0; padding: 0;
+    font-size: 9px; font-weight: 500; line-height: 11px; letter-spacing: -0.1px;
+    text-align: center; white-space: nowrap; overflow: hidden; text-overflow: clip;
   }
   .tabs a.on { color: var(--accent); }
-  .ti { display: block; width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tabs a.on .tl { font-weight: 500; } /* active = color only, same weight/size */
+  .ti {
+    display: block; width: 25px; height: 25px; flex: 0 0 25px;
+    margin: 0; padding: 0;
+    fill: none; stroke: currentColor; stroke-width: 1.7;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
   .tabs a[data-tab="transactions"] .ti circle { fill: currentColor; stroke: none; }
+  .tabs a:active { transform: none; } /* iOS tab bar: no scale bounce */
   main { padding-top: 6px; }
   .acct-head { padding-top: 6px; }
   .foot { padding-bottom: 16px; }
@@ -664,14 +692,14 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
 .pj-empty p { margin: 0; color: var(--muted); }
 .pj-hero { text-align: left; }
 .pj-hero-k { color: var(--muted); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
-.pj-hero-v { font-size: 40px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin: 2px 0 2px; line-height: 1.15; }
+.pj-hero-v { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; margin: 4px 0 4px; line-height: 1.08; }
 .pj-hero-sub { color: var(--muted); font-size: 13.5px; }
 .pj-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
 .pj-card { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; min-width: 0; animation: row-in .42s var(--ease-out) backwards; }
 .pj-card + .pj-card { animation-delay: 60ms; }
 .pj-keep { box-shadow: inset 3px 0 0 var(--accent); }
 .pj-ck { color: var(--muted); font-size: 12.5px; font-weight: 600; }
-.pj-cv { font-size: 21px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 3px; white-space: nowrap; }
+.pj-cv { font-size: 21px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin-top: 4px; white-space: nowrap; }
 .pj-diff { margin-top: 10px; font-size: 14px; }
 .pj-readout { white-space: normal; min-height: 38px; line-height: 1.4; }
 .pj-chart-box { position: relative; }
@@ -696,6 +724,57 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
 @media (max-width: 380px) { .pj-hero-v { font-size: 34px; } .pj-cv { font-size: 18px; } }
 @media (prefers-reduced-motion: reduce) { .pj-card { animation: none; } .pj-bar span { transition: none; } }
 
+/* ---------------------------------------------------------------- Guide */
+.guide-hero { padding: 22px 22px 20px; }
+.guide-kicker {
+  margin: 0 0 8px; color: var(--muted); font-size: 12px; font-weight: 650;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.guide-title {
+  margin: 0 0 12px; font-size: 32px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.12;
+}
+.guide-lead, .guide-p {
+  margin: 0 0 12px; max-width: 68ch; color: #d1d1d6; font-size: 15.5px; line-height: 1.55; font-weight: 400;
+}
+.guide-lead { margin-bottom: 0; font-size: 17px; line-height: 1.45; color: #f2f2f7; }
+.guide-p:last-child { margin-bottom: 0; }
+.guide-dl { margin: 0; }
+.guide-dl > div {
+  display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 6px 22px;
+  padding: 14px 0; border-top: 1px solid #38383a; align-items: start;
+}
+.guide-dl > div:first-child { border-top: 0; padding-top: 2px; }
+.guide-dl dt { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.35; }
+.guide-dl dt a { color: var(--text); text-decoration: none; }
+.guide-dl dt a:hover { color: var(--accent); }
+.guide-dl dd { margin: 0; color: #d1d1d6; font-size: 14.5px; line-height: 1.5; font-weight: 400; }
+.guide-steps { margin: 4px 0 16px; padding: 0; list-style: none; counter-reset: gstep; }
+.guide-steps li {
+  display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; align-items: start;
+  padding: 12px 0; border-top: 1px solid #38383a; color: #d1d1d6; font-size: 14.5px; line-height: 1.5; font-weight: 400;
+}
+.guide-steps li:first-child { border-top: 0; padding-top: 0; }
+.guide-steps li::before {
+  counter-increment: gstep; content: counter(gstep);
+  width: 28px; height: 28px; margin-top: 1px; border-radius: 50%;
+  background: var(--surface-2); color: var(--text); font-weight: 700; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
+.guide-formula {
+  margin: 0 0 14px; padding: 14px 16px; background: var(--bg); border-radius: 12px;
+  font-size: 16px; font-weight: 650; letter-spacing: -0.015em; line-height: 1.35;
+}
+.guide-p a, .guide-dl a { font-weight: 600; }
+.guide-p a { color: var(--accent); text-decoration: none; }
+.guide-p a:hover { text-decoration: underline; }
+@media (min-width: 701px) { .guide-title { font-size: 36px; } }
+@media (max-width: 640px) {
+  .guide-hero { padding: 18px 16px 16px; }
+  .guide-title { font-size: 28px; }
+  .guide-lead { font-size: 16px; }
+  .guide-dl > div { grid-template-columns: 1fr; gap: 4px; padding: 13px 0; }
+}
+
 </style>
 </head>
 <body>
@@ -714,6 +793,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
       <a href="#projections" data-tab="projections"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16h16"/><path d="M7 16c4 0 8-2.5 12-10"/><path d="M15.5 6H19v3.5"/></svg><span class="tl">Projections</span></a>
       <a href="#transactions" data-tab="transactions"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span class="tl">Transactions</span></a>
       <a href="#edit" data-tab="edit"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span class="tl">Edit</span></a>
+      <a href="#guide" data-tab="guide"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.2A2.3 2.3 0 0 1 18.5 6.8V20H7.2A2.2 2.2 0 0 0 5 17.8z"/><path d="M5 4.5A2.2 2.2 0 0 1 7.2 6.7H18.5"/><path d="M8.5 11h6"/></svg><span class="tl">Guide</span></a>
     </nav>
   </header>
   <div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="ptr-track" cx="12" cy="12" r="9"/><circle class="ptr-arc" cx="12" cy="12" r="9"/></svg></div>
@@ -872,9 +952,9 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
           <div class="f-wide">
             <div class="pj-lbl">Yearly return</div>
             <div class="seg pj-seg" role="radiogroup" aria-label="Yearly return">
-              <label><input type="radio" name="pj-rate" value="conservative"><b>6%</b><small>Conservative</small></label>
-              <label><input type="radio" name="pj-rate" value="base" checked><b>8%</b><small>Base</small></label>
-              <label><input type="radio" name="pj-rate" value="optimistic"><b>10%</b><small>Optimistic</small></label>
+              <label><input type="radio" name="pj-rate" value="conservative"><b>8%</b><small>Conservative</small></label>
+              <label><input type="radio" name="pj-rate" value="base"><b>10%</b><small>Base</small></label>
+              <label><input type="radio" name="pj-rate" value="optimistic" checked><b>12%</b><small>Ramsey</small></label>
               <label><input type="radio" name="pj-rate" value="custom"><b id="pj-custom-b">Custom</b><small>Your rate</small></label>
             </div>
           </div>
@@ -888,7 +968,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
             </div>
           </div>
         </form>
-        <p class="note">Target 59½: the age when withdrawals from IRAs and 401(k)s generally stop owing the IRS 10% early-withdrawal penalty. Today's dollars removes 3% a year of inflation so amounts compare with prices now.</p>
+        <p class="note">Target 59½: the age when withdrawals from IRAs and 401(k)s generally stop owing the IRS 10% early-withdrawal penalty. Math matches Ramsey Solutions’ compound interest calculator (monthly compounding at rate÷12, deposits at month-end). Today’s dollars is optional here (3% inflation); Ramsey’s site shows future dollars with no inflation adjustment.</p>
       </section>
       <section class="card pj-empty" id="pj-empty">
         <p>Enter your age to see projections.</p>
@@ -908,7 +988,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
           <h2 id="pj-chart-title" class="card-title">Growth by age</h2>
           <div class="readout pj-readout" id="pj-readout">&nbsp;</div>
           <div class="pj-chart-box"><canvas id="pj-chart" class="pj-chart" role="img" aria-label="Projected value by age"></canvas></div>
-          <div class="pj-legend"><span><i class="lg-keep"></i>Keep investing</span><span><i class="lg-none"></i>Add nothing more</span><span><i class="lg-band"></i>6% to 10% range</span></div>
+          <div class="pj-legend"><span><i class="lg-keep"></i>Keep investing</span><span><i class="lg-none"></i>Add nothing more</span><span><i class="lg-band"></i>8% to 12% range</span></div>
         </section>
         <section class="card" aria-labelledby="pj-split-title">
           <h2 id="pj-split-title" class="card-title">Money put in vs growth</h2>
@@ -923,11 +1003,16 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
         <section class="card pj-notes">
           <p class="pj-warn" id="pj-warn"></p>
           <details class="how" id="pj-src"><summary>Where these rates come from</summary><div class="how-body">
-            <p><strong>S&amp;P 500 with dividends reinvested, 1928–2025:</strong> 10.02% a year compounded (11.85% simple average), about 6.8% a year after inflation; inflation averaged about 3.0% a year. Source: Aswath Damodaran, NYU Stern, “Historical Returns on Stocks, Bonds and Bills: 1928–2025” (updated January 2026), pages.stern.nyu.edu/~adamodar.</p>
-            <p><strong>Large US stocks, 1926–2025:</strong> 10.07% a year compounded; inflation 2.94% a year. Source: Ibbotson equity indices (CRSP and US Bureau of Labor Statistics data) in CFA Institute Research Foundation, “Exponential Wealth” (2026).</p>
-            <p>The presets sit at or below that history on purpose: 10% optimistic (the long-run average), 8% base and 6% conservative, because future returns may be lower and real investors pay fees and miss some days. 3% inflation matches the long-run average.</p>
-            <p>Math: monthly compounding, with the monthly rate set so 12 months equal the yearly rate; contributions go in at the end of each month. Real returns vary a lot year to year; a smooth line is an average path, not a forecast.</p>
-            <p class="subtle">Educational only, not advice.</p>
+            <p><strong>Ramsey Solutions (default math):</strong> Future value with monthly compounding and end-of-month contributions —
+              FV = PV × (1 + r/12)<sup>n</sup> + PMT × [((1 + r/12)<sup>n</sup> − 1) / (r/12)], where r is the annual rate and n is months.
+              Same model as their Compound Interest Calculator (default monthly compounding; contribution timing = end of period) and the Jack-and-Blake education article (example: $0 start, $200/mo, 9 years, 11% → $36,635).
+              Sources: <a href="https://www.ramseysolutions.com/retirement/compound-interest-calculator" target="_blank" rel="noopener">ramseysolutions.com/retirement/compound-interest-calculator</a>;
+              <a href="https://ramseyeducation.help.ramseysolutions.com/hc/en-us/articles/32702416902029-Jack-and-Blake-the-Math-Behind-the-Graph" target="_blank" rel="noopener">Jack and Blake — the Math Behind the Graph</a>.
+              Ramsey cites a long-run stock-market average around <strong>10–12%</strong>; the <strong>12% Ramsey</strong> preset is the default teaching rate. Their calculator does not adjust for inflation.</p>
+            <p><strong>S&amp;P 500 with dividends reinvested, 1928–2025:</strong> about 10% a year compounded historically. Source: Aswath Damodaran, NYU Stern. The <strong>10% Base</strong> preset sits near that history; <strong>8% Conservative</strong> is lower for fees and weaker decades.</p>
+            <p>Optional <strong>Today’s dollars</strong> divides by 3% inflation per year so a future sum compares with prices now. Choose <strong>Future dollars</strong> to match Ramsey’s on-site calculator output more closely.</p>
+            <p>Real returns vary a lot year to year; a smooth line is an average path, not a forecast.</p>
+            <p class="subtle">Educational only, not advice. Not affiliated with Ramsey Solutions.</p>
           </div></details>
         </section>
       </div>
@@ -1046,6 +1131,84 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
         <p class="note">Issues in this repository are public, like the rest of the dashboard. Issues opened by anyone else are ignored.</p>
       </section>
     </div>
+
+    <!-- ============================== Guide -->
+    <div class="view" id="view-guide" data-view="guide" hidden>
+      <section class="card guide-hero" aria-labelledby="g-title">
+        <p class="guide-kicker">Guide</p>
+        <h2 id="g-title" class="guide-title">How this tracker works</h2>
+        <p class="guide-lead">This site keeps a record of the brokerage account. Trades happen in E*Trade. After a fill, log it here so the totals, the history, and the charts stay in step. Nothing on this site sends an order.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-tabs">
+        <h2 id="g-tabs" class="card-title">What each tab shows</h2>
+        <dl class="guide-dl">
+          <div>
+            <dt><a href="#stocks">Stocks</a></dt>
+            <dd>Home on a phone. Account value and the day’s change are at the top. Each holding and each watchlist name is a row: the name, a small intraday chart, the price, and a change box. Tap the box to switch among day change %, day change $, and market value. Tap a row for the longer chart (1D, 1W, 1M, 3M, 1Y, ALL), the stats, and your position. On a wide screen the list sits beside that detail. This tab is the default on a phone.</dd>
+          </div>
+          <div>
+            <dt><a href="#overview">Overview</a></dt>
+            <dd>Home on a wide screen. Four figures: total account value, day change, cash, and the short call liability. Then the positions table, the monthly roll plan, the covered call, and account value at the close of each trading day.</dd>
+          </div>
+          <div>
+            <dt><a href="#projections">Projections</a></dt>
+            <dd>A sketch of what steady saving could grow to. It runs in the browser from the birthdate and the live account total. It is not a quote, and it is not a forecast of this month.</dd>
+          </div>
+          <div>
+            <dt><a href="#transactions">Transactions</a></dt>
+            <dd>Every change recorded from the Edit form, newest first. Buys, sells, option opens and closes, rolls, cash, and dividends land here after GitHub accepts the log.</dd>
+          </div>
+          <div>
+            <dt><a href="#edit">Edit</a></dt>
+            <dd>The log. Fill it in after you trade at the brokerage. It opens a prefilled GitHub issue. It does not place the trade.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="card" aria-labelledby="g-quotes">
+        <h2 id="g-quotes" class="card-title">How quotes update</h2>
+        <p class="guide-p">A scheduled job reads <code>data/holdings.json</code> and asks Yahoo Finance for prices, about every 15 minutes while the US market is in session, and once more after the close. Clocks on this site are Eastern Time.</p>
+        <p class="guide-p">The page reloads <code>data/portfolio.json</code> about every 60 seconds. It does not reload the whole site. On a phone, pull down from the top to fetch now. Prices can run about 15 minutes behind the brokerage. The line under the market status is the quote time, not the moment you opened the page.</p>
+        <p class="guide-p">A missing stock quote stops the update and leaves the last good file in place. Overnight, an option often comes back with no real bid or ask. That is not used as a price. The last good bid/ask midpoint is kept, with the session it came from. A failed refresh never fills in a made-up price.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-log">
+        <h2 id="g-log" class="card-title">How you log a trade</h2>
+        <p class="guide-p">You buy and sell at E*Trade. This site only records what already happened.</p>
+        <ol class="guide-steps">
+          <li>After the fill, open Edit and pick the type: buy or sell shares, sell to open or buy to close an option, expiry, assignment, roll, deposit, withdrawal, dividend, or a correction such as cash or cost basis.</li>
+          <li>Type the symbol, quantity, and the price you were actually filled at. Fees if you paid any. The date defaults to today in Eastern Time.</li>
+          <li>Continue on GitHub. A new issue opens with the label <code>trade</code> and the details in the text. You still have to tap <strong>Submit new issue</strong>, signed in as the account that owns this repo.</li>
+          <li>A check runs. If the log is valid it updates the holdings, adds a row under Transactions, rebuilds the dashboard, writes a before/after comment, and closes the issue. That usually takes about a minute.</li>
+          <li>If the log is wrong (selling more shares than you hold, for example) it comments the reason, closes the issue, and changes nothing. Issues opened by anyone else are ignored.</li>
+        </ol>
+        <p class="guide-p">A roll is two fills in one log: buy to close the current call, then sell to open the next one. The form starts from the latest quotes (buy back near the ask, sell the next monthly call near the bid). Replace those with your real fills before you submit. They are saved as two linked transactions.</p>
+        <p class="guide-p"><a href="#edit/set_option_premium">Set option premium received</a> records what you were paid per share when you sold the open call. It updates profit and loss and the roll history. It does not change cash, because that cash is already in the account. Use the fill from E*Trade.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-short">
+        <h2 id="g-short" class="card-title">A short option is a liability</h2>
+        <p class="guide-formula">Account value = stocks + cash − the short option’s mark</p>
+        <p class="guide-p">Selling a call means you may have to deliver shares at the strike. While that contract is open, buying it back would cost money, so the mark is owed, not owned. The books store that as a negative number. One contract is 100 shares.</p>
+        <p class="guide-p">If the call’s price rises, the amount you owe rises and the account falls. That day is red. If the call’s price falls, you owe less and that day is green. Green and red are your gain and loss, not the direction of the option’s own price.</p>
+        <p class="guide-p">The open contract is one short UPRO call, strike $154, expiring October 16, 2026. Those terms come from the holdings file. The shares you already own are what makes the call covered. The premium you were paid when you sold it is not on file, so close profit and loss stays blank until you enter that fill. Do not guess it.</p>
+        <p class="guide-p">Near expiry, Overview’s roll plan is a reminder, not an order. If you want to keep the shares and the call is still in the money, buy it back at the brokerage before 4:00 PM ET on that Friday, then sell the next monthly call near the share price, and log the roll here afterward.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-proj">
+        <h2 id="g-proj" class="card-title">Projections and the birthday</h2>
+        <p class="guide-p">The birthdate stored with the account is November 25, 2008. Projections turns that into an exact age: whole years, plus how far you are through the current year. That number fills the age field, and it moves forward each day. The 18th birthday is November 25, 2026. The default target is 59½, which is May 25, 2068. That is the age when withdrawals from IRAs and 401(k)s generally stop owing the 10% early-withdrawal penalty. You can type another age or target. “Use it” under the age field puts the birthdate age back.</p>
+        <p class="guide-p">The starting amount follows the live account total unless you type your own. Monthly contribution and a yearly raise are yours to set. The yearly return presets are 8% conservative, 10% base, and 12% Ramsey (default), or a rate you type. Math matches Ramsey’s compound interest calculator (monthly rate = yearly÷12, deposits at month-end). Today’s dollars takes out 3% a year of inflation; Future dollars matches Ramsey’s site (no inflation adjustment).</p>
+        <p class="guide-p">The chart compares keeping that monthly amount with adding nothing more, and it shades the band from 6% to 10%. The math compounds once a month. A smooth line is an average path, not a promise.</p>
+        <p class="guide-p">UPRO aims for three times the S&amp;P 500’s move in a single day. These projections use broad-market rates, not 3×. Over many years a fund that resets daily can land far above or far below three times the index, especially in a choppy market. The note on the Projections tab says the same thing from the live mix of holdings.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-disp">
+        <h2 id="g-disp" class="card-title">The display page</h2>
+        <p class="guide-p"><a href="display.html">display.html</a> is the second screen. It shows the account total, today’s change, how that total splits across stocks, cash, and the short call, the account chart, and a card for each holding with its small chart. There is no tab bar and no place to log a trade. It reads the same file and refreshes on the same 60-second cycle. Leave it open on the monitor.</p>
+      </section>
+    </div>
   </main>
 
   <footer class="foot wrap">
@@ -1059,10 +1222,14 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
 /* Projection math for the Projections tab (pure functions, no DOM). Works in the browser
  * (window.PQProj) and in Node (module.exports) so tests/projection.test.js can check it.
  *
- * Monthly compounding: the monthly rate is (1 + annual)^(1/12) - 1, so twelve months of growth equal
- * the annual rate exactly (historical returns are quoted as compound annual rates). Contributions are
- * added at the end of each month. An optional yearly increase raises the monthly contribution once
- * every 12 months. "Today's dollars" divides each month's values by (1 + inflation)^(months / 12).
+ * Ramsey Solutions model (matches their Compound Interest / Investment Calculator JS and the
+ * Jack-and-Blake education article):
+ *   - Monthly compounding with nominal monthly rate = annual / 12  (not (1+r)^(1/12)-1)
+ *   - Ordinary annuity: contributions at the END of each month
+ *   - Combined FV = PV*(1+i)^n + PMT*((1+i)^n - 1)/i   where i = annual/12, n = months
+ * Their site does not deflate for inflation; "today's dollars" here is an optional extra.
+ * Sources: ramseysolutions.com/retirement/compound-interest-calculator (calculator JS);
+ * ramseyeducation.help…/Jack-and-Blake-the-Math-Behind-the-Graph (11% example → $36,635).
  */
 (function (root, factory) {
   var api = factory();
@@ -1071,12 +1238,15 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var PRESETS = { conservative: 0.06, base: 0.08, optimistic: 0.10 };
-  var INFLATION = 0.03;
+  // Presets: 8% cautious, 10% mid history, 12% Ramsey teaching default (stock-market 10–12% range).
+  var PRESETS = { conservative: 0.08, base: 0.10, optimistic: 0.12 };
+  var DEFAULT_PRESET = "optimistic"; // 12% — Ramsey's common teaching rate
+  var INFLATION = 0.03; // optional "today's dollars" only; Ramsey's calculator leaves inflation out
 
-  function monthlyRate(annual) { return Math.pow(1 + annual, 1 / 12) - 1; }
+  // Ramsey: divide the annual rate by compounding periods per year (monthly → /12).
+  function monthlyRate(annual) { return (annual || 0) / 12; }
 
-  // Closed form (no yearly increase, nominal): P(1+m)^n + C((1+m)^n - 1)/m
+  // Closed form (no yearly increase, nominal): P(1+i)^n + C*((1+i)^n - 1)/i
   function fvClosed(start, monthly, annual, months) {
     var m = monthlyRate(annual), g = Math.pow(1 + m, months);
     return start * g + (m === 0 ? monthly * months : monthly * (g - 1) / m);
@@ -1093,6 +1263,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     var values = [bal], contrib = [bal];
     for (var k = 1; k <= months; k++) {
       var c = monthly * Math.pow(1 + raise, Math.floor((k - 1) / 12));
+      // End-of-month contribution (ordinary annuity / Ramsey contributionTimingBefore: false)
       bal = bal * (1 + m) + c;
       var d = real ? Math.pow(1 + infl, k / 12) : 1;
       put += c / d;
@@ -1147,20 +1318,25 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     return res[key || "values"][k];
   }
 
-  return { PRESETS: PRESETS, INFLATION: INFLATION, monthlyRate: monthlyRate, fvClosed: fvClosed, project: project,
-           neededMonthly: neededMonthly, monthsBetween: monthsBetween, ageFromBirthdate: ageFromBirthdate, dateAtAge: dateAtAge, milestones: milestones, at: at };
+  return {
+    PRESETS: PRESETS, DEFAULT_PRESET: DEFAULT_PRESET, INFLATION: INFLATION,
+    monthlyRate: monthlyRate, fvClosed: fvClosed, project: project,
+    neededMonthly: neededMonthly, monthsBetween: monthsBetween,
+    ageFromBirthdate: ageFromBirthdate, dateAtAge: dateAtAge, milestones: milestones, at: at
+  };
 });
 
 </script>
-  <script id="embedded-data" type="application/json">{"schema":2,"generated_at_et":"2026-10-06 20:35:48 ET","generated_at_iso":"2026-10-06T20:35:48-04:00","trade_date":"2026-10-06","quotes_as_of_et":"2026-10-06 16:00 ET","market_state":"POSTPOST","market_label":"Closed (after hours)","delay_note":"Prices may be delayed ~15 minutes. Tracking only - not financial advice.","account":{"total":16848.38,"prev_total":16658.06,"day_change":190.32,"day_change_pct":1.14,"stocks_value":16328.68,"cash":964.7,"cash_share_pct":5.73,"option_liability":-445.0},"positions":[{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"SPCX","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","shares":4,"price":171.92,"prev_close":171.09,"day_change_per_share":0.83,"day_change":3.32,"day_change_pct":0.49,"value":687.68,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POSTPOST","price_source":"regular-session close","ext_price":169.98,"ext_label":"post-market","share_pct":4.08},{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"UPRO","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","shares":100,"price":156.41,"prev_close":153.89,"day_change_per_share":2.52,"day_change":252.0,"day_change_pct":1.64,"value":15641.0,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POSTPOST","price_source":"regular-session close","ext_price":156.88,"ext_label":"post-market","share_pct":92.83}],"options":[{"open_price":null,"unrealized":null,"key":"UPRO|2026-10-16|154|call","label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","underlying":"UPRO","type":"call","position":"short","contracts":1,"multiplier":100,"strike":154.0,"expiry":"2026-10-16","expiry_close_iso":"2026-10-16T16:00:00-04:00","dte":10,"expired":false,"spot":156.41,"distance":2.41,"distance_pct":1.56,"status":"ITM","itm":true,"covered":true,"bid":3.1,"ask":5.8,"last":3.98,"mark":4.45,"mark_source":"mid of bid/ask","intrinsic":2.41,"extrinsic":2.04,"liability":-445.0,"day_change":-65.0,"prev_mark":3.8,"prev_mark_source":"recorded mark for prior session 2026-10-05","iv":0.4385,"open_interest":747.0,"volume":3.0,"last_trade_et":"2026-10-05 15:05 ET","assignment_risk":"HIGH","assignment_note":"In the money - likely assigned at expiry if it stays above the strike.","prob_finish_itm":0.5715,"assigned_proceeds":15400.0,"shares_at_risk":100,"quote_quality":3,"quote_reused":false,"quote_as_of_et":null}],"stats":{"days_tracked":2,"all_time_high":16848.38,"best_day":{"date":"2026-10-05","change":242.52,"pct":1.48},"worst_day":{"date":"2026-10-06","change":190.32,"pct":1.14}},"history":[{"date":"2026-10-05","total":16658.06,"day_change":242.52,"day_change_pct":1.48},{"date":"2026-10-06","total":16848.38,"day_change":190.32,"day_change_pct":1.14}],"watchlist":[],"roll":{"history":{"rows":[{"label":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","expiry":"2026-10-16","strike":154.0,"opened":null,"premium":null,"premium_source":null,"closed":null,"close_action":"Open","close_cost":null,"rolled_to":null,"roll_id":null,"open":true,"net":null,"cumulative":0.0}],"premiums_total":0.0,"buybacks_total":0.0,"net_total":0.0,"missing_premium":true},"current":{"label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","key":"UPRO|2026-10-16|154|call","underlying":"UPRO","strike":154.0,"expiry":"2026-10-16","contracts":1,"multiplier":100,"spot":156.41,"itm":true,"mark":4.45,"bid":3.1,"ask":5.8,"mid":4.45,"mark_source":"mid of bid/ask","quote_reused":false,"quote_as_of_et":null,"buyback_ask":580.0,"buyback_mid":445.0,"buyback_mark":445.0,"premium_received_per_share":null,"premium_received":null,"pl_if_closed_ask":null,"pl_if_closed_mid":null,"deadline_iso":"2026-10-16T16:00:00-04:00","deadline_text":"Buy to close before 4:00 PM ET Fri Oct 16 to keep your shares","expired":false},"next":{"expiry":"2026-11-20","expiry_label":"Fri Nov 20 2026","days":45,"spot":156.41,"contracts":1,"multiplier":100,"quote_note":null,"strikes":[{"strike":154.0,"contract":"UPRO261120C00154000","bid":8.3,"ask":11.2,"last":9.8,"iv":0.458,"oi":15.0,"volume":1.0,"last_trade_et":"2026-09-22 12:22 ET","mid":9.75,"atm":false},{"strike":155.0,"contract":"UPRO261120C00155000","bid":7.6,"ask":10.2,"last":8.0,"iv":0.4349,"oi":183.0,"volume":21.0,"last_trade_et":"2026-10-05 12:43 ET","mid":8.9,"atm":false},{"strike":156.0,"contract":"UPRO261120C00156000","bid":7.0,"ask":10.9,"last":6.8,"iv":0.4893,"oi":14.0,"volume":4.0,"last_trade_et":"2026-09-24 13:02 ET","mid":8.95,"atm":true},{"strike":157.0,"contract":"UPRO261120C00157000","bid":6.5,"ask":10.4,"last":8.62,"iv":0.4877,"oi":75.0,"volume":3.0,"last_trade_et":"2026-10-06 14:20 ET","mid":8.45,"atm":false},{"strike":158.0,"contract":"UPRO261120C00158000","bid":6.0,"ask":8.3,"last":8.4,"iv":0.4124,"oi":60.0,"volume":1.0,"last_trade_et":"2026-10-06 11:37 ET","mid":7.15,"atm":false}],"atm_strike":156.0,"contract":"UPRO261120C00156000","bid":7.0,"ask":10.9,"mid":8.95,"last":6.8,"iv":0.4893,"oi":14.0,"volume":4.0,"last_trade_et":"2026-09-24 13:02 ET","est_premium":700.0,"net_roll":120.0,"premium_pct":4.48,"annualized_pct":36.3,"breakeven":149.41,"called_away_value":15600.0,"max_gain_vs_today":659.0,"above_text":"Above $156 on Fri Nov 20 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $156 ($15,600.00). You keep $700.00 either way.","below_text":"Below $156: the call expires worthless. You keep $700.00 and the 100 shares, which are worth less if UPRO fell.","underlying":"UPRO","quote_time_et":"2026-10-06 16:00 ET"},"dividends":[{"ex_date":"2026-09-23","amount":0.27},{"ex_date":"2026-06-24","amount":0.299},{"ex_date":"2026-03-25","amount":0.222},{"ex_date":"2025-12-24","amount":0.34}],"notes":[]},"projection":{"birthdate":"2008-11-25","note":"Used by the Projections tab for the exact current age (editable on the page)."},"quotes":{"SPCX":{"symbol":"SPCX","kind":"stock","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","price":171.92,"prev_close":171.09,"change":0.83,"change_pct":0.49,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POSTPOST","stats":{"open":172.09,"day_high":176.42,"day_low":171.39,"volume":106392820.0,"avg_volume":91955409.0,"high_52w":225.64,"low_52w":104.83,"market_cap":2266211549184.0,"net_assets":null,"quote_type":"EQUITY"},"held":true,"watch":false,"chart":"data/charts/SPCX.json","spark":[[0,174.22],[5,174.91],[10,175.78],[15,175.03],[20,175.38],[25,174.84],[30,174.5],[35,175.43],[40,175.64],[45,174.82],[50,174.78],[55,174.75],[60,174.92],[65,175.45],[70,174.81],[75,175.02],[80,175.1],[85,175.2],[90,174.63],[95,174.6],[100,174.62],[105,174.08],[110,173.79],[115,173.69],[120,173.75],[125,173.99],[130,174.12],[135,174.12],[140,173.93],[145,173.87],[150,173.99],[155,173.18],[160,174.13],[165,173.84],[170,173.53],[175,173.52],[180,173.84],[185,174.11],[190,173.86],[195,173.83],[200,173.74],[205,173.68],[210,173.74],[215,173.8],[220,173.62],[225,173.14],[230,173.22],[235,172.7],[240,173.01],[245,173.63],[250,173.55],[255,173.07],[260,172.82],[265,172.88],[270,173.12],[275,172.99],[280,173.16],[285,172.85],[290,172.73],[295,172.29],[300,172.03],[305,171.87],[310,172.1],[315,172.25],[320,172.54],[325,172.41],[330,172.21],[335,171.68],[340,171.95],[345,172.49],[350,172.56],[355,172.95],[360,173.28],[365,173.0],[370,173.14],[375,173.17],[380,172.04],[385,171.99]],"spark_base":171.09},"UPRO":{"symbol":"UPRO","kind":"stock","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","price":156.41,"prev_close":153.89,"change":2.52,"change_pct":1.64,"quote_time_et":"2026-10-06 16:00 ET","market_state":"POSTPOST","stats":{"open":155.82,"day_high":157.88,"day_low":155.71,"volume":1621528.0,"avg_volume":1935171.0,"high_52w":158.63,"low_52w":88.15,"market_cap":null,"net_assets":5276780032.0,"quote_type":"ETF"},"held":true,"watch":false,"chart":"data/charts/UPRO.json","spark":[[0,155.82],[5,155.99],[10,156.1],[15,156.36],[20,156.48],[25,156.79],[30,156.88],[35,157.15],[40,156.91],[45,156.7],[50,156.62],[55,156.22],[60,156.42],[65,156.71],[70,157.04],[75,156.83],[80,157.06],[85,157.16],[90,157.23],[95,157.41],[100,157.6],[105,157.75],[110,157.76],[115,157.68],[120,157.65],[125,157.73],[130,157.61],[135,157.65],[140,157.6],[145,157.57],[150,157.58],[155,157.34],[160,157.56],[165,157.3],[170,157.31],[175,157.1],[180,157.19],[185,157.01],[190,157.16],[195,156.96],[200,157.03],[205,156.92],[210,156.82],[215,156.8],[220,156.68],[225,156.45],[230,156.46],[235,156.73],[240,156.9],[245,156.85],[250,156.88],[255,156.92],[260,156.82],[265,156.74],[270,157.01],[275,157.03],[280,157.01],[285,156.9],[290,156.8],[295,156.77],[300,156.87],[305,156.75],[310,156.84],[315,156.88],[320,156.9],[325,156.98],[330,157.0],[335,156.76],[340,156.83],[345,156.77],[350,156.73],[355,156.71],[360,156.66],[365,156.66],[370,156.64],[375,156.65],[380,156.37],[385,156.38]],"spark_base":153.89},"UPRO261016C00154000":{"symbol":"UPRO261016C00154000","kind":"option","display":"UPRO 154C","name":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","price":4.45,"prev_close":3.8,"change":0.65,"change_pct":17.11,"held":true,"watch":false,"chart":"data/charts/UPRO261016C00154000.json","spark":[[0,3.8],[5,3.8],[10,3.8],[15,3.8],[20,3.8],[25,3.8],[30,3.8],[35,3.8],[40,3.8],[45,3.8],[50,3.8],[55,3.8],[60,3.8],[65,3.8],[70,3.8],[75,3.8],[80,3.8],[85,3.8],[90,3.8],[95,3.8],[100,3.8],[105,3.8],[110,3.8],[115,3.8],[120,3.8],[125,3.8],[130,3.8],[135,3.8],[140,3.8],[145,3.8],[150,5.4],[155,5.4],[160,5.4],[165,5.4],[170,5.4],[175,5.4],[180,5.4],[185,5.4],[190,5.4],[195,5.4],[200,5.4],[205,5.4],[210,5.4],[215,5.4],[220,5.4],[225,5.4],[230,5.4],[235,5.4],[240,5.4],[245,5.4],[250,5.4],[255,5.4],[260,5.4],[265,5.4],[270,5.4],[275,5.4],[280,5.4],[285,5.4],[290,5.4],[295,5.2],[300,5.2],[305,5.2],[310,5.2],[315,5.2],[320,5.2],[325,5.2],[330,5.2],[335,5.2],[340,5.2],[345,5.2],[350,5.2],[355,5.2],[360,5.2],[365,5.2],[370,5.2],[375,5.2],[380,5.2],[385,5.2]],"spark_base":3.8,"key":"UPRO|2026-10-16|154|call"}},"caveats":["UPRO Oct 16 2026 $154 call: wide bid/ask (3.10 x 5.80); the mid-price mark is approximate.","Market not in regular session (Closed (after hours)): stocks valued at the regular-session close; extended-hours quotes are not used.","Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."]}</script>
+  <script id="embedded-data" type="application/json">{"schema":2,"generated_at_et":"2026-10-07 09:56:47 ET","generated_at_iso":"2026-10-07T09:56:47-04:00","trade_date":"2026-10-07","quotes_as_of_et":"2026-10-07 09:56 ET","market_state":"REGULAR","market_label":"Market open","delay_note":"Prices may be delayed ~15 minutes. Tracking only - not financial advice.","account":{"total":16671.04,"prev_total":16849.38,"day_change":-178.34,"day_change_pct":-1.06,"stocks_value":16048.84,"cash":964.7,"cash_share_pct":5.79,"option_liability":-342.5},"positions":[{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"SPCX","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","shares":4,"price":168.96,"prev_close":171.92,"day_change_per_share":-2.96,"day_change":-11.84,"day_change_pct":-1.72,"value":675.84,"quote_time_et":"2026-10-07 09:56 ET","market_state":"REGULAR","price_source":"live regular session","ext_price":null,"ext_label":"","share_pct":4.05},{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"UPRO","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","shares":100,"price":153.73,"prev_close":156.42,"day_change_per_share":-2.69,"day_change":-269.0,"day_change_pct":-1.72,"value":15373.0,"quote_time_et":"2026-10-07 09:56 ET","market_state":"REGULAR","price_source":"live regular session","ext_price":null,"ext_label":"","share_pct":92.21}],"options":[{"open_price":null,"unrealized":null,"key":"UPRO|2026-10-16|154|call","label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","underlying":"UPRO","type":"call","position":"short","contracts":1,"multiplier":100,"strike":154.0,"expiry":"2026-10-16","expiry_close_iso":"2026-10-16T16:00:00-04:00","dte":9,"expired":false,"spot":153.73,"distance":-0.27,"distance_pct":-0.18,"status":"OTM","itm":false,"covered":true,"bid":2.85,"ask":4.0,"last":3.98,"mark":3.425,"mark_source":"mid of bid/ask","intrinsic":0.0,"extrinsic":3.425,"liability":-342.5,"day_change":102.5,"prev_mark":4.45,"prev_mark_source":"recorded mark for prior session 2026-10-06","iv":0.407,"open_interest":747.0,"volume":3.0,"last_trade_et":"2026-10-05 15:05 ET","assignment_risk":"AT THE STRIKE","assignment_note":"Right at the strike - a small move up puts it in the money.","prob_finish_itm":0.4763,"assigned_proceeds":15400.0,"shares_at_risk":100,"quote_quality":3,"quote_reused":false,"quote_as_of_et":null}],"stats":{"days_tracked":3,"all_time_high":16848.38,"best_day":{"date":"2026-10-05","change":242.52,"pct":1.48},"worst_day":{"date":"2026-10-07","change":-178.34,"pct":-1.06}},"history":[{"date":"2026-10-05","total":16658.06,"day_change":242.52,"day_change_pct":1.48},{"date":"2026-10-06","total":16848.38,"day_change":190.32,"day_change_pct":1.14},{"date":"2026-10-07","total":16671.04,"day_change":-178.34,"day_change_pct":-1.06}],"watchlist":[],"roll":{"history":{"rows":[{"label":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","expiry":"2026-10-16","strike":154.0,"opened":null,"premium":null,"premium_source":null,"closed":null,"close_action":"Open","close_cost":null,"rolled_to":null,"roll_id":null,"open":true,"net":null,"cumulative":0.0}],"premiums_total":0.0,"buybacks_total":0.0,"net_total":0.0,"missing_premium":true},"current":{"label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","key":"UPRO|2026-10-16|154|call","underlying":"UPRO","strike":154.0,"expiry":"2026-10-16","contracts":1,"multiplier":100,"spot":153.73,"itm":false,"mark":3.425,"bid":2.85,"ask":4.0,"mid":3.425,"mark_source":"mid of bid/ask","quote_reused":false,"quote_as_of_et":null,"buyback_ask":400.0,"buyback_mid":342.5,"buyback_mark":342.5,"premium_received_per_share":null,"premium_received":null,"pl_if_closed_ask":null,"pl_if_closed_mid":null,"deadline_iso":"2026-10-16T16:00:00-04:00","deadline_text":"Buy to close before 4:00 PM ET Fri Oct 16 to keep your shares","expired":false},"next":{"expiry":"2026-11-20","expiry_label":"Fri Nov 20 2026","days":44,"spot":153.73,"contracts":1,"multiplier":100,"quote_note":null,"strikes":[{"strike":152.0,"contract":"UPRO261120C00152000","bid":8.5,"ask":11.4,"last":11.8,"iv":0.4915,"oi":23.0,"volume":1.0,"last_trade_et":"2026-10-06 15:05 ET","mid":9.95,"atm":false},{"strike":153.0,"contract":"UPRO261120C00153000","bid":7.8,"ask":11.4,"last":7.5,"iv":0.5142,"oi":59.0,"volume":12.0,"last_trade_et":"2026-09-24 12:09 ET","mid":9.6,"atm":false},{"strike":154.0,"contract":"UPRO261120C00154000","bid":7.4,"ask":9.6,"last":9.8,"iv":0.4521,"oi":15.0,"volume":1.0,"last_trade_et":"2026-09-22 12:22 ET","mid":8.5,"atm":true},{"strike":155.0,"contract":"UPRO261120C00155000","bid":6.8,"ask":9.3,"last":8.0,"iv":0.4594,"oi":183.0,"volume":21.0,"last_trade_et":"2026-10-05 12:43 ET","mid":8.05,"atm":false},{"strike":156.0,"contract":"UPRO261120C00156000","bid":6.1,"ask":9.3,"last":6.8,"iv":0.4797,"oi":14.0,"volume":4.0,"last_trade_et":"2026-09-24 13:02 ET","mid":7.7,"atm":false}],"atm_strike":154.0,"contract":"UPRO261120C00154000","bid":7.4,"ask":9.6,"mid":8.5,"last":9.8,"iv":0.4521,"oi":15.0,"volume":1.0,"last_trade_et":"2026-09-22 12:22 ET","est_premium":740.0,"net_roll":340.0,"premium_pct":4.81,"annualized_pct":39.9,"breakeven":146.33,"called_away_value":15400.0,"max_gain_vs_today":767.0,"above_text":"Above $154 on Fri Nov 20 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $154 ($15,400.00). You keep $740.00 either way.","below_text":"Below $154: the call expires worthless. You keep $740.00 and the 100 shares, which are worth less if UPRO fell.","underlying":"UPRO","quote_time_et":"2026-10-07 09:56 ET"},"dividends":[{"ex_date":"2026-09-23","amount":0.27},{"ex_date":"2026-06-24","amount":0.299},{"ex_date":"2026-03-25","amount":0.222},{"ex_date":"2025-12-24","amount":0.34}],"notes":[]},"projection":{"birthdate":"2008-11-25","note":"Used by the Projections tab for the exact current age (editable on the page)."},"quotes":{"SPCX":{"symbol":"SPCX","kind":"stock","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","price":168.96,"prev_close":171.92,"change":-2.96,"change_pct":-1.72,"quote_time_et":"2026-10-07 09:56 ET","market_state":"REGULAR","stats":{"open":168.12,"day_high":171.31,"day_low":167.33,"volume":14474012.0,"avg_volume":92301598.0,"high_52w":225.64,"low_52w":104.83,"market_cap":2227193511936.0,"net_assets":null,"quote_type":"EQUITY"},"held":true,"watch":false,"chart":"data/charts/SPCX.json","spark":[[0,170.66],[5,169.56],[10,168.84],[15,168.53],[20,168.72],[25,168.85]],"spark_base":171.92},"UPRO":{"symbol":"UPRO","kind":"stock","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","price":153.73,"prev_close":156.42,"change":-2.69,"change_pct":-1.72,"quote_time_et":"2026-10-07 09:56 ET","market_state":"REGULAR","stats":{"open":154.33,"day_high":154.55,"day_low":153.31,"volume":612664.0,"avg_volume":1922601.0,"high_52w":158.63,"low_52w":88.15,"market_cap":null,"net_assets":5276780032.0,"quote_type":"ETF"},"held":true,"watch":false,"chart":"data/charts/UPRO.json","spark":[[0,154.15],[5,153.58],[10,153.69],[15,153.48],[20,153.84],[25,153.73]],"spark_base":156.42},"UPRO261016C00154000":{"symbol":"UPRO261016C00154000","kind":"option","display":"UPRO 154C","name":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","price":3.425,"prev_close":4.45,"change":-1.025,"change_pct":-23.03,"held":true,"watch":false,"chart":"data/charts/UPRO261016C00154000.json","spark":[[0,4.45],[5,4.45],[10,4.45],[15,4.45],[20,4.45],[25,3.425]],"spark_base":4.45,"key":"UPRO|2026-10-16|154|call"}},"caveats":["UPRO Oct 16 2026 $154 call: wide bid/ask (2.85 x 4.00); the mid-price mark is approximate.","Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."]}</script>
   <script>window.DASHBOARD_CONFIG = {"remoteUrl": "https://at4engineer.github.io/pq-22e56fd9/data/portfolio.json"};</script>
   <script>
 /* Portfolio Tracker dashboard. Plain JS, no libraries, no external requests except its own data files.
  *
  * Views (hash routes): #stocks (iOS Stocks-style list, default on phones; #stocks/<SYMBOL> opens the detail
  * panel), #overview (summary, positions, covered call, history; default on wide screens),
- * #transactions (data/transactions.json, newest first) and #edit (builds a prefilled GitHub issue that the
- * apply-trade workflow turns into a holdings update).
+ * #projections (client-side growth from the birthdate), #transactions (data/transactions.json, newest first),
+ * #edit (builds a prefilled GitHub issue that the apply-trade workflow turns into a holdings update;
+ * the page never places a trade) and #guide (how the tracker works).
  *
  * Modes
  *  - Site (GitHub Pages): fetches data/portfolio.json (cache-busted) on load and every 60 s.
@@ -1873,23 +2049,47 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
       if (ev.changedTouches && ev.changedTouches.length) return { x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY };
       return { x: ev.clientX, y: ev.clientY };
     }
-    function at(ev) {
-      var pt = clientXY(ev), rect = svg.getBoundingClientRect(), px = (pt.x - rect.left) * (W / rect.width);
-      var bi = 0, bd = Infinity;
-      for (var k = 0; k < n; k++) { var dd = Math.abs(x(k) - px); if (dd < bd) { bd = dd; bi = k; } }
-      return bi;
+    // Finger x in viewBox units, then the point on the plotted segment at that x.
+    // SVG attributes (not a CSS transform) so the dot is not 90ms behind the finger
+    // and does not travel the chord between samples.
+    function svgX(ev) {
+      var p = clientXY(ev), rect = svg.getBoundingClientRect();
+      if (!rect.width) return x(0);
+      return (p.x - rect.left) * (W / rect.width);
+    }
+    function onCurve(px) {
+      var idx = [];
+      for (var k = 0; k < n; k++) if (isNum(V[k])) idx.push(k);
+      if (!idx.length) return null;
+      var a0 = idx[0], aN = idx[idx.length - 1];
+      if (idx.length === 1 || px <= x(a0)) return { x: x(a0), y: y(V[a0]), v: V[a0], i: a0 };
+      if (px >= x(aN)) return { x: x(aN), y: y(V[aN]), v: V[aN], i: aN };
+      for (var p = 0; p < idx.length - 1; p++) {
+        var a = idx[p], b = idx[p + 1], x0 = x(a), x1 = x(b);
+        if (px <= x1 || p === idx.length - 2) {
+          var f = x1 - x0 > 0.01 ? (px - x0) / (x1 - x0) : 0;
+          if (f < 0) f = 0; else if (f > 1) f = 1;
+          var v = V[a] + (V[b] - V[a]) * f;
+          return { x: x0 + (x1 - x0) * f, y: y(v), v: v, i: f < 0.5 ? a : b };
+        }
+      }
+      return { x: x(aN), y: y(V[aN]), v: V[aN], i: aN };
+    }
+    function place(hit) {
+      var X = hit.x.toFixed(1), Y = hit.y.toFixed(1);
+      xl.setAttribute("x1", X); xl.setAttribute("x2", X);
+      xd.setAttribute("cx", X); xd.setAttribute("cy", Y);
+      xl.style.transform = "none"; xd.style.transform = "none";
+      xl.setAttribute("visibility", "visible"); xd.setAttribute("visibility", "visible");
     }
     var shown = false, dragging = false;
     function show(ev) {
       if (!n) return;
-      var k = at(ev), v = V[k];
-      if (!isNum(v)) return;
-      // crosshair glides between points (CSS transition on transform); jumps straight there on first show
-      if (!shown) { xl.classList.add("snap"); xd.classList.add("snap"); }
-      xl.style.transform = "translate(" + x(k).toFixed(1) + "px,0)";
-      xd.style.transform = "translate(" + x(k).toFixed(1) + "px," + y(v).toFixed(1) + "px)";
-      xl.setAttribute("visibility", "visible"); xd.setAttribute("visibility", "visible");
-      if (!shown) { void xl.getBoundingClientRect(); xl.classList.remove("snap"); xd.classList.remove("snap"); shown = true; }
+      var hit = onCurve(svgX(ev));
+      if (!hit) return;
+      place(hit);
+      shown = true;
+      var k = hit.i, v = hit.v;
       var intra = rg.interval && /m$/.test(rg.interval);
       var when = intra ? fmtTime(T[k], !timeScale) + " ET" : fmtDay(T[k], { month: "short", day: "numeric", year: "numeric" });
       var c = v - first;
@@ -2226,9 +2426,73 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     set_option_premium: ["openopt", "symbol", "price", "option", "note"]
   };
   var OPT_RE = /open|close|expired|assigned|roll|premium/;
-  function todayET() { return new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); }
+  function todayET() {
+    // formatToParts, not en-CA string output: some phones do not use YYYY-MM-DD for that locale,
+    // and a slash-formatted date makes the birthdate age null so Projections stays empty.
+    try {
+      var parts = new Intl.DateTimeFormat("en-US", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+      var g = {};
+      for (var i = 0; i < parts.length; i++) g[parts[i].type] = parts[i].value;
+      if (g.year && g.month && g.day) return g.year + "-" + g.month + "-" + g.day;
+    } catch (e) { /* fall through */ }
+    var d = new Date();
+    function p2(n) { return (n < 10 ? "0" : "") + n; }
+    return d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate());
+  }
   function fv(id) { return ($(id).value || "").trim(); }
   function pnum(s) { if (s === "" || s == null) return null; var x = Number(String(s).replace(/[$,\s]/g, "")); return isFinite(x) ? x : NaN; }
+  // Comma grouping while typing (1,000,000). Preserves decimals and caret; pnum() strips for math/JSON.
+  var COMMA_IDS = { "ed-qty": 1, "ed-price": 1, "ed-amount": 1, "ed-price2": 1, "ed-fees": 1, "ed-strike": 1, "pj-start": 1, "pj-monthly": 1 };
+  function formatCommaTyping(raw) {
+    raw = String(raw == null ? "" : raw);
+    if (raw === "") return "";
+    if (/[a-zA-Z]/.test(raw)) return raw; // e.g. "all" for contracts
+    var neg = /^\s*-/.test(raw);
+    var s = raw.replace(/[^\d.]/g, "");
+    var dot = s.indexOf(".");
+    var intPart = dot < 0 ? s : s.slice(0, dot);
+    var frac = dot < 0 ? null : s.slice(dot + 1).replace(/\./g, "");
+    if (intPart === "" && frac !== null) intPart = "0";
+    var grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var out = (neg ? "-" : "") + grouped;
+    if (frac !== null) out += "." + frac;
+    return out;
+  }
+  function significantBefore(str, pos) {
+    var n = 0;
+    for (var i = 0; i < pos && i < str.length; i++) {
+      var c = str.charAt(i);
+      if ((c >= "0" && c <= "9") || c === "." || c === "-") n++;
+    }
+    return n;
+  }
+  function applyCommaInput(el) {
+    if (!el || !COMMA_IDS[el.id]) return;
+    var old = el.value;
+    if (/[a-zA-Z]/.test(old)) return;
+    var start = el.selectionStart != null ? el.selectionStart : old.length;
+    var target = significantBefore(old, start);
+    var next = formatCommaTyping(old);
+    if (next === old) return;
+    el.value = next;
+    var n = 0, caret = next.length;
+    if (target === 0) caret = next.charAt(0) === "-" ? 1 : 0;
+    else {
+      for (var i = 0; i < next.length; i++) {
+        var c = next.charAt(i);
+        if ((c >= "0" && c <= "9") || c === "." || c === "-") {
+          n++;
+          if (n >= target) { caret = i + 1; break; }
+        }
+      }
+    }
+    try { el.setSelectionRange(caret, caret); } catch (e) { /* not focused */ }
+  }
+  function setCommaVal(id, v) {
+    var el = $(id); if (!el) return;
+    if (v === "" || v == null) { el.value = ""; return; }
+    el.value = formatCommaTyping(String(v));
+  }
   function optLabel(sym, o) { return [sym, o.expiry ? fmtDate(o.expiry, { month: "short", day: "numeric", year: "numeric" }) : "", isNum(o.strike) ? "$" + o.strike : "", o.right || ""].filter(Boolean).join(" "); }
   function edType() { return $("ed-type").value; }
 
@@ -2258,17 +2522,17 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     if (t === "roll") edRollPrefill();
     if (t === "set_option_premium") {
       var so = opts[+$("ed-openopt").value];
-      $("ed-price").value = so && isNum(so.open_price) ? so.open_price : "";
+      setCommaVal("ed-price", so && isNum(so.open_price) ? so.open_price : "");
     }
     edPreview();
   }
   // Roll: buy back at the current ask, sell the next monthly call nearest the share price at its bid (editable).
   function edRollPrefill() {
     var roll = (state.data || {}).roll || {}, c = roll.current, n = roll.next;
-    if (c && isNum(c.ask) && c.ask > 0) $("ed-price").value = c.ask;
+    if (c && isNum(c.ask) && c.ask > 0) setCommaVal("ed-price", c.ask);
     if (n && isNum(n.atm_strike)) {
-      $("ed-strike").value = n.atm_strike; $("ed-expiry").value = n.expiry;
-      $("ed-price2").value = isNum(n.bid) && n.bid > 0 ? n.bid : "";
+      setCommaVal("ed-strike", n.atm_strike); $("ed-expiry").value = n.expiry;
+      setCommaVal("ed-price2", isNum(n.bid) && n.bid > 0 ? n.bid : "");
       var rc = document.querySelector('#ed-form input[name="right"][value="call"]'); if (rc) rc.checked = true;
     }
     if (c && c.expiry && c.expiry >= todayET()) $("ed-date").value = todayET();
@@ -2278,11 +2542,11 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     var d = state.data || {}, o = (d.options || [])[+$("ed-openopt").value];
     if ($("ed-openopt").value === "" || !o) return;
     $("ed-symbol").value = o.underlying;
-    if (edType() === "roll") { $("ed-qty").value = o.contracts; return; }  // the option fields are the NEW contract
-    $("ed-strike").value = o.strike;
+    if (edType() === "roll") { setCommaVal("ed-qty", o.contracts); return; }  // the option fields are the NEW contract
+    setCommaVal("ed-strike", o.strike);
     $("ed-expiry").value = o.expiry;
     var r = document.querySelector('#ed-form input[name="right"][value="' + o.type + '"]'); if (r) r.checked = true;
-    if (edType() !== "option_expired" && edType() !== "option_assigned") $("ed-qty").value = o.contracts;
+    if (edType() !== "option_expired" && edType() !== "option_assigned") setCommaVal("ed-qty", o.contracts);
     if (edType() === "option_expired") $("ed-date").value = o.expiry;
   }
   function edBuild() {
@@ -2426,7 +2690,10 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
   function edInit() {
     $("ed-type").addEventListener("change", edSetup);
     $("ed-openopt").addEventListener("change", function () { edPickOpt(); edPreview(); });
-    $("ed-form").addEventListener("input", edPreview);
+    $("ed-form").addEventListener("input", function (e) {
+      if (e.target) applyCommaInput(e.target);
+      edPreview();
+    });
     $("ed-form").addEventListener("change", edPreview);
     $("ed-form").addEventListener("submit", edSubmit);
     $("ed-form").addEventListener("reset", function () { setTimeout(function () { $("ed-date").value = todayET(); $("ed-done").hidden = true; $("ed-error").hidden = true; edSetup(); }, 0); });
@@ -2448,7 +2715,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     return {
       age: isNum(s.age) ? s.age : defAge, target: isNum(s.target) ? s.target : 59.5,
       start: isNum(s.start) ? s.start : null, monthly: isNum(s.monthly) ? s.monthly : 0, raise: isNum(s.raise) ? s.raise : 0,
-      preset: s.preset || "base", custom: isNum(s.custom) ? s.custom : null, dollars: s.dollars || "today"
+      preset: s.preset || (PJ.DEFAULT_PRESET || "optimistic"), custom: isNum(s.custom) ? s.custom : null, dollars: s.dollars || "today"
     };
   }
   // Default age: exact fractional age from projection.birthdate in holdings.json (else projection.age).
@@ -2465,8 +2732,8 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     var s = pjSettings();
     $("pj-age").value = pjAgeStr(s.age);
     $("pj-target").value = s.target;
-    $("pj-start").value = isNum(s.start) ? s.start : (isNum(pjLive()) ? pjLive().toFixed(2) : "");
-    $("pj-monthly").value = s.monthly || "";
+    setCommaVal("pj-start", isNum(s.start) ? s.start : (isNum(pjLive()) ? pjLive().toFixed(2) : ""));
+    setCommaVal("pj-monthly", s.monthly || "");
     $("pj-raise").value = s.raise || "";
     $("pj-custom").value = isNum(s.custom) ? s.custom : "";
     var r = document.querySelector('input[name="pj-rate"][value="' + s.preset + '"]'); if (r) r.checked = true;
@@ -2491,11 +2758,29 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     pjFill();
     var form = $("pj-form");
     form.addEventListener("submit", function (e) { e.preventDefault(); });
-    form.addEventListener("input", function () { pjRead(); renderProj(true); });
+    form.addEventListener("input", function (e) {
+      if (e.target) applyCommaInput(e.target);
+      pjRead(); renderProj(true);
+    });
     form.addEventListener("change", function () { pjRead(); renderProj(true); });
+    // Segmented radios: set the checked state ourselves. A label tap does not flip them on iOS
+    // when the input is taken out of flow, so 8/10/12% and today's/future dollars did nothing.
+    form.addEventListener("click", function (e) {
+      var lab = e.target.closest && e.target.closest("label");
+      if (!lab || !form.contains(lab)) return;
+      var inp = lab.querySelector('input[type="radio"]');
+      if (!inp || inp.checked) {
+        if (inp) pjMarkSeg(form);
+        return;
+      }
+      var group = form.querySelectorAll('input[name="' + inp.name + '"]');
+      for (var i = 0; i < group.length; i++) group[i].checked = group[i] === inp;
+      pjMarkSeg(form);
+      pjRead(); renderProj(true);
+    });
     $("pj-chips").addEventListener("click", function (e) {
       var b = e.target.closest && e.target.closest("[data-amt]"); if (!b) return;
-      $("pj-monthly").value = b.getAttribute("data-amt") === "0" ? "" : b.getAttribute("data-amt");
+      setCommaVal("pj-monthly", b.getAttribute("data-amt") === "0" ? "" : b.getAttribute("data-amt"));
       pjRead(); renderProj(true);
     });
     $("pj-age-hint").addEventListener("click", function (e) {
@@ -2504,8 +2789,16 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     });
     $("pj-start-hint").addEventListener("click", function (e) {
       if (!e.target.closest || !e.target.closest("[data-live]")) return;
-      e.preventDefault(); $("pj-start").value = isNum(pjLive()) ? pjLive().toFixed(2) : ""; pjRead(); renderProj(true);
+      e.preventDefault(); setCommaVal("pj-start", isNum(pjLive()) ? pjLive().toFixed(2) : ""); pjRead(); renderProj(true);
     });
+  }
+  function pjMarkSeg(form) {
+    if (!form) return;
+    var radios = form.querySelectorAll('input[type="radio"]');
+    for (var i = 0; i < radios.length; i++) {
+      var lab = radios[i].closest && radios[i].closest("label");
+      if (lab) lab.classList.toggle("on", radios[i].checked);
+    }
   }
   function pjRate(s) {
     if (s.preset === "custom") return isNum(s.custom) && s.custom > -50 && s.custom < 50 ? s.custom / 100 : null;
@@ -2517,7 +2810,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     if (!$("pj-form")) return;
     pjInit();
     var s = pjSettings(), live = pjLive();
-    if (!isNum(s.start) && isNum(live) && document.activeElement !== $("pj-start")) $("pj-start").value = live.toFixed(2);
+    if (!isNum(s.start) && isNum(live) && document.activeElement !== $("pj-start")) setCommaVal("pj-start", live.toFixed(2));
     var stored = pjLoad(), dAge = pjAgeDefault(), pr = (state.data || {}).projection || {};
     if (!isNum(stored.age) && isNum(dAge) && document.activeElement !== $("pj-age")) $("pj-age").value = pjAgeStr(dAge);
     // use the unrounded birthdate age for the math while the field shows the default
@@ -2529,6 +2822,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     $("pj-custom-b").textContent = s.preset === "custom" && isNum(s.custom) ? s.custom + "%" : "Custom";
     var chipsEl = document.querySelectorAll("#pj-chips [data-amt]");
     for (var i = 0; i < chipsEl.length; i++) chipsEl[i].classList.toggle("on", +chipsEl[i].getAttribute("data-amt") === (s.monthly || 0));
+    pjMarkSeg($("pj-form"));
     pjHTML($("pj-start-hint"), isNum(s.start) ? (isNum(live) ? 'Live account total is ' + money(live) + ' · <a href="#" data-live="1">Use it</a>' : "") :
       (isNum(live) ? "Live account total (updates with prices)" : ""));
     var age = s.age, target = s.target, rate = pjRate(s);
@@ -2547,7 +2841,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     var none = PJ.project(Object.assign({}, base, { monthly: 0, annual: rate }));
     var lo = PJ.project(Object.assign({}, base, { monthly: s.monthly, annual: PJ.PRESETS.conservative }));
     var hi = PJ.project(Object.assign({}, base, { monthly: s.monthly, annual: PJ.PRESETS.optimistic }));
-    var need = PJ.neededMonthly(Object.assign({}, base, { annual: PJ.PRESETS.base }), 1e6);
+    var need = PJ.neededMonthly(Object.assign({}, base, { annual: PJ.PRESETS.optimistic }), 1e6);
     var units = real ? "today's dollars" : "future dollars", rtxt = pct(rate * 100, rate * 100 % 1 ? 1 : 0);
     var yrs = (target - age), prev = pj.last || {};
     var prj = (state.data || {}).projection || {};
@@ -2566,8 +2860,8 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     $("pj-split").innerHTML = kv("Money put in", money0s(keep.contributed) + ' <span class="subtle">start ' + money0s(start) + (s.monthly ? " + contributions" : "") + "</span>") +
       kv("Growth earned", '<span class="pos">' + money0s(keep.growth) + "</span>") + kv("Projected total", money0s(keep.final)) +
       kv("Growth share", pct(tot > 0 ? keep.growth / tot * 100 : null, 0));
-    $("pj-takes").innerHTML = need === 0 ? "What it takes: your starting amount alone reaches <strong>$1,000,000</strong> by " + ageTxt(target) + " at 8% (" + units + ")." :
-      "What it takes: about <strong>" + money0s(Math.ceil(need)) + "/mo</strong>" + (raise ? " to start (rising " + s.raise + "% a year)" : "") + " to reach <strong>$1,000,000</strong> by " + ageTxt(target) + " at the 8% base rate (" + units + ").";
+    $("pj-takes").innerHTML = need === 0 ? "What it takes: your starting amount alone reaches <strong>$1,000,000</strong> by " + ageTxt(target) + " at the Ramsey 12% rate (" + units + ")." :
+      "What it takes: about <strong>" + money0s(Math.ceil(need)) + "/mo</strong>" + (raise ? " to start (rising " + s.raise + "% a year)" : "") + " to reach <strong>$1,000,000</strong> by " + ageTxt(target) + " at the Ramsey 12% rate (" + units + ").";
     // milestones
     var ms = PJ.milestones(age, target);
     $("pj-ms").innerHTML = "<thead><tr><th>Age</th><th class=\"num\">Keep investing</th><th class=\"num\">Add nothing</th><th class=\"num\">Put in</th></tr></thead><tbody>" +
@@ -2583,13 +2877,21 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     // chart
     pj.last = { keep: keep.final, none: none.final };
     pjChart({ age: age, target: target, keep: keep.values, none: none.values, lo: lo.values, hi: hi.values, units: units }, anim);
+    pjSchedulePaint();
+  }
+  // iOS drops a canvas bitmap painted while a parent is transforming or just un-hidden. Paint again after layout.
+  var pjPaintT = null;
+  function pjSchedulePaint() {
+    if (pjPaintT) clearTimeout(pjPaintT);
+    requestAnimationFrame(function () { if (ui.view === "projections") pjDraw(); });
+    pjPaintT = setTimeout(function () { pjPaintT = null; if (ui.view === "projections") pjDraw(); }, 320);
   }
   function setNum(el, from, to, anim) {
     if (anim && motion() && isNum(from) && Math.abs(from - to) > 0.5) countUp(el, from, to, money0s, 450);
     else if (!pj.drawn && motion()) countUp(el, 0, to, money0s, 800);
     else countUp(el, to, to, money0s);  // also cancels a count-up still running from an earlier render
   }
-  // ---- canvas chart: both scenarios by age + 6%-10% band; drag/hover to scrub (touch locks page scroll)
+  // ---- canvas chart: both scenarios by age + 8%-12% band; drag/hover to scrub (touch locks page scroll)
   var PJN = 240;
   function pjSample(arr) {
     var out = [], n = arr.length - 1;
@@ -2694,15 +2996,26 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     cv.addEventListener("pointerup", function (ev) { if (ev.pointerType === "touch" || !dragging) return; setDrag(false); hide(); });
     cv.addEventListener("pointercancel", function (ev) { if (ev.pointerType === "touch") return; if (dragging) setDrag(false); hide(); });
     cv.addEventListener("pointerleave", function (ev) { if (ev.pointerType === "touch" || dragging) return; hide(); });
+    if (window.IntersectionObserver) {
+      var io = new IntersectionObserver(function (ents) {
+        for (var i = 0; i < ents.length; i++) if (ents[i].isIntersecting && ui.view === "projections") pjDraw();
+      });
+      io.observe(cv);
+    }
   }
 
   // ================================================================== views / router
-  var TAB_ORDER = ["stocks", "overview", "projections", "transactions", "edit"];
-  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", transactions: "Transactions", edit: "Edit portfolio" };
+  var TAB_ORDER = ["stocks", "overview", "projections", "transactions", "edit", "guide"];
+  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", transactions: "Transactions", edit: "Edit portfolio", guide: "Guide" };
   function route() {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, "")), parts = h.split("/");
     var v = parts[0];
-    if (TAB_ORDER.indexOf(v) < 0) v = window.matchMedia("(max-width: 700px)").matches ? "stocks" : "overview";
+    // The page's own views win. A hardcoded list that lags the HTML (Guide button present,
+    // router from an older script) used to send #guide to Stocks on a phone and Overview on a wide screen.
+    var names = [], nodes = document.querySelectorAll(".view[data-view]");
+    for (var ni = 0; ni < nodes.length; ni++) names.push(nodes[ni].getAttribute("data-view"));
+    if (names.indexOf(v) < 0) v = window.matchMedia("(max-width: 700px)").matches ? "stocks" : "overview";
+    if (names.length && names.indexOf(v) < 0) v = names[0];
     var changed = ui.view !== v, prevView = ui.view;
     ui.view = v;
     var views = document.querySelectorAll(".view");
@@ -2710,14 +3023,24 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     $("view-title").textContent = $("nav-title").textContent = VIEW_TITLES[v];
     if (changed && prevView && motion()) {
       var ve = document.querySelector('.view[data-view="' + v + '"]');
-      ve.style.setProperty("--vx", (TAB_ORDER.indexOf(v) > TAB_ORDER.indexOf(prevView) ? 18 : -18) + "px");
-      ve.classList.remove("view-in"); void ve.offsetWidth; ve.classList.add("view-in");
+      if (ve) {
+        var iv = TAB_ORDER.indexOf(v), ip = TAB_ORDER.indexOf(prevView);
+        ve.style.setProperty("--vx", ((iv < 0 || ip < 0 || iv > ip) ? 18 : -18) + "px");
+        ve.classList.remove("view-in"); void ve.offsetWidth; ve.classList.add("view-in");
+      }
     }
     var tabs = document.querySelectorAll(".tabs a");
     for (var k = 0; k < tabs.length; k++) {
       var on = tabs[k].getAttribute("data-tab") === v;
       tabs[k].classList.toggle("on", on);
-      if (on) tabs[k].setAttribute("aria-current", "page"); else tabs[k].removeAttribute("aria-current");
+      if (on) {
+        tabs[k].setAttribute("aria-current", "page");
+        var nav = tabs[k].parentNode;
+        if (nav && nav.scrollWidth > nav.clientWidth + 2) {
+          var left = tabs[k].offsetLeft - (nav.clientWidth - tabs[k].offsetWidth) / 2;
+          nav.scrollTo({ left: Math.max(0, left), behavior: motion() ? "smooth" : "auto" });
+        }
+      } else tabs[k].removeAttribute("aria-current");
     }
     if (v !== "stocks" || !parts[1]) {
       if (ui.sel && !(v === "stocks" && wide())) closeDetail(true);
@@ -2794,7 +3117,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     document.addEventListener("touchstart", function (e) {
       st = null;
       if (busy || e.touches.length !== 1 || window.__pqChartDrag || (window.scrollY || 0) > 0 || document.body.classList.contains("sheet-open")) return;
-      if (e.target.closest && e.target.closest(".pchart, .detail, input, select, textarea, .tabs, .ranges")) return;
+      if (e.target.closest && e.target.closest(".pchart, .pj-chart, .detail, input, select, textarea, .tabs, .ranges, .seg")) return;
       st = { y0: e.touches[0].clientY, x0: e.touches[0].clientX, dy: 0, on: false };
     }, { passive: true });
     document.addEventListener("touchmove", function (e) {
