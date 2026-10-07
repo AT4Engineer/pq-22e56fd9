@@ -58,6 +58,8 @@ def main():
 
     # PWA bits (manifest, icons, service worker) only make sense on the hosted site.
     html = re.sub(r"[ \t]*<!-- pwa:start.*?<!-- pwa:end -->\n?", "", html, flags=re.S)
+    # strip cache-busting query strings (?v=N) so the inline replacements below match
+    html = re.sub(r'((?:href|src)="assets/[^"?]+)\?[^"]*"', r'\1"', html)
     html = html.replace('<link rel="stylesheet" href="assets/style.css">', "<style>\n" + css + "\n</style>")
     html = html.replace('href="assets/favicon.svg" type="image/svg+xml"', f'href="data:image/svg+xml;base64,{icon}" type="image/svg+xml"')
     html = re.sub(r"<title>(.*?)</title>", lambda m: f"<title>{m.group(1)} - snapshot {snap}</title>", html, count=1)
