@@ -49,6 +49,7 @@ def main():
     html = read("index.html")
     css = read("assets/style.css")
     js = read("assets/app.js")
+    proj_js = read("assets/projection.js")
     icon = base64.b64encode(read("assets/favicon.svg").encode()).decode()
 
     data_json = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -63,6 +64,7 @@ def main():
     inline = (f'<script id="embedded-data" type="application/json">{data_json}</script>\n'
               f"  <script>window.DASHBOARD_CONFIG = {cfg};</script>\n"
               f"  <script>\n{safe_script(js)}\n</script>")
+    html = html.replace('<script src="assets/projection.js"></script>', f"<script>\n{safe_script(proj_js)}\n</script>")
     html = html.replace('<script src="assets/app.js"></script>', inline)
     for leftover in ('href="assets/', 'src="assets/'):
         if leftover in html:

@@ -1278,13 +1278,274 @@
     edSetup();
   }
 
+
+  // ================================================================== Projections (all client-side; works offline)
+  var PJ = window.PQProj, PJ_KEY = "pq-proj";
+  var pj = { inited: false, chart: null, prev: null, drawn: false, last: null };
+  function pjLoad() { try { return JSON.parse(localStorage.getItem(PJ_KEY) || "{}") || {}; } catch (e) { return {}; } }
+  function pjSave(o) { try { localStorage.setItem(PJ_KEY, JSON.stringify(o)); } catch (e) { /* private mode */ } }
+  function pjNum(id) { var x = pnum(fv(id)); return isNum(x) ? x : null; }
+  function pjSettings() {
+    var s = pjLoad(), d = state.data || {};
+    var defAge = pjAgeDefault();
+    return {
+      age: isNum(s.age) ? s.age : defAge, target: isNum(s.target) ? s.target : 59.5,
+      start: isNum(s.start) ? s.start : null, monthly: isNum(s.monthly) ? s.monthly : 0, raise: isNum(s.raise) ? s.raise : 0,
+      preset: s.preset || "base", custom: isNum(s.custom) ? s.custom : null, dollars: s.dollars || "today"
+    };
+  }
+  // Default age: exact fractional age from projection.birthdate in holdings.json (else projection.age).
+  function pjAgeDefault() {
+    var pr = (state.data || {}).projection || {};
+    if (pr.birthdate) { var a = PJ.ageFromBirthdate(pr.birthdate, todayET()); if (isNum(a)) return a; }
+    return isNum(pr.age) ? pr.age : null;
+  }
+  // Rewrite only on change: a blur/change re-render must not replace a link mid-tap.
+  function pjHTML(el, html) { if (el._h !== html) { el.innerHTML = html; el._h = html; } }
+  function pjAgeStr(a) { return isNum(a) ? String(Math.round(a * 100) / 100) : ""; }
+  function pjLive() { var a = (state.data || {}).account || {}; return isNum(a.total) ? a.total : null; }
+  function pjFill() {
+    var s = pjSettings();
+    $("pj-age").value = pjAgeStr(s.age);
+    $("pj-target").value = s.target;
+    $("pj-start").value = isNum(s.start) ? s.start : (isNum(pjLive()) ? pjLive().toFixed(2) : "");
+    $("pj-monthly").value = s.monthly || "";
+    $("pj-raise").value = s.raise || "";
+    $("pj-custom").value = isNum(s.custom) ? s.custom : "";
+    var r = document.querySelector('input[name="pj-rate"][value="' + s.preset + '"]'); if (r) r.checked = true;
+    var dl = document.querySelector('input[name="pj-dollars"][value="' + s.dollars + '"]'); if (dl) dl.checked = true;
+  }
+  function pjRead() {
+    var s = pjLoad();
+    var ag = pjNum("pj-age"), dflt = pjAgeDefault();
+    s.age = isNum(ag) && !(isNum(dflt) && Math.abs(ag - +pjAgeStr(dflt)) < 0.005) ? ag : null;  // null = follow the birthdate
+    s.target = pjNum("pj-target"); s.monthly = pjNum("pj-monthly") || 0; s.raise = pjNum("pj-raise") || 0;
+    var st = pjNum("pj-start"), live = pjLive();
+    s.start = isNum(st) && !(isNum(live) && Math.abs(st - live) < 0.005) ? st : null;  // null = follow the live account total
+    s.preset = (document.querySelector('input[name="pj-rate"]:checked') || {}).value || "base";
+    s.custom = pjNum("pj-custom");
+    s.dollars = (document.querySelector('input[name="pj-dollars"]:checked') || {}).value || "today";
+    pjSave(s);
+    return s;
+  }
+  function pjInit() {
+    if (pj.inited || !$("pj-form")) return;
+    pj.inited = true;
+    pjFill();
+    var form = $("pj-form");
+    form.addEventListener("submit", function (e) { e.preventDefault(); });
+    form.addEventListener("input", function () { pjRead(); renderProj(true); });
+    form.addEventListener("change", function () { pjRead(); renderProj(true); });
+    $("pj-chips").addEventListener("click", function (e) {
+      var b = e.target.closest && e.target.closest("[data-amt]"); if (!b) return;
+      $("pj-monthly").value = b.getAttribute("data-amt") === "0" ? "" : b.getAttribute("data-amt");
+      pjRead(); renderProj(true);
+    });
+    $("pj-age-hint").addEventListener("click", function (e) {
+      if (!e.target.closest || !e.target.closest("[data-bday]")) return;
+      e.preventDefault(); $("pj-age").value = pjAgeStr(pjAgeDefault()); pjRead(); renderProj(true);
+    });
+    $("pj-start-hint").addEventListener("click", function (e) {
+      if (!e.target.closest || !e.target.closest("[data-live]")) return;
+      e.preventDefault(); $("pj-start").value = isNum(pjLive()) ? pjLive().toFixed(2) : ""; pjRead(); renderProj(true);
+    });
+  }
+  function pjRate(s) {
+    if (s.preset === "custom") return isNum(s.custom) && s.custom > -50 && s.custom < 50 ? s.custom / 100 : null;
+    return PJ.PRESETS[s.preset] || PJ.PRESETS.base;
+  }
+  function ageTxt(a) { return Math.abs(a - Math.round(a)) < 1e-9 ? String(Math.round(a)) : (Math.round(a * 10) / 10).toFixed(1); }
+  function money0s(x) { return isNum(x) ? (x < 0 ? "−" : "") + USD0.format(Math.abs(x)) : "n/a"; }
+  function renderProj(anim) {
+    if (!$("pj-form")) return;
+    pjInit();
+    var s = pjSettings(), live = pjLive();
+    if (!isNum(s.start) && isNum(live) && document.activeElement !== $("pj-start")) $("pj-start").value = live.toFixed(2);
+    var stored = pjLoad(), dAge = pjAgeDefault(), pr = (state.data || {}).projection || {};
+    if (!isNum(stored.age) && isNum(dAge) && document.activeElement !== $("pj-age")) $("pj-age").value = pjAgeStr(dAge);
+    // use the unrounded birthdate age for the math while the field shows the default
+    if (!isNum(stored.age) && isNum(dAge)) s.age = dAge;
+    pjHTML($("pj-age-hint"), pr.birthdate && isNum(dAge) ? (isNum(stored.age) ? 'From birthdate: ' + esc(pjAgeStr(dAge)) + ' · <a href="#" data-bday="1">Use it</a>' :
+      "Exact age from birthdate " + esc(fmtDate(pr.birthdate, { month: "short", day: "numeric", year: "numeric" }))) : "");
+    if (!state.data && !isNum(s.start)) { $("pj-empty").hidden = false; $("pj-out").hidden = true; $("pj-empty").innerHTML = "<p>Loading the account total…</p>"; return; }
+    $("pj-custom-wrap").hidden = s.preset !== "custom";
+    $("pj-custom-b").textContent = s.preset === "custom" && isNum(s.custom) ? s.custom + "%" : "Custom";
+    var chipsEl = document.querySelectorAll("#pj-chips [data-amt]");
+    for (var i = 0; i < chipsEl.length; i++) chipsEl[i].classList.toggle("on", +chipsEl[i].getAttribute("data-amt") === (s.monthly || 0));
+    pjHTML($("pj-start-hint"), isNum(s.start) ? (isNum(live) ? 'Live account total is ' + money(live) + ' · <a href="#" data-live="1">Use it</a>' : "") :
+      (isNum(live) ? "Live account total (updates with prices)" : ""));
+    var age = s.age, target = s.target, rate = pjRate(s);
+    var err = !isNum(age) ? "" : age < 10 || age > 100 ? "Enter an age between 10 and 100." :
+      !isNum(target) || target <= age ? "Target age must be after your current age." : target > 110 ? "Target age is too high." :
+      rate === null ? "Enter a custom yearly return between −50% and 50%." : "";
+    var show = isNum(age) && !err;
+    $("pj-empty").hidden = show;
+    $("pj-empty").innerHTML = "<p>" + esc(err || "Enter your age to see projections.") + "</p>";
+    $("pj-out").hidden = !show;
+    if (!show) return;
+    var start = isNum(s.start) ? s.start : (isNum(live) ? live : 0);
+    var months = PJ.monthsBetween(age, target), real = s.dollars !== "future", raise = (s.raise || 0) / 100;
+    var base = { start: start, months: months, raise: raise, real: real, inflation: PJ.INFLATION };
+    var keep = PJ.project(Object.assign({}, base, { monthly: s.monthly, annual: rate }));
+    var none = PJ.project(Object.assign({}, base, { monthly: 0, annual: rate }));
+    var lo = PJ.project(Object.assign({}, base, { monthly: s.monthly, annual: PJ.PRESETS.conservative }));
+    var hi = PJ.project(Object.assign({}, base, { monthly: s.monthly, annual: PJ.PRESETS.optimistic }));
+    var need = PJ.neededMonthly(Object.assign({}, base, { annual: PJ.PRESETS.base }), 1e6);
+    var units = real ? "today's dollars" : "future dollars", rtxt = pct(rate * 100, rate * 100 % 1 ? 1 : 0);
+    var yrs = (target - age), prev = pj.last || {};
+    var prj = (state.data || {}).projection || {};
+    $("pj-hero-k").textContent = "Projected value at " + ageTxt(target) + (prj.birthdate && !isNum(pjLoad().age) ? " · " + fmtDate(PJ.dateAtAge(prj.birthdate, target), { month: "short", year: "numeric" }) : "");
+    setNum($("pj-hero-v"), prev.keep, keep.final, anim);
+    $("pj-hero-sub").textContent = rtxt + " a year for " + (Math.round(yrs * 10) / 10).toFixed(1) + " years (" + months + " months), in " + units + (s.monthly ? ", adding " + money0s(s.monthly) + "/mo" + (raise ? " (+" + s.raise + "% a year)" : "") : "");
+    $("pj-keep-k").textContent = "Keep investing " + money0s(s.monthly) + "/mo";
+    setNum($("pj-keep-v"), prev.keep, keep.final, anim);
+    setNum($("pj-none-v"), prev.none, none.final, anim);
+    var diff = keep.final - none.final;
+    $("pj-diff").innerHTML = s.monthly ? "Difference: <strong class=\"pos\">+" + money0s(diff) + "</strong> from adding " + money0s(s.monthly) + " a month" :
+      '<span class="subtle">Pick a monthly amount above to compare.</span>';
+    // put in vs growth
+    var tot = keep.final, inP = tot > 0 ? Math.max(0, Math.min(100, keep.contributed / tot * 100)) : 0;
+    $("pj-bar-in").style.width = inP + "%"; $("pj-bar-gr").style.width = (100 - inP) + "%";
+    $("pj-split").innerHTML = kv("Money put in", money0s(keep.contributed) + ' <span class="subtle">start ' + money0s(start) + (s.monthly ? " + contributions" : "") + "</span>") +
+      kv("Growth earned", '<span class="pos">' + money0s(keep.growth) + "</span>") + kv("Projected total", money0s(keep.final)) +
+      kv("Growth share", pct(tot > 0 ? keep.growth / tot * 100 : null, 0));
+    $("pj-takes").innerHTML = need === 0 ? "What it takes: your starting amount alone reaches <strong>$1,000,000</strong> by " + ageTxt(target) + " at 8% (" + units + ")." :
+      "What it takes: about <strong>" + money0s(Math.ceil(need)) + "/mo</strong>" + (raise ? " to start (rising " + s.raise + "% a year)" : "") + " to reach <strong>$1,000,000</strong> by " + ageTxt(target) + " at the 8% base rate (" + units + ").";
+    // milestones
+    var ms = PJ.milestones(age, target);
+    $("pj-ms").innerHTML = "<thead><tr><th>Age</th><th class=\"num\">Keep investing</th><th class=\"num\">Add nothing</th><th class=\"num\">Put in</th></tr></thead><tbody>" +
+      ms.map(function (a, k) {
+        return '<tr class="row-in" style="animation-delay:' + (k * 35) + 'ms"><td>' + ageTxt(a) + '</td><td class="num">' + money0s(PJ.at(keep, a, age)) + '</td><td class="num">' + money0s(PJ.at(none, a, age)) +
+          '</td><td class="num subtle">' + money0s(PJ.at(keep, a, age, "contrib")) + "</td></tr>";
+      }).join("") + "</tbody>";
+    // UPRO / leverage caveat from the live positions
+    var d = state.data || {}, lev = (d.positions || []).filter(function (p) { return p.symbol === "UPRO"; })[0];
+    $("pj-warn").innerHTML = "<strong>Your portfolio is " + (lev && isNum(lev.share_pct) ? "about " + Math.round(lev.share_pct) + "% " : "mostly ") + "UPRO</strong>, a 3x leveraged S&amp;P 500 fund. " +
+      "It swings about three times as much as the index day to day and loses ground in choppy markets (volatility decay), so its long-run result can be far above or far below 3x. " +
+      "These projections use broad-market rates, not 3x.";
+    // chart
+    pj.last = { keep: keep.final, none: none.final };
+    pjChart({ age: age, target: target, keep: keep.values, none: none.values, lo: lo.values, hi: hi.values, units: units }, anim);
+  }
+  function setNum(el, from, to, anim) {
+    if (anim && motion() && isNum(from) && Math.abs(from - to) > 0.5) countUp(el, from, to, money0s, 450);
+    else if (!pj.drawn && motion()) countUp(el, 0, to, money0s, 800);
+    else countUp(el, to, to, money0s);  // also cancels a count-up still running from an earlier render
+  }
+  // ---- canvas chart: both scenarios by age + 6%-10% band; drag/hover to scrub (touch locks page scroll)
+  var PJN = 240;
+  function pjSample(arr) {
+    var out = [], n = arr.length - 1;
+    for (var i = 0; i <= PJN; i++) { var x = i / PJN * n, k = Math.floor(x), f = x - k; out.push(k >= n ? arr[n] : arr[k] + (arr[k + 1] - arr[k]) * f); }
+    return out;
+  }
+  function pjChart(raw, anim) {
+    var cv = $("pj-chart"); if (!cv) return;
+    var tgt = { age: raw.age, target: raw.target, keep: pjSample(raw.keep), none: pjSample(raw.none), lo: pjSample(raw.lo), hi: pjSample(raw.hi), units: raw.units };
+    var from = pj.chart, first = !pj.drawn;
+    pj.drawn = true;
+    pjChartInit(cv);
+    if (pj.raf) cancelAnimationFrame(pj.raf);
+    if (!motion() || (!first && !from) || (!anim && !first)) { pj.chart = tgt; pj.reveal = 1; pjDraw(); return; }
+    var t0 = performance.now(), dur = first ? 900 : 380;
+    function lerpA(a, b, f) { return b.map(function (v, i) { return a[i] + (v - a[i]) * f; }); }
+    (function step(now) {
+      var f = Math.min(1, (now - t0) / dur), e = first ? ease3(f) : easeIO(f);
+      if (first) { pj.chart = tgt; pj.reveal = e; }
+      else {
+        pj.reveal = 1;
+        pj.chart = { age: from.age + (tgt.age - from.age) * e, target: from.target + (tgt.target - from.target) * e, units: tgt.units,
+          keep: lerpA(from.keep, tgt.keep, e), none: lerpA(from.none, tgt.none, e), lo: lerpA(from.lo, tgt.lo, e), hi: lerpA(from.hi, tgt.hi, e) };
+      }
+      pjDraw();
+      if (f < 1) pj.raf = requestAnimationFrame(step); else { pj.chart = tgt; pj.raf = null; pjDraw(); }
+    })(t0);
+  }
+  function pjAxis(v) {
+    var t = function (x) { return String(+x.toFixed(x < 10 ? 2 : 1)); };
+    return v >= 1e6 ? "$" + t(v / 1e6) + "M" : v >= 1e3 ? "$" + t(v / 1e3) + "K" : "$" + Math.round(v);
+  }
+  function pjGeom(cv) {
+    var w = cv.clientWidth || 340, h = w < 500 ? 220 : 270, padL = 6, padR = 54, padT = 10, padB = 24;
+    return { w: w, h: h, x0: padL, x1: w - padR, y0: padT, y1: h - padB };
+  }
+  function pjDraw() {
+    var cv = $("pj-chart"), c = pj.chart; if (!cv || !c) return;
+    var g = pjGeom(cv), dpr = window.devicePixelRatio || 1;
+    if (cv.width !== Math.round(g.w * dpr) || cv.height !== Math.round(g.h * dpr)) { cv.width = Math.round(g.w * dpr); cv.height = Math.round(g.h * dpr); cv.style.height = g.h + "px"; }
+    var ctx = cv.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, g.w, g.h);
+    var max = Math.max.apply(null, c.hi.concat(c.keep, [1])), step = niceStep(max, 4), top = Math.ceil(max / step) * step;
+    var X = function (i) { return g.x0 + (g.x1 - g.x0) * i / PJN; }, Y = function (v) { return g.y1 - (g.y1 - g.y0) * v / top; };
+    ctx.font = "11px -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif";
+    ctx.textBaseline = "middle"; ctx.fillStyle = "#8e8e93"; ctx.strokeStyle = "rgba(84,84,88,.45)"; ctx.lineWidth = 1;
+    for (var v = 0; v <= top + 1e-6; v += step) {
+      var y = Math.round(Y(v)) + 0.5; ctx.beginPath(); ctx.moveTo(g.x0, y); ctx.lineTo(g.x1, y); ctx.stroke();
+      ctx.textAlign = "left"; ctx.fillText(pjAxis(v), g.x1 + 6, y);
+    }
+    var span = c.target - c.age, ystep = span > 40 ? 10 : span > 16 ? 5 : span > 6 ? 2 : 1;
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (var a = Math.ceil(c.age / ystep) * ystep; a <= c.target + 1e-9; a += ystep) {
+      var xi = (a - c.age) / span * PJN, xx = X(xi);
+      if (xx < g.x0 + 10 || xx > g.x1 - 10) continue;
+      ctx.fillText(String(a), xx, g.y1 + 6);
+    }
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, g.x0 + (g.x1 - g.x0) * pj.reveal, g.h); ctx.clip();
+    // band
+    ctx.beginPath();
+    for (var i = 0; i <= PJN; i++) ctx[i ? "lineTo" : "moveTo"](X(i), Y(c.hi[i]));
+    for (var j = PJN; j >= 0; j--) ctx.lineTo(X(j), Y(c.lo[j]));
+    ctx.closePath(); ctx.fillStyle = "rgba(10,132,255,.14)"; ctx.fill();
+    function line(arr, color, width, dash) {
+      ctx.beginPath(); for (var i = 0; i <= PJN; i++) ctx[i ? "lineTo" : "moveTo"](X(i), Y(arr[i]));
+      ctx.setLineDash(dash || []); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineJoin = "round"; ctx.stroke(); ctx.setLineDash([]);
+    }
+    line(c.none, "#8e8e93", 1.8, [5, 4]);
+    line(c.keep, "#0a84ff", 2.4);
+    ctx.restore();
+    // crosshair
+    if (isNum(pj.hover)) {
+      var hi = Math.max(0, Math.min(PJN, Math.round(pj.hover))), hx = Math.round(X(hi)) + 0.5;
+      ctx.strokeStyle = "rgba(235,235,245,.5)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(hx, g.y0); ctx.lineTo(hx, g.y1); ctx.stroke();
+      [[c.none[hi], "#8e8e93"], [c.keep[hi], "#0a84ff"]].forEach(function (p) {
+        ctx.beginPath(); ctx.arc(hx, Y(p[0]), 4, 0, Math.PI * 2); ctx.fillStyle = p[1]; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#1c1c1e"; ctx.stroke();
+      });
+      var ag = c.age + span * hi / PJN;
+      $("pj-readout").innerHTML = "<strong>Age " + esc(ageTxt(Math.round(ag * 2) / 2)) + "</strong> · keep investing <strong>" + money0s(c.keep[hi]) + "</strong> · add nothing " + money0s(c.none[hi]) +
+        ' <span class="subtle">range ' + money0s(c.lo[hi]) + "–" + money0s(c.hi[hi]) + "</span>";
+    } else $("pj-readout").innerHTML = '<span class="subtle">Drag across the chart to see each age (' + esc(c.units) + ")</span>";
+  }
+  function pjChartInit(cv) {
+    if (cv._pj) return; cv._pj = true;
+    var dragging = false, hideT = null;
+    function pos(ev) {
+      var t = ev.touches && ev.touches[0] ? ev.touches[0] : ev, r = cv.getBoundingClientRect(), g = pjGeom(cv);
+      pj.hover = Math.max(0, Math.min(PJN, (t.clientX - r.left - g.x0) / (g.x1 - g.x0) * PJN)); clearTimeout(hideT); pjDraw();
+    }
+    function hide() { pj.hover = null; pjDraw(); }
+    function setDrag(on) {
+      dragging = on; cv.classList.toggle("dragging", on); document.body.classList.toggle("chart-dragging", on);
+      window.__pqChartDrag = on ? (window.__pqChartDrag || 0) + 1 : Math.max(0, (window.__pqChartDrag || 1) - 1);
+      if (!window.__pqChartDrag) document.body.classList.remove("chart-dragging");
+    }
+    cv.addEventListener("touchstart", function (ev) { if (!ev.touches || ev.touches.length !== 1) return; if (ev.cancelable) ev.preventDefault(); setDrag(true); pos(ev); }, { passive: false });
+    cv.addEventListener("touchmove", function (ev) { if (!dragging) return; if (ev.cancelable) ev.preventDefault(); pos(ev); }, { passive: false });
+    function end() { if (!dragging) return; setDrag(false); hideT = setTimeout(hide, 1500); }
+    cv.addEventListener("touchend", end); cv.addEventListener("touchcancel", end);
+    cv.addEventListener("pointerdown", function (ev) { if (ev.pointerType === "touch") return; setDrag(true); pos(ev); try { cv.setPointerCapture(ev.pointerId); } catch (e) { /* old browsers */ } });
+    cv.addEventListener("pointermove", function (ev) { if (ev.pointerType === "touch") return; if (dragging || ev.buttons === 0) pos(ev); });
+    cv.addEventListener("pointerup", function (ev) { if (ev.pointerType === "touch" || !dragging) return; setDrag(false); hide(); });
+    cv.addEventListener("pointercancel", function (ev) { if (ev.pointerType === "touch") return; if (dragging) setDrag(false); hide(); });
+    cv.addEventListener("pointerleave", function (ev) { if (ev.pointerType === "touch" || dragging) return; hide(); });
+  }
+
   // ================================================================== views / router
-  var TAB_ORDER = ["stocks", "overview", "transactions", "edit"];
-  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", transactions: "Transactions", edit: "Edit portfolio" };
+  var TAB_ORDER = ["stocks", "overview", "projections", "transactions", "edit"];
+  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", transactions: "Transactions", edit: "Edit portfolio" };
   function route() {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, "")), parts = h.split("/");
     var v = parts[0];
-    if (["stocks", "overview", "transactions", "edit"].indexOf(v) < 0) v = window.matchMedia("(max-width: 700px)").matches ? "stocks" : "overview";
+    if (TAB_ORDER.indexOf(v) < 0) v = window.matchMedia("(max-width: 700px)").matches ? "stocks" : "overview";
     var changed = ui.view !== v, prevView = ui.view;
     ui.view = v;
     var views = document.querySelectorAll(".view");
@@ -1311,6 +1572,8 @@
       if (ui.sel) { renderDetail(d); markSelected(); }
     } else if (v === "overview" && d && changed) {
       renderChart(d, true);
+    } else if (v === "projections") {
+      renderProj(false);
     } else if (v === "transactions") {
       renderTx(false);
     } else if (v === "edit") {
@@ -1439,6 +1702,7 @@
       }
       renderChart(d, ui.view === "overview" && !ui.ovDrawn); if (ui.view === "overview") ui.ovDrawn = true;
             renderStocks(d); renderEditSide(d);
+      if (ui.view === "projections") renderProj(false);
       ui.lastPrices = priceMap(d); ui.lastTotal = (d.account || {}).total;
       $("app").setAttribute("aria-busy", "false");
       var eb = $("render-error"); if (eb) eb.remove();
@@ -1504,6 +1768,7 @@
         lastW = window.innerWidth; renderChart(state.data);
         renderRanges("ac-ranges", ui.acRange, chartFor("ACCOUNT"));
         if (ui.sel) { var rr = findRow(state.data, ui.sel); renderRanges("d-ranges", ui.range, rr && chartFor(rr.id)); }
+        if (ui.view === "projections") pjDraw();
         if (ui.view === "stocks") { drawAccount(); var r = ui.sel && findRow(state.data, ui.sel); if (r) drawDetailChart(r); if (wide()) document.body.classList.remove("sheet-open"); else if (ui.sel) document.body.classList.add("sheet-open"); }
       }
     }, 200);

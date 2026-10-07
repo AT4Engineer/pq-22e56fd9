@@ -30,5 +30,9 @@
   "settings": {
     "use_extended_hours_price": false
   },
-  "watchlist": []
+  "watchlist": [],
+  "projection": {
+    "birthdate": "2008-11-25",
+    "note": "Used by the Projections tab for the exact current age (editable on the page)."
+  }
 }

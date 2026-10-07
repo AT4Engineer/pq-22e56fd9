@@ -72,6 +72,7 @@ Local (no GitHub) equivalent: `python scripts/apply_trade.py --txn trade.json [-
 | Positions | Symbol, name, qty, price, market value, day $, day %, % of portfolio (stocks, the short call, cash, total) |
 | Monthly roll plan | This month (call mark, buyback cost at the ask and mid, premium received, P/L if closed now, live countdown to the 4:00 PM ET expiry close), next roll preview from the real next-monthly chain (at-the-money strike, bid/ask/mid, premium at the bid, net roll credit/debit, % and annualized, breakeven, nearby strikes), roll history from transactions, and a collapsible "How this works" |
 | Covered call | Plain-language assignment outcome, mark, bid/ask, liability, underlying vs strike and distance, in/out of the money, days to expiry, intrinsic/time value |
+| (Projections tab) | Retirement-style projection computed in the browser (works offline): age (exact, from `projection.birthdate` in data/holdings.json, editable), target age 59.5, starting amount (live total), monthly contribution and yearly raise, 6/8/10%/custom return, today's vs future dollars; big number, keep-investing vs add-nothing cards, put-in vs growth, canvas chart with a 6-10% band, milestone table and the monthly amount needed for $1M. Math in assets/projection.js (tests: tests/projection.test.js) |
 | Account value history | Plain line chart, one point per trading day |
 | Footer | Last updated time (ET), data-delay note, caveats |
 
@@ -84,6 +85,7 @@ Account value = stocks + cash - current value of the short option (a liability).
 ```
 index.html                  page shell
 assets/style.css            styles (light/dark, responsive)
+assets/projection.js        projection math (monthly compounding; browser + Node tests)
 assets/app.js               rendering, auto-refresh every 60 s (no full reload)
 assets/favicon.svg
 data/holdings.json          positions, cash, avg costs, watchlist (updated by the Edit flow, or by hand)

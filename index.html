@@ -39,6 +39,7 @@
     <nav class="wrap tabs" aria-label="Views">
       <a href="#stocks" data-tab="stocks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg><span class="tl">Stocks</span></a>
       <a href="#overview" data-tab="overview"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span class="tl">Overview</span></a>
+      <a href="#projections" data-tab="projections"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16h16"/><path d="M7 16c4 0 8-2.5 12-10"/><path d="M15.5 6H19v3.5"/></svg><span class="tl">Projections</span></a>
       <a href="#transactions" data-tab="transactions"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span class="tl">Transactions</span></a>
       <a href="#edit" data-tab="edit"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span class="tl">Edit</span></a>
     </nav>
@@ -172,6 +173,94 @@
     </div>
 
     <!-- ============================== Transactions -->
+    <div class="view" id="view-projections" data-view="projections" hidden>
+      <section class="card pj-in" aria-labelledby="pj-title">
+        <h2 id="pj-title" class="card-title">Projections <span class="card-sub">what steady investing could grow to</span></h2>
+        <form class="ed-form pj-form" id="pj-form" novalidate autocomplete="off">
+          <label class="f">Current age
+            <input id="pj-age" type="text" inputmode="decimal" placeholder="Enter your age">
+            <span class="pj-hint" id="pj-age-hint"></span>
+          </label>
+          <label class="f">Target age
+            <input id="pj-target" type="text" inputmode="decimal" placeholder="59.5">
+          </label>
+          <label class="f f-wide">Starting amount
+            <input id="pj-start" type="text" inputmode="decimal" placeholder="0">
+            <span class="pj-hint" id="pj-start-hint"></span>
+          </label>
+          <label class="f f-wide">Monthly contribution
+            <input id="pj-monthly" type="text" inputmode="decimal" placeholder="0">
+          </label>
+          <div class="f-wide pj-chips" id="pj-chips" role="group" aria-label="Quick monthly amounts">
+            <button type="button" data-amt="0">$0</button><button type="button" data-amt="50">$50</button><button type="button" data-amt="100">$100</button><button type="button" data-amt="250">$250</button><button type="button" data-amt="500">$500</button>
+          </div>
+          <label class="f f-wide">Raise the monthly amount each year by (%)
+            <input id="pj-raise" type="text" inputmode="decimal" placeholder="0">
+          </label>
+          <div class="f-wide">
+            <div class="pj-lbl">Yearly return</div>
+            <div class="seg pj-seg" role="radiogroup" aria-label="Yearly return">
+              <label><input type="radio" name="pj-rate" value="conservative"><b>6%</b><small>Conservative</small></label>
+              <label><input type="radio" name="pj-rate" value="base" checked><b>8%</b><small>Base</small></label>
+              <label><input type="radio" name="pj-rate" value="optimistic"><b>10%</b><small>Optimistic</small></label>
+              <label><input type="radio" name="pj-rate" value="custom"><b id="pj-custom-b">Custom</b><small>Your rate</small></label>
+            </div>
+          </div>
+          <label class="f f-wide" id="pj-custom-wrap" hidden>Custom yearly return (%)
+            <input id="pj-custom" type="text" inputmode="decimal" placeholder="7">
+          </label>
+          <div class="f-wide">
+            <div class="seg pj-seg2" role="radiogroup" aria-label="Show values in">
+              <label><input type="radio" name="pj-dollars" value="today" checked>Today's dollars</label>
+              <label><input type="radio" name="pj-dollars" value="future">Future dollars</label>
+            </div>
+          </div>
+        </form>
+        <p class="note">Target 59½: the age when withdrawals from IRAs and 401(k)s generally stop owing the IRS 10% early-withdrawal penalty. Today's dollars removes 3% a year of inflation so amounts compare with prices now.</p>
+      </section>
+      <section class="card pj-empty" id="pj-empty">
+        <p>Enter your age to see projections.</p>
+      </section>
+      <div id="pj-out" hidden>
+        <section class="card pj-hero" aria-live="polite">
+          <div class="pj-hero-k" id="pj-hero-k">Projected value at 59.5</div>
+          <div class="pj-hero-v" id="pj-hero-v">--</div>
+          <div class="pj-hero-sub" id="pj-hero-sub"></div>
+          <div class="pj-cards">
+            <div class="pj-card pj-keep"><div class="pj-ck" id="pj-keep-k">Keep investing</div><div class="pj-cv" id="pj-keep-v">--</div></div>
+            <div class="pj-card pj-none"><div class="pj-ck">Add nothing more</div><div class="pj-cv" id="pj-none-v">--</div></div>
+          </div>
+          <div class="pj-diff" id="pj-diff"></div>
+        </section>
+        <section class="card" aria-labelledby="pj-chart-title">
+          <h2 id="pj-chart-title" class="card-title">Growth by age</h2>
+          <div class="readout pj-readout" id="pj-readout">&nbsp;</div>
+          <div class="pj-chart-box"><canvas id="pj-chart" class="pj-chart" role="img" aria-label="Projected value by age"></canvas></div>
+          <div class="pj-legend"><span><i class="lg-keep"></i>Keep investing</span><span><i class="lg-none"></i>Add nothing more</span><span><i class="lg-band"></i>6% to 10% range</span></div>
+        </section>
+        <section class="card" aria-labelledby="pj-split-title">
+          <h2 id="pj-split-title" class="card-title">Money put in vs growth</h2>
+          <div class="pj-bar" aria-hidden="true"><span class="pj-bar-in" id="pj-bar-in"></span><span class="pj-bar-gr" id="pj-bar-gr"></span></div>
+          <div class="kv-grid pj-split" id="pj-split"></div>
+          <p class="pj-takes" id="pj-takes"></p>
+        </section>
+        <section class="card" aria-labelledby="pj-ms-title">
+          <h2 id="pj-ms-title" class="card-title">Milestones</h2>
+          <div class="table-scroll"><table class="data compact pj-ms" id="pj-ms"></table></div>
+        </section>
+        <section class="card pj-notes">
+          <p class="pj-warn" id="pj-warn"></p>
+          <details class="how" id="pj-src"><summary>Where these rates come from</summary><div class="how-body">
+            <p><strong>S&amp;P 500 with dividends reinvested, 1928–2025:</strong> 10.02% a year compounded (11.85% simple average), about 6.8% a year after inflation; inflation averaged about 3.0% a year. Source: Aswath Damodaran, NYU Stern, “Historical Returns on Stocks, Bonds and Bills: 1928–2025” (updated January 2026), pages.stern.nyu.edu/~adamodar.</p>
+            <p><strong>Large US stocks, 1926–2025:</strong> 10.07% a year compounded; inflation 2.94% a year. Source: Ibbotson equity indices (CRSP and US Bureau of Labor Statistics data) in CFA Institute Research Foundation, “Exponential Wealth” (2026).</p>
+            <p>The presets sit at or below that history on purpose: 10% optimistic (the long-run average), 8% base and 6% conservative, because future returns may be lower and real investors pay fees and miss some days. 3% inflation matches the long-run average.</p>
+            <p>Math: monthly compounding, with the monthly rate set so 12 months equal the yearly rate; contributions go in at the end of each month. Real returns vary a lot year to year; a smooth line is an average path, not a forecast.</p>
+            <p class="subtle">Educational only, not advice.</p>
+          </div></details>
+        </section>
+      </div>
+    </div>
+
     <div class="view" id="view-transactions" data-view="transactions" hidden>
       <section class="card" aria-labelledby="tx-title">
         <h2 id="tx-title" class="card-title">Transactions <span class="card-sub">newest first, recorded from the Edit form</span></h2>
@@ -294,6 +383,7 @@
   </footer>
 
   <noscript><p class="noscript">This dashboard needs JavaScript enabled.</p></noscript>
+  <script src="assets/projection.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

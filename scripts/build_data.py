@@ -912,6 +912,7 @@ def main():
                      "day_change_pct": h.get("day_change_pct")} for h in history],
         "watchlist": watch,
         "roll": roll,
+        "projection": H.get("projection") if isinstance(H.get("projection"), dict) else None,
         "quotes": quote_map,
         "caveats": caveats,
     }
