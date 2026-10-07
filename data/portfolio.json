@@ -1,11 +1,11 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 19:24:26 ET",
-  "generated_at_iso": "2026-10-06T19:24:26-04:00",
+  "generated_at_et": "2026-10-06 20:31:25 ET",
+  "generated_at_iso": "2026-10-06T20:31:25-04:00",
   "trade_date": "2026-10-06",
   "quotes_as_of_et": "2026-10-06 16:00 ET",
-  "market_state": "POST",
-  "market_label": "After hours",
+  "market_state": "POSTPOST",
+  "market_label": "Closed (after hours)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
     "total": 16848.38,
@@ -35,9 +35,9 @@
       "day_change_pct": 0.49,
       "value": 687.68,
       "quote_time_et": "2026-10-06 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 170.05,
+      "ext_price": 169.98,
       "ext_label": "post-market",
       "share_pct": 4.08
     },
@@ -58,9 +58,9 @@
       "day_change_pct": 1.64,
       "value": 15641.0,
       "quote_time_et": "2026-10-06 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 156.96,
+      "ext_price": 156.88,
       "ext_label": "post-market",
       "share_pct": 92.83
     }
@@ -99,13 +99,13 @@
       "day_change": -65.0,
       "prev_mark": 3.8,
       "prev_mark_source": "recorded mark for prior session 2026-10-05",
-      "iv": 0.418,
+      "iv": 0.4385,
       "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.576,
+      "prob_finish_itm": 0.5714,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -212,7 +212,7 @@
           "bid": 8.3,
           "ask": 11.2,
           "last": 9.8,
-          "iv": 0.453,
+          "iv": 0.458,
           "oi": 15.0,
           "volume": 1.0,
           "last_trade_et": "2026-09-22 12:22 ET",
@@ -225,7 +225,7 @@
           "bid": 7.6,
           "ask": 10.2,
           "last": 8.0,
-          "iv": 0.4302,
+          "iv": 0.4349,
           "oi": 183.0,
           "volume": 21.0,
           "last_trade_et": "2026-10-05 12:43 ET",
@@ -238,7 +238,7 @@
           "bid": 7.0,
           "ask": 10.9,
           "last": 6.8,
-          "iv": 0.4839,
+          "iv": 0.4893,
           "oi": 14.0,
           "volume": 4.0,
           "last_trade_et": "2026-09-24 13:02 ET",
@@ -251,7 +251,7 @@
           "bid": 6.5,
           "ask": 10.4,
           "last": 8.62,
-          "iv": 0.4823,
+          "iv": 0.4877,
           "oi": 75.0,
           "volume": 3.0,
           "last_trade_et": "2026-10-06 14:20 ET",
@@ -264,7 +264,7 @@
           "bid": 6.0,
           "ask": 8.3,
           "last": 8.4,
-          "iv": 0.4078,
+          "iv": 0.4124,
           "oi": 60.0,
           "volume": 1.0,
           "last_trade_et": "2026-10-06 11:37 ET",
@@ -278,7 +278,7 @@
       "ask": 10.9,
       "mid": 8.95,
       "last": 6.8,
-      "iv": 0.4839,
+      "iv": 0.4893,
       "oi": 14.0,
       "volume": 4.0,
       "last_trade_et": "2026-09-24 13:02 ET",
@@ -314,6 +314,10 @@
     ],
     "notes": []
   },
+  "projection": {
+    "birthdate": "2008-11-25",
+    "note": "Used by the Projections tab for the exact current age (editable on the page)."
+  },
   "quotes": {
     "SPCX": {
       "symbol": "SPCX",
@@ -326,7 +330,7 @@
       "change": 0.83,
       "change_pct": 0.49,
       "quote_time_et": "2026-10-06 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 172.09,
         "day_high": 176.42,
@@ -669,7 +673,7 @@
       "change": 2.52,
       "change_pct": 1.64,
       "quote_time_et": "2026-10-06 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 155.82,
         "day_high": 157.88,
@@ -1334,7 +1338,7 @@
   },
   "caveats": [
     "UPRO Oct 16 2026 $154 call: wide bid/ask (3.10 x 5.80); the mid-price mark is approximate.",
-    "Market not in regular session (After hours): stocks valued at the regular-session close; extended-hours quotes are not used.",
+    "Market not in regular session (Closed (after hours)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }
