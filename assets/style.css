@@ -531,7 +531,7 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
 /* phones: large title that collapses into a compact bar, bottom tab bar */
 @media (max-width: 700px) {
   html, body { overscroll-behavior-y: contain; }
-  body { padding-bottom: calc(52px + env(safe-area-inset-bottom)); }
+  body { padding-bottom: calc(49px + env(safe-area-inset-bottom)); }
   .wrap { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
   .navbar {
     display: block; position: fixed; z-index: 45; top: 0; left: 0; right: 0; height: calc(44px + env(safe-area-inset-top));
@@ -555,35 +555,44 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   .brand-full { display: none; }
   .brand-view { display: inline; }
   .status { font-size: 13px; gap: 10px; opacity: calc(1 - var(--nt, 0)); }
+  /* iOS Tab Bar rhythm: 49px content row + home-indicator safe area; equal columns */
   .tabs {
     position: fixed; z-index: 46; left: 0; right: 0; bottom: 0; max-width: none; margin: 0; gap: 0;
-    display: flex; justify-content: stretch; align-items: stretch;
-    height: calc(52px + env(safe-area-inset-bottom));
+    display: flex; justify-content: space-between; align-items: flex-start;
+    height: calc(49px + env(safe-area-inset-bottom));
     padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    overflow: hidden; /* equal tabs — no horizontal scroll */
-    background: rgba(22,22,24,.9); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
-    border-top: 1px solid rgba(84,84,88,.45);
+    overflow: hidden;
+    background: rgba(22,22,24,.92); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+    border-top: 0.5px solid rgba(84,84,88,.55);
+    box-sizing: border-box;
   }
   .tabs a {
     flex: 1 1 0; min-width: 0; max-width: none;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-    min-height: 52px; padding: 6px 2px 4px; border-bottom: 0;
-    color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: -0.02em;
-    box-sizing: border-box;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    gap: 1px;
+    height: 49px; min-height: 49px; max-height: 49px;
+    margin: 0; padding: 6px 0 0; border: 0; border-bottom: 0;
+    color: var(--muted); font-size: 10px; font-weight: 500; letter-spacing: -0.08px;
+    box-sizing: border-box; -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
   }
-  .tabs a:first-child { padding-left: 2px; } /* same as siblings — keep rule so desktop override stays clear */
+  .tabs a:first-child { padding-left: 0; }
   .tabs .tl {
-    display: block; width: 100%; text-align: center;
-    font-size: 10px; font-weight: 600; line-height: 1.1;
-    white-space: nowrap; overflow: hidden; text-overflow: clip;
+    display: block; width: auto; max-width: 100%;
+    margin: 0; padding: 0 2px;
+    font-size: 10px; font-weight: 500; line-height: 12px;
+    text-align: center; white-space: nowrap; overflow: hidden; text-overflow: clip;
   }
   .tabs a.on { color: var(--accent); }
+  .tabs a.on .tl { font-weight: 500; } /* active = color only, same weight/size */
   .ti {
-    display: block; width: 22px; height: 22px; flex: 0 0 22px;
-    margin: 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8;
+    display: block; width: 25px; height: 25px; flex: 0 0 25px;
+    margin: 0; padding: 0;
+    fill: none; stroke: currentColor; stroke-width: 1.7;
     stroke-linecap: round; stroke-linejoin: round;
   }
   .tabs a[data-tab="transactions"] .ti circle { fill: currentColor; stroke: none; }
+  .tabs a:active { transform: none; } /* iOS tab bar: no scale bounce */
   main { padding-top: 6px; }
   .acct-head { padding-top: 6px; }
   .foot { padding-bottom: 16px; }
