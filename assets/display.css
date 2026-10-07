@@ -201,24 +201,30 @@ body.display {
     overflow: auto;
     height: auto;
     min-height: 100%;
-    grid-template-rows: auto auto auto auto;
-    padding: max(18px, env(safe-area-inset-top)) 16px 28px;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    padding: max(12px, env(safe-area-inset-top)) 14px max(12px, env(safe-area-inset-bottom));
+    gap: 0;
   }
   .disp-clock {
     position: static;
-    margin: 0 0 14px;
+    margin: 0 0 6px;
     text-align: left;
   }
   .disp-label { padding-right: 0; }
-  .disp-head { padding-bottom: 16px; }
-  .disp-total { font-size: 44px; }
-  .disp-day { font-size: 18px; }
-  .disp-sub { margin-top: 16px; }
-  .disp-break { gap: 14px 22px; }
+  .disp-head { padding-bottom: 10px; }
+  .disp-total { font-size: 40px; margin-top: 2px; }
+  .disp-day { font-size: 18px; margin-top: 4px; }
+  .disp-sub { margin-top: 10px; }
+  .disp-break { gap: 10px 18px; }
   .disp-break dd { font-size: 18px; }
-  .disp-chart { min-height: 220px; height: 240px; flex: none; }
-  .disp-holdings { padding-top: 16px; }
-  .disp-strip { grid-template-columns: 1fr; }
+  .disp-asof { margin-top: 8px; }
+  .disp-chart-card { padding: 12px 12px 8px; }
+  .disp-chart { min-height: 180px; height: auto; flex: 1 1 auto; }
+  .disp-holdings { padding-top: 12px; }
+  .disp-h { margin-bottom: 8px; }
+  .disp-strip { grid-template-columns: 1fr; gap: 8px; }
+  .disp-card { padding: 12px 12px 10px; gap: 8px; }
+  .disp-foot { padding-top: 10px; }
 }
 
 @media (min-width: 1080px) {
@@ -236,12 +242,31 @@ body.display {
     grid-row: 1 / 3;
     padding: 0;
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
+  .disp-h { flex: 0 0 auto; }
   .disp-strip {
+    flex: 1 1 auto;
+    min-height: 0;
     grid-template-columns: 1fr;
+    grid-auto-rows: minmax(0, 1fr);
+    align-content: stretch;
     gap: 12px;
-    align-content: start;
+  }
+  .disp-card { min-height: 0; }
+  .disp-card .spark-wrap {
+    position: relative;
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 64px;
+  }
+  .disp-card .spark-wrap svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
   .disp-foot { grid-column: 1 / -1; grid-row: 3; }
-  .disp-card .spark-wrap, .disp-card .spark-wrap svg { height: 44px; }
 }
