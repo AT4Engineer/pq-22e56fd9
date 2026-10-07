@@ -98,8 +98,8 @@
     var path = pts.map(function (p, i) { return (i ? "L" : "M") + x(p[0]) + "," + y(p[1]); }).join("");
     var col = up ? "#30d158" : "#ff453a";
     return '<svg viewBox="0 0 280 36" preserveAspectRatio="none" aria-hidden="true">' +
-      (isNum(base) ? '<line x1="0" x2="280" y1="' + y(base) + '" y2="' + y(base) + '" stroke="#8e8e93" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"/>' : "") +
-      '<path d="' + path + '" fill="none" stroke="' + col + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+      (isNum(base) ? '<line x1="0" x2="280" y1="' + y(base) + '" y2="' + y(base) + '" stroke="#8e8e93" stroke-width="1" stroke-dasharray="2 3" opacity="0.5" vector-effect="non-scaling-stroke"/>' : "") +
+      '<path d="' + path + '" fill="none" stroke="' + col + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>';
   }
 
   function holdingsRows(d) {
