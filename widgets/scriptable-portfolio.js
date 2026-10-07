@@ -20,38 +20,6 @@ const GREEN = new Color("#30d158")
 const RED = new Color("#ff453a")
 const DIVIDER = new Color("#38383a")
 
-const family = (config.widgetFamily || "medium").toLowerCase()
-
-let payload = null
-let stale = false
-let errorMsg = null
-
-try {
-  payload = await fetchPortfolio()
-} catch (e) {
-  errorMsg = String(e)
-  payload = loadCache()
-  if (payload) stale = true
-}
-
-const widget = await buildWidget(payload, family, stale, errorMsg)
-widget.url = SITE_URL
-if (!config.runsInWidget) {
-  if (family.indexOf("accessory") === 0) {
-    if (family === "accessorycircular") await widget.presentAccessoryCircular()
-    else if (family === "accessoryinline") await widget.presentAccessoryInline()
-    else await widget.presentAccessoryRectangular()
-  } else if (family === "small") {
-    await widget.presentSmall()
-  } else if (family === "large") {
-    await widget.presentLarge()
-  } else {
-    await widget.presentMedium()
-  }
-}
-Script.setWidget(widget)
-Script.complete()
-
 // ─── Data ───────────────────────────────────────────────────────────
 
 async function fetchPortfolio() {
@@ -622,3 +590,37 @@ function shortMarketLabel(data) {
   }
   return data.market_state || ""
 }
+
+// ─── Main ────────────────────────────────────────────────────────────
+const family = (config.widgetFamily || "medium").toLowerCase()
+
+let payload = null
+let stale = false
+let errorMsg = null
+
+try {
+  payload = await fetchPortfolio()
+} catch (e) {
+  errorMsg = String(e)
+  payload = loadCache()
+  if (payload) stale = true
+}
+
+const widget = await buildWidget(payload, family, stale, errorMsg)
+widget.url = SITE_URL
+if (!config.runsInWidget) {
+  if (family.indexOf("accessory") === 0) {
+    if (family === "accessorycircular") await widget.presentAccessoryCircular()
+    else if (family === "accessoryinline") await widget.presentAccessoryInline()
+    else await widget.presentAccessoryRectangular()
+  } else if (family === "small") {
+    await widget.presentSmall()
+  } else if (family === "large") {
+    await widget.presentLarge()
+  } else {
+    await widget.presentMedium()
+  }
+}
+Script.setWidget(widget)
+Script.complete()
+

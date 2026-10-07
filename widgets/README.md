@@ -39,3 +39,7 @@ Open [`preview.html`](./preview.html) in a browser (or after Pages deploy: `/wid
 ## Refresh
 
 iOS controls widget refresh timing. The script sets `refreshAfterDate` ~15 minutes; actual updates may be slower when the phone is idle. Opening Scriptable and running the script forces a fresh fetch and updates the cache.
+
+## Updating the script
+
+After a widget fix on GitHub, open Scriptable → your Portfolio script → replace all text with the latest [`scriptable-portfolio.js`](./scriptable-portfolio.js) → Done. Home Screen widgets pick up the new code on the next refresh (or run the script once in Scriptable).
