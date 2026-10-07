@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Portfolio widget preview</title>
+<style>
+  :root {
+    --bg: #000;
+    --card: #1c1c1e;
+    --label: #8e8e93;
+    --white: #fff;
+    --green: #30d158;
+    --red: #ff453a;
+    --div: #38383a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+    background: #111;
+    color: var(--white);
+    padding: 32px 24px 64px;
+  }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 8px; }
+  .meta { color: var(--label); font-size: 13px; margin-bottom: 28px; }
+  .meta a { color: #64d2ff; }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: flex-start;
+  }
+  .col { display: flex; flex-direction: column; gap: 10px; }
+  .label {
+    font-size: 12px;
+    color: var(--label);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .widget {
+    background: var(--card);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  }
+  .w-small { width: 158px; height: 158px; padding: 14px 14px 12px; }
+  .w-medium { width: 338px; height: 158px; padding: 12px 14px; }
+  .w-large { width: 338px; height: 354px; padding: 14px 16px; }
+  .t-label { font-size: 12px; color: var(--label); }
+  .t-total { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+  .t-total-md { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  .t-chg { font-size: 13px; font-weight: 600; }
+  .t-chg-md { font-size: 14px; font-weight: 600; text-align: right; }
+  .t-mkt { font-size: 10px; color: var(--label); text-align: right; margin-top: 2px; }
+  .t-foot { font-size: 10px; color: var(--label); margin-top: auto; }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .holdings { margin-top: 8px; display: flex; flex-direction: column; gap: 5px; }
+  .holdings.large { margin-top: 10px; gap: 6px; }
+  .hrow {
+    display: grid;
+    grid-template-columns: 88px 1fr auto;
+    gap: 8px;
+    align-items: center;
+  }
+  .sym { font-size: 13px; font-weight: 700; }
+  .det { font-size: 10px; color: var(--label); }
+  .px { font-size: 12px; text-align: right; }
+  .pxc { font-size: 11px; text-align: right; }
+  .val { font-size: 13px; font-weight: 600; text-align: right; }
+  .valc { font-size: 11px; text-align: right; }
+  .note {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--label);
+    line-height: 1.35;
+  }
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .stack-fill { display: flex; flex-direction: column; height: 100%; }
+  .spacer { flex: 1; }
+  #status { margin-top: 24px; font-size: 12px; color: var(--label); }
+  #status.err { color: var(--red); }
+</style>
+</head>
+<body>
+  <h1>Portfolio widget preview</h1>
+  <p class="meta">
+    Mock of Scriptable small / medium / large · data from
+    <a href="https://at4engineer.github.io/pq-22e56fd9/data/portfolio.json">portfolio.json</a>
+    · site
+    <a href="https://at4engineer.github.io/pq-22e56fd9/">pq-22e56fd9</a>
+  </p>
+  <div class="row" id="widgets"></div>
+  <p id="status">Loading live data…</p>
+
+<script>
+const DATA_URL = "https://at4engineer.github.io/pq-22e56fd9/data/portfolio.json";
+const FALLBACK = null; // filled after fetch or embedded below on failure
+
+function money(n) {
+  if (n == null || Number.isNaN(n)) return "—";
+  const neg = n < 0;
+  const s = Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return (neg ? "-$" : "$") + s;
+}
+function signedMoney(n) {
+  if (n == null || Number.isNaN(n)) return "—";
+  const sign = n > 0 ? "+" : n < 0 ? "-" : "";
+  return sign + "$" + Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function signedPct(n) {
+  if (n == null || Number.isNaN(n)) return "—";
+  const sign = n > 0 ? "+" : n < 0 ? "-" : "";
+  return sign + Math.abs(n).toFixed(2) + "%";
+}
+function price(n) {
+  if (n == null || Number.isNaN(n)) return "—";
+  return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function cls(n) {
+  if (n == null || n === 0 || Number.isNaN(n)) return "";
+  return n > 0 ? "green" : "red";
+}
+function expiryShort(iso) {
+  if (!iso) return "?";
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const p = String(iso).split("-");
+  return months[parseInt(p[1],10)-1] + " " + parseInt(p[2],10);
+}
+function buildRows(data) {
+  const rows = [];
+  const positions = (data.positions || []).slice().sort((a,b) => {
+    const o = { UPRO: 0, SPCX: 1 };
+    const ao = o[a.symbol] ?? 9, bo = o[b.symbol] ?? 9;
+    if (ao !== bo) return ao - bo;
+    return (b.value||0)-(a.value||0);
+  });
+  for (const p of positions) {
+    rows.push({
+      symbol: p.symbol,
+      detail: p.shares != null ? p.shares + " sh" : "",
+      price: p.price,
+      change: p.day_change,
+      changePct: p.day_change_pct,
+      value: p.value,
+      liability: false,
+    });
+  }
+  for (const o of (data.options || [])) {
+    if (o.expired) continue;
+    const label = (o.underlying||"OPT") + " $" + o.strike + (o.type==="call"?"C":"P");
+    rows.push({
+      symbol: label,
+      detail: "short call",
+      price: o.mark ?? o.last,
+      change: o.day_change,
+      changePct: null,
+      value: o.liability,
+      liability: true,
+    });
+  }
+  if (data.account?.cash != null) {
+    rows.push({ symbol: "Cash", detail: "", price: null, change: null, changePct: null, value: data.account.cash, isCash: true });
+  }
+  return rows;
+}
+function rowHtml(r) {
+  return `<div class="hrow">
+    <div><div class="sym">${r.symbol}</div>${r.detail?`<div class="det">${r.detail}</div>`:""}</div>
+    <div>
+      <div class="px">${r.price!=null?price(r.price):(r.isCash?"—":"")}</div>
+      ${r.change!=null?`<div class="pxc ${cls(r.change)}">${signedMoney(r.change)}</div>`:""}
+    </div>
+    <div>
+      <div class="val ${r.liability?"red":""}">${r.value!=null?money(r.value):""}</div>
+      ${r.changePct!=null?`<div class="valc ${cls(r.changePct)}">${signedPct(r.changePct)}</div>`:""}
+    </div>
+  </div>`;
+}
+function callNote(data) {
+  const o = (data.options||[]).find(x => !x.expired);
+  if (!o) return "";
+  return `${o.underlying} ${price(o.spot)} vs $${o.strike} call · ${o.dte}d to ${expiryShort(o.expiry)} · ${o.itm?"ITM":"OTM"}`;
+}
+function render(data, stale) {
+  const a = data.account;
+  const day = `${signedMoney(a.day_change)} (${signedPct(a.day_change_pct)})`;
+  const foot = [data.quotes_as_of_et || data.generated_at_et, stale ? "stale" : null].filter(Boolean).join(" · ");
+  const rows = buildRows(data);
+  const note = callNote(data);
+
+  const small = `
+    <div class="col"><div class="label">Small</div>
+    <div class="widget w-small" id="shot-small"><div class="stack-fill">
+      <div class="t-label">Portfolio${stale?" · stale":""}</div>
+      <div class="t-total">${money(a.total)}</div>
+      <div class="t-chg ${cls(a.day_change)}">${day}</div>
+      <div class="spacer"></div>
+      <div class="t-foot">${foot}</div>
+    </div></div></div>`;
+
+  const medRows = rows.slice(0,4).map(rowHtml).join("");
+  const medium = `
+    <div class="col"><div class="label">Medium</div>
+    <div class="widget w-medium" id="shot-medium">
+      <div class="header">
+        <div>
+          <div class="t-label">Portfolio${stale?" · stale":""}</div>
+          <div class="t-total-md">${money(a.total)}</div>
+        </div>
+        <div>
+          <div class="t-chg-md ${cls(a.day_change)}">${day}</div>
+          <div class="t-mkt">${data.market_label||""}</div>
+        </div>
+      </div>
+      <div class="holdings">${medRows}</div>
+    </div></div>`;
+
+  const largeRows = rows.slice(0,8).map(rowHtml).join("");
+  const large = `
+    <div class="col"><div class="label">Large</div>
+    <div class="widget w-large" id="shot-large"><div class="stack-fill">
+      <div class="header">
+        <div>
+          <div class="t-label">Portfolio${stale?" · stale":""}</div>
+          <div class="t-total-md">${money(a.total)}</div>
+        </div>
+        <div>
+          <div class="t-chg-md ${cls(a.day_change)}">${day}</div>
+          <div class="t-mkt">${data.market_label||""}</div>
+        </div>
+      </div>
+      <div class="holdings large">${largeRows}</div>
+      ${note?`<div class="note">${note}</div>`:""}
+      <div class="spacer"></div>
+      <div class="t-foot">${foot}</div>
+    </div></div></div>`;
+
+  document.getElementById("widgets").innerHTML = small + medium + large;
+}
+
+async function main() {
+  const status = document.getElementById("status");
+  try {
+    const res = await fetch(DATA_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (!data.account) throw new Error("Missing account");
+    render(data, false);
+    status.textContent = "Live · " + (data.quotes_as_of_et || data.generated_at_et || "");
+  } catch (e) {
+    status.className = "err";
+    status.textContent = "Fetch failed: " + e + " — using embedded snapshot if present.";
+    if (window.__EMBEDDED__) render(window.__EMBEDDED__, true);
+  }
+}
+main();
+</script>
+<script>window.__EMBEDDED__ = {"quotes_as_of_et":"2026-10-06 16:00 ET","generated_at_et":"2026-10-06 20:31:25 ET","market_label":"Closed (after hours)","account":{"total":16848.38,"prev_total":16658.06,"day_change":190.32,"day_change_pct":1.14,"stocks_value":16328.68,"cash":964.7,"cash_share_pct":5.73,"option_liability":-445.0},"positions":[{"symbol":"SPCX","name":"SpaceX","shares":4,"price":171.92,"day_change":3.32,"day_change_pct":0.49,"value":687.68},{"symbol":"UPRO","name":"ProShares UltraPro S&P 500 (3x)","shares":100,"price":156.41,"day_change":252.0,"day_change_pct":1.64,"value":15641.0}],"options":[{"underlying":"UPRO","type":"call","position":"short","strike":154.0,"expiry":"2026-10-16","dte":10,"expired":false,"spot":156.41,"mark":4.45,"last":3.98,"liability":-445.0,"day_change":-65.0,"itm":true,"status":"ITM"}]};</script>
+</body>
+</html>

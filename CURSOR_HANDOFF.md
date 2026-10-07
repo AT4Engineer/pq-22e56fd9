@@ -4,6 +4,7 @@
 **Live site:** https://at4engineer.github.io/pq-22e56fd9/  
 **Display (2nd monitor):** https://at4engineer.github.io/pq-22e56fd9/display.html  
 **Local clone (this box):** `/workspace/portfolio-dashboard`  
+**iPhone widget (Scriptable):** `widgets/` — paste `widgets/scriptable-portfolio.js` into Scriptable; setup in `widgets/README.md`.  
 **Box tracker (separate):** `/workspace/portfolio`  
 **Paper lab (hidden, keep on disk):** `/workspace/spy-paper-lab` — do **not** surface in UI
 
@@ -42,6 +43,7 @@ Oct 6 2026 close total was about **$16,848**. Account value = stocks + cash − 
 | `#edit` | `index.html` | Opens GitHub issue → `apply-trade.yml` |
 | `display.html` | + `assets/display.js/css` | Kiosk: total + charts only (no edit/roll text) |
 | `dist/dashboard.html` | built by `build_standalone.py` | Offline email snapshot |
+| `widgets/` | Scriptable + preview | iPhone Home/Lock Screen live portfolio widget |
 
 Bottom tab order: Stocks · Overview · **Projections** · Transactions · Edit
 
@@ -139,6 +141,7 @@ Edit holdings → commit/push `data/holdings.json`, or use Edit form / `python s
 
 ## Recently finished (2026-10-06)
 
+- **Scriptable iPhone widget** (`widgets/scriptable-portfolio.js` + README + preview)
 - Removed paper trading from UI (`2fc1b70`); `/workspace/spy-paper-lab` kept on disk
 - `display.html` kiosk page
 - Chart drag scroll fix
