@@ -89,5 +89,18 @@
     "issue": 10,
     "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/10",
     "applied_at_et": "2026-10-07 11:31:17 ET"
+  },
+  {
+    "id": "T11",
+    "type": "watchlist_add",
+    "date": "2026-10-07",
+    "symbol": "NDAQ",
+    "fees": 0.0,
+    "description": "Watchlist add NDAQ",
+    "cash_before": 964.7,
+    "cash_after": 964.7,
+    "issue": 11,
+    "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/11",
+    "applied_at_et": "2026-10-07 11:38:51 ET"
   }
 ]
