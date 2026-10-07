@@ -31,7 +31,8 @@
     "use_extended_hours_price": false
   },
   "watchlist": [
-    "NVDA"
+    "NVDA",
+    "AMZN"
   ],
   "projection": {
     "birthdate": "2008-11-25",
