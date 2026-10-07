@@ -717,23 +717,47 @@
       if (ev.changedTouches && ev.changedTouches.length) return { x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY };
       return { x: ev.clientX, y: ev.clientY };
     }
-    function at(ev) {
-      var pt = clientXY(ev), rect = svg.getBoundingClientRect(), px = (pt.x - rect.left) * (W / rect.width);
-      var bi = 0, bd = Infinity;
-      for (var k = 0; k < n; k++) { var dd = Math.abs(x(k) - px); if (dd < bd) { bd = dd; bi = k; } }
-      return bi;
+    // Finger x in viewBox units, then the point on the plotted segment at that x.
+    // SVG attributes (not a CSS transform) so the dot is not 90ms behind the finger
+    // and does not travel the chord between samples.
+    function svgX(ev) {
+      var p = clientXY(ev), rect = svg.getBoundingClientRect();
+      if (!rect.width) return x(0);
+      return (p.x - rect.left) * (W / rect.width);
+    }
+    function onCurve(px) {
+      var idx = [];
+      for (var k = 0; k < n; k++) if (isNum(V[k])) idx.push(k);
+      if (!idx.length) return null;
+      var a0 = idx[0], aN = idx[idx.length - 1];
+      if (idx.length === 1 || px <= x(a0)) return { x: x(a0), y: y(V[a0]), v: V[a0], i: a0 };
+      if (px >= x(aN)) return { x: x(aN), y: y(V[aN]), v: V[aN], i: aN };
+      for (var p = 0; p < idx.length - 1; p++) {
+        var a = idx[p], b = idx[p + 1], x0 = x(a), x1 = x(b);
+        if (px <= x1 || p === idx.length - 2) {
+          var f = x1 - x0 > 0.01 ? (px - x0) / (x1 - x0) : 0;
+          if (f < 0) f = 0; else if (f > 1) f = 1;
+          var v = V[a] + (V[b] - V[a]) * f;
+          return { x: x0 + (x1 - x0) * f, y: y(v), v: v, i: f < 0.5 ? a : b };
+        }
+      }
+      return { x: x(aN), y: y(V[aN]), v: V[aN], i: aN };
+    }
+    function place(hit) {
+      var X = hit.x.toFixed(1), Y = hit.y.toFixed(1);
+      xl.setAttribute("x1", X); xl.setAttribute("x2", X);
+      xd.setAttribute("cx", X); xd.setAttribute("cy", Y);
+      xl.style.transform = "none"; xd.style.transform = "none";
+      xl.setAttribute("visibility", "visible"); xd.setAttribute("visibility", "visible");
     }
     var shown = false, dragging = false;
     function show(ev) {
       if (!n) return;
-      var k = at(ev), v = V[k];
-      if (!isNum(v)) return;
-      // crosshair glides between points (CSS transition on transform); jumps straight there on first show
-      if (!shown) { xl.classList.add("snap"); xd.classList.add("snap"); }
-      xl.style.transform = "translate(" + x(k).toFixed(1) + "px,0)";
-      xd.style.transform = "translate(" + x(k).toFixed(1) + "px," + y(v).toFixed(1) + "px)";
-      xl.setAttribute("visibility", "visible"); xd.setAttribute("visibility", "visible");
-      if (!shown) { void xl.getBoundingClientRect(); xl.classList.remove("snap"); xd.classList.remove("snap"); shown = true; }
+      var hit = onCurve(svgX(ev));
+      if (!hit) return;
+      place(hit);
+      shown = true;
+      var k = hit.i, v = hit.v;
       var intra = rg.interval && /m$/.test(rg.interval);
       var when = intra ? fmtTime(T[k], !timeScale) + " ET" : fmtDay(T[k], { month: "short", day: "numeric", year: "numeric" });
       var c = v - first;
@@ -1070,7 +1094,19 @@
     set_option_premium: ["openopt", "symbol", "price", "option", "note"]
   };
   var OPT_RE = /open|close|expired|assigned|roll|premium/;
-  function todayET() { return new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); }
+  function todayET() {
+    // formatToParts, not en-CA string output: some phones do not use YYYY-MM-DD for that locale,
+    // and a slash-formatted date makes the birthdate age null so Projections stays empty.
+    try {
+      var parts = new Intl.DateTimeFormat("en-US", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+      var g = {};
+      for (var i = 0; i < parts.length; i++) g[parts[i].type] = parts[i].value;
+      if (g.year && g.month && g.day) return g.year + "-" + g.month + "-" + g.day;
+    } catch (e) { /* fall through */ }
+    var d = new Date();
+    function p2(n) { return (n < 10 ? "0" : "") + n; }
+    return d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate());
+  }
   function fv(id) { return ($(id).value || "").trim(); }
   function pnum(s) { if (s === "" || s == null) return null; var x = Number(String(s).replace(/[$,\s]/g, "")); return isFinite(x) ? x : NaN; }
   function optLabel(sym, o) { return [sym, o.expiry ? fmtDate(o.expiry, { month: "short", day: "numeric", year: "numeric" }) : "", isNum(o.strike) ? "$" + o.strike : "", o.right || ""].filter(Boolean).join(" "); }
@@ -1337,6 +1373,21 @@
     form.addEventListener("submit", function (e) { e.preventDefault(); });
     form.addEventListener("input", function () { pjRead(); renderProj(true); });
     form.addEventListener("change", function () { pjRead(); renderProj(true); });
+    // Segmented radios: set the checked state ourselves. A label tap does not flip them on iOS
+    // when the input is taken out of flow, so 6/8/10% and today's/future dollars did nothing.
+    form.addEventListener("click", function (e) {
+      var lab = e.target.closest && e.target.closest("label");
+      if (!lab || !form.contains(lab)) return;
+      var inp = lab.querySelector('input[type="radio"]');
+      if (!inp || inp.checked) {
+        if (inp) pjMarkSeg(form);
+        return;
+      }
+      var group = form.querySelectorAll('input[name="' + inp.name + '"]');
+      for (var i = 0; i < group.length; i++) group[i].checked = group[i] === inp;
+      pjMarkSeg(form);
+      pjRead(); renderProj(true);
+    });
     $("pj-chips").addEventListener("click", function (e) {
       var b = e.target.closest && e.target.closest("[data-amt]"); if (!b) return;
       $("pj-monthly").value = b.getAttribute("data-amt") === "0" ? "" : b.getAttribute("data-amt");
@@ -1350,6 +1401,14 @@
       if (!e.target.closest || !e.target.closest("[data-live]")) return;
       e.preventDefault(); $("pj-start").value = isNum(pjLive()) ? pjLive().toFixed(2) : ""; pjRead(); renderProj(true);
     });
+  }
+  function pjMarkSeg(form) {
+    if (!form) return;
+    var radios = form.querySelectorAll('input[type="radio"]');
+    for (var i = 0; i < radios.length; i++) {
+      var lab = radios[i].closest && radios[i].closest("label");
+      if (lab) lab.classList.toggle("on", radios[i].checked);
+    }
   }
   function pjRate(s) {
     if (s.preset === "custom") return isNum(s.custom) && s.custom > -50 && s.custom < 50 ? s.custom / 100 : null;
@@ -1373,6 +1432,7 @@
     $("pj-custom-b").textContent = s.preset === "custom" && isNum(s.custom) ? s.custom + "%" : "Custom";
     var chipsEl = document.querySelectorAll("#pj-chips [data-amt]");
     for (var i = 0; i < chipsEl.length; i++) chipsEl[i].classList.toggle("on", +chipsEl[i].getAttribute("data-amt") === (s.monthly || 0));
+    pjMarkSeg($("pj-form"));
     pjHTML($("pj-start-hint"), isNum(s.start) ? (isNum(live) ? 'Live account total is ' + money(live) + ' · <a href="#" data-live="1">Use it</a>' : "") :
       (isNum(live) ? "Live account total (updates with prices)" : ""));
     var age = s.age, target = s.target, rate = pjRate(s);
@@ -1427,6 +1487,14 @@
     // chart
     pj.last = { keep: keep.final, none: none.final };
     pjChart({ age: age, target: target, keep: keep.values, none: none.values, lo: lo.values, hi: hi.values, units: units }, anim);
+    pjSchedulePaint();
+  }
+  // iOS drops a canvas bitmap painted while a parent is transforming or just un-hidden. Paint again after layout.
+  var pjPaintT = null;
+  function pjSchedulePaint() {
+    if (pjPaintT) clearTimeout(pjPaintT);
+    requestAnimationFrame(function () { if (ui.view === "projections") pjDraw(); });
+    pjPaintT = setTimeout(function () { pjPaintT = null; if (ui.view === "projections") pjDraw(); }, 320);
   }
   function setNum(el, from, to, anim) {
     if (anim && motion() && isNum(from) && Math.abs(from - to) > 0.5) countUp(el, from, to, money0s, 450);
@@ -1538,6 +1606,12 @@
     cv.addEventListener("pointerup", function (ev) { if (ev.pointerType === "touch" || !dragging) return; setDrag(false); hide(); });
     cv.addEventListener("pointercancel", function (ev) { if (ev.pointerType === "touch") return; if (dragging) setDrag(false); hide(); });
     cv.addEventListener("pointerleave", function (ev) { if (ev.pointerType === "touch" || dragging) return; hide(); });
+    if (window.IntersectionObserver) {
+      var io = new IntersectionObserver(function (ents) {
+        for (var i = 0; i < ents.length; i++) if (ents[i].isIntersecting && ui.view === "projections") pjDraw();
+      });
+      io.observe(cv);
+    }
   }
 
   // ================================================================== views / router
@@ -1546,7 +1620,12 @@
   function route() {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, "")), parts = h.split("/");
     var v = parts[0];
-    if (TAB_ORDER.indexOf(v) < 0) v = window.matchMedia("(max-width: 700px)").matches ? "stocks" : "overview";
+    // The page's own views win. A hardcoded list that lags the HTML (Guide button present,
+    // router from an older script) used to send #guide to Stocks on a phone and Overview on a wide screen.
+    var names = [], nodes = document.querySelectorAll(".view[data-view]");
+    for (var ni = 0; ni < nodes.length; ni++) names.push(nodes[ni].getAttribute("data-view"));
+    if (names.indexOf(v) < 0) v = window.matchMedia("(max-width: 700px)").matches ? "stocks" : "overview";
+    if (names.length && names.indexOf(v) < 0) v = names[0];
     var changed = ui.view !== v, prevView = ui.view;
     ui.view = v;
     var views = document.querySelectorAll(".view");
@@ -1554,8 +1633,11 @@
     $("view-title").textContent = $("nav-title").textContent = VIEW_TITLES[v];
     if (changed && prevView && motion()) {
       var ve = document.querySelector('.view[data-view="' + v + '"]');
-      ve.style.setProperty("--vx", (TAB_ORDER.indexOf(v) > TAB_ORDER.indexOf(prevView) ? 18 : -18) + "px");
-      ve.classList.remove("view-in"); void ve.offsetWidth; ve.classList.add("view-in");
+      if (ve) {
+        var iv = TAB_ORDER.indexOf(v), ip = TAB_ORDER.indexOf(prevView);
+        ve.style.setProperty("--vx", ((iv < 0 || ip < 0 || iv > ip) ? 18 : -18) + "px");
+        ve.classList.remove("view-in"); void ve.offsetWidth; ve.classList.add("view-in");
+      }
     }
     var tabs = document.querySelectorAll(".tabs a");
     for (var k = 0; k < tabs.length; k++) {
@@ -1645,7 +1727,7 @@
     document.addEventListener("touchstart", function (e) {
       st = null;
       if (busy || e.touches.length !== 1 || window.__pqChartDrag || (window.scrollY || 0) > 0 || document.body.classList.contains("sheet-open")) return;
-      if (e.target.closest && e.target.closest(".pchart, .detail, input, select, textarea, .tabs, .ranges")) return;
+      if (e.target.closest && e.target.closest(".pchart, .pj-chart, .detail, input, select, textarea, .tabs, .ranges, .seg")) return;
       st = { y0: e.touches[0].clientY, x0: e.touches[0].clientX, dy: 0, on: false };
     }, { passive: true });
     document.addEventListener("touchmove", function (e) {

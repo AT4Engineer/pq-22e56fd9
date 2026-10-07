@@ -9,7 +9,7 @@
   <meta name="trade-repo" content="AT4Engineer/pq-22e56fd9">
   <title>Portfolio Tracker</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=10">
   <!-- pwa:start (stripped from the standalone build) -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,7 +21,19 @@
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
   <script>
     if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
-      window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+      window.addEventListener("load", function () {
+        // A page that already ran the previous script reloads once when the new worker takes over,
+        // so the Guide route is not left on the copy that does not know that tab.
+        var had = !!navigator.serviceWorker.controller;
+        if (sessionStorage.getItem("pq-sw") === "1") sessionStorage.removeItem("pq-sw");
+        navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (!had) { had = true; return; }
+          if (sessionStorage.getItem("pq-sw") === "1") return;
+          sessionStorage.setItem("pq-sw", "1");
+          location.reload();
+        });
+        navigator.serviceWorker.register("sw.js").catch(function () {});
+      });
     }
   </script>
   <!-- pwa:end -->
@@ -462,7 +474,7 @@
   </footer>
 
   <noscript><p class="noscript">This dashboard needs JavaScript enabled.</p></noscript>
-  <script src="assets/projection.js"></script>
-  <script src="assets/app.js"></script>
+  <script src="assets/projection.js?v=10"></script>
+  <script src="assets/app.js?v=10"></script>
 </body>
 </html>

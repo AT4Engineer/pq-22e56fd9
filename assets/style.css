@@ -331,9 +331,10 @@ body.sheet-open { overflow: hidden; }
 .opt-fields[hidden] { display: none !important; }
 .opt-fields legend { padding: 0 4px; font-size: 13px; font-weight: 650; color: var(--text); }
 .seg { grid-column: 1 / -1; display: flex; gap: 2px; background: var(--surface-2); border-radius: 8px; padding: 2px; }
-.seg label { flex: 1 1 0; text-align: center; padding: 7px 0; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--muted); font-size: 14px; }
-.seg input { position: absolute; opacity: 0; pointer-events: none; }
-.seg label:has(input:checked) { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
+.seg label { position: relative; flex: 1 1 0; text-align: center; padding: 7px 0; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--muted); font-size: 14px; }
+/* Hidden, but still hit-tested. pointer-events:none here drops the tap on iOS, so the rate control never changes. */
+.seg input { position: absolute; opacity: 0; margin: 0; inset: 0; width: 100%; height: 100%; }
+.seg label:has(input:checked), .seg label.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
 .ed-preview { min-height: 20px; }
 .ed-error { color: var(--neg); font-size: 13.5px; }
 .ed-error[hidden] { display: none; }
@@ -437,8 +438,7 @@ main { min-height: 100vh; }
 /* charts */
 .pchart .pline { transition: stroke .3s ease; }
 .pchart .area { opacity: 0.12; transition: fill .3s ease; }
-.pchart .xhair, .pchart .xdot { transition: transform .09s linear; }
-.pchart .xhair.snap, .pchart .xdot.snap { transition: none; }
+.pchart .xhair, .pchart .xdot { transition: none; }
 .pchart .xhair { stroke: #8e8e93; opacity: 0.8; }
 .pchart .xdot { fill: #fff; stroke: var(--surface); }
 .chart .series { stroke: var(--accent); }
@@ -461,6 +461,8 @@ main { min-height: 100vh; }
 .row-in { animation: row-in .42s var(--ease-out) backwards; }
 @keyframes row-in { from { opacity: 0; transform: translateY(10px); } }
 .view.view-in > *:not(.stocks-layout):not(.sheet-backdrop), .view.view-in .stocks-col { animation: view-in .26s var(--ease-out) backwards; }
+/* A transform on an ancestor makes iOS drop the projections canvas bitmap. Keep that view still. */
+#view-projections.view-in > * { animation: none; }
 @keyframes view-in { from { opacity: 0; transform: translateX(var(--vx, 18px)); } }
 
 /* press feedback */
