@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-06 20:31:25 ET",
-  "generated_at_iso": "2026-10-06T20:31:25-04:00",
+  "generated_at_et": "2026-10-06 20:35:48 ET",
+  "generated_at_iso": "2026-10-06T20:35:48-04:00",
   "trade_date": "2026-10-06",
   "quotes_as_of_et": "2026-10-06 16:00 ET",
   "market_state": "POSTPOST",
@@ -105,7 +105,7 @@
       "last_trade_et": "2026-10-05 15:05 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.5714,
+      "prob_finish_itm": 0.5715,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
