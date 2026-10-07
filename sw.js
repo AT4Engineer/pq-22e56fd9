@@ -1,6 +1,6 @@
 /* Portfolio Tracker service worker: cache the app shell, always go network-first for data/ files.
    Scripts and styles are network-first too, so a new tab in the HTML cannot run an older router. */
-const CACHE = "pq-shell-v11";
+const CACHE = "pq-shell-v12";
 const SHELL = [
   "./",
   "index.html",

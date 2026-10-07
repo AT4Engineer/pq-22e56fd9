@@ -1328,7 +1328,7 @@
     return {
       age: isNum(s.age) ? s.age : defAge, target: isNum(s.target) ? s.target : 59.5,
       start: isNum(s.start) ? s.start : null, monthly: isNum(s.monthly) ? s.monthly : 0, raise: isNum(s.raise) ? s.raise : 0,
-      preset: s.preset || "base", custom: isNum(s.custom) ? s.custom : null, dollars: s.dollars || "today"
+      preset: s.preset || (PJ.DEFAULT_PRESET || "optimistic"), custom: isNum(s.custom) ? s.custom : null, dollars: s.dollars || "today"
     };
   }
   // Default age: exact fractional age from projection.birthdate in holdings.json (else projection.age).
@@ -1374,7 +1374,7 @@
     form.addEventListener("input", function () { pjRead(); renderProj(true); });
     form.addEventListener("change", function () { pjRead(); renderProj(true); });
     // Segmented radios: set the checked state ourselves. A label tap does not flip them on iOS
-    // when the input is taken out of flow, so 6/8/10% and today's/future dollars did nothing.
+    // when the input is taken out of flow, so 8/10/12% and today's/future dollars did nothing.
     form.addEventListener("click", function (e) {
       var lab = e.target.closest && e.target.closest("label");
       if (!lab || !form.contains(lab)) return;
@@ -1451,7 +1451,7 @@
     var none = PJ.project(Object.assign({}, base, { monthly: 0, annual: rate }));
     var lo = PJ.project(Object.assign({}, base, { monthly: s.monthly, annual: PJ.PRESETS.conservative }));
     var hi = PJ.project(Object.assign({}, base, { monthly: s.monthly, annual: PJ.PRESETS.optimistic }));
-    var need = PJ.neededMonthly(Object.assign({}, base, { annual: PJ.PRESETS.base }), 1e6);
+    var need = PJ.neededMonthly(Object.assign({}, base, { annual: PJ.PRESETS.optimistic }), 1e6);
     var units = real ? "today's dollars" : "future dollars", rtxt = pct(rate * 100, rate * 100 % 1 ? 1 : 0);
     var yrs = (target - age), prev = pj.last || {};
     var prj = (state.data || {}).projection || {};
@@ -1470,8 +1470,8 @@
     $("pj-split").innerHTML = kv("Money put in", money0s(keep.contributed) + ' <span class="subtle">start ' + money0s(start) + (s.monthly ? " + contributions" : "") + "</span>") +
       kv("Growth earned", '<span class="pos">' + money0s(keep.growth) + "</span>") + kv("Projected total", money0s(keep.final)) +
       kv("Growth share", pct(tot > 0 ? keep.growth / tot * 100 : null, 0));
-    $("pj-takes").innerHTML = need === 0 ? "What it takes: your starting amount alone reaches <strong>$1,000,000</strong> by " + ageTxt(target) + " at 8% (" + units + ")." :
-      "What it takes: about <strong>" + money0s(Math.ceil(need)) + "/mo</strong>" + (raise ? " to start (rising " + s.raise + "% a year)" : "") + " to reach <strong>$1,000,000</strong> by " + ageTxt(target) + " at the 8% base rate (" + units + ").";
+    $("pj-takes").innerHTML = need === 0 ? "What it takes: your starting amount alone reaches <strong>$1,000,000</strong> by " + ageTxt(target) + " at the Ramsey 12% rate (" + units + ")." :
+      "What it takes: about <strong>" + money0s(Math.ceil(need)) + "/mo</strong>" + (raise ? " to start (rising " + s.raise + "% a year)" : "") + " to reach <strong>$1,000,000</strong> by " + ageTxt(target) + " at the Ramsey 12% rate (" + units + ").";
     // milestones
     var ms = PJ.milestones(age, target);
     $("pj-ms").innerHTML = "<thead><tr><th>Age</th><th class=\"num\">Keep investing</th><th class=\"num\">Add nothing</th><th class=\"num\">Put in</th></tr></thead><tbody>" +
@@ -1501,7 +1501,7 @@
     else if (!pj.drawn && motion()) countUp(el, 0, to, money0s, 800);
     else countUp(el, to, to, money0s);  // also cancels a count-up still running from an earlier render
   }
-  // ---- canvas chart: both scenarios by age + 6%-10% band; drag/hover to scrub (touch locks page scroll)
+  // ---- canvas chart: both scenarios by age + 8%-12% band; drag/hover to scrub (touch locks page scroll)
   var PJN = 240;
   function pjSample(arr) {
     var out = [], n = arr.length - 1;

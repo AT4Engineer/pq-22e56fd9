@@ -38,7 +38,7 @@ Oct 6 2026 close total was about **$16,848**. Account value = stocks + cash − 
 |---|---|---|
 | `#stocks` | `index.html` | Apple Stocks–style list + detail sheets + charts |
 | `#overview` | `index.html` | Summary, positions, **Monthly roll plan**, history |
-| `#projections` | `index.html` + `assets/projection.js` | Retirement-style FV to age 59.5; monthly contrib vs $0 |
+| `#projections` | `index.html` + `assets/projection.js` | Retirement-style FV to age 59.5 (Ramsey monthly compound math); monthly contrib vs $0 |
 | `#transactions` | `index.html` | From `data/transactions.json` |
 | `#edit` | `index.html` | Opens GitHub issue → `apply-trade.yml` |
 | `display.html` | + `assets/display.js/css` | Kiosk: total + charts only (no edit/roll text) |
@@ -141,6 +141,7 @@ Edit holdings → commit/push `data/holdings.json`, or use Edit form / `python s
 
 ## Recently finished (2026-10-06)
 
+- **Projections = Ramsey compound model** (monthly rate = annual/12, end-of-month deposits; presets 8/10/12% with 12% Ramsey default; Jack $36,635 test)
 - **Scriptable iPhone widget** (`widgets/scriptable-portfolio.js` + README + preview)
 - Removed paper trading from UI (`2fc1b70`); `/workspace/spy-paper-lab` kept on disk
 - `display.html` kiosk page

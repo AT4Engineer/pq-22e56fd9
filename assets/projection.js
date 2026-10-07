@@ -1,10 +1,14 @@
 /* Projection math for the Projections tab (pure functions, no DOM). Works in the browser
  * (window.PQProj) and in Node (module.exports) so tests/projection.test.js can check it.
  *
- * Monthly compounding: the monthly rate is (1 + annual)^(1/12) - 1, so twelve months of growth equal
- * the annual rate exactly (historical returns are quoted as compound annual rates). Contributions are
- * added at the end of each month. An optional yearly increase raises the monthly contribution once
- * every 12 months. "Today's dollars" divides each month's values by (1 + inflation)^(months / 12).
+ * Ramsey Solutions model (matches their Compound Interest / Investment Calculator JS and the
+ * Jack-and-Blake education article):
+ *   - Monthly compounding with nominal monthly rate = annual / 12  (not (1+r)^(1/12)-1)
+ *   - Ordinary annuity: contributions at the END of each month
+ *   - Combined FV = PV*(1+i)^n + PMT*((1+i)^n - 1)/i   where i = annual/12, n = months
+ * Their site does not deflate for inflation; "today's dollars" here is an optional extra.
+ * Sources: ramseysolutions.com/retirement/compound-interest-calculator (calculator JS);
+ * ramseyeducation.help…/Jack-and-Blake-the-Math-Behind-the-Graph (11% example → $36,635).
  */
 (function (root, factory) {
   var api = factory();
@@ -13,12 +17,15 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var PRESETS = { conservative: 0.06, base: 0.08, optimistic: 0.10 };
-  var INFLATION = 0.03;
+  // Presets: 8% cautious, 10% mid history, 12% Ramsey teaching default (stock-market 10–12% range).
+  var PRESETS = { conservative: 0.08, base: 0.10, optimistic: 0.12 };
+  var DEFAULT_PRESET = "optimistic"; // 12% — Ramsey's common teaching rate
+  var INFLATION = 0.03; // optional "today's dollars" only; Ramsey's calculator leaves inflation out
 
-  function monthlyRate(annual) { return Math.pow(1 + annual, 1 / 12) - 1; }
+  // Ramsey: divide the annual rate by compounding periods per year (monthly → /12).
+  function monthlyRate(annual) { return (annual || 0) / 12; }
 
-  // Closed form (no yearly increase, nominal): P(1+m)^n + C((1+m)^n - 1)/m
+  // Closed form (no yearly increase, nominal): P(1+i)^n + C*((1+i)^n - 1)/i
   function fvClosed(start, monthly, annual, months) {
     var m = monthlyRate(annual), g = Math.pow(1 + m, months);
     return start * g + (m === 0 ? monthly * months : monthly * (g - 1) / m);
@@ -35,6 +42,7 @@
     var values = [bal], contrib = [bal];
     for (var k = 1; k <= months; k++) {
       var c = monthly * Math.pow(1 + raise, Math.floor((k - 1) / 12));
+      // End-of-month contribution (ordinary annuity / Ramsey contributionTimingBefore: false)
       bal = bal * (1 + m) + c;
       var d = real ? Math.pow(1 + infl, k / 12) : 1;
       put += c / d;
@@ -89,6 +97,10 @@
     return res[key || "values"][k];
   }
 
-  return { PRESETS: PRESETS, INFLATION: INFLATION, monthlyRate: monthlyRate, fvClosed: fvClosed, project: project,
-           neededMonthly: neededMonthly, monthsBetween: monthsBetween, ageFromBirthdate: ageFromBirthdate, dateAtAge: dateAtAge, milestones: milestones, at: at };
+  return {
+    PRESETS: PRESETS, DEFAULT_PRESET: DEFAULT_PRESET, INFLATION: INFLATION,
+    monthlyRate: monthlyRate, fvClosed: fvClosed, project: project,
+    neededMonthly: neededMonthly, monthsBetween: monthsBetween,
+    ageFromBirthdate: ageFromBirthdate, dateAtAge: dateAtAge, milestones: milestones, at: at
+  };
 });

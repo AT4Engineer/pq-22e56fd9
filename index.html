@@ -213,9 +213,9 @@
           <div class="f-wide">
             <div class="pj-lbl">Yearly return</div>
             <div class="seg pj-seg" role="radiogroup" aria-label="Yearly return">
-              <label><input type="radio" name="pj-rate" value="conservative"><b>6%</b><small>Conservative</small></label>
-              <label><input type="radio" name="pj-rate" value="base" checked><b>8%</b><small>Base</small></label>
-              <label><input type="radio" name="pj-rate" value="optimistic"><b>10%</b><small>Optimistic</small></label>
+              <label><input type="radio" name="pj-rate" value="conservative"><b>8%</b><small>Conservative</small></label>
+              <label><input type="radio" name="pj-rate" value="base"><b>10%</b><small>Base</small></label>
+              <label><input type="radio" name="pj-rate" value="optimistic" checked><b>12%</b><small>Ramsey</small></label>
               <label><input type="radio" name="pj-rate" value="custom"><b id="pj-custom-b">Custom</b><small>Your rate</small></label>
             </div>
           </div>
@@ -229,7 +229,7 @@
             </div>
           </div>
         </form>
-        <p class="note">Target 59½: the age when withdrawals from IRAs and 401(k)s generally stop owing the IRS 10% early-withdrawal penalty. Today's dollars removes 3% a year of inflation so amounts compare with prices now.</p>
+        <p class="note">Target 59½: the age when withdrawals from IRAs and 401(k)s generally stop owing the IRS 10% early-withdrawal penalty. Math matches Ramsey Solutions’ compound interest calculator (monthly compounding at rate÷12, deposits at month-end). Today’s dollars is optional here (3% inflation); Ramsey’s site shows future dollars with no inflation adjustment.</p>
       </section>
       <section class="card pj-empty" id="pj-empty">
         <p>Enter your age to see projections.</p>
@@ -249,7 +249,7 @@
           <h2 id="pj-chart-title" class="card-title">Growth by age</h2>
           <div class="readout pj-readout" id="pj-readout">&nbsp;</div>
           <div class="pj-chart-box"><canvas id="pj-chart" class="pj-chart" role="img" aria-label="Projected value by age"></canvas></div>
-          <div class="pj-legend"><span><i class="lg-keep"></i>Keep investing</span><span><i class="lg-none"></i>Add nothing more</span><span><i class="lg-band"></i>6% to 10% range</span></div>
+          <div class="pj-legend"><span><i class="lg-keep"></i>Keep investing</span><span><i class="lg-none"></i>Add nothing more</span><span><i class="lg-band"></i>8% to 12% range</span></div>
         </section>
         <section class="card" aria-labelledby="pj-split-title">
           <h2 id="pj-split-title" class="card-title">Money put in vs growth</h2>
@@ -264,11 +264,16 @@
         <section class="card pj-notes">
           <p class="pj-warn" id="pj-warn"></p>
           <details class="how" id="pj-src"><summary>Where these rates come from</summary><div class="how-body">
-            <p><strong>S&amp;P 500 with dividends reinvested, 1928–2025:</strong> 10.02% a year compounded (11.85% simple average), about 6.8% a year after inflation; inflation averaged about 3.0% a year. Source: Aswath Damodaran, NYU Stern, “Historical Returns on Stocks, Bonds and Bills: 1928–2025” (updated January 2026), pages.stern.nyu.edu/~adamodar.</p>
-            <p><strong>Large US stocks, 1926–2025:</strong> 10.07% a year compounded; inflation 2.94% a year. Source: Ibbotson equity indices (CRSP and US Bureau of Labor Statistics data) in CFA Institute Research Foundation, “Exponential Wealth” (2026).</p>
-            <p>The presets sit at or below that history on purpose: 10% optimistic (the long-run average), 8% base and 6% conservative, because future returns may be lower and real investors pay fees and miss some days. 3% inflation matches the long-run average.</p>
-            <p>Math: monthly compounding, with the monthly rate set so 12 months equal the yearly rate; contributions go in at the end of each month. Real returns vary a lot year to year; a smooth line is an average path, not a forecast.</p>
-            <p class="subtle">Educational only, not advice.</p>
+            <p><strong>Ramsey Solutions (default math):</strong> Future value with monthly compounding and end-of-month contributions —
+              FV = PV × (1 + r/12)<sup>n</sup> + PMT × [((1 + r/12)<sup>n</sup> − 1) / (r/12)], where r is the annual rate and n is months.
+              Same model as their Compound Interest Calculator (default monthly compounding; contribution timing = end of period) and the Jack-and-Blake education article (example: $0 start, $200/mo, 9 years, 11% → $36,635).
+              Sources: <a href="https://www.ramseysolutions.com/retirement/compound-interest-calculator" target="_blank" rel="noopener">ramseysolutions.com/retirement/compound-interest-calculator</a>;
+              <a href="https://ramseyeducation.help.ramseysolutions.com/hc/en-us/articles/32702416902029-Jack-and-Blake-the-Math-Behind-the-Graph" target="_blank" rel="noopener">Jack and Blake — the Math Behind the Graph</a>.
+              Ramsey cites a long-run stock-market average around <strong>10–12%</strong>; the <strong>12% Ramsey</strong> preset is the default teaching rate. Their calculator does not adjust for inflation.</p>
+            <p><strong>S&amp;P 500 with dividends reinvested, 1928–2025:</strong> about 10% a year compounded historically. Source: Aswath Damodaran, NYU Stern. The <strong>10% Base</strong> preset sits near that history; <strong>8% Conservative</strong> is lower for fees and weaker decades.</p>
+            <p>Optional <strong>Today’s dollars</strong> divides by 3% inflation per year so a future sum compares with prices now. Choose <strong>Future dollars</strong> to match Ramsey’s on-site calculator output more closely.</p>
+            <p>Real returns vary a lot year to year; a smooth line is an average path, not a forecast.</p>
+            <p class="subtle">Educational only, not advice. Not affiliated with Ramsey Solutions.</p>
           </div></details>
         </section>
       </div>
@@ -455,7 +460,7 @@
       <section class="card" aria-labelledby="g-proj">
         <h2 id="g-proj" class="card-title">Projections and the birthday</h2>
         <p class="guide-p">The birthdate stored with the account is November 25, 2008. Projections turns that into an exact age: whole years, plus how far you are through the current year. That number fills the age field, and it moves forward each day. The 18th birthday is November 25, 2026. The default target is 59½, which is May 25, 2068. That is the age when withdrawals from IRAs and 401(k)s generally stop owing the 10% early-withdrawal penalty. You can type another age or target. “Use it” under the age field puts the birthdate age back.</p>
-        <p class="guide-p">The starting amount follows the live account total unless you type your own. Monthly contribution and a yearly raise are yours to set. The yearly return presets are 6% conservative, 8% base, and 10% optimistic, or a rate you type. Today’s dollars takes out 3% a year of inflation so a future sum compares with prices now. Future dollars leaves inflation in.</p>
+        <p class="guide-p">The starting amount follows the live account total unless you type your own. Monthly contribution and a yearly raise are yours to set. The yearly return presets are 8% conservative, 10% base, and 12% Ramsey (default), or a rate you type. Math matches Ramsey’s compound interest calculator (monthly rate = yearly÷12, deposits at month-end). Today’s dollars takes out 3% a year of inflation; Future dollars matches Ramsey’s site (no inflation adjustment).</p>
         <p class="guide-p">The chart compares keeping that monthly amount with adding nothing more, and it shades the band from 6% to 10%. The math compounds once a month. A smooth line is an average path, not a promise.</p>
         <p class="guide-p">UPRO aims for three times the S&amp;P 500’s move in a single day. These projections use broad-market rates, not 3×. Over many years a fund that resets daily can land far above or far below three times the index, especially in a choppy market. The note on the Projections tab says the same thing from the live mix of holdings.</p>
       </section>
@@ -474,7 +479,7 @@
   </footer>
 
   <noscript><p class="noscript">This dashboard needs JavaScript enabled.</p></noscript>
-  <script src="assets/projection.js?v=11"></script>
-  <script src="assets/app.js?v=11"></script>
+  <script src="assets/projection.js?v=12"></script>
+  <script src="assets/app.js?v=12"></script>
 </body>
 </html>
