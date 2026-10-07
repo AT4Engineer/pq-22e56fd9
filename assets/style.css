@@ -555,18 +555,18 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   .status { font-size: 13px; gap: 10px; opacity: calc(1 - var(--nt, 0)); }
   .tabs {
     position: fixed; z-index: 46; left: 0; right: 0; bottom: 0; max-width: none; margin: 0; gap: 0;
-    display: flex; justify-content: space-around; height: calc(52px + env(safe-area-inset-bottom));
+    display: flex; justify-content: flex-start; height: calc(52px + env(safe-area-inset-bottom));
     padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     overflow-x: auto; scrollbar-width: none;
     background: rgba(22,22,24,.9); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
     border-top: 1px solid rgba(84,84,88,.45);
   }
   .tabs a {
-    flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
-    min-height: 52px; padding: 5px 1px 3px; border-bottom: 0; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: -0.02em;
+    flex: 1 0 auto; min-width: max-content; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    min-height: 52px; padding: 5px 8px 3px; border-bottom: 0; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: -0.01em;
   }
-  .tabs a:first-child { padding-left: 1px; }
-  .tabs .tl { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.15; }
+  .tabs a:first-child { padding-left: 8px; }
+  .tabs .tl { display: block; max-width: none; overflow: visible; text-overflow: clip; white-space: nowrap; line-height: 1.15; }
   .tabs a.on { color: var(--accent); }
   .ti { display: block; width: 22px; height: 22px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .tabs a[data-tab="transactions"] .ti circle { fill: currentColor; stroke: none; }
