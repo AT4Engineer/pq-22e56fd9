@@ -1,11 +1,11 @@
 {
   "UPRO|2026-10-16|154|call": {
     "last_good": {
-      "mark": 3.3,
-      "bid": 3.2,
+      "mark": 3.2,
+      "bid": 3.0,
       "ask": 3.4,
       "last": 3.98,
-      "iv": 0.3626,
+      "iv": 0.3608,
       "oi": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-05 15:05 ET",
@@ -13,7 +13,7 @@
       "session": "2026-10-07",
       "prev_mark": 4.45,
       "prev_mark_source": "recorded mark for prior session 2026-10-06",
-      "as_of_et": "2026-10-07 10:15:21 ET"
+      "as_of_et": "2026-10-07 10:30:18 ET"
     }
   }
 }

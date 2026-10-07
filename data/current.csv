@@ -1,6 +1,6 @@
 symbol,price,source,market_value,as_of_et
-SPCX,168.27,live regular session,673.06,2026-10-07 10:15 ET
-UPRO,153.43,live regular session,15342.5,2026-10-07 10:14 ET
-UPRO261016C00154000,3.3,mid of bid/ask,-330.0,2026-10-07 10:15:21 ET
-CASH,1,holdings.json,964.7,2026-10-07 10:15:21 ET
-TOTAL,,account total (stocks + cash + option liability),16650.26,2026-10-07 10:15:21 ET
+SPCX,168.26,live regular session,673.06,2026-10-07 10:30 ET
+UPRO,153.46,live regular session,15346.0,2026-10-07 10:29 ET
+UPRO261016C00154000,3.2,mid of bid/ask,-320.0,2026-10-07 10:30:18 ET
+CASH,1,holdings.json,964.7,2026-10-07 10:30:18 ET
+TOTAL,,account total (stocks + cash + option liability),16663.76,2026-10-07 10:30:18 ET
