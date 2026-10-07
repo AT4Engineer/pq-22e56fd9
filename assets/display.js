@@ -74,10 +74,13 @@
   function renderHeader(d) {
     var a = d.account || {}, o = (d.options || [])[0];
     $("total").textContent = money(a.total);
-    $("day").innerHTML = '<span class="' + cls(a.day_change) + '">' + sMoney(a.day_change) + " (" + sPct(a.day_change_pct) + ")</span> today";
-    $("sub").textContent = "Stocks " + money(a.stocks_value) + " · Cash " + money(a.cash) +
-      (o ? " · Short call " + money(a.option_liability) : "") +
-      " · " + (d.market_label || "") + (d.quotes_as_of_et ? ", as of " + d.quotes_as_of_et : "");
+    $("day").innerHTML = '<span class="' + cls(a.day_change) + '">' + sMoney(a.day_change) + " (" + sPct(a.day_change_pct) + ')</span><span class="disp-day-word">today</span>';
+    var bits = [["Stocks", money(a.stocks_value)], ["Cash", money(a.cash)]];
+    if (o) bits.push(["Short call", money(a.option_liability)]);
+    var asof = (d.market_label || "") + (d.quotes_as_of_et ? (d.market_label ? " · " : "") + "as of " + d.quotes_as_of_et : "");
+    $("sub").innerHTML = '<dl class="disp-break">' + bits.map(function (b) {
+      return "<div><dt>" + esc(b[0]) + "</dt><dd>" + esc(b[1]) + "</dd></div>";
+    }).join("") + "</dl>" + (asof ? '<p class="disp-asof">' + esc(asof) + "</p>" : "");
     $("updated").textContent = "Updated " + fmtET(d.generated_at_iso, d.generated_at_et);
   }
 
@@ -133,10 +136,10 @@
     $("holdings").innerHTML = rows.map(function (r) {
       var pl = isNum(r.chg) ? r.chg * (r.sign || 1) : null;
       return '<article class="disp-card" data-id="' + esc(r.id) + '">' +
-        '<div class="sym">' + esc(r.sym) + '</div>' +
-        '<div class="price">' + money(r.price) + "</div>" +
-        '<div class="name">' + esc(r.name) + "</div>" +
-        '<div class="chg ' + cls(pl) + '">' + sPct(r.pct) + "</div>" +
+        '<div class="disp-card-top">' +
+          '<div class="disp-id"><div class="sym">' + esc(r.sym) + '</div><div class="name">' + esc(r.name) + "</div></div>" +
+          '<div class="disp-quote"><div class="price">' + money(r.price) + '</div><div class="chg ' + cls(pl) + '">' + sPct(r.pct) + "</div></div>" +
+        "</div>" +
         '<div class="spark-wrap">' + sparkSvg(r.spark, r.base, r.sign) + "</div>" +
         '<div class="meta">' + esc(r.meta) + "</div>" +
         "</article>";

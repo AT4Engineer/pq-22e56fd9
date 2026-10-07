@@ -42,6 +42,7 @@
       <a href="#projections" data-tab="projections"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16h16"/><path d="M7 16c4 0 8-2.5 12-10"/><path d="M15.5 6H19v3.5"/></svg><span class="tl">Projections</span></a>
       <a href="#transactions" data-tab="transactions"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span class="tl">Transactions</span></a>
       <a href="#edit" data-tab="edit"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span class="tl">Edit</span></a>
+      <a href="#guide" data-tab="guide"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.2A2.3 2.3 0 0 1 18.5 6.8V20H7.2A2.2 2.2 0 0 0 5 17.8z"/><path d="M5 4.5A2.2 2.2 0 0 1 7.2 6.7H18.5"/><path d="M8.5 11h6"/></svg><span class="tl">Guide</span></a>
     </nav>
   </header>
   <div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="ptr-track" cx="12" cy="12" r="9"/><circle class="ptr-arc" cx="12" cy="12" r="9"/></svg></div>
@@ -372,6 +373,84 @@
           <li>If something is wrong (for example selling more than you hold) it comments the reason, closes the issue and changes nothing.</li>
         </ol>
         <p class="note">Issues in this repository are public, like the rest of the dashboard. Issues opened by anyone else are ignored.</p>
+      </section>
+    </div>
+
+    <!-- ============================== Guide -->
+    <div class="view" id="view-guide" data-view="guide" hidden>
+      <section class="card guide-hero" aria-labelledby="g-title">
+        <p class="guide-kicker">Guide</p>
+        <h2 id="g-title" class="guide-title">How this tracker works</h2>
+        <p class="guide-lead">This site keeps a record of the brokerage account. Trades happen in E*Trade. After a fill, log it here so the totals, the history, and the charts stay in step. Nothing on this site sends an order.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-tabs">
+        <h2 id="g-tabs" class="card-title">What each tab shows</h2>
+        <dl class="guide-dl">
+          <div>
+            <dt><a href="#stocks">Stocks</a></dt>
+            <dd>Home on a phone. Account value and the day’s change are at the top. Each holding and each watchlist name is a row: the name, a small intraday chart, the price, and a change box. Tap the box to switch among day change %, day change $, and market value. Tap a row for the longer chart (1D, 1W, 1M, 3M, 1Y, ALL), the stats, and your position. On a wide screen the list sits beside that detail. This tab is the default on a phone.</dd>
+          </div>
+          <div>
+            <dt><a href="#overview">Overview</a></dt>
+            <dd>Home on a wide screen. Four figures: total account value, day change, cash, and the short call liability. Then the positions table, the monthly roll plan, the covered call, and account value at the close of each trading day.</dd>
+          </div>
+          <div>
+            <dt><a href="#projections">Projections</a></dt>
+            <dd>A sketch of what steady saving could grow to. It runs in the browser from the birthdate and the live account total. It is not a quote, and it is not a forecast of this month.</dd>
+          </div>
+          <div>
+            <dt><a href="#transactions">Transactions</a></dt>
+            <dd>Every change recorded from the Edit form, newest first. Buys, sells, option opens and closes, rolls, cash, and dividends land here after GitHub accepts the log.</dd>
+          </div>
+          <div>
+            <dt><a href="#edit">Edit</a></dt>
+            <dd>The log. Fill it in after you trade at the brokerage. It opens a prefilled GitHub issue. It does not place the trade.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="card" aria-labelledby="g-quotes">
+        <h2 id="g-quotes" class="card-title">How quotes update</h2>
+        <p class="guide-p">A scheduled job reads <code>data/holdings.json</code> and asks Yahoo Finance for prices, about every 15 minutes while the US market is in session, and once more after the close. Clocks on this site are Eastern Time.</p>
+        <p class="guide-p">The page reloads <code>data/portfolio.json</code> about every 60 seconds. It does not reload the whole site. On a phone, pull down from the top to fetch now. Prices can run about 15 minutes behind the brokerage. The line under the market status is the quote time, not the moment you opened the page.</p>
+        <p class="guide-p">A missing stock quote stops the update and leaves the last good file in place. Overnight, an option often comes back with no real bid or ask. That is not used as a price. The last good bid/ask midpoint is kept, with the session it came from. A failed refresh never fills in a made-up price.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-log">
+        <h2 id="g-log" class="card-title">How you log a trade</h2>
+        <p class="guide-p">You buy and sell at E*Trade. This site only records what already happened.</p>
+        <ol class="guide-steps">
+          <li>After the fill, open Edit and pick the type: buy or sell shares, sell to open or buy to close an option, expiry, assignment, roll, deposit, withdrawal, dividend, or a correction such as cash or cost basis.</li>
+          <li>Type the symbol, quantity, and the price you were actually filled at. Fees if you paid any. The date defaults to today in Eastern Time.</li>
+          <li>Continue on GitHub. A new issue opens with the label <code>trade</code> and the details in the text. You still have to tap <strong>Submit new issue</strong>, signed in as the account that owns this repo.</li>
+          <li>A check runs. If the log is valid it updates the holdings, adds a row under Transactions, rebuilds the dashboard, writes a before/after comment, and closes the issue. That usually takes about a minute.</li>
+          <li>If the log is wrong (selling more shares than you hold, for example) it comments the reason, closes the issue, and changes nothing. Issues opened by anyone else are ignored.</li>
+        </ol>
+        <p class="guide-p">A roll is two fills in one log: buy to close the current call, then sell to open the next one. The form starts from the latest quotes (buy back near the ask, sell the next monthly call near the bid). Replace those with your real fills before you submit. They are saved as two linked transactions.</p>
+        <p class="guide-p"><a href="#edit/set_option_premium">Set option premium received</a> records what you were paid per share when you sold the open call. It updates profit and loss and the roll history. It does not change cash, because that cash is already in the account. Use the fill from E*Trade.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-short">
+        <h2 id="g-short" class="card-title">A short option is a liability</h2>
+        <p class="guide-formula">Account value = stocks + cash − the short option’s mark</p>
+        <p class="guide-p">Selling a call means you may have to deliver shares at the strike. While that contract is open, buying it back would cost money, so the mark is owed, not owned. The books store that as a negative number. One contract is 100 shares.</p>
+        <p class="guide-p">If the call’s price rises, the amount you owe rises and the account falls. That day is red. If the call’s price falls, you owe less and that day is green. Green and red are your gain and loss, not the direction of the option’s own price.</p>
+        <p class="guide-p">The open contract is one short UPRO call, strike $154, expiring October 16, 2026. Those terms come from the holdings file. The shares you already own are what makes the call covered. The premium you were paid when you sold it is not on file, so close profit and loss stays blank until you enter that fill. Do not guess it.</p>
+        <p class="guide-p">Near expiry, Overview’s roll plan is a reminder, not an order. If you want to keep the shares and the call is still in the money, buy it back at the brokerage before 4:00 PM ET on that Friday, then sell the next monthly call near the share price, and log the roll here afterward.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-proj">
+        <h2 id="g-proj" class="card-title">Projections and the birthday</h2>
+        <p class="guide-p">The birthdate stored with the account is November 25, 2008. Projections turns that into an exact age: whole years, plus how far you are through the current year. That number fills the age field, and it moves forward each day. The 18th birthday is November 25, 2026. The default target is 59½, which is May 25, 2068. That is the age when withdrawals from IRAs and 401(k)s generally stop owing the 10% early-withdrawal penalty. You can type another age or target. “Use it” under the age field puts the birthdate age back.</p>
+        <p class="guide-p">The starting amount follows the live account total unless you type your own. Monthly contribution and a yearly raise are yours to set. The yearly return presets are 6% conservative, 8% base, and 10% optimistic, or a rate you type. Today’s dollars takes out 3% a year of inflation so a future sum compares with prices now. Future dollars leaves inflation in.</p>
+        <p class="guide-p">The chart compares keeping that monthly amount with adding nothing more, and it shades the band from 6% to 10%. The math compounds once a month. A smooth line is an average path, not a promise.</p>
+        <p class="guide-p">UPRO aims for three times the S&amp;P 500’s move in a single day. These projections use broad-market rates, not 3×. Over many years a fund that resets daily can land far above or far below three times the index, especially in a choppy market. The note on the Projections tab says the same thing from the live mix of holdings.</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-disp">
+        <h2 id="g-disp" class="card-title">The display page</h2>
+        <p class="guide-p"><a href="display.html">display.html</a> is the second screen. It shows the account total, today’s change, how that total splits across stocks, cash, and the short call, the account chart, and a card for each holding with its small chart. There is no tab bar and no place to log a trade. It reads the same file and refreshes on the same 60-second cycle. Leave it open on the monitor.</p>
       </section>
     </div>
   </main>

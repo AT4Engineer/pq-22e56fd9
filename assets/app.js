@@ -2,8 +2,9 @@
  *
  * Views (hash routes): #stocks (iOS Stocks-style list, default on phones; #stocks/<SYMBOL> opens the detail
  * panel), #overview (summary, positions, covered call, history; default on wide screens),
- * #transactions (data/transactions.json, newest first) and #edit (builds a prefilled GitHub issue that the
- * apply-trade workflow turns into a holdings update).
+ * #projections (client-side growth from the birthdate), #transactions (data/transactions.json, newest first),
+ * #edit (builds a prefilled GitHub issue that the apply-trade workflow turns into a holdings update;
+ * the page never places a trade) and #guide (how the tracker works).
  *
  * Modes
  *  - Site (GitHub Pages): fetches data/portfolio.json (cache-busted) on load and every 60 s.
@@ -1540,8 +1541,8 @@
   }
 
   // ================================================================== views / router
-  var TAB_ORDER = ["stocks", "overview", "projections", "transactions", "edit"];
-  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", transactions: "Transactions", edit: "Edit portfolio" };
+  var TAB_ORDER = ["stocks", "overview", "projections", "transactions", "edit", "guide"];
+  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", transactions: "Transactions", edit: "Edit portfolio", guide: "Guide" };
   function route() {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, "")), parts = h.split("/");
     var v = parts[0];
@@ -1560,7 +1561,14 @@
     for (var k = 0; k < tabs.length; k++) {
       var on = tabs[k].getAttribute("data-tab") === v;
       tabs[k].classList.toggle("on", on);
-      if (on) tabs[k].setAttribute("aria-current", "page"); else tabs[k].removeAttribute("aria-current");
+      if (on) {
+        tabs[k].setAttribute("aria-current", "page");
+        var nav = tabs[k].parentNode;
+        if (nav && nav.scrollWidth > nav.clientWidth + 2) {
+          var left = tabs[k].offsetLeft - (nav.clientWidth - tabs[k].offsetWidth) / 2;
+          nav.scrollTo({ left: Math.max(0, left), behavior: motion() ? "smooth" : "auto" });
+        }
+      } else tabs[k].removeAttribute("aria-current");
     }
     if (v !== "stocks" || !parts[1]) {
       if (ui.sel && !(v === "stocks" && wide())) closeDetail(true);

@@ -2,8 +2,7 @@
 
 A plain, professional dashboard for a small portfolio, built as a fully static site:
 plain HTML + CSS + JavaScript, no build step, no frameworks, no CDNs, no web fonts. It works on
-locked-down school Chromebooks / Windows browsers and on phones (light or dark, following the
-device setting).
+locked-down school Chromebooks / Windows browsers and on phones. The look is always dark (iOS Stocks).
 
 All numbers come from `data/portfolio.json`, which `scripts/build_data.py` computes from real
 quotes (Yahoo Finance via `yfinance`). Nothing is made up: if quotes cannot be fetched the script
@@ -13,15 +12,17 @@ fails and leaves the last good data in place.
 
 ## Views
 
-The page has four tabs (hash routes, so the browser Back button works):
+The page has six tabs (hash routes, so the browser Back button works):
 
 | Tab | Contents |
 |---|---|
 | **Stocks** (`#stocks`, default on phones) | iOS Stocks-style list: account value + day change on top; one row per holding (stocks and the short option) and per watchlist symbol with name, intraday sparkline, price and a change box. Tap the change box to cycle day change %, day change $ and market value (market cap for watchlist symbols). Tap a row for the detail panel (`#stocks/<SYMBOL>`; a full-screen sheet on phones, a side panel on wide screens): price chart with 1D / 1W / 1M / 3M / 1Y / ALL, hover/touch crosshair with exact time and value, stats (open, high, low, prev close, 52-week high/low, volume, market cap or net assets) and your position (shares, avg cost, market value, day gain, unrealized P/L). Below the list: account value chart with the same ranges. |
 | **Overview** (`#overview`, default on wide screens) | Summary, positions table, covered call, daily history |
+| **Projections** (`#projections`) | Growth from the stored birthdate, the live total, and 6/8/10% presets. Today's dollars vs future dollars. Broad-market rates, not 3× for UPRO. |
 | **Transactions** (`#transactions`) | Everything recorded through the Edit form, newest first (`data/transactions.json`) |
+| **Edit** (`#edit`) | Form to record a trade you already made at the brokerage. Opens a prefilled GitHub issue that a workflow applies (see below). It does not place the trade. |
+| **Guide** (`#guide`) | How the tabs, quotes, trade log, short-option liability, projections, and display page work |
 | **Display** (`display.html`) | Full-screen second-monitor view: large total, day change, account chart, holdings strip. No navigation or edit. |
-| **Edit** (`#edit`) | Form to record a trade; opens a prefilled GitHub issue that a workflow applies (see below) |
 
 Everything refreshes every 60 s without reloading (the data itself changes when the update workflow runs).
 
@@ -30,7 +31,7 @@ Everything refreshes every 60 s without reloading (the data itself changes when 
 - Always dark (iOS Stocks palette): black background, #1c1c1e cards, #2c2c2e separators, white / #8e8e93 text,
   green #30d158 and red #ff453a. The status bar is black-translucent when installed on a phone.
 - Phones (700 px wide or less): large title that collapses into a compact bar on scroll, bottom tab bar
-  (Stocks, Overview, Transactions, Edit), bottom-sheet detail (swipe down or tap outside to close),
+  (Stocks, Overview, Projections, Transactions, Edit, Guide), bottom-sheet detail (swipe down or tap outside to close),
   pull to refresh (re-fetches the data now), and skeleton placeholders sized like the real content.
 - Animations are plain CSS plus requestAnimationFrame, with no libraries: totals and prices count to the new
   value on refresh and briefly tint green or red, sparklines and charts draw left to right, chart ranges
@@ -84,7 +85,7 @@ Account value = stocks + cash - current value of the short option (a liability).
 
 ```
 index.html                  page shell
-assets/style.css            styles (light/dark, responsive)
+assets/style.css            styles (always dark, responsive)
 assets/projection.js        projection math (monthly compounding; browser + Node tests)
 assets/app.js               rendering, auto-refresh every 60 s (no full reload)
 assets/favicon.svg
