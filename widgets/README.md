@@ -25,7 +25,7 @@ Data is never invented. On fetch failure the last good JSON is shown from Keycha
 
 | Size | Content |
 |------|---------|
-| **Small** | Total account value; day $ and % change (green/red); quotes-as-of footer |
+| **Small** | Total + day $/%%; UPRO price & %%; short-call mark/liability (or cash); quotes-as-of |
 | **Medium** | Total + day change + market label; rows for UPRO, SPCX, short call mark/liability, cash |
 | **Large** | Same as medium (more space for rows) + one-line covered-call note (e.g. UPRO vs $154 strike, days to Oct 16, ITM/OTM) when an option is still open |
 | **Lock Screen** | Compact total and day change (circular / rectangular / inline) |

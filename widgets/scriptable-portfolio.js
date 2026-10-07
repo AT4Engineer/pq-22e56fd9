@@ -121,33 +121,93 @@ function buildErrorWidget(msg) {
 
 function buildSmall(data, isStale) {
   const w = new ListWidget()
-  styleHome(w, 12, 14)
+  styleHome(w, 10, 12)
   const acct = data.account
 
-  const title = w.addText("Portfolio")
-  title.font = Font.systemFont(12)
+  const titleRow = w.addStack()
+  titleRow.layoutHorizontally()
+  titleRow.centerAlignContent()
+  const title = titleRow.addText("Portfolio" + (isStale ? " · stale" : ""))
+  title.font = Font.systemFont(11)
   title.textColor = LABEL
+  titleRow.addSpacer()
+  const mkt = titleRow.addText(shortMarketLabel(data))
+  mkt.font = Font.systemFont(9)
+  mkt.textColor = LABEL
+  mkt.lineLimit = 1
 
-  w.addSpacer(4)
+  w.addSpacer(3)
 
   const total = w.addText(fmtMoney(acct.total))
-  total.font = Font.boldSystemFont(22)
+  total.font = Font.boldSystemFont(20)
   total.textColor = WHITE
-  total.minimumScaleFactor = 0.7
+  total.minimumScaleFactor = 0.65
   total.lineLimit = 1
 
-  w.addSpacer(2)
-
   const ch = w.addText(fmtDayChange(acct.day_change, acct.day_change_pct))
-  ch.font = Font.boldSystemFont(13)
+  ch.font = Font.boldSystemFont(12)
   ch.textColor = changeColor(acct.day_change)
-  ch.minimumScaleFactor = 0.75
+  ch.minimumScaleFactor = 0.7
   ch.lineLimit = 1
+
+  w.addSpacer(6)
+
+  // Top holding (prefer UPRO) — price + day change
+  const upro = findPosition(data, "UPRO") || (data.positions && data.positions[0])
+  if (upro) {
+    const row = w.addStack()
+    row.layoutHorizontally()
+    row.centerAlignContent()
+    const sym = row.addText(upro.symbol)
+    sym.font = Font.boldSystemFont(11)
+    sym.textColor = WHITE
+    row.addSpacer()
+    const px = row.addText(fmtPrice(upro.price))
+    px.font = Font.systemFont(11)
+    px.textColor = WHITE
+    const pct = row.addText("  " + fmtSignedPct(upro.day_change_pct))
+    pct.font = Font.systemFont(11)
+    pct.textColor = changeColor(upro.day_change_pct)
+  }
+
+  w.addSpacer(3)
+
+  // One-liner: open short call mark, else cash
+  const opt = ((data.options || []).filter((o) => !o.expired)[0]) || null
+  let line = ""
+  if (opt) {
+    const strike = opt.strike != null ? trimNum(opt.strike) : "?"
+    line =
+      (opt.underlying || "OPT") +
+      " $" +
+      strike +
+      "C  " +
+      fmtPrice(opt.mark != null ? opt.mark : opt.last) +
+      "  " +
+      fmtMoney(opt.liability)
+  } else if (acct.cash != null) {
+    line = "Cash  " + fmtMoney(acct.cash)
+  }
+  if (line) {
+    const note = w.addText(line)
+    note.font = Font.systemFont(10)
+    note.textColor = LABEL
+    note.lineLimit = 1
+    note.minimumScaleFactor = 0.75
+  }
 
   w.addSpacer()
 
-  addFooter(w, data, isStale, 10)
+  addFooter(w, data, false, 9) // stale already in title
   return w
+}
+
+function findPosition(data, symbol) {
+  const list = data.positions || []
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].symbol === symbol) return list[i]
+  }
+  return null
 }
 
 function buildMedium(data, isStale) {

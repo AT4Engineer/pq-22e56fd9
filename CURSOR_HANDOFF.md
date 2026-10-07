@@ -141,6 +141,7 @@ Edit holdings → commit/push `data/holdings.json`, or use Edit form / `python s
 
 ## Recently finished (2026-10-06)
 
+- **Comma number inputs** on Edit amounts/prices + Projections start/monthly; denser Scriptable **small** widget
 - **Projections = Ramsey compound model** (monthly rate = annual/12, end-of-month deposits; presets 8/10/12% with 12% Ramsey default; Jack $36,635 test)
 - **Scriptable iPhone widget** (`widgets/scriptable-portfolio.js` + README + preview)
 - Removed paper trading from UI (`2fc1b70`); `/workspace/spy-paper-lab` kept on disk

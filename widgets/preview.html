@@ -195,12 +195,20 @@ function render(data, stale) {
   const rows = buildRows(data);
   const note = callNote(data);
 
+  const upro = (data.positions||[]).find(p => p.symbol==="UPRO") || (data.positions||[])[0];
+  const opt = (data.options||[]).find(o => !o.expired);
+  const smallExtra = upro ? `<div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px"><span style="font-weight:700">${upro.symbol}</span><span>${price(upro.price)} <span class="${cls(upro.day_change_pct)}">${signedPct(upro.day_change_pct)}</span></span></div>` : "";
+  const smallNote = opt
+    ? `${opt.underlying} $${opt.strike}C  ${price(opt.mark??opt.last)}  ${money(opt.liability)}`
+    : (a.cash!=null ? `Cash  ${money(a.cash)}` : "");
   const small = `
     <div class="col"><div class="label">Small</div>
     <div class="widget w-small" id="shot-small"><div class="stack-fill">
-      <div class="t-label">Portfolio${stale?" · stale":""}</div>
-      <div class="t-total">${money(a.total)}</div>
+      <div class="t-label" style="display:flex;justify-content:space-between"><span>Portfolio${stale?" · stale":""}</span><span style="font-size:9px">${(data.market_label||"").slice(0,18)}</span></div>
+      <div class="t-total" style="font-size:20px">${money(a.total)}</div>
       <div class="t-chg ${cls(a.day_change)}">${day}</div>
+      ${smallExtra}
+      ${smallNote?`<div class="t-foot" style="margin-top:4px">${smallNote}</div>`:""}
       <div class="spacer"></div>
       <div class="t-foot">${foot}</div>
     </div></div></div>`;

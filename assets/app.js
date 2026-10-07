@@ -1109,6 +1109,58 @@
   }
   function fv(id) { return ($(id).value || "").trim(); }
   function pnum(s) { if (s === "" || s == null) return null; var x = Number(String(s).replace(/[$,\s]/g, "")); return isFinite(x) ? x : NaN; }
+  // Comma grouping while typing (1,000,000). Preserves decimals and caret; pnum() strips for math/JSON.
+  var COMMA_IDS = { "ed-qty": 1, "ed-price": 1, "ed-amount": 1, "ed-price2": 1, "ed-fees": 1, "ed-strike": 1, "pj-start": 1, "pj-monthly": 1 };
+  function formatCommaTyping(raw) {
+    raw = String(raw == null ? "" : raw);
+    if (raw === "") return "";
+    if (/[a-zA-Z]/.test(raw)) return raw; // e.g. "all" for contracts
+    var neg = /^\s*-/.test(raw);
+    var s = raw.replace(/[^\d.]/g, "");
+    var dot = s.indexOf(".");
+    var intPart = dot < 0 ? s : s.slice(0, dot);
+    var frac = dot < 0 ? null : s.slice(dot + 1).replace(/\./g, "");
+    if (intPart === "" && frac !== null) intPart = "0";
+    var grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var out = (neg ? "-" : "") + grouped;
+    if (frac !== null) out += "." + frac;
+    return out;
+  }
+  function significantBefore(str, pos) {
+    var n = 0;
+    for (var i = 0; i < pos && i < str.length; i++) {
+      var c = str.charAt(i);
+      if ((c >= "0" && c <= "9") || c === "." || c === "-") n++;
+    }
+    return n;
+  }
+  function applyCommaInput(el) {
+    if (!el || !COMMA_IDS[el.id]) return;
+    var old = el.value;
+    if (/[a-zA-Z]/.test(old)) return;
+    var start = el.selectionStart != null ? el.selectionStart : old.length;
+    var target = significantBefore(old, start);
+    var next = formatCommaTyping(old);
+    if (next === old) return;
+    el.value = next;
+    var n = 0, caret = next.length;
+    if (target === 0) caret = next.charAt(0) === "-" ? 1 : 0;
+    else {
+      for (var i = 0; i < next.length; i++) {
+        var c = next.charAt(i);
+        if ((c >= "0" && c <= "9") || c === "." || c === "-") {
+          n++;
+          if (n >= target) { caret = i + 1; break; }
+        }
+      }
+    }
+    try { el.setSelectionRange(caret, caret); } catch (e) { /* not focused */ }
+  }
+  function setCommaVal(id, v) {
+    var el = $(id); if (!el) return;
+    if (v === "" || v == null) { el.value = ""; return; }
+    el.value = formatCommaTyping(String(v));
+  }
   function optLabel(sym, o) { return [sym, o.expiry ? fmtDate(o.expiry, { month: "short", day: "numeric", year: "numeric" }) : "", isNum(o.strike) ? "$" + o.strike : "", o.right || ""].filter(Boolean).join(" "); }
   function edType() { return $("ed-type").value; }
 
@@ -1138,17 +1190,17 @@
     if (t === "roll") edRollPrefill();
     if (t === "set_option_premium") {
       var so = opts[+$("ed-openopt").value];
-      $("ed-price").value = so && isNum(so.open_price) ? so.open_price : "";
+      setCommaVal("ed-price", so && isNum(so.open_price) ? so.open_price : "");
     }
     edPreview();
   }
   // Roll: buy back at the current ask, sell the next monthly call nearest the share price at its bid (editable).
   function edRollPrefill() {
     var roll = (state.data || {}).roll || {}, c = roll.current, n = roll.next;
-    if (c && isNum(c.ask) && c.ask > 0) $("ed-price").value = c.ask;
+    if (c && isNum(c.ask) && c.ask > 0) setCommaVal("ed-price", c.ask);
     if (n && isNum(n.atm_strike)) {
-      $("ed-strike").value = n.atm_strike; $("ed-expiry").value = n.expiry;
-      $("ed-price2").value = isNum(n.bid) && n.bid > 0 ? n.bid : "";
+      setCommaVal("ed-strike", n.atm_strike); $("ed-expiry").value = n.expiry;
+      setCommaVal("ed-price2", isNum(n.bid) && n.bid > 0 ? n.bid : "");
       var rc = document.querySelector('#ed-form input[name="right"][value="call"]'); if (rc) rc.checked = true;
     }
     if (c && c.expiry && c.expiry >= todayET()) $("ed-date").value = todayET();
@@ -1158,11 +1210,11 @@
     var d = state.data || {}, o = (d.options || [])[+$("ed-openopt").value];
     if ($("ed-openopt").value === "" || !o) return;
     $("ed-symbol").value = o.underlying;
-    if (edType() === "roll") { $("ed-qty").value = o.contracts; return; }  // the option fields are the NEW contract
-    $("ed-strike").value = o.strike;
+    if (edType() === "roll") { setCommaVal("ed-qty", o.contracts); return; }  // the option fields are the NEW contract
+    setCommaVal("ed-strike", o.strike);
     $("ed-expiry").value = o.expiry;
     var r = document.querySelector('#ed-form input[name="right"][value="' + o.type + '"]'); if (r) r.checked = true;
-    if (edType() !== "option_expired" && edType() !== "option_assigned") $("ed-qty").value = o.contracts;
+    if (edType() !== "option_expired" && edType() !== "option_assigned") setCommaVal("ed-qty", o.contracts);
     if (edType() === "option_expired") $("ed-date").value = o.expiry;
   }
   function edBuild() {
@@ -1306,7 +1358,10 @@
   function edInit() {
     $("ed-type").addEventListener("change", edSetup);
     $("ed-openopt").addEventListener("change", function () { edPickOpt(); edPreview(); });
-    $("ed-form").addEventListener("input", edPreview);
+    $("ed-form").addEventListener("input", function (e) {
+      if (e.target) applyCommaInput(e.target);
+      edPreview();
+    });
     $("ed-form").addEventListener("change", edPreview);
     $("ed-form").addEventListener("submit", edSubmit);
     $("ed-form").addEventListener("reset", function () { setTimeout(function () { $("ed-date").value = todayET(); $("ed-done").hidden = true; $("ed-error").hidden = true; edSetup(); }, 0); });
@@ -1345,8 +1400,8 @@
     var s = pjSettings();
     $("pj-age").value = pjAgeStr(s.age);
     $("pj-target").value = s.target;
-    $("pj-start").value = isNum(s.start) ? s.start : (isNum(pjLive()) ? pjLive().toFixed(2) : "");
-    $("pj-monthly").value = s.monthly || "";
+    setCommaVal("pj-start", isNum(s.start) ? s.start : (isNum(pjLive()) ? pjLive().toFixed(2) : ""));
+    setCommaVal("pj-monthly", s.monthly || "");
     $("pj-raise").value = s.raise || "";
     $("pj-custom").value = isNum(s.custom) ? s.custom : "";
     var r = document.querySelector('input[name="pj-rate"][value="' + s.preset + '"]'); if (r) r.checked = true;
@@ -1371,7 +1426,10 @@
     pjFill();
     var form = $("pj-form");
     form.addEventListener("submit", function (e) { e.preventDefault(); });
-    form.addEventListener("input", function () { pjRead(); renderProj(true); });
+    form.addEventListener("input", function (e) {
+      if (e.target) applyCommaInput(e.target);
+      pjRead(); renderProj(true);
+    });
     form.addEventListener("change", function () { pjRead(); renderProj(true); });
     // Segmented radios: set the checked state ourselves. A label tap does not flip them on iOS
     // when the input is taken out of flow, so 8/10/12% and today's/future dollars did nothing.
@@ -1390,7 +1448,7 @@
     });
     $("pj-chips").addEventListener("click", function (e) {
       var b = e.target.closest && e.target.closest("[data-amt]"); if (!b) return;
-      $("pj-monthly").value = b.getAttribute("data-amt") === "0" ? "" : b.getAttribute("data-amt");
+      setCommaVal("pj-monthly", b.getAttribute("data-amt") === "0" ? "" : b.getAttribute("data-amt"));
       pjRead(); renderProj(true);
     });
     $("pj-age-hint").addEventListener("click", function (e) {
@@ -1399,7 +1457,7 @@
     });
     $("pj-start-hint").addEventListener("click", function (e) {
       if (!e.target.closest || !e.target.closest("[data-live]")) return;
-      e.preventDefault(); $("pj-start").value = isNum(pjLive()) ? pjLive().toFixed(2) : ""; pjRead(); renderProj(true);
+      e.preventDefault(); setCommaVal("pj-start", isNum(pjLive()) ? pjLive().toFixed(2) : ""); pjRead(); renderProj(true);
     });
   }
   function pjMarkSeg(form) {
@@ -1420,7 +1478,7 @@
     if (!$("pj-form")) return;
     pjInit();
     var s = pjSettings(), live = pjLive();
-    if (!isNum(s.start) && isNum(live) && document.activeElement !== $("pj-start")) $("pj-start").value = live.toFixed(2);
+    if (!isNum(s.start) && isNum(live) && document.activeElement !== $("pj-start")) setCommaVal("pj-start", live.toFixed(2));
     var stored = pjLoad(), dAge = pjAgeDefault(), pr = (state.data || {}).projection || {};
     if (!isNum(stored.age) && isNum(dAge) && document.activeElement !== $("pj-age")) $("pj-age").value = pjAgeStr(dAge);
     // use the unrounded birthdate age for the math while the field shows the default
