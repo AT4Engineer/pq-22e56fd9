@@ -9,7 +9,7 @@
   <meta name="trade-repo" content="AT4Engineer/pq-22e56fd9">
   <title>Portfolio Tracker</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=14">
+  <link rel="stylesheet" href="assets/style.css?v=15">
   <!-- pwa:start (stripped from the standalone build) -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -47,6 +47,7 @@
         <span class="market" id="market-pill"><span class="dot" aria-hidden="true"></span><span id="market-label">Loading</span></span>
         <span class="updated">Last updated <strong id="updated">--</strong></span>
       </div>
+      <button type="button" class="rf-btn" id="rf-btn" aria-label="Refresh data" aria-haspopup="menu" title="Refresh (hold for more)"><svg class="rf-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4.2h-4.2"/></svg></button>
     </div>
     <nav class="wrap tabs" aria-label="Views">
       <a href="#stocks" data-tab="stocks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg><span class="tl">Stocks</span></a>
@@ -57,6 +58,11 @@
       <a href="#guide" data-tab="guide"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.2A2.3 2.3 0 0 1 18.5 6.8V20H7.2A2.2 2.2 0 0 0 5 17.8z"/><path d="M5 4.5A2.2 2.2 0 0 1 7.2 6.7H18.5"/><path d="M8.5 11h6"/></svg><span class="tl">Guide</span></a>
     </nav>
   </header>
+  <div class="rf-menu" id="rf-menu" role="menu" aria-label="Refresh options" hidden>
+    <button type="button" role="menuitem" data-rf="now"><span>Refresh now</span><small>Reload the latest saved prices</small></button>
+    <button type="button" role="menuitem" data-rf="fresh"><span>Get fresh prices</span><small>Opens GitHub to run the price update (about 2 to 3 min)</small></button>
+  </div>
+  <div class="rf-toast" id="rf-toast" role="status" aria-live="polite" hidden></div>
   <div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="ptr-track" cx="12" cy="12" r="9"/><circle class="ptr-arc" cx="12" cy="12" r="9"/></svg></div>
 
   <main id="app" class="wrap" aria-busy="true">
@@ -430,7 +436,8 @@
       <section class="card" aria-labelledby="g-quotes">
         <h2 id="g-quotes" class="card-title">How quotes update</h2>
         <p class="guide-p">A scheduled job reads <code>data/holdings.json</code> and asks Yahoo Finance for prices, about every 15 minutes while the US market is in session, and once more after the close. Clocks on this site are Eastern Time.</p>
-        <p class="guide-p">The page reloads <code>data/portfolio.json</code> about every 60 seconds. It does not reload the whole site. On a phone, pull down from the top to fetch now. Prices can run about 15 minutes behind the brokerage. The line under the market status is the quote time, not the moment you opened the page.</p>
+        <p class="guide-p">The page reloads <code>data/portfolio.json</code> about every 60 seconds. It does not reload the whole site. On a phone, pull down from the top to fetch now, or tap the refresh button at the top right. That reloads the saved file; it does not get new quotes. Prices can run about 15 minutes behind the brokerage. The line under the market status is the quote time, not the moment you opened the page.</p>
+        <p class="guide-p">To get new quotes right away, hold the refresh button (or right-click it on a computer) and choose <strong>Get fresh prices</strong>. GitHub opens with a ready-made issue titled <code>refresh</code>; tap <strong>Create</strong>. A workflow runs the same price update as the schedule, comments the result on the issue and closes it. The page checks for the new file every 15 seconds for about 3 minutes. Only issues you open run it.</p>
         <p class="guide-p">A missing stock quote stops the update and leaves the last good file in place. Overnight, an option often comes back with no real bid or ask. That is not used as a price. The last good bid/ask midpoint is kept, with the session it came from. A failed refresh never fills in a made-up price.</p>
       </section>
 
@@ -480,6 +487,6 @@
 
   <noscript><p class="noscript">This dashboard needs JavaScript enabled.</p></noscript>
   <script src="assets/projection.js?v=12"></script>
-  <script src="assets/app.js?v=13"></script>
+  <script src="assets/app.js?v=14"></script>
 </body>
 </html>

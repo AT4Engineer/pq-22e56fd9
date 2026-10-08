@@ -1,0 +1,104 @@
+name: Refresh prices from issue
+
+# "Get fresh prices" on the dashboard (hold the refresh button) opens a prefilled issue titled "refresh"
+# with the label "refresh". This runs the same job as the scheduled update (update.yml: fresh quotes,
+# rebuild data/ and dist/, commit), then comments the result on the issue and closes it.
+# Only issues opened by the repo owner run it. Nothing here places a trade or changes holdings.
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+# An issue created with a label fires both "opened" and "labeled". Runs for one issue queue here;
+# the second one finds the issue already closed at the gate and does nothing.
+concurrency:
+  group: refresh-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    if: >-
+      github.event.issue.user.login == 'AT4Engineer' &&
+      github.event.issue.state == 'open' &&
+      ((github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'refresh')) ||
+       (github.event.action == 'labeled' && github.event.label.name == 'refresh'))
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ steps.check.outputs.go }}
+    steps:
+      - name: Is the issue still open?
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUM: ${{ github.event.issue.number }}
+        run: |
+          st=$(gh issue view "$NUM" -R "$GITHUB_REPOSITORY" --json state -q .state)
+          echo "Issue #$NUM is $st"
+          if [ "$st" = "OPEN" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; else echo "go=false" >> "$GITHUB_OUTPUT"; fi
+
+  update:
+    needs: gate
+    if: needs.gate.outputs.go == 'true'
+    uses: ./.github/workflows/update.yml
+
+  report:
+    needs: [gate, update]
+    if: always() && needs.gate.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Comment and close
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUM: ${{ github.event.issue.number }}
+          RESULT: ${{ needs.update.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ "$RESULT" = "success" ]; then
+            summary=$(python3 - <<'PY'
+          import json
+          d = json.load(open("data/portfolio.json"))
+          a = d.get("account") or {}
+          def money(x):
+              return "n/a" if not isinstance(x, (int, float)) else ("-" if x < 0 else "") + "${:,.2f}".format(abs(x))
+          def signed(x):
+              return "n/a" if not isinstance(x, (int, float)) else ("+" if x > 0 else "-" if x < 0 else "") + "${:,.2f}".format(abs(x))
+          def pct(x):
+              return "" if not isinstance(x, (int, float)) else " ({}{:.2f}%)".format("+" if x > 0 else "-" if x < 0 else "", abs(x))
+          print("Account total **{}**, day change {}{}. Data generated {} ({}).".format(
+              money(a.get("total")), signed(a.get("day_change")), pct(a.get("day_change_pct")),
+              d.get("generated_at_et", "n/a"), d.get("market_label", "")))
+          PY
+            )
+            sha=$(git rev-parse --short HEAD)
+            gh issue comment "$NUM" -R "$GITHUB_REPOSITORY" --body "Prices refreshed. ${summary}
+
+          Commit ${sha} on main. The site shows it once GitHub Pages finishes publishing (usually under a minute); an open dashboard picks it up on its own. Run: ${RUN_URL}"
+            gh issue close "$NUM" -R "$GITHUB_REPOSITORY" --reason completed
+          else
+            gh issue comment "$NUM" -R "$GITHUB_REPOSITORY" --body "Price update did not finish (result: ${RESULT}). The last good data was kept; no prices were made up. Details: ${RUN_URL}"
+            gh issue close "$NUM" -R "$GITHUB_REPOSITORY" --reason "not planned"
+          fi
+
+  reject:
+    # Someone else opened or labelled an issue "refresh": refuse it, run nothing.
+    if: >-
+      github.event.issue.user.login != 'AT4Engineer' &&
+      github.event.issue.state == 'open' &&
+      ((github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'refresh')) ||
+       (github.event.action == 'labeled' && github.event.label.name == 'refresh'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment and close
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUM: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$NUM" -R "$GITHUB_REPOSITORY" --body "Not run: only refresh requests opened by @AT4Engineer start a price update."
+          gh issue close "$NUM" -R "$GITHUB_REPOSITORY" --reason "not planned"

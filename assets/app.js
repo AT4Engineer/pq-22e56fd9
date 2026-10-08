@@ -1886,6 +1886,7 @@
         render(j);
       }
       tickStatus();
+      if (rf.wait) rfCheckWait(state.data);
       return refreshExtras();
     }).catch(function (e) {
       state.fetchError = true;
@@ -1908,6 +1909,144 @@
   function doRefresh() { return refresh(true); }
   window.PQ = { refresh: doRefresh };
 
+  // ------------------------------------------------------------------ refresh button (top bar)
+  // Tap: reload data/portfolio.json now (same as pull to refresh). Hold, right-click or the
+  // context-menu key: a small menu with "Get fresh prices", which opens a prefilled GitHub issue
+  // (label "refresh"); the refresh.yml workflow runs the price update and closes it. The page then
+  // checks the data file every 15 s for about 3 minutes until generated_at changes.
+  var RF_WAIT_KEY = "pq-rf-wait", RF_POLL_EVERY = 15000, RF_POLL_FOR = 180000, RF_HOLD_MS = 500, RF_MIN_SPIN = 600;
+  var rf = { busy: false, toastT: null, poll: null, wait: null, hold: null, heldAt: 0 };
+  function hm(d, withDay) {
+    var o = { timeZone: TZ, hour: "numeric", minute: "2-digit" };
+    if (withDay) o.weekday = "short";
+    return new Intl.DateTimeFormat("en-US", o).format(d);
+  }
+  function etDay(d) { return new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(d); }
+  function rfToast(html, ms, wait) {
+    var el = $("rf-toast");
+    clearTimeout(rf.toastT);
+    el.hidden = true; el.innerHTML = html; el.classList.toggle("wait", !!wait);
+    void el.offsetWidth; el.hidden = false;  // replay the entry animation
+    if (ms) rf.toastT = setTimeout(function () { if (rf.wait) rfShowWait(); else el.hidden = true; }, ms);
+  }
+  function rfShowWait() { if (rf.wait) rfToast('Waiting for fresh prices&hellip; <span class="sub">tap to stop</span>', 0, true); }
+  function rfNow() {
+    if (rf.busy) return;
+    rf.busy = true;
+    var btn = $("rf-btn"), t0 = Date.now(), hadWait = !!rf.wait;
+    btn.classList.add("spin"); btn.setAttribute("aria-busy", "true");
+    var fin = function () {
+      setTimeout(function () {
+        rf.busy = false; btn.classList.remove("spin"); btn.removeAttribute("aria-busy");
+        if (hadWait && !rf.wait) return;  // the new prices arrived with this reload; that message is already showing
+        if (state.fetchError) { rfToast("Couldn&rsquo;t refresh &middot; showing the last data", 3500); return; }
+        var now = new Date(), gen = state.data ? new Date(state.data.generated_at_iso) : null, sub = "";
+        if (gen && !isNaN(gen) && now - gen > 20 * 60000) sub = ' <span class="sub">&middot; prices ' + esc(hm(gen, etDay(gen) !== etDay(now))) + "</span>";
+        rfToast("Updated " + esc(hm(now)) + sub, 2600);
+      }, Math.max(0, RF_MIN_SPIN - (Date.now() - t0)));
+    };
+    doRefresh().then(fin, fin);
+  }
+  function rfIssueUrl() {
+    var body = "Get fresh prices now.\n\nCreating this issue runs the same price update as the 15-minute schedule " +
+      "(quotes from Yahoo Finance, then data/ and dist/ are rebuilt). The refresh workflow comments the result here and " +
+      "closes this issue. It only runs for issues opened by the repo owner. It never places a trade.\n\n" +
+      "Requested from the dashboard on " + fmtET(new Date().toISOString()) + ".";
+    return "https://github.com/" + REPO + "/issues/new?labels=refresh&title=refresh&body=" + encodeURIComponent(body);
+  }
+  function rfFresh() {
+    rf.wait = { base: (state.data && state.data.generated_at_iso) || "", until: Date.now() + RF_POLL_FOR };
+    lsSet(RF_WAIT_KEY, JSON.stringify(rf.wait));
+    window.open(rfIssueUrl(), "_blank", "noopener");
+    rfStartPoll();
+  }
+  function rfStartPoll() {
+    clearInterval(rf.poll);
+    $("rf-btn").classList.add("wait");
+    rfShowWait();
+    rf.poll = setInterval(rfPollTick, RF_POLL_EVERY);
+  }
+  function rfStop(msg, ms) {
+    clearInterval(rf.poll); rf.poll = null; rf.wait = null; lsSet(RF_WAIT_KEY, "");
+    $("rf-btn").classList.remove("wait");
+    if (msg) rfToast(msg, ms || 3500); else { clearTimeout(rf.toastT); $("rf-toast").hidden = true; }
+  }
+  function rfGot(d) {
+    return !!(rf.wait && d && d.generated_at_iso && d.generated_at_iso !== rf.wait.base && isNewer(d, { generated_at_iso: rf.wait.base }));
+  }
+  function rfCheckWait(d) {
+    if (!rfGot(d)) return false;
+    rfStop("Fresh prices &middot; " + esc(hm(new Date(d.generated_at_iso))), 4000);
+    return true;
+  }
+  function rfPollTick() {
+    if (!rf.wait) { rfStop(); return; }
+    if (rfCheckWait(state.data)) return;
+    if (document.hidden) return;  // checked again as soon as the page is visible
+    fetchJSON(DATA_URL).then(function (j) {
+      if (rfGot(j)) {
+        if (STANDALONE) state.source = "remote";
+        state.fetchError = false; state.lastCheck = new Date();
+        render(j); tickStatus(); refreshExtras();
+        rfCheckWait(j);
+      } else if (rf.wait && Date.now() > rf.wait.until) rfStop("No new prices yet &middot; try again in a minute", 5000);
+    }, function () {
+      if (rf.wait && Date.now() > rf.wait.until) rfStop("Couldn&rsquo;t reach the data file &middot; try again later", 5000);
+    });
+  }
+  function rfMenu(open, focus) {
+    var m = $("rf-menu"), b = $("rf-btn");
+    if (!open) { if (!m.hidden) { m.hidden = true; b.setAttribute("aria-expanded", "false"); } return; }
+    var r = b.getBoundingClientRect();
+    m.style.top = Math.round(r.bottom + 4) + "px";
+    m.style.right = Math.max(8, Math.round(document.documentElement.clientWidth - r.right)) + "px";
+    m.hidden = false; b.setAttribute("aria-expanded", "true");
+    if (focus) m.querySelector("button").focus({ preventScroll: true });
+  }
+  function rfInit() {
+    var btn = $("rf-btn"), menu = $("rf-menu");
+    if (!btn || !menu) return;
+    if (!DATA_URL) { btn.hidden = true; return; }  // standalone file without a remote URL: nothing to reload
+    btn.setAttribute("aria-expanded", "false");
+    btn.addEventListener("pointerdown", function (e) {
+      if (e.button) return;
+      clearTimeout(rf.hold);
+      rf.hold = setTimeout(function () { rf.heldAt = Date.now(); if (navigator.vibrate) navigator.vibrate(10); rfMenu(true); }, RF_HOLD_MS);
+    });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) { btn.addEventListener(ev, function () { clearTimeout(rf.hold); }); });
+    btn.addEventListener("contextmenu", function (e) {
+      e.preventDefault(); clearTimeout(rf.hold);
+      if (menu.hidden) { rf.heldAt = Date.now(); rfMenu(true, !e.pointerType && e.button !== 2); }
+    });
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (Date.now() - rf.heldAt < 1200) { rf.heldAt = 0; return; }  // the end of a long press, not a tap
+      if (!menu.hidden) { rfMenu(false); return; }
+      rfNow();
+    });
+    btn.addEventListener("keydown", function (e) { if (e.key === "ArrowDown") { e.preventDefault(); rfMenu(true, true); } });
+    menu.addEventListener("click", function (e) {
+      var it = e.target.closest && e.target.closest("[data-rf]");
+      if (!it) return;
+      e.stopPropagation();
+      rfMenu(false);
+      if (it.getAttribute("data-rf") === "fresh") rfFresh(); else rfNow();
+    });
+    menu.addEventListener("keydown", function (e) {
+      var items = [].slice.call(menu.querySelectorAll("button")), i = items.indexOf(document.activeElement);
+      if (e.key === "Escape") { e.preventDefault(); rfMenu(false); btn.focus(); }
+      else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); items[(i + (e.key === "ArrowDown" ? 1 : items.length - 1)) % items.length].focus(); }
+    });
+    document.addEventListener("pointerdown", function (e) { if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) rfMenu(false); }, true);
+    window.addEventListener("scroll", function () { rfMenu(false); }, { passive: true });
+    window.addEventListener("resize", function () { rfMenu(false); });
+    $("rf-toast").addEventListener("click", function () { if (rf.wait) rfStop(); });
+    document.addEventListener("visibilitychange", function () { if (!document.hidden && rf.wait) rfPollTick(); });
+    var w = null;
+    try { w = JSON.parse(lsGet(RF_WAIT_KEY, "") || "null"); } catch (e) { w = null; }
+    if (w && w.until > Date.now()) { rf.wait = w; rfStartPoll(); }
+  }
+
   var rsT = null, lastW = window.innerWidth;
   window.addEventListener("resize", function () {
     clearTimeout(rsT);
@@ -1922,6 +2061,7 @@
     }, 200);
   });
   uiInit();
+  rfInit();
   if (STANDALONE) { state.source = "embedded"; render(EMBEDDED); }
   refresh();
   setInterval(refresh, REFRESH_MS);

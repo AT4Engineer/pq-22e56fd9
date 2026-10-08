@@ -505,6 +505,57 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
 .ptr.loading .ptr-arc { stroke-dashoffset: 40; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* manual refresh: top-bar button (tap = reload data, hold = options), options menu, status toast */
+.status { margin-left: auto; }
+.rf-btn {
+  position: relative; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin: -8px -10px -8px -6px; padding: 0; border: 0; border-radius: 50%;
+  background: transparent; color: var(--text); cursor: pointer; font: inherit;
+  -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
+  touch-action: manipulation; transition: opacity .15s ease, background-color .15s ease;
+}
+.rf-btn[hidden] { display: none; }
+@media (hover: hover) { .rf-btn:hover { background: rgba(255,255,255,.07); } }
+.rf-btn:active { opacity: .4; }
+.rf-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
+.rf-ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.rf-btn.spin .rf-ic { animation: spin .8s linear infinite; }
+.rf-btn.wait::after {
+  content: ""; position: absolute; top: 9px; right: 8px; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 2px var(--bg);
+}
+.rf-menu {
+  position: fixed; z-index: 70; width: 268px; max-width: calc(100vw - 16px); border-radius: 13px; overflow: hidden;
+  background: rgba(40,40,43,.96); -webkit-backdrop-filter: saturate(180%) blur(30px); backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.65), 0 0 0 .5px rgba(84,84,88,.6); transform-origin: top right;
+  animation: rf-pop .22s var(--ease-out) backwards;
+}
+.rf-menu[hidden] { display: none; }
+.rf-menu button {
+  display: block; width: 100%; min-height: 44px; padding: 10px 16px; border: 0; background: transparent; color: var(--text);
+  font: inherit; font-size: 17px; line-height: 22px; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.rf-menu button + button { border-top: .5px solid rgba(84,84,88,.65); }
+.rf-menu button small { display: block; margin-top: 1px; color: var(--muted); font-size: 13px; line-height: 17px; }
+.rf-menu button:active, .rf-menu button:focus-visible { background: rgba(255,255,255,.1); outline: 0; }
+@media (hover: hover) { .rf-menu button:hover { background: rgba(255,255,255,.07); } }
+@keyframes rf-pop { from { opacity: 0; transform: scale(.86); } }
+.rf-toast {
+  position: fixed; z-index: 48; left: 50%; top: calc(env(safe-area-inset-top) + 12px); transform: translateX(-50%);
+  max-width: calc(100vw - 24px); padding: 7px 14px; border-radius: 999px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  background: rgba(44,44,46,.95); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  color: var(--text); font-size: 13px; font-weight: 600; line-height: 18px; box-shadow: 0 4px 18px rgba(0,0,0,.55);
+  animation: rf-in .25s var(--ease-out) backwards; pointer-events: none;
+}
+.rf-toast[hidden] { display: none; }
+.rf-toast.wait { pointer-events: auto; cursor: pointer; }
+.rf-toast .sub { color: var(--muted); font-weight: 500; }
+@keyframes rf-in { from { opacity: 0; transform: translate(-50%, -8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .rf-btn.spin .rf-ic { animation: none !important; opacity: .4; }
+  .rf-menu, .rf-toast { animation: none !important; }
+}
+
 /* detail: bottom sheet below 960px */
 @media (max-width: 959px) {
   .detail {
@@ -554,7 +605,10 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   }
   .brand-full { display: none; }
   .brand-view { display: inline; }
-  .status { font-size: 13px; gap: 10px; opacity: calc(1 - var(--nt, 0)); }
+  .status { font-size: 13px; gap: 10px; margin-left: 0; opacity: calc(1 - var(--nt, 0)); }
+  /* refresh button sits in the compact nav bar row (top right), visible with the large title or collapsed */
+  .rf-btn { position: fixed; z-index: 47; top: env(safe-area-inset-top); right: max(4px, env(safe-area-inset-right)); margin: 0; }
+  .rf-toast { top: calc(env(safe-area-inset-top) + 50px); }
   /* iOS Tab Bar rhythm: 49px content row + home-indicator safe area; equal columns */
   .tabs {
     position: fixed; z-index: 46; left: 0; right: 0; bottom: 0; max-width: none; margin: 0; gap: 0;
