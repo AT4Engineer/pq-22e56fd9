@@ -1,21 +1,21 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-08 16:00:39 ET",
-  "generated_at_iso": "2026-10-08T16:00:39-04:00",
+  "generated_at_et": "2026-10-08 16:10:36 ET",
+  "generated_at_iso": "2026-10-08T16:10:36-04:00",
   "trade_date": "2026-10-08",
   "quotes_as_of_et": "2026-10-08 16:00 ET",
   "market_state": "POST",
   "market_label": "After hours",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16688.48,
+    "total": 16663.48,
     "prev_total": 16761.1,
-    "day_change": -72.62,
-    "day_change_pct": -0.43,
+    "day_change": -97.62,
+    "day_change_pct": -0.58,
     "stocks_value": 15961.28,
     "cash": 964.7,
-    "cash_share_pct": 5.78,
-    "option_liability": -237.5
+    "cash_share_pct": 5.79,
+    "option_liability": -262.5
   },
   "positions": [
     {
@@ -37,7 +37,7 @@
       "quote_time_et": "2026-10-08 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 160.81,
+      "ext_price": 160.23,
       "ext_label": "post-market",
       "share_pct": 3.85
     },
@@ -60,15 +60,15 @@
       "quote_time_et": "2026-10-08 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": null,
-      "ext_label": "",
-      "share_pct": 91.79
+      "ext_price": 153.54,
+      "ext_label": "post-market",
+      "share_pct": 91.93
     }
   ],
   "options": [
     {
       "open_price": 5.3647,
-      "unrealized": 298.97,
+      "unrealized": 273.97,
       "key": "UPRO|2026-10-16|154|call",
       "label": "UPRO Oct 16 2026 $154 call",
       "contract": "UPRO261016C00154000",
@@ -88,24 +88,24 @@
       "status": "OTM",
       "itm": false,
       "covered": true,
-      "bid": 2.25,
-      "ask": 2.5,
-      "last": 2.41,
-      "mark": 2.375,
+      "bid": 2.3,
+      "ask": 2.95,
+      "last": 2.45,
+      "mark": 2.625,
       "mark_source": "mid of bid/ask",
       "intrinsic": 0.0,
-      "extrinsic": 2.375,
-      "liability": -237.5,
-      "day_change": 152.5,
+      "extrinsic": 2.625,
+      "liability": -262.5,
+      "day_change": 127.5,
       "prev_mark": 3.9,
       "prev_mark_source": "recorded mark for prior session 2026-10-07",
-      "iv": 0.3001,
+      "iv": 0.3472,
       "open_interest": 737.0,
-      "volume": 75.0,
-      "last_trade_et": "2026-10-08 15:28 ET",
+      "volume": 85.0,
+      "last_trade_et": "2026-10-08 15:49 ET",
       "assignment_risk": "AT THE STRIKE",
       "assignment_note": "Right at the strike - a small move up puts it in the money.",
-      "prob_finish_itm": 0.444,
+      "prob_finish_itm": 0.4489,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -122,9 +122,9 @@
       "pct": 1.48
     },
     "worst_day": {
-      "date": "2026-10-07",
-      "change": -87.28,
-      "pct": -0.52
+      "date": "2026-10-08",
+      "change": -97.62,
+      "pct": -0.58
     }
   },
   "history": [
@@ -148,9 +148,9 @@
     },
     {
       "date": "2026-10-08",
-      "total": 16688.48,
-      "day_change": -72.62,
-      "day_change_pct": -0.43
+      "total": 16663.48,
+      "day_change": -97.62,
+      "day_change_pct": -0.58
     }
   ],
   "watchlist": [
@@ -195,20 +195,20 @@
       "multiplier": 100,
       "spot": 153.19,
       "itm": false,
-      "mark": 2.375,
-      "bid": 2.25,
-      "ask": 2.5,
-      "mid": 2.375,
+      "mark": 2.625,
+      "bid": 2.3,
+      "ask": 2.95,
+      "mid": 2.625,
       "mark_source": "mid of bid/ask",
       "quote_reused": false,
       "quote_as_of_et": null,
-      "buyback_ask": 250.0,
-      "buyback_mid": 237.5,
-      "buyback_mark": 237.5,
+      "buyback_ask": 295.0,
+      "buyback_mid": 262.5,
+      "buyback_mark": 262.5,
       "premium_received_per_share": 5.3647,
       "premium_received": 536.47,
-      "pl_if_closed_ask": 286.47,
-      "pl_if_closed_mid": 298.97,
+      "pl_if_closed_ask": 241.47,
+      "pl_if_closed_mid": 273.97,
       "deadline_iso": "2026-10-16T16:00:00-04:00",
       "deadline_text": "Buy to close before 4:00 PM ET Fri Oct 16 to keep your shares",
       "expired": false
@@ -299,7 +299,7 @@
       "volume": 3.0,
       "last_trade_et": "2026-10-07 14:59 ET",
       "est_premium": 700.0,
-      "net_roll": 450.0,
+      "net_roll": 405.0,
       "premium_pct": 4.57,
       "annualized_pct": 38.8,
       "breakeven": 146.19,
@@ -1008,11 +1008,11 @@
         ],
         [
           375,
-          152.95
+          153.0
         ],
         [
           380,
-          152.8
+          152.82
         ],
         [
           385,
@@ -2056,10 +2056,10 @@
       "display": "UPRO 154C",
       "name": "UPRO Oct 16 2026 $154 call",
       "underlying": "UPRO",
-      "price": 2.375,
+      "price": 2.625,
       "prev_close": 3.9,
-      "change": -1.525,
-      "change_pct": -39.1,
+      "change": -1.275,
+      "change_pct": -32.69,
       "held": true,
       "watch": false,
       "chart": "data/charts/UPRO261016C00154000.json",
@@ -2374,7 +2374,7 @@
         ],
         [
           385,
-          2.41
+          2.45
         ]
       ],
       "spark_base": 3.9,

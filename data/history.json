@@ -73,12 +73,12 @@
   },
   {
     "date": "2026-10-08",
-    "total": 16688.48,
-    "day_change": -72.62,
-    "day_change_pct": -0.43,
+    "total": 16663.48,
+    "day_change": -97.62,
+    "day_change_pct": -0.58,
     "cash": 964.7,
-    "option_liability": -237.5,
-    "option_mark": 2.375,
+    "option_liability": -262.5,
+    "option_mark": 2.625,
     "option_mark_source": "mid of bid/ask",
     "option_prev_mark": 3.9,
     "quote_quality": 3,
@@ -93,6 +93,6 @@
         "day_pct": -1.27
       }
     },
-    "updated_et": "2026-10-08 16:00:39 ET"
+    "updated_et": "2026-10-08 16:10:36 ET"
   }
 ]
