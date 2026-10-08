@@ -1,11 +1,11 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-07 19:34:38 ET",
-  "generated_at_iso": "2026-10-07T19:34:38-04:00",
+  "generated_at_et": "2026-10-07 20:55:44 ET",
+  "generated_at_iso": "2026-10-07T20:55:44-04:00",
   "trade_date": "2026-10-07",
   "quotes_as_of_et": "2026-10-07 16:00 ET",
-  "market_state": "POST",
-  "market_label": "After hours",
+  "market_state": "POSTPOST",
+  "market_label": "Closed (after hours)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
     "total": 16761.1,
@@ -35,9 +35,9 @@
       "day_change_pct": -2.51,
       "value": 670.4,
       "quote_time_et": "2026-10-07 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 168.41,
+      "ext_price": 168.5,
       "ext_label": "post-market",
       "share_pct": 4.0
     },
@@ -58,9 +58,9 @@
       "day_change_pct": -0.8,
       "value": 15516.0,
       "quote_time_et": "2026-10-07 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 155.38,
+      "ext_price": 155.29,
       "ext_label": "post-market",
       "share_pct": 92.57
     }
@@ -99,13 +99,13 @@
       "day_change": 55.0,
       "prev_mark": 4.45,
       "prev_mark_source": "recorded mark for prior session 2026-10-06",
-      "iv": 0.3518,
+      "iv": 0.3709,
       "open_interest": 747.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-07 10:34 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.5436,
+      "prob_finish_itm": 0.5405,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -222,7 +222,7 @@
           "bid": 7.9,
           "ask": 11.6,
           "last": 9.9,
-          "iv": 0.4863,
+          "iv": 0.4918,
           "oi": 59.0,
           "volume": 3.0,
           "last_trade_et": "2026-10-07 14:59 ET",
@@ -235,7 +235,7 @@
           "bid": 7.2,
           "ask": 9.6,
           "last": 8.31,
-          "iv": 0.4164,
+          "iv": 0.421,
           "oi": 15.0,
           "volume": 1.0,
           "last_trade_et": "2026-10-07 10:10 ET",
@@ -248,7 +248,7 @@
           "bid": 8.0,
           "ask": 8.9,
           "last": 8.0,
-          "iv": 0.4063,
+          "iv": 0.4109,
           "oi": 183.0,
           "volume": 21.0,
           "last_trade_et": "2026-10-05 12:43 ET",
@@ -261,7 +261,7 @@
           "bid": 7.8,
           "ask": 8.7,
           "last": 6.8,
-          "iv": 0.4185,
+          "iv": 0.4232,
           "oi": 14.0,
           "volume": 4.0,
           "last_trade_et": "2026-09-24 13:02 ET",
@@ -274,7 +274,7 @@
           "bid": 7.3,
           "ask": 7.8,
           "last": 6.6,
-          "iv": 0.3977,
+          "iv": 0.4022,
           "oi": 78.0,
           "volume": 3.0,
           "last_trade_et": "2026-10-06 14:20 ET",
@@ -288,7 +288,7 @@
       "ask": 8.9,
       "mid": 8.45,
       "last": 8.0,
-      "iv": 0.4063,
+      "iv": 0.4109,
       "oi": 183.0,
       "volume": 21.0,
       "last_trade_et": "2026-10-05 12:43 ET",
@@ -340,16 +340,16 @@
       "change": -4.32,
       "change_pct": -2.51,
       "quote_time_et": "2026-10-07 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 168.12,
         "day_high": 171.31,
-        "day_low": 165.66,
+        "day_low": 165.65,
         "volume": 76951787.0,
         "avg_volume": 92301598.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 2209266532352.0,
+        "market_cap": 2207993823232.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -683,7 +683,7 @@
       "change": -1.25,
       "change_pct": -0.8,
       "quote_time_et": "2026-10-07 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 154.33,
         "day_high": 155.6,
@@ -1026,11 +1026,11 @@
       "change": -1.77,
       "change_pct": -0.74,
       "quote_time_et": "2026-10-07 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 237.68,
         "day_high": 239.08,
-        "day_low": 236.39,
+        "day_low": 236.38,
         "volume": 81027431.0,
         "avg_volume": 122543137.0,
         "high_52w": 243.37,
@@ -1369,7 +1369,7 @@
       "change": 3.63,
       "change_pct": 1.42,
       "quote_time_et": "2026-10-07 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 254.07,
         "day_high": 260.14,
@@ -1712,7 +1712,7 @@
       "change": -0.34,
       "change_pct": -0.37,
       "quote_time_et": "2026-10-07 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 91.16,
         "day_high": 92.14,
@@ -2368,7 +2368,7 @@
         ],
         [
           385,
-          3.9
+          3.1
         ]
       ],
       "spark_base": 4.45,
@@ -2376,7 +2376,7 @@
     }
   },
   "caveats": [
-    "Market not in regular session (After hours): stocks valued at the regular-session close; extended-hours quotes are not used.",
+    "Market not in regular session (Closed (after hours)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }
