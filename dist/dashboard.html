@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex">
   <meta name="trade-repo" content="AT4Engineer/pq-22e56fd9">
-  <title>Portfolio Tracker - snapshot 2026-10-08 09:45:25 ET</title>
+  <title>Portfolio Tracker - snapshot 2026-10-08 09:49:26 ET</title>
   <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzFmM2E1NiIvPjxwYXRoIGQ9Ik03IDI0VjhNNyAyNGgxOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGZhOWMyIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTkuNSAyMC41bDQuNS01IDMuNSAzIDYtNy41IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4K" type="image/svg+xml">
   <style>
 /* Portfolio Tracker - plain, professional finance layout. No web fonts, no external assets. */
@@ -517,6 +517,57 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
 .ptr.loading .ptr-arc { stroke-dashoffset: 40; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* manual refresh: top-bar button (tap = reload data, hold = options), options menu, status toast */
+.status { margin-left: auto; }
+.rf-btn {
+  position: relative; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin: -8px -10px -8px -6px; padding: 0; border: 0; border-radius: 50%;
+  background: transparent; color: var(--text); cursor: pointer; font: inherit;
+  -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
+  touch-action: manipulation; transition: opacity .15s ease, background-color .15s ease;
+}
+.rf-btn[hidden] { display: none; }
+@media (hover: hover) { .rf-btn:hover { background: rgba(255,255,255,.07); } }
+.rf-btn:active { opacity: .4; }
+.rf-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
+.rf-ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.rf-btn.spin .rf-ic { animation: spin .8s linear infinite; }
+.rf-btn.wait::after {
+  content: ""; position: absolute; top: 9px; right: 8px; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 2px var(--bg);
+}
+.rf-menu {
+  position: fixed; z-index: 70; width: 268px; max-width: calc(100vw - 16px); border-radius: 13px; overflow: hidden;
+  background: rgba(40,40,43,.96); -webkit-backdrop-filter: saturate(180%) blur(30px); backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.65), 0 0 0 .5px rgba(84,84,88,.6); transform-origin: top right;
+  animation: rf-pop .22s var(--ease-out) backwards;
+}
+.rf-menu[hidden] { display: none; }
+.rf-menu button {
+  display: block; width: 100%; min-height: 44px; padding: 10px 16px; border: 0; background: transparent; color: var(--text);
+  font: inherit; font-size: 17px; line-height: 22px; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.rf-menu button + button { border-top: .5px solid rgba(84,84,88,.65); }
+.rf-menu button small { display: block; margin-top: 1px; color: var(--muted); font-size: 13px; line-height: 17px; }
+.rf-menu button:active, .rf-menu button:focus-visible { background: rgba(255,255,255,.1); outline: 0; }
+@media (hover: hover) { .rf-menu button:hover { background: rgba(255,255,255,.07); } }
+@keyframes rf-pop { from { opacity: 0; transform: scale(.86); } }
+.rf-toast {
+  position: fixed; z-index: 48; left: 50%; top: calc(env(safe-area-inset-top) + 12px); transform: translateX(-50%);
+  max-width: calc(100vw - 24px); padding: 7px 14px; border-radius: 999px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  background: rgba(44,44,46,.95); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  color: var(--text); font-size: 13px; font-weight: 600; line-height: 18px; box-shadow: 0 4px 18px rgba(0,0,0,.55);
+  animation: rf-in .25s var(--ease-out) backwards; pointer-events: none;
+}
+.rf-toast[hidden] { display: none; }
+.rf-toast.wait { pointer-events: auto; cursor: pointer; }
+.rf-toast .sub { color: var(--muted); font-weight: 500; }
+@keyframes rf-in { from { opacity: 0; transform: translate(-50%, -8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .rf-btn.spin .rf-ic { animation: none !important; opacity: .4; }
+  .rf-menu, .rf-toast { animation: none !important; }
+}
+
 /* detail: bottom sheet below 960px */
 @media (max-width: 959px) {
   .detail {
@@ -566,7 +617,10 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
   }
   .brand-full { display: none; }
   .brand-view { display: inline; }
-  .status { font-size: 13px; gap: 10px; opacity: calc(1 - var(--nt, 0)); }
+  .status { font-size: 13px; gap: 10px; margin-left: 0; opacity: calc(1 - var(--nt, 0)); }
+  /* refresh button sits in the compact nav bar row (top right), visible with the large title or collapsed */
+  .rf-btn { position: fixed; z-index: 47; top: env(safe-area-inset-top); right: max(4px, env(safe-area-inset-right)); margin: 0; }
+  .rf-toast { top: calc(env(safe-area-inset-top) + 50px); }
   /* iOS Tab Bar rhythm: 49px content row + home-indicator safe area; equal columns */
   .tabs {
     position: fixed; z-index: 46; left: 0; right: 0; bottom: 0; max-width: none; margin: 0; gap: 0;
@@ -786,6 +840,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
         <span class="market" id="market-pill"><span class="dot" aria-hidden="true"></span><span id="market-label">Loading</span></span>
         <span class="updated">Last updated <strong id="updated">--</strong></span>
       </div>
+      <button type="button" class="rf-btn" id="rf-btn" aria-label="Refresh data" aria-haspopup="menu" title="Refresh (hold for more)"><svg class="rf-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4.2h-4.2"/></svg></button>
     </div>
     <nav class="wrap tabs" aria-label="Views">
       <a href="#stocks" data-tab="stocks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg><span class="tl">Stocks</span></a>
@@ -796,6 +851,11 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
       <a href="#guide" data-tab="guide"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.2A2.3 2.3 0 0 1 18.5 6.8V20H7.2A2.2 2.2 0 0 0 5 17.8z"/><path d="M5 4.5A2.2 2.2 0 0 1 7.2 6.7H18.5"/><path d="M8.5 11h6"/></svg><span class="tl">Guide</span></a>
     </nav>
   </header>
+  <div class="rf-menu" id="rf-menu" role="menu" aria-label="Refresh options" hidden>
+    <button type="button" role="menuitem" data-rf="now"><span>Refresh now</span><small>Reload the latest saved prices</small></button>
+    <button type="button" role="menuitem" data-rf="fresh"><span>Get fresh prices</span><small>Opens GitHub to run the price update (about 2 to 3 min)</small></button>
+  </div>
+  <div class="rf-toast" id="rf-toast" role="status" aria-live="polite" hidden></div>
   <div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="ptr-track" cx="12" cy="12" r="9"/><circle class="ptr-arc" cx="12" cy="12" r="9"/></svg></div>
 
   <main id="app" class="wrap" aria-busy="true">
@@ -1169,7 +1229,8 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
       <section class="card" aria-labelledby="g-quotes">
         <h2 id="g-quotes" class="card-title">How quotes update</h2>
         <p class="guide-p">A scheduled job reads <code>data/holdings.json</code> and asks Yahoo Finance for prices, about every 15 minutes while the US market is in session, and once more after the close. Clocks on this site are Eastern Time.</p>
-        <p class="guide-p">The page reloads <code>data/portfolio.json</code> about every 60 seconds. It does not reload the whole site. On a phone, pull down from the top to fetch now. Prices can run about 15 minutes behind the brokerage. The line under the market status is the quote time, not the moment you opened the page.</p>
+        <p class="guide-p">The page reloads <code>data/portfolio.json</code> about every 60 seconds. It does not reload the whole site. On a phone, pull down from the top to fetch now, or tap the refresh button at the top right. That reloads the saved file; it does not get new quotes. Prices can run about 15 minutes behind the brokerage. The line under the market status is the quote time, not the moment you opened the page.</p>
+        <p class="guide-p">To get new quotes right away, hold the refresh button (or right-click it on a computer) and choose <strong>Get fresh prices</strong>. GitHub opens with a ready-made issue titled <code>refresh</code>; tap <strong>Create</strong>. A workflow runs the same price update as the schedule, comments the result on the issue and closes it. The page checks for the new file every 15 seconds for about 3 minutes. Only issues you open run it.</p>
         <p class="guide-p">A missing stock quote stops the update and leaves the last good file in place. Overnight, an option often comes back with no real bid or ask. That is not used as a price. The last good bid/ask midpoint is kept, with the session it came from. A failed refresh never fills in a made-up price.</p>
       </section>
 
@@ -1327,7 +1388,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
 });
 
 </script>
-  <script id="embedded-data" type="application/json">{"schema":2,"generated_at_et":"2026-10-08 09:45:25 ET","generated_at_iso":"2026-10-08T09:45:25-04:00","trade_date":"2026-10-08","quotes_as_of_et":"2026-10-08 09:45 ET","market_state":"REGULAR","market_label":"Market open","delay_note":"Prices may be delayed ~15 minutes. Tracking only - not financial advice.","account":{"total":16600.82,"prev_total":16767.1,"day_change":-166.28,"day_change_pct":-0.99,"stocks_value":16026.12,"cash":964.7,"cash_share_pct":5.81,"option_liability":-390.0},"positions":[{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"SPCX","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","shares":4,"price":166.03,"prev_close":167.6,"day_change_per_share":-1.57,"day_change":-6.28,"day_change_pct":-0.94,"value":664.12,"quote_time_et":"2026-10-08 09:45 ET","market_state":"REGULAR","price_source":"live regular session","ext_price":null,"ext_label":"","share_pct":4.0},{"avg_cost":154.155,"cost_basis":15415.5,"unrealized":-53.5,"unrealized_pct":-0.35,"symbol":"UPRO","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","shares":100,"price":153.62,"prev_close":155.22,"day_change_per_share":-1.6,"day_change":-160.0,"day_change_pct":-1.03,"value":15362.0,"quote_time_et":"2026-10-08 09:45 ET","market_state":"REGULAR","price_source":"live regular session","ext_price":null,"ext_label":"","share_pct":92.54}],"options":[{"open_price":5.3647,"unrealized":146.47,"key":"UPRO|2026-10-16|154|call","label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","underlying":"UPRO","type":"call","position":"short","contracts":1,"multiplier":100,"strike":154.0,"expiry":"2026-10-16","expiry_close_iso":"2026-10-16T16:00:00-04:00","dte":8,"expired":false,"spot":153.62,"distance":-0.38,"distance_pct":-0.25,"status":"OTM","itm":false,"covered":true,"bid":3.6,"ask":4.2,"last":3.1,"mark":3.9,"mark_source":"last good bid/ask mid (session 2026-10-07, saved 2026-10-07 20:55:44 ET); no live bid/ask now","intrinsic":0.0,"extrinsic":3.9,"liability":-390.0,"day_change":-0.0,"prev_mark":3.9,"prev_mark_source":"recorded mark for prior session 2026-10-07","iv":0.3709,"open_interest":747.0,"volume":3.0,"last_trade_et":"2026-10-07 10:34 ET","assignment_risk":"AT THE STRIKE","assignment_note":"Right at the strike - a small move up puts it in the money.","prob_finish_itm":0.4712,"assigned_proceeds":15400.0,"shares_at_risk":100,"quote_quality":2,"quote_reused":true,"quote_as_of_et":"2026-10-07 20:55:44 ET"}],"stats":{"days_tracked":4,"all_time_high":16848.38,"best_day":{"date":"2026-10-05","change":242.52,"pct":1.48},"worst_day":{"date":"2026-10-08","change":-149.88,"pct":-0.89}},"history":[{"date":"2026-10-05","total":16658.06,"day_change":242.52,"day_change_pct":1.48},{"date":"2026-10-06","total":16848.38,"day_change":190.32,"day_change_pct":1.14},{"date":"2026-10-07","total":16761.1,"day_change":-87.28,"day_change_pct":-0.52},{"date":"2026-10-08","total":16617.22,"day_change":-149.88,"day_change_pct":-0.89}],"watchlist":["NVDA","AMZN","NDAQ"],"roll":{"history":{"rows":[{"label":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","expiry":"2026-10-16","strike":154.0,"opened":null,"premium":536.47,"premium_source":"entered","closed":null,"close_action":"Open","close_cost":null,"rolled_to":null,"roll_id":null,"open":true,"net":null,"cumulative":536.47}],"premiums_total":536.47,"buybacks_total":0.0,"net_total":536.47,"missing_premium":false},"current":{"label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","key":"UPRO|2026-10-16|154|call","underlying":"UPRO","strike":154.0,"expiry":"2026-10-16","contracts":1,"multiplier":100,"spot":153.62,"itm":false,"mark":3.9,"bid":3.6,"ask":4.2,"mid":3.9,"mark_source":"last good bid/ask mid (session 2026-10-07, saved 2026-10-07 20:55:44 ET); no live bid/ask now","quote_reused":true,"quote_as_of_et":"2026-10-07 20:55:44 ET","buyback_ask":420.0,"buyback_mid":390.0,"buyback_mark":390.0,"premium_received_per_share":5.3647,"premium_received":536.47,"pl_if_closed_ask":116.47,"pl_if_closed_mid":146.47,"deadline_iso":"2026-10-16T16:00:00-04:00","deadline_text":"Buy to close before 4:00 PM ET Fri Oct 16 to keep your shares","expired":false},"next":{"expiry":"2026-11-20","expiry_label":"Fri Nov 20 2026","days":43,"spot":153.62,"contracts":1,"multiplier":100,"quote_note":"No live bid/ask right now; using the last good 2026-11-20 chain from session 2026-10-07 (saved 2026-10-07 20:55:44 ET).","strikes":[{"strike":152.0,"contract":"UPRO261120C00152000","bid":10.2,"ask":10.8,"last":11.8,"iv":0.4297,"oi":23.0,"volume":1.0,"last_trade_et":"2026-10-06 15:05 ET","mid":10.5,"atm":false},{"strike":153.0,"contract":"UPRO261120C00153000","bid":7.9,"ask":11.6,"last":9.9,"iv":0.4918,"oi":59.0,"volume":3.0,"last_trade_et":"2026-10-07 14:59 ET","mid":9.75,"atm":false},{"strike":154.0,"contract":"UPRO261120C00154000","bid":7.2,"ask":9.6,"last":8.31,"iv":0.421,"oi":15.0,"volume":1.0,"last_trade_et":"2026-10-07 10:10 ET","mid":8.4,"atm":true},{"strike":155.0,"contract":"UPRO261120C00155000","bid":8.0,"ask":8.9,"last":8.0,"iv":0.4109,"oi":183.0,"volume":21.0,"last_trade_et":"2026-10-05 12:43 ET","mid":8.45,"atm":false},{"strike":156.0,"contract":"UPRO261120C00156000","bid":7.8,"ask":8.7,"last":6.8,"iv":0.4232,"oi":14.0,"volume":4.0,"last_trade_et":"2026-09-24 13:02 ET","mid":8.25,"atm":false}],"atm_strike":154.0,"contract":"UPRO261120C00154000","bid":7.2,"ask":9.6,"mid":8.4,"last":8.31,"iv":0.421,"oi":15.0,"volume":1.0,"last_trade_et":"2026-10-07 10:10 ET","est_premium":720.0,"net_roll":300.0,"premium_pct":4.69,"annualized_pct":39.8,"breakeven":146.42,"called_away_value":15400.0,"max_gain_vs_today":758.0,"above_text":"Above $154 on Fri Nov 20 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $154 ($15,400.00). You keep $720.00 either way.","below_text":"Below $154: the call expires worthless. You keep $720.00 and the 100 shares, which are worth less if UPRO fell.","underlying":"UPRO","quote_time_et":"2026-10-08 09:45 ET"},"dividends":[{"ex_date":"2026-09-23","amount":0.27},{"ex_date":"2026-06-24","amount":0.299},{"ex_date":"2026-03-25","amount":0.222},{"ex_date":"2025-12-24","amount":0.34}],"notes":[]},"projection":{"birthdate":"2008-11-25","note":"Used by the Projections tab for the exact current age (editable on the page)."},"quotes":{"SPCX":{"symbol":"SPCX","kind":"stock","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","price":166.03,"prev_close":167.6,"change":-1.57,"change_pct":-0.94,"quote_time_et":"2026-10-08 09:45 ET","market_state":"REGULAR","stats":{"open":167.5,"day_high":167.6,"day_low":165.88,"volume":6894699.0,"avg_volume":92585781.0,"high_52w":225.64,"low_52w":104.83,"market_cap":2188570918912.0,"net_assets":null,"quote_type":"EQUITY"},"held":true,"watch":false,"chart":"data/charts/SPCX.json","spark":[[0,166.36],[5,166.51],[10,165.99],[15,166.1]],"spark_base":167.6},"UPRO":{"symbol":"UPRO","kind":"stock","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","price":153.62,"prev_close":155.22,"change":-1.6,"change_pct":-1.03,"quote_time_et":"2026-10-08 09:45 ET","market_state":"REGULAR","stats":{"open":153.72,"day_high":154.0,"day_low":153.52,"volume":353840.0,"avg_volume":1919790.0,"high_52w":158.63,"low_52w":88.15,"market_cap":null,"net_assets":5276780032.0,"quote_type":"ETF"},"held":true,"watch":false,"chart":"data/charts/UPRO.json","spark":[[0,153.98],[5,153.74],[10,153.65],[15,153.62]],"spark_base":155.22},"NVDA":{"symbol":"NVDA","kind":"stock","name":"NVIDIA Corporation","long_name":"NVIDIA Corporation","exchange":"NasdaqGS","price":234.21,"prev_close":237.47,"change":-3.26,"change_pct":-1.37,"quote_time_et":"2026-10-08 09:45 ET","market_state":"REGULAR","stats":{"open":234.93,"day_high":235.2,"day_low":233.87,"volume":10525539.0,"avg_volume":121525935.0,"high_52w":243.37,"low_52w":164.27,"market_cap":5655347855360.0,"net_assets":null,"quote_type":"EQUITY"},"held":false,"watch":true,"chart":"data/charts/NVDA.json","spark":[[0,234.54],[5,234.66],[10,234.29],[15,234.24]],"spark_base":237.47},"AMZN":{"symbol":"AMZN","kind":"stock","name":"Amazon.com, Inc.","long_name":"Amazon.com, Inc.","exchange":"NasdaqGS","price":258.3,"prev_close":259.92,"change":-1.62,"change_pct":-0.62,"quote_time_et":"2026-10-08 09:45 ET","market_state":"REGULAR","stats":{"open":259.72,"day_high":259.86,"day_low":258.2,"volume":2413707.0,"avg_volume":39178020.0,"high_52w":287.2,"low_52w":196.0,"market_cap":2786106015744.0,"net_assets":null,"quote_type":"EQUITY"},"held":false,"watch":true,"chart":"data/charts/AMZN.json","spark":[[0,259.0],[5,258.88],[10,258.65],[15,258.33]],"spark_base":259.92},"NDAQ":{"symbol":"NDAQ","kind":"stock","name":"Nasdaq, Inc.","long_name":"Nasdaq, Inc.","exchange":"NasdaqGS","price":91.55,"prev_close":91.93,"change":-0.38,"change_pct":-0.41,"quote_time_et":"2026-10-08 09:45 ET","market_state":"REGULAR","stats":{"open":91.78,"day_high":91.95,"day_low":91.33,"volume":67862.0,"avg_volume":3301165.0,"high_52w":101.79,"low_52w":76.55,"market_cap":51174379520.0,"net_assets":null,"quote_type":"EQUITY"},"held":false,"watch":true,"chart":"data/charts/NDAQ.json","spark":[[0,91.87],[5,91.67],[10,91.56],[15,91.55]],"spark_base":91.93},"UPRO261016C00154000":{"symbol":"UPRO261016C00154000","kind":"option","display":"UPRO 154C","name":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","price":3.9,"prev_close":3.9,"change":0.0,"change_pct":0.0,"held":true,"watch":false,"chart":"data/charts/UPRO261016C00154000.json","spark":[[0,3.9],[5,3.9],[10,3.9],[15,3.9]],"spark_base":3.9,"key":"UPRO|2026-10-16|154|call"}},"caveats":["UPRO Oct 16 2026 $154 call: no live bid/ask right now (market closed or no quotes); using the last good bid/ask mid 3.90 from session 2026-10-07 (saved 2026-10-07 20:55:44 ET).","Next roll preview: No live bid/ask right now; using the last good 2026-11-20 chain from session 2026-10-07 (saved 2026-10-07 20:55:44 ET).","Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."]}</script>
+  <script id="embedded-data" type="application/json">{"schema":2,"generated_at_et":"2026-10-08 09:49:26 ET","generated_at_iso":"2026-10-08T09:49:26-04:00","trade_date":"2026-10-08","quotes_as_of_et":"2026-10-08 09:49 ET","market_state":"REGULAR","market_label":"Market open","delay_note":"Prices may be delayed ~15 minutes. Tracking only - not financial advice.","account":{"total":16773.34,"prev_total":16761.1,"day_change":12.24,"day_change_pct":0.07,"stocks_value":16053.64,"cash":964.7,"cash_share_pct":5.75,"option_liability":-245.0},"positions":[{"avg_cost":null,"cost_basis":null,"unrealized":null,"unrealized_pct":null,"symbol":"SPCX","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","shares":4,"price":165.91,"prev_close":167.6,"day_change_per_share":-1.69,"day_change":-6.76,"day_change_pct":-1.01,"value":663.64,"quote_time_et":"2026-10-08 09:49 ET","market_state":"REGULAR","price_source":"live regular session","ext_price":null,"ext_label":"","share_pct":3.96},{"avg_cost":154.155,"cost_basis":15415.5,"unrealized":-25.5,"unrealized_pct":-0.17,"symbol":"UPRO","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","shares":100,"price":153.9,"prev_close":155.16,"day_change_per_share":-1.26,"day_change":-126.0,"day_change_pct":-0.81,"value":15390.0,"quote_time_et":"2026-10-08 09:49 ET","market_state":"REGULAR","price_source":"live regular session","ext_price":null,"ext_label":"","share_pct":91.75}],"options":[{"open_price":5.3647,"unrealized":291.47,"key":"UPRO|2026-10-16|154|call","label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","underlying":"UPRO","type":"call","position":"short","contracts":1,"multiplier":100,"strike":154.0,"expiry":"2026-10-16","expiry_close_iso":"2026-10-16T16:00:00-04:00","dte":8,"expired":false,"spot":153.9,"distance":-0.1,"distance_pct":-0.06,"status":"OTM","itm":false,"covered":true,"bid":1.6,"ask":3.3,"last":3.1,"mark":2.45,"mark_source":"mid of bid/ask","intrinsic":0.0,"extrinsic":2.45,"liability":-245.0,"day_change":145.0,"prev_mark":3.9,"prev_mark_source":"recorded mark for prior session 2026-10-07","iv":0.3474,"open_interest":737.0,"volume":3.0,"last_trade_et":"2026-10-07 10:34 ET","assignment_risk":"AT THE STRIKE","assignment_note":"Right at the strike - a small move up puts it in the money.","prob_finish_itm":0.4846,"assigned_proceeds":15400.0,"shares_at_risk":100,"quote_quality":3,"quote_reused":false,"quote_as_of_et":null}],"stats":{"days_tracked":4,"all_time_high":16848.38,"best_day":{"date":"2026-10-05","change":242.52,"pct":1.48},"worst_day":{"date":"2026-10-07","change":-87.28,"pct":-0.52}},"history":[{"date":"2026-10-05","total":16658.06,"day_change":242.52,"day_change_pct":1.48},{"date":"2026-10-06","total":16848.38,"day_change":190.32,"day_change_pct":1.14},{"date":"2026-10-07","total":16761.1,"day_change":-87.28,"day_change_pct":-0.52},{"date":"2026-10-08","total":16773.34,"day_change":12.24,"day_change_pct":0.07}],"watchlist":["NVDA","AMZN","NDAQ"],"roll":{"history":{"rows":[{"label":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","expiry":"2026-10-16","strike":154.0,"opened":null,"premium":536.47,"premium_source":"entered","closed":null,"close_action":"Open","close_cost":null,"rolled_to":null,"roll_id":null,"open":true,"net":null,"cumulative":536.47}],"premiums_total":536.47,"buybacks_total":0.0,"net_total":536.47,"missing_premium":false},"current":{"label":"UPRO Oct 16 2026 $154 call","contract":"UPRO261016C00154000","key":"UPRO|2026-10-16|154|call","underlying":"UPRO","strike":154.0,"expiry":"2026-10-16","contracts":1,"multiplier":100,"spot":153.9,"itm":false,"mark":2.45,"bid":1.6,"ask":3.3,"mid":2.45,"mark_source":"mid of bid/ask","quote_reused":false,"quote_as_of_et":null,"buyback_ask":330.0,"buyback_mid":245.0,"buyback_mark":245.0,"premium_received_per_share":5.3647,"premium_received":536.47,"pl_if_closed_ask":206.47,"pl_if_closed_mid":291.47,"deadline_iso":"2026-10-16T16:00:00-04:00","deadline_text":"Buy to close before 4:00 PM ET Fri Oct 16 to keep your shares","expired":false},"next":{"expiry":"2026-11-20","expiry_label":"Fri Nov 20 2026","days":43,"spot":153.9,"contracts":1,"multiplier":100,"quote_note":null,"strikes":[{"strike":152.0,"contract":"UPRO261120C00152000","bid":7.2,"ask":10.4,"last":11.8,"iv":0.445,"oi":19.0,"volume":1.0,"last_trade_et":"2026-10-06 15:05 ET","mid":8.8,"atm":false},{"strike":153.0,"contract":"UPRO261120C00153000","bid":6.6,"ask":9.8,"last":9.9,"iv":0.4399,"oi":62.0,"volume":3.0,"last_trade_et":"2026-10-07 14:59 ET","mid":8.2,"atm":false},{"strike":154.0,"contract":"UPRO261120C00154000","bid":6.1,"ask":9.1,"last":8.31,"iv":0.4294,"oi":16.0,"volume":1.0,"last_trade_et":"2026-10-07 10:10 ET","mid":7.6,"atm":true},{"strike":155.0,"contract":"UPRO261120C00155000","bid":5.5,"ask":8.5,"last":8.0,"iv":0.4229,"oi":183.0,"volume":21.0,"last_trade_et":"2026-10-05 12:43 ET","mid":7.0,"atm":false},{"strike":156.0,"contract":"UPRO261120C00156000","bid":5.0,"ask":8.0,"last":6.8,"iv":0.4202,"oi":14.0,"volume":4.0,"last_trade_et":"2026-09-24 13:02 ET","mid":6.5,"atm":false}],"atm_strike":154.0,"contract":"UPRO261120C00154000","bid":6.1,"ask":9.1,"mid":7.6,"last":8.31,"iv":0.4294,"oi":16.0,"volume":1.0,"last_trade_et":"2026-10-07 10:10 ET","est_premium":610.0,"net_roll":280.0,"premium_pct":3.96,"annualized_pct":33.6,"breakeven":147.8,"called_away_value":15400.0,"max_gain_vs_today":620.0,"above_text":"Above $154 on Fri Nov 20 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $154 ($15,400.00). You keep $610.00 either way.","below_text":"Below $154: the call expires worthless. You keep $610.00 and the 100 shares, which are worth less if UPRO fell.","underlying":"UPRO","quote_time_et":"2026-10-08 09:49 ET"},"dividends":[{"ex_date":"2026-09-23","amount":0.27},{"ex_date":"2026-06-24","amount":0.299},{"ex_date":"2026-03-25","amount":0.222},{"ex_date":"2025-12-24","amount":0.34}],"notes":[]},"projection":{"birthdate":"2008-11-25","note":"Used by the Projections tab for the exact current age (editable on the page)."},"quotes":{"SPCX":{"symbol":"SPCX","kind":"stock","name":"SpaceX","long_name":"Space Exploration Technologies Corp.","exchange":"Nasdaq","price":165.91,"prev_close":167.6,"change":-1.69,"change_pct":-1.01,"quote_time_et":"2026-10-08 09:49 ET","market_state":"REGULAR","stats":{"open":167.5,"day_high":167.6,"day_low":165.59,"volume":7773843.0,"avg_volume":92585781.0,"high_52w":225.64,"low_52w":104.83,"market_cap":2186989142016.0,"net_assets":null,"quote_type":"EQUITY"},"held":true,"watch":false,"chart":"data/charts/SPCX.json","spark":[[0,166.36],[5,166.51],[10,165.99],[15,165.93]],"spark_base":167.6},"UPRO":{"symbol":"UPRO","kind":"stock","name":"ProShares UltraPro S&P 500 (3x)","long_name":"ProShares UltraPro S&P500","exchange":"NYSE Arca","price":153.9,"prev_close":155.16,"change":-1.26,"change_pct":-0.81,"quote_time_et":"2026-10-08 09:49 ET","market_state":"REGULAR","stats":{"open":153.72,"day_high":154.0,"day_low":153.52,"volume":364075.0,"avg_volume":1919790.0,"high_52w":158.63,"low_52w":88.15,"market_cap":null,"net_assets":5276780032.0,"quote_type":"ETF"},"held":true,"watch":false,"chart":"data/charts/UPRO.json","spark":[[0,153.98],[5,153.74],[10,153.65],[15,153.9]],"spark_base":155.16},"NVDA":{"symbol":"NVDA","kind":"stock","name":"NVIDIA Corporation","long_name":"NVIDIA Corporation","exchange":"NasdaqGS","price":234.11,"prev_close":237.47,"change":-3.36,"change_pct":-1.41,"quote_time_et":"2026-10-08 09:49 ET","market_state":"REGULAR","stats":{"open":234.93,"day_high":235.2,"day_low":233.87,"volume":11504704.0,"avg_volume":121525935.0,"high_52w":243.37,"low_52w":164.27,"market_cap":5653054095360.0,"net_assets":null,"quote_type":"EQUITY"},"held":false,"watch":true,"chart":"data/charts/NVDA.json","spark":[[0,234.54],[5,234.66],[10,234.29],[15,234.12]],"spark_base":237.47},"AMZN":{"symbol":"AMZN","kind":"stock","name":"Amazon.com, Inc.","long_name":"Amazon.com, Inc.","exchange":"NasdaqGS","price":258.72,"prev_close":259.92,"change":-1.2,"change_pct":-0.46,"quote_time_et":"2026-10-08 09:49 ET","market_state":"REGULAR","stats":{"open":259.72,"day_high":259.86,"day_low":258.2,"volume":2604128.0,"avg_volume":39178020.0,"high_52w":287.2,"low_52w":196.0,"market_cap":2790635077632.0,"net_assets":null,"quote_type":"EQUITY"},"held":false,"watch":true,"chart":"data/charts/AMZN.json","spark":[[0,259.0],[5,258.88],[10,258.65],[15,258.74]],"spark_base":259.92},"NDAQ":{"symbol":"NDAQ","kind":"stock","name":"Nasdaq, Inc.","long_name":"Nasdaq, Inc.","exchange":"NasdaqGS","price":91.42,"prev_close":91.93,"change":-0.51,"change_pct":-0.55,"quote_time_et":"2026-10-08 09:49 ET","market_state":"REGULAR","stats":{"open":91.78,"day_high":91.95,"day_low":91.33,"volume":80093.0,"avg_volume":3301165.0,"high_52w":101.79,"low_52w":76.55,"market_cap":51101708288.0,"net_assets":null,"quote_type":"EQUITY"},"held":false,"watch":true,"chart":"data/charts/NDAQ.json","spark":[[0,91.87],[5,91.67],[10,91.56],[15,91.44]],"spark_base":91.93},"UPRO261016C00154000":{"symbol":"UPRO261016C00154000","kind":"option","display":"UPRO 154C","name":"UPRO Oct 16 2026 $154 call","underlying":"UPRO","price":2.45,"prev_close":3.9,"change":-1.45,"change_pct":-37.18,"held":true,"watch":false,"chart":"data/charts/UPRO261016C00154000.json","spark":[[0,3.9],[5,3.9],[10,3.9],[15,2.45]],"spark_base":3.9,"key":"UPRO|2026-10-16|154|call"}},"caveats":["UPRO Oct 16 2026 $154 call: wide bid/ask (1.60 x 3.30); the mid-price mark is approximate.","Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."]}</script>
   <script>window.DASHBOARD_CONFIG = {"remoteUrl": "https://at4engineer.github.io/pq-22e56fd9/data/portfolio.json"};</script>
   <script>
 /* Portfolio Tracker dashboard. Plain JS, no libraries, no external requests except its own data files.
@@ -3218,6 +3279,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
         render(j);
       }
       tickStatus();
+      if (rf.wait) rfCheckWait(state.data);
       return refreshExtras();
     }).catch(function (e) {
       state.fetchError = true;
@@ -3240,6 +3302,144 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
   function doRefresh() { return refresh(true); }
   window.PQ = { refresh: doRefresh };
 
+  // ------------------------------------------------------------------ refresh button (top bar)
+  // Tap: reload data/portfolio.json now (same as pull to refresh). Hold, right-click or the
+  // context-menu key: a small menu with "Get fresh prices", which opens a prefilled GitHub issue
+  // (label "refresh"); the refresh.yml workflow runs the price update and closes it. The page then
+  // checks the data file every 15 s for about 3 minutes until generated_at changes.
+  var RF_WAIT_KEY = "pq-rf-wait", RF_POLL_EVERY = 15000, RF_POLL_FOR = 180000, RF_HOLD_MS = 500, RF_MIN_SPIN = 600;
+  var rf = { busy: false, toastT: null, poll: null, wait: null, hold: null, heldAt: 0 };
+  function hm(d, withDay) {
+    var o = { timeZone: TZ, hour: "numeric", minute: "2-digit" };
+    if (withDay) o.weekday = "short";
+    return new Intl.DateTimeFormat("en-US", o).format(d);
+  }
+  function etDay(d) { return new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(d); }
+  function rfToast(html, ms, wait) {
+    var el = $("rf-toast");
+    clearTimeout(rf.toastT);
+    el.hidden = true; el.innerHTML = html; el.classList.toggle("wait", !!wait);
+    void el.offsetWidth; el.hidden = false;  // replay the entry animation
+    if (ms) rf.toastT = setTimeout(function () { if (rf.wait) rfShowWait(); else el.hidden = true; }, ms);
+  }
+  function rfShowWait() { if (rf.wait) rfToast('Waiting for fresh prices&hellip; <span class="sub">tap to stop</span>', 0, true); }
+  function rfNow() {
+    if (rf.busy) return;
+    rf.busy = true;
+    var btn = $("rf-btn"), t0 = Date.now(), hadWait = !!rf.wait;
+    btn.classList.add("spin"); btn.setAttribute("aria-busy", "true");
+    var fin = function () {
+      setTimeout(function () {
+        rf.busy = false; btn.classList.remove("spin"); btn.removeAttribute("aria-busy");
+        if (hadWait && !rf.wait) return;  // the new prices arrived with this reload; that message is already showing
+        if (state.fetchError) { rfToast("Couldn&rsquo;t refresh &middot; showing the last data", 3500); return; }
+        var now = new Date(), gen = state.data ? new Date(state.data.generated_at_iso) : null, sub = "";
+        if (gen && !isNaN(gen) && now - gen > 20 * 60000) sub = ' <span class="sub">&middot; prices ' + esc(hm(gen, etDay(gen) !== etDay(now))) + "</span>";
+        rfToast("Updated " + esc(hm(now)) + sub, 2600);
+      }, Math.max(0, RF_MIN_SPIN - (Date.now() - t0)));
+    };
+    doRefresh().then(fin, fin);
+  }
+  function rfIssueUrl() {
+    var body = "Get fresh prices now.\n\nCreating this issue runs the same price update as the 15-minute schedule " +
+      "(quotes from Yahoo Finance, then data/ and dist/ are rebuilt). The refresh workflow comments the result here and " +
+      "closes this issue. It only runs for issues opened by the repo owner. It never places a trade.\n\n" +
+      "Requested from the dashboard on " + fmtET(new Date().toISOString()) + ".";
+    return "https://github.com/" + REPO + "/issues/new?labels=refresh&title=refresh&body=" + encodeURIComponent(body);
+  }
+  function rfFresh() {
+    rf.wait = { base: (state.data && state.data.generated_at_iso) || "", until: Date.now() + RF_POLL_FOR };
+    lsSet(RF_WAIT_KEY, JSON.stringify(rf.wait));
+    window.open(rfIssueUrl(), "_blank", "noopener");
+    rfStartPoll();
+  }
+  function rfStartPoll() {
+    clearInterval(rf.poll);
+    $("rf-btn").classList.add("wait");
+    rfShowWait();
+    rf.poll = setInterval(rfPollTick, RF_POLL_EVERY);
+  }
+  function rfStop(msg, ms) {
+    clearInterval(rf.poll); rf.poll = null; rf.wait = null; lsSet(RF_WAIT_KEY, "");
+    $("rf-btn").classList.remove("wait");
+    if (msg) rfToast(msg, ms || 3500); else { clearTimeout(rf.toastT); $("rf-toast").hidden = true; }
+  }
+  function rfGot(d) {
+    return !!(rf.wait && d && d.generated_at_iso && d.generated_at_iso !== rf.wait.base && isNewer(d, { generated_at_iso: rf.wait.base }));
+  }
+  function rfCheckWait(d) {
+    if (!rfGot(d)) return false;
+    rfStop("Fresh prices &middot; " + esc(hm(new Date(d.generated_at_iso))), 4000);
+    return true;
+  }
+  function rfPollTick() {
+    if (!rf.wait) { rfStop(); return; }
+    if (rfCheckWait(state.data)) return;
+    if (document.hidden) return;  // checked again as soon as the page is visible
+    fetchJSON(DATA_URL).then(function (j) {
+      if (rfGot(j)) {
+        if (STANDALONE) state.source = "remote";
+        state.fetchError = false; state.lastCheck = new Date();
+        render(j); tickStatus(); refreshExtras();
+        rfCheckWait(j);
+      } else if (rf.wait && Date.now() > rf.wait.until) rfStop("No new prices yet &middot; try again in a minute", 5000);
+    }, function () {
+      if (rf.wait && Date.now() > rf.wait.until) rfStop("Couldn&rsquo;t reach the data file &middot; try again later", 5000);
+    });
+  }
+  function rfMenu(open, focus) {
+    var m = $("rf-menu"), b = $("rf-btn");
+    if (!open) { if (!m.hidden) { m.hidden = true; b.setAttribute("aria-expanded", "false"); } return; }
+    var r = b.getBoundingClientRect();
+    m.style.top = Math.round(r.bottom + 4) + "px";
+    m.style.right = Math.max(8, Math.round(document.documentElement.clientWidth - r.right)) + "px";
+    m.hidden = false; b.setAttribute("aria-expanded", "true");
+    if (focus) m.querySelector("button").focus({ preventScroll: true });
+  }
+  function rfInit() {
+    var btn = $("rf-btn"), menu = $("rf-menu");
+    if (!btn || !menu) return;
+    if (!DATA_URL) { btn.hidden = true; return; }  // standalone file without a remote URL: nothing to reload
+    btn.setAttribute("aria-expanded", "false");
+    btn.addEventListener("pointerdown", function (e) {
+      if (e.button) return;
+      clearTimeout(rf.hold);
+      rf.hold = setTimeout(function () { rf.heldAt = Date.now(); if (navigator.vibrate) navigator.vibrate(10); rfMenu(true); }, RF_HOLD_MS);
+    });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) { btn.addEventListener(ev, function () { clearTimeout(rf.hold); }); });
+    btn.addEventListener("contextmenu", function (e) {
+      e.preventDefault(); clearTimeout(rf.hold);
+      if (menu.hidden) { rf.heldAt = Date.now(); rfMenu(true, !e.pointerType && e.button !== 2); }
+    });
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (Date.now() - rf.heldAt < 1200) { rf.heldAt = 0; return; }  // the end of a long press, not a tap
+      if (!menu.hidden) { rfMenu(false); return; }
+      rfNow();
+    });
+    btn.addEventListener("keydown", function (e) { if (e.key === "ArrowDown") { e.preventDefault(); rfMenu(true, true); } });
+    menu.addEventListener("click", function (e) {
+      var it = e.target.closest && e.target.closest("[data-rf]");
+      if (!it) return;
+      e.stopPropagation();
+      rfMenu(false);
+      if (it.getAttribute("data-rf") === "fresh") rfFresh(); else rfNow();
+    });
+    menu.addEventListener("keydown", function (e) {
+      var items = [].slice.call(menu.querySelectorAll("button")), i = items.indexOf(document.activeElement);
+      if (e.key === "Escape") { e.preventDefault(); rfMenu(false); btn.focus(); }
+      else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); items[(i + (e.key === "ArrowDown" ? 1 : items.length - 1)) % items.length].focus(); }
+    });
+    document.addEventListener("pointerdown", function (e) { if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) rfMenu(false); }, true);
+    window.addEventListener("scroll", function () { rfMenu(false); }, { passive: true });
+    window.addEventListener("resize", function () { rfMenu(false); });
+    $("rf-toast").addEventListener("click", function () { if (rf.wait) rfStop(); });
+    document.addEventListener("visibilitychange", function () { if (!document.hidden && rf.wait) rfPollTick(); });
+    var w = null;
+    try { w = JSON.parse(lsGet(RF_WAIT_KEY, "") || "null"); } catch (e) { w = null; }
+    if (w && w.until > Date.now()) { rf.wait = w; rfStartPoll(); }
+  }
+
   var rsT = null, lastW = window.innerWidth;
   window.addEventListener("resize", function () {
     clearTimeout(rsT);
@@ -3254,6 +3454,7 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
     }, 200);
   });
   uiInit();
+  rfInit();
   if (STANDALONE) { state.source = "embedded"; render(EMBEDDED); }
   refresh();
   setInterval(refresh, REFRESH_MS);
