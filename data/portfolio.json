@@ -1,21 +1,21 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-08 10:45:38 ET",
-  "generated_at_iso": "2026-10-08T10:45:38-04:00",
+  "generated_at_et": "2026-10-08 11:01:03 ET",
+  "generated_at_iso": "2026-10-08T11:01:03-04:00",
   "trade_date": "2026-10-08",
-  "quotes_as_of_et": "2026-10-08 10:45 ET",
+  "quotes_as_of_et": "2026-10-08 11:01 ET",
   "market_state": "REGULAR",
   "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16778.02,
+    "total": 16715.58,
     "prev_total": 16761.1,
-    "day_change": 16.92,
-    "day_change_pct": 0.1,
-    "stocks_value": 16098.32,
+    "day_change": -45.52,
+    "day_change_pct": -0.27,
+    "stocks_value": 16050.88,
     "cash": 964.7,
-    "cash_share_pct": 5.75,
-    "option_liability": -285.0
+    "cash_share_pct": 5.77,
+    "option_liability": -300.0
   },
   "positions": [
     {
@@ -28,47 +28,47 @@
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 4,
-      "price": 165.08,
+      "price": 164.97,
       "prev_close": 167.6,
-      "day_change_per_share": -2.52,
-      "day_change": -10.08,
-      "day_change_pct": -1.5,
-      "value": 660.32,
-      "quote_time_et": "2026-10-08 10:45 ET",
+      "day_change_per_share": -2.63,
+      "day_change": -10.52,
+      "day_change_pct": -1.57,
+      "value": 659.88,
+      "quote_time_et": "2026-10-08 11:01 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 3.94
+      "share_pct": 3.95
     },
     {
       "avg_cost": 154.155,
       "cost_basis": 15415.5,
-      "unrealized": 22.5,
-      "unrealized_pct": 0.15,
+      "unrealized": -24.5,
+      "unrealized_pct": -0.16,
       "symbol": "UPRO",
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "shares": 100,
-      "price": 154.38,
+      "price": 153.91,
       "prev_close": 155.16,
-      "day_change_per_share": -0.78,
-      "day_change": -78.0,
-      "day_change_pct": -0.5,
-      "value": 15438.0,
-      "quote_time_et": "2026-10-08 10:45 ET",
+      "day_change_per_share": -1.25,
+      "day_change": -125.0,
+      "day_change_pct": -0.81,
+      "value": 15391.0,
+      "quote_time_et": "2026-10-08 11:01 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 92.01
+      "share_pct": 92.08
     }
   ],
   "options": [
     {
       "open_price": 5.3647,
-      "unrealized": 251.47,
+      "unrealized": 236.47,
       "key": "UPRO|2026-10-16|154|call",
       "label": "UPRO Oct 16 2026 $154 call",
       "contract": "UPRO261016C00154000",
@@ -82,30 +82,30 @@
       "expiry_close_iso": "2026-10-16T16:00:00-04:00",
       "dte": 8,
       "expired": false,
-      "spot": 154.38,
-      "distance": 0.38,
-      "distance_pct": 0.25,
-      "status": "ITM",
-      "itm": true,
+      "spot": 153.91,
+      "distance": -0.09,
+      "distance_pct": -0.06,
+      "status": "OTM",
+      "itm": false,
       "covered": true,
       "bid": 2.3,
-      "ask": 3.4,
+      "ask": 3.7,
       "last": 3.26,
-      "mark": 2.85,
+      "mark": 3.0,
       "mark_source": "mid of bid/ask",
-      "intrinsic": 0.38,
-      "extrinsic": 2.47,
-      "liability": -285.0,
-      "day_change": 105.0,
+      "intrinsic": 0.0,
+      "extrinsic": 3.0,
+      "liability": -300.0,
+      "day_change": 90.0,
       "prev_mark": 3.9,
       "prev_mark_source": "recorded mark for prior session 2026-10-07",
-      "iv": 0.332,
+      "iv": 0.3883,
       "open_interest": 737.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-08 10:14 ET",
-      "assignment_risk": "HIGH",
-      "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.5098,
+      "assignment_risk": "AT THE STRIKE",
+      "assignment_note": "Right at the strike - a small move up puts it in the money.",
+      "prob_finish_itm": 0.4844,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -148,9 +148,9 @@
     },
     {
       "date": "2026-10-08",
-      "total": 16778.02,
-      "day_change": 16.92,
-      "day_change_pct": 0.1
+      "total": 16715.58,
+      "day_change": -45.52,
+      "day_change_pct": -0.27
     }
   ],
   "watchlist": [
@@ -193,22 +193,22 @@
       "expiry": "2026-10-16",
       "contracts": 1,
       "multiplier": 100,
-      "spot": 154.38,
-      "itm": true,
-      "mark": 2.85,
+      "spot": 153.91,
+      "itm": false,
+      "mark": 3.0,
       "bid": 2.3,
-      "ask": 3.4,
-      "mid": 2.85,
+      "ask": 3.7,
+      "mid": 3.0,
       "mark_source": "mid of bid/ask",
       "quote_reused": false,
       "quote_as_of_et": null,
-      "buyback_ask": 340.0,
-      "buyback_mid": 285.0,
-      "buyback_mark": 285.0,
+      "buyback_ask": 370.0,
+      "buyback_mid": 300.0,
+      "buyback_mark": 300.0,
       "premium_received_per_share": 5.3647,
       "premium_received": 536.47,
-      "pl_if_closed_ask": 196.47,
-      "pl_if_closed_mid": 251.47,
+      "pl_if_closed_ask": 166.47,
+      "pl_if_closed_mid": 236.47,
       "deadline_iso": "2026-10-16T16:00:00-04:00",
       "deadline_text": "Buy to close before 4:00 PM ET Fri Oct 16 to keep your shares",
       "expired": false
@@ -217,7 +217,7 @@
       "expiry": "2026-11-20",
       "expiry_label": "Fri Nov 20 2026",
       "days": 43,
-      "spot": 154.38,
+      "spot": 153.91,
       "contracts": 1,
       "multiplier": 100,
       "quote_note": null,
@@ -228,7 +228,7 @@
           "bid": 9.4,
           "ask": 10.2,
           "last": 8.89,
-          "iv": 0.4222,
+          "iv": 0.4352,
           "oi": 19.0,
           "volume": 3.0,
           "last_trade_et": "2026-10-08 10:18 ET",
@@ -241,7 +241,7 @@
           "bid": 7.5,
           "ask": 9.5,
           "last": 9.9,
-          "iv": 0.413,
+          "iv": 0.4255,
           "oi": 62.0,
           "volume": 3.0,
           "last_trade_et": "2026-10-07 14:59 ET",
@@ -254,7 +254,7 @@
           "bid": 6.5,
           "ask": 8.9,
           "last": 8.31,
-          "iv": 0.4077,
+          "iv": 0.4198,
           "oi": 16.0,
           "volume": 1.0,
           "last_trade_et": "2026-10-07 10:10 ET",
@@ -264,14 +264,14 @@
         {
           "strike": 155.0,
           "contract": "UPRO261120C00155000",
-          "bid": 5.7,
+          "bid": 5.9,
           "ask": 8.5,
           "last": 8.0,
-          "iv": 0.411,
+          "iv": 0.4226,
           "oi": 183.0,
           "volume": 21.0,
           "last_trade_et": "2026-10-05 12:43 ET",
-          "mid": 7.1,
+          "mid": 7.2,
           "atm": false
         },
         {
@@ -280,7 +280,7 @@
           "bid": 5.2,
           "ask": 8.0,
           "last": 6.8,
-          "iv": 0.4087,
+          "iv": 0.4199,
           "oi": 14.0,
           "volume": 4.0,
           "last_trade_et": "2026-09-24 13:02 ET",
@@ -294,21 +294,21 @@
       "ask": 8.9,
       "mid": 7.7,
       "last": 8.31,
-      "iv": 0.4077,
+      "iv": 0.4198,
       "oi": 16.0,
       "volume": 1.0,
       "last_trade_et": "2026-10-07 10:10 ET",
       "est_premium": 650.0,
-      "net_roll": 310.0,
-      "premium_pct": 4.21,
-      "annualized_pct": 35.7,
-      "breakeven": 147.88,
+      "net_roll": 280.0,
+      "premium_pct": 4.22,
+      "annualized_pct": 35.8,
+      "breakeven": 147.41,
       "called_away_value": 15400.0,
-      "max_gain_vs_today": 612.0,
+      "max_gain_vs_today": 659.0,
       "above_text": "Above $154 on Fri Nov 20 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $154 ($15,400.00). You keep $650.00 either way.",
       "below_text": "Below $154: the call expires worthless. You keep $650.00 and the 100 shares, which are worth less if UPRO fell.",
       "underlying": "UPRO",
-      "quote_time_et": "2026-10-08 10:45 ET"
+      "quote_time_et": "2026-10-08 11:01 ET"
     },
     "dividends": [
       {
@@ -341,21 +341,21 @@
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
-      "price": 165.08,
+      "price": 164.97,
       "prev_close": 167.6,
-      "change": -2.52,
-      "change_pct": -1.5,
-      "quote_time_et": "2026-10-08 10:45 ET",
+      "change": -2.63,
+      "change_pct": -1.57,
+      "quote_time_et": "2026-10-08 11:01 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 167.5,
         "day_high": 167.6,
-        "day_low": 165.02,
-        "volume": 16913695.0,
+        "day_low": 164.42,
+        "volume": 20148165.0,
         "avg_volume": 92585781.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 2176048300032.0,
+        "market_cap": 2173345595392.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -425,7 +425,19 @@
         ],
         [
           75,
-          165.11
+          164.58
+        ],
+        [
+          80,
+          164.49
+        ],
+        [
+          85,
+          165.15
+        ],
+        [
+          90,
+          164.97
         ]
       ],
       "spark_base": 167.6
@@ -436,17 +448,17 @@
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
-      "price": 154.38,
+      "price": 153.91,
       "prev_close": 155.16,
-      "change": -0.78,
-      "change_pct": -0.5,
-      "quote_time_et": "2026-10-08 10:45 ET",
+      "change": -1.25,
+      "change_pct": -0.81,
+      "quote_time_et": "2026-10-08 11:01 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 153.72,
         "day_high": 154.74,
         "day_low": 153.52,
-        "volume": 586516.0,
+        "volume": 627603.0,
         "avg_volume": 1919790.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -512,7 +524,7 @@
         ],
         [
           65,
-          154.51
+          154.49
         ],
         [
           70,
@@ -520,7 +532,19 @@
         ],
         [
           75,
-          154.38
+          154.21
+        ],
+        [
+          80,
+          153.84
+        ],
+        [
+          85,
+          154.04
+        ],
+        [
+          90,
+          153.91
         ]
       ],
       "spark_base": 155.16
@@ -531,21 +555,21 @@
       "name": "NVIDIA Corporation",
       "long_name": "NVIDIA Corporation",
       "exchange": "NasdaqGS",
-      "price": 236.77,
+      "price": 236.5,
       "prev_close": 237.47,
-      "change": -0.7,
-      "change_pct": -0.29,
-      "quote_time_et": "2026-10-08 10:45 ET",
+      "change": -0.97,
+      "change_pct": -0.41,
+      "quote_time_et": "2026-10-08 11:01 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 234.93,
         "day_high": 237.07,
         "day_low": 233.71,
-        "volume": 26019392.0,
+        "volume": 28332434.0,
         "avg_volume": 121525935.0,
         "high_52w": 243.37,
         "low_52w": 164.27,
-        "market_cap": 5717285142528.0,
+        "market_cap": 5710765096960.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -615,7 +639,19 @@
         ],
         [
           75,
-          236.76
+          236.75
+        ],
+        [
+          80,
+          236.38
+        ],
+        [
+          85,
+          236.59
+        ],
+        [
+          90,
+          236.5
         ]
       ],
       "spark_base": 237.47
@@ -626,21 +662,21 @@
       "name": "Amazon.com, Inc.",
       "long_name": "Amazon.com, Inc.",
       "exchange": "NasdaqGS",
-      "price": 259.18,
+      "price": 258.47,
       "prev_close": 259.92,
-      "change": -0.74,
-      "change_pct": -0.28,
-      "quote_time_et": "2026-10-08 10:45 ET",
+      "change": -1.45,
+      "change_pct": -0.56,
+      "quote_time_et": "2026-10-08 11:01 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 259.72,
         "day_high": 259.86,
         "day_low": 258.2,
-        "volume": 6060126.0,
+        "volume": 6751428.0,
         "avg_volume": 39178020.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
-        "market_cap": 2795631017984.0,
+        "market_cap": 2787938402304.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -710,7 +746,19 @@
         ],
         [
           75,
-          259.18
+          258.8
+        ],
+        [
+          80,
+          258.42
+        ],
+        [
+          85,
+          258.54
+        ],
+        [
+          90,
+          258.43
         ]
       ],
       "spark_base": 259.92
@@ -725,13 +773,13 @@
       "prev_close": 91.93,
       "change": -0.56,
       "change_pct": -0.61,
-      "quote_time_et": "2026-10-08 10:45 ET",
+      "quote_time_et": "2026-10-08 11:00 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 91.78,
         "day_high": 91.95,
         "day_low": 91.1,
-        "volume": 321529.0,
+        "volume": 369907.0,
         "avg_volume": 3301165.0,
         "high_52w": 101.79,
         "low_52w": 76.55,
@@ -805,6 +853,18 @@
         ],
         [
           75,
+          91.43
+        ],
+        [
+          80,
+          91.44
+        ],
+        [
+          85,
+          91.45
+        ],
+        [
+          90,
           91.37
         ]
       ],
@@ -816,10 +876,10 @@
       "display": "UPRO 154C",
       "name": "UPRO Oct 16 2026 $154 call",
       "underlying": "UPRO",
-      "price": 2.85,
+      "price": 3.0,
       "prev_close": 3.9,
-      "change": -1.05,
-      "change_pct": -26.92,
+      "change": -0.9,
+      "change_pct": -23.08,
       "held": true,
       "watch": false,
       "chart": "data/charts/UPRO261016C00154000.json",
@@ -887,6 +947,18 @@
         [
           75,
           2.85
+        ],
+        [
+          80,
+          2.85
+        ],
+        [
+          85,
+          2.85
+        ],
+        [
+          90,
+          3.0
         ]
       ],
       "spark_base": 3.9,
@@ -894,7 +966,7 @@
     }
   },
   "caveats": [
-    "UPRO Oct 16 2026 $154 call: wide bid/ask (2.30 x 3.40); the mid-price mark is approximate.",
+    "UPRO Oct 16 2026 $154 call: wide bid/ask (2.30 x 3.70); the mid-price mark is approximate.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }
