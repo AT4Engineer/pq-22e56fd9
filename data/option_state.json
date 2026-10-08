@@ -5,7 +5,7 @@
       "bid": 2.3,
       "ask": 3.4,
       "last": 3.26,
-      "iv": 0.3203,
+      "iv": 0.332,
       "oi": 737.0,
       "volume": 3.0,
       "last_trade_et": "2026-10-08 10:14 ET",
@@ -13,7 +13,7 @@
       "session": "2026-10-08",
       "prev_mark": 3.9,
       "prev_mark_source": "recorded mark for prior session 2026-10-07",
-      "as_of_et": "2026-10-08 10:30:41 ET"
+      "as_of_et": "2026-10-08 10:45:38 ET"
     }
   }
 }
