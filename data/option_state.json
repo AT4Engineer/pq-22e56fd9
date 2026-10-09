@@ -4,16 +4,16 @@
       "mark": 3.2,
       "bid": 2.6,
       "ask": 3.8,
-      "last": 2.95,
-      "iv": 0.3347,
+      "last": 3.36,
+      "iv": 0.3206,
       "oi": 744.0,
-      "volume": 14.0,
-      "last_trade_et": "2026-10-09 11:16 ET",
+      "volume": 15.0,
+      "last_trade_et": "2026-10-09 12:41 ET",
       "contract": "UPRO261016C00154000",
       "session": "2026-10-09",
       "prev_mark": 2.45,
       "prev_mark_source": "recorded mark for prior session 2026-10-08",
-      "as_of_et": "2026-10-09 12:45:25 ET"
+      "as_of_et": "2026-10-09 13:00:38 ET"
     }
   }
 }
