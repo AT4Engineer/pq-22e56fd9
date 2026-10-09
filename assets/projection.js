@@ -97,7 +97,25 @@
     return res[key || "values"][k];
   }
 
+  /* Compound tab (general calculator, not tied to the portfolio). o: {start, monthly, annual, age, retire}.
+   * Same Ramsey model (rate/12 monthly, end-of-month deposits, nominal, no inflation).
+   * Returns project()'s fields plus interest and rows[] = one per year {age, balance, contributed, interest},
+   * with a last partial-year row when the span is not whole years (e.g. retiring at 59.5). */
+  function compound(o) {
+    var age = +o.age, months = monthsBetween(age, +o.retire);
+    var r = project({ start: +o.start || 0, monthly: +o.monthly || 0, months: months, annual: o.annual || 0, real: false, inflation: 0 });
+    var rows = [];
+    for (var k = 12; k <= months; k += 12) rows.push(k);
+    if (months % 12 || !rows.length) rows.push(months);
+    r.interest = r.final - r.contributed;
+    r.rows = rows.filter(function (k) { return k > 0; }).map(function (k) {
+      return { age: Math.round((age + k / 12) * 100) / 100, months: k, balance: r.values[k], contributed: r.contrib[k], interest: r.values[k] - r.contrib[k] };
+    });
+    return r;
+  }
+
   return {
+    compound: compound,
     PRESETS: PRESETS, DEFAULT_PRESET: DEFAULT_PRESET, INFLATION: INFLATION,
     monthlyRate: monthlyRate, fvClosed: fvClosed, project: project,
     neededMonthly: neededMonthly, monthsBetween: monthsBetween,

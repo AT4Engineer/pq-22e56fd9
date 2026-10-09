@@ -9,7 +9,7 @@
   <meta name="trade-repo" content="AT4Engineer/pq-22e56fd9">
   <title>Portfolio Tracker</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=15">
+  <link rel="stylesheet" href="assets/style.css?v=16">
   <!-- pwa:start (stripped from the standalone build) -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -47,12 +47,14 @@
         <span class="market" id="market-pill"><span class="dot" aria-hidden="true"></span><span id="market-label">Loading</span></span>
         <span class="updated">Last updated <strong id="updated">--</strong></span>
       </div>
+      <a href="#guide" class="gd-btn" id="gd-btn" aria-label="Guide"><svg class="rf-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.2A2.3 2.3 0 0 1 18.5 6.8V20H7.2A2.2 2.2 0 0 0 5 17.8z"/><path d="M5 4.5A2.2 2.2 0 0 1 7.2 6.7H18.5"/><path d="M8.5 11h6"/></svg></a>
       <button type="button" class="rf-btn" id="rf-btn" aria-label="Refresh data" aria-haspopup="menu" title="Refresh (hold for more)"><svg class="rf-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4.2h-4.2"/></svg></button>
     </div>
     <nav class="wrap tabs" aria-label="Views">
       <a href="#stocks" data-tab="stocks"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/></svg><span class="tl">Stocks</span></a>
       <a href="#overview" data-tab="overview"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span class="tl">Overview</span></a>
       <a href="#projections" data-tab="projections"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16h16"/><path d="M7 16c4 0 8-2.5 12-10"/><path d="M15.5 6H19v3.5"/></svg><span class="tl">Projections</span></a>
+      <a href="#compound" data-tab="compound"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 15l6-6"/><circle cx="9.3" cy="9.3" r="1.1"/><circle cx="14.7" cy="14.7" r="1.1"/></svg><span class="tl">Compound</span></a>
       <a href="#transactions" data-tab="transactions"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span class="tl">Transactions</span></a>
       <a href="#edit" data-tab="edit"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span class="tl">Edit</span></a>
       <a href="#guide" data-tab="guide"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.2A2.3 2.3 0 0 1 18.5 6.8V20H7.2A2.2 2.2 0 0 0 5 17.8z"/><path d="M5 4.5A2.2 2.2 0 0 1 7.2 6.7H18.5"/><path d="M8.5 11h6"/></svg><span class="tl">Guide</span></a>
@@ -285,6 +287,60 @@
       </div>
     </div>
 
+    <div class="view" id="view-compound" data-view="compound" hidden>
+      <section class="card ci-in" aria-labelledby="ci-title">
+        <h2 id="ci-title" class="card-title">Compound interest <span class="card-sub">a general calculator, separate from your account</span></h2>
+        <form class="ed-form pj-form" id="ci-form" novalidate autocomplete="off">
+          <label class="f">Current age
+            <input id="ci-age" type="text" inputmode="decimal" placeholder="Your age">
+          </label>
+          <label class="f">Retirement age
+            <input id="ci-ret" type="text" inputmode="decimal" placeholder="67">
+          </label>
+          <div class="f-wide pj-chips" id="ci-ret-chips" role="group" aria-label="Quick retirement ages">
+            <button type="button" data-ret="59.5">59½</button><button type="button" data-ret="62">62</button><button type="button" data-ret="65">65</button><button type="button" data-ret="67">67</button>
+          </div>
+          <label class="f f-wide">Starting amount ($)
+            <input id="ci-start" type="text" inputmode="decimal" placeholder="0">
+          </label>
+          <label class="f f-wide">Monthly contribution ($)
+            <input id="ci-monthly" type="text" inputmode="decimal" placeholder="0">
+          </label>
+          <label class="f f-wide">Annual rate (%)
+            <input id="ci-rate" type="text" inputmode="decimal" placeholder="12">
+          </label>
+          <div class="f-wide pj-chips" id="ci-rate-chips" role="group" aria-label="Quick annual rates">
+            <button type="button" data-rate="6">6%</button><button type="button" data-rate="8">8%</button><button type="button" data-rate="10">10%</button><button type="button" data-rate="12">12%</button>
+          </div>
+        </form>
+        <p class="note">Monthly compounding at the annual rate &divide; 12, deposits at the end of each month, no inflation adjustment: the same math as Ramsey Solutions&rsquo; compound interest calculator. Real returns vary year to year; this is an average path, not a forecast. Educational only.</p>
+      </section>
+      <section class="card pj-empty" id="ci-empty"><p>Enter your current age to see the result.</p></section>
+      <div id="ci-out" hidden>
+        <section class="card pj-hero" aria-live="polite">
+          <div class="pj-hero-k" id="ci-hero-k">Balance at 67</div>
+          <div class="pj-hero-v" id="ci-hero-v">--</div>
+          <div class="pj-hero-sub" id="ci-hero-sub"></div>
+        </section>
+        <section class="card" aria-labelledby="ci-split-title">
+          <h2 id="ci-split-title" class="card-title">Contributions vs interest</h2>
+          <div class="pj-bar" aria-hidden="true"><span class="pj-bar-in" id="ci-bar-in"></span><span class="pj-bar-gr" id="ci-bar-gr"></span></div>
+          <div class="kv-grid pj-split" id="ci-split"></div>
+        </section>
+        <section class="card" aria-labelledby="ci-chart-title">
+          <h2 id="ci-chart-title" class="card-title">Growth by age</h2>
+          <div class="readout pj-readout" id="ci-readout">&nbsp;</div>
+          <div class="pj-chart-box"><canvas id="ci-chart" class="pj-chart" role="img" aria-label="Balance by age"></canvas></div>
+          <div class="pj-legend"><span><i class="lg-keep"></i>Balance</span><span><i class="lg-in"></i>Total contributions</span></div>
+        </section>
+        <section class="card ci-years-card">
+          <details class="how" id="ci-years"><summary>Year-by-year table <span class="card-sub">balance at each birthday</span></summary><div class="how-body">
+            <div class="table-scroll"><table class="data compact ci-table" id="ci-table"></table></div>
+          </div></details>
+        </section>
+      </div>
+    </div>
+
     <div class="view" id="view-transactions" data-view="transactions" hidden>
       <section class="card" aria-labelledby="tx-title">
         <h2 id="tx-title" class="card-title">Transactions <span class="card-sub">newest first, recorded from the Edit form</span></h2>
@@ -470,6 +526,7 @@
         <p class="guide-p">The starting amount follows the live account total unless you type your own. Monthly contribution and a yearly raise are yours to set. The yearly return presets are 8% conservative, 10% base, and 12% Ramsey (default), or a rate you type. Math matches Ramsey’s compound interest calculator (monthly rate = yearly÷12, deposits at month-end). Today’s dollars takes out 3% a year of inflation; Future dollars matches Ramsey’s site (no inflation adjustment).</p>
         <p class="guide-p">The chart compares keeping that monthly amount with adding nothing more, and it shades the band from 6% to 10%. The math compounds once a month. A smooth line is an average path, not a promise.</p>
         <p class="guide-p">UPRO aims for three times the S&amp;P 500’s move in a single day. These projections use broad-market rates, not 3×. Over many years a fund that resets daily can land far above or far below three times the index, especially in a choppy market. The note on the Projections tab says the same thing from the live mix of holdings.</p>
+        <p class="guide-p"><strong>Compound</strong> is a plain compound-interest calculator, like Ramsey Solutions&rsquo; own. It does not use the account total or the birthdate: enter any age, starting amount, monthly amount, rate and retirement age. Same math as Projections (rate &divide; 12 each month, deposits at month-end, no inflation). Inputs are saved on this device. On a phone, this Guide opens from the book icon at the top right.</p>
       </section>
 
       <section class="card" aria-labelledby="g-disp">
@@ -486,7 +543,7 @@
   </footer>
 
   <noscript><p class="noscript">This dashboard needs JavaScript enabled.</p></noscript>
-  <script src="assets/projection.js?v=12"></script>
-  <script src="assets/app.js?v=14"></script>
+  <script src="assets/projection.js?v=13"></script>
+  <script src="assets/app.js?v=15"></script>
 </body>
 </html>

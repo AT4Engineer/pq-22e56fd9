@@ -462,7 +462,7 @@ main { min-height: 100vh; }
 @keyframes row-in { from { opacity: 0; transform: translateY(10px); } }
 .view.view-in > *:not(.stocks-layout):not(.sheet-backdrop), .view.view-in .stocks-col { animation: view-in .26s var(--ease-out) backwards; }
 /* A transform on an ancestor makes iOS drop the projections canvas bitmap. Keep that view still. */
-#view-projections.view-in > * { animation: none; }
+#view-projections.view-in > *, #view-compound.view-in > * { animation: none; }
 @keyframes view-in { from { opacity: 0; transform: translateX(var(--vx, 18px)); } }
 
 /* press feedback */
@@ -554,6 +554,28 @@ button, .btn-primary, .btn-plain, .chips li a, .tabs a { transition: transform .
 @media (prefers-reduced-motion: reduce) {
   .rf-btn.spin .rf-ic { animation: none !important; opacity: .4; }
   .rf-menu, .rf-toast { animation: none !important; }
+}
+
+/* Compound tab */
+.lg-in { background: #8e8e93; }
+.ci-years-card { padding: 0; overflow: hidden; }
+.ci-years-card details.how { margin: 0; border: 0; border-radius: 0; background: transparent; }
+.ci-years-card details.how summary { padding: 14px 16px; }
+.ci-years-card details.how .how-body { padding: 0 8px 10px; }
+.ci-table { width: 100%; font-variant-numeric: tabular-nums; }
+.ci-table th, .ci-table td { white-space: nowrap; padding-left: 6px; padding-right: 6px; }
+@media (max-width: 380px) { .ci-table th, .ci-table td { font-size: 12.5px; padding-left: 4px; padding-right: 4px; } }
+/* Guide: top-bar button on phones (the bottom bar keeps six even tabs); a regular tab on wider screens */
+.gd-btn { display: none; }
+@media (max-width: 700px) {
+  .tabs a[data-tab="guide"] { display: none; }
+  .gd-btn {
+    display: inline-flex; align-items: center; justify-content: center; position: fixed; z-index: 47;
+    top: env(safe-area-inset-top); right: calc(max(4px, env(safe-area-inset-right)) + 40px); width: 44px; height: 44px;
+    color: var(--text); -webkit-tap-highlight-color: transparent; transition: opacity .15s ease;
+  }
+  .gd-btn:active { opacity: .4; }
+  .gd-btn[aria-current] { color: var(--accent); }
 }
 
 /* detail: bottom sheet below 960px */

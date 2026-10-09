@@ -112,4 +112,34 @@ t("exact age from the birthdate", () => {
   assert.strictEqual(P.monthsBetween(P.ageFromBirthdate("2008-11-25", "2026-10-06"), 59.5), 500);
 });
 
+t("Compound tab: age 17, $0, $100/mo, 12%, retire 59.5 = 510 months, closed form", () => {
+  const r = P.compound({ age: 17, start: 0, monthly: 100, annual: 0.12, retire: 59.5 });
+  assert.strictEqual(r.months, 510);
+  close(r.final, 100 * (Math.pow(1.01, 510) - 1) / 0.01, 1e-12, "FV");
+  close(r.contributed, 51000, 1e-12, "510 x $100");
+  close(r.interest, r.final - 51000, 1e-12, "interest");
+  assert.strictEqual(r.rows.length, 43);               // 42 whole years + the half year to 59.5
+  assert.strictEqual(r.rows[0].age, 18);
+  close(r.rows[0].balance, P.fvClosed(0, 100, 0.12, 12), 1e-12, "year 1");
+  assert.strictEqual(r.rows[42].age, 59.5);
+  close(r.rows[42].balance, r.final, 1e-12, "last row = final");
+  close(r.rows[41].contributed, 42 * 1200, 1e-12, "contributions so far");
+});
+
+t("Compound tab: start only, whole years, 0% rate, retire <= age", () => {
+  const a = P.compound({ age: 30, start: 10000, monthly: 0, annual: 0.06, retire: 40 });
+  close(a.final, 10000 * Math.pow(1.005, 120), 1e-12, "lump sum");
+  assert.strictEqual(a.rows.length, 10);
+  close(a.contributed, 10000, 1e-12, "start counts as contribution");
+  const z = P.compound({ age: 20, start: 500, monthly: 50, annual: 0, retire: 22 });
+  close(z.final, 500 + 50 * 24, 1e-12, "0% = sum of deposits"); close(z.interest, 0, 1e-12, "no interest");
+  const n = P.compound({ age: 67, start: 100, monthly: 10, annual: 0.12, retire: 67 });
+  assert.strictEqual(n.months, 0); close(n.final, 100, 1e-12, "no time");
+});
+
+t("Compound tab matches Ramsey Jack example via compound()", () => {
+  const r = P.compound({ age: 15, start: 0, monthly: 200, annual: 0.11, retire: 24 });
+  assert.strictEqual(Math.round(r.final), 36635);
+});
+
 console.log(`projection.test.js: ${n} tests passed`);

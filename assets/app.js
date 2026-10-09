@@ -1110,7 +1110,7 @@
   function fv(id) { return ($(id).value || "").trim(); }
   function pnum(s) { if (s === "" || s == null) return null; var x = Number(String(s).replace(/[$,\s]/g, "")); return isFinite(x) ? x : NaN; }
   // Comma grouping while typing (1,000,000). Preserves decimals and caret; pnum() strips for math/JSON.
-  var COMMA_IDS = { "ed-qty": 1, "ed-price": 1, "ed-amount": 1, "ed-price2": 1, "ed-fees": 1, "ed-strike": 1, "pj-start": 1, "pj-monthly": 1 };
+  var COMMA_IDS = { "ed-qty": 1, "ed-price": 1, "ed-amount": 1, "ed-price2": 1, "ed-fees": 1, "ed-strike": 1, "pj-start": 1, "pj-monthly": 1, "ci-start": 1, "ci-monthly": 1 };
   function formatCommaTyping(raw) {
     raw = String(raw == null ? "" : raw);
     if (raw === "") return "";
@@ -1673,8 +1673,202 @@
   }
 
   // ================================================================== views / router
-  var TAB_ORDER = ["stocks", "overview", "projections", "transactions", "edit", "guide"];
-  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", transactions: "Transactions", edit: "Edit portfolio", guide: "Guide" };
+  // ================================================================== Compound (general calculator; never reads the account)
+  // Ramsey model from projection.js (rate/12 monthly, end-of-month deposits, no inflation). Inputs live in
+  // localStorage "pq-compound" only; nothing is prefilled from the portfolio or the birthdate.
+  var CI_KEY = "pq-compound", CIN = 240;
+  var ci = { inited: false, chart: null, drawn: false, last: null, hover: null, reveal: 1, raf: null, tableKey: "" };
+  function ciLoad() { try { return JSON.parse(localStorage.getItem(CI_KEY) || "{}") || {}; } catch (e) { return {}; } }
+  function ciSettings() {
+    var s = ciLoad();
+    return { age: isNum(s.age) ? s.age : null, start: isNum(s.start) ? s.start : 0, retire: isNum(s.retire) ? s.retire : 67,
+      monthly: isNum(s.monthly) ? s.monthly : 0, rate: isNum(s.rate) ? s.rate : 12 };
+  }
+  function ciVal(id) { var x = pnum(fv(id)); return isNum(x) ? x : null; }
+  function ciRead() {
+    var s = { age: ciVal("ci-age"), retire: ciVal("ci-ret"), start: ciVal("ci-start"), monthly: ciVal("ci-monthly"), rate: ciVal("ci-rate") };
+    try { localStorage.setItem(CI_KEY, JSON.stringify(s)); } catch (e) { /* private mode */ }
+  }
+  function ciInit() {
+    if (ci.inited || !$("ci-form")) return;
+    ci.inited = true;
+    var s = ciSettings();
+    $("ci-age").value = isNum(s.age) ? String(s.age) : "";
+    $("ci-ret").value = String(s.retire);
+    setCommaVal("ci-start", s.start || ""); setCommaVal("ci-monthly", s.monthly || "");
+    $("ci-rate").value = String(s.rate);
+    var form = $("ci-form");
+    form.addEventListener("submit", function (e) { e.preventDefault(); });
+    form.addEventListener("input", function (e) { if (e.target) applyCommaInput(e.target); ciRead(); renderCompound(true); });
+    form.addEventListener("click", function (e) {
+      var b = e.target.closest && e.target.closest("[data-ret],[data-rate]"); if (!b) return;
+      if (b.hasAttribute("data-ret")) $("ci-ret").value = b.getAttribute("data-ret");
+      else $("ci-rate").value = b.getAttribute("data-rate");
+      ciRead(); renderCompound(true);
+    });
+  }
+  function ciNum(el, from, to, anim) {
+    if (anim && motion() && isNum(from) && Math.abs(from - to) > 0.5) countUp(el, from, to, money0s, 450);
+    else if (!ci.drawn && motion()) countUp(el, 0, to, money0s, 800);
+    else countUp(el, to, to, money0s);
+  }
+  function renderCompound(anim) {
+    if (!$("ci-form")) return;
+    ciInit();
+    var s = ciSettings(), i;
+    var rc = document.querySelectorAll("#ci-ret-chips [data-ret]");
+    for (i = 0; i < rc.length; i++) rc[i].classList.toggle("on", Math.abs(+rc[i].getAttribute("data-ret") - s.retire) < 1e-9);
+    var pc = document.querySelectorAll("#ci-rate-chips [data-rate]");
+    for (i = 0; i < pc.length; i++) pc[i].classList.toggle("on", Math.abs(+pc[i].getAttribute("data-rate") - s.rate) < 1e-9);
+    var err = !isNum(s.age) ? "" : s.age < 1 || s.age > 100 ? "Enter an age between 1 and 100." :
+      s.retire <= s.age ? "Retirement age must be after your current age." : s.retire > 120 ? "Retirement age is too high." :
+      s.rate <= -50 || s.rate >= 50 ? "Enter an annual rate between −50% and 50%." :
+      s.start < 0 || s.monthly < 0 ? "Amounts cannot be negative." : "";
+    var show = isNum(s.age) && !err;
+    $("ci-empty").hidden = show;
+    $("ci-empty").innerHTML = "<p>" + esc(err || "Enter your current age to see the result.") + "</p>";
+    $("ci-out").hidden = !show;
+    if (!show) return;
+    var r = PJ.compound({ age: s.age, start: s.start, monthly: s.monthly, annual: s.rate / 100, retire: s.retire });
+    var prev = ci.last || {}, yrs = r.months / 12;
+    $("ci-hero-k").textContent = "Balance at age " + ageTxt(s.retire);
+    ciNum($("ci-hero-v"), prev.final, r.final, anim);
+    $("ci-hero-sub").textContent = pct(s.rate, s.rate % 1 ? 2 : 0) + " a year for " + (yrs % 1 ? yrs.toFixed(1) : yrs) + " years (" + r.months + " months)" +
+      (s.start ? ", starting with " + money0s(s.start) : "") + (s.monthly ? ", adding " + money0s(s.monthly) + "/mo" : "");
+    var tot = r.final, inP = tot > 0 ? Math.max(0, Math.min(100, r.contributed / tot * 100)) : 100;
+    $("ci-bar-in").style.width = inP + "%"; $("ci-bar-gr").style.width = (100 - inP) + "%";
+    $("ci-split").innerHTML = kv("Total contributions", money0s(r.contributed) + (s.start ? ' <span class="subtle">incl. ' + money0s(s.start) + " start</span>" : "")) +
+      kv("Total interest earned", '<span class="' + (r.interest < 0 ? "neg" : "pos") + '">' + money0s(r.interest) + "</span>") +
+      kv("Interest share of the balance", pct(tot > 0 ? r.interest / tot * 100 : null, 0));
+    var key = [s.age, s.start, s.monthly, s.rate, s.retire].join("|");
+    if (key !== ci.tableKey) {
+      var first = !ci.tableKey; ci.tableKey = key;
+      $("ci-table").innerHTML = '<thead><tr><th>Age</th><th class="num">Balance</th><th class="num">Put in so far</th><th class="num">Interest so far</th></tr></thead><tbody>' +
+        r.rows.map(function (row, k) {
+          return "<tr" + (first && motion() && k < 15 ? ' class="row-in" style="animation-delay:' + (k * 25) + 'ms"' : "") + "><td>" + esc(ageTxt(row.age)) +
+            '</td><td class="num">' + money0s(row.balance) + '</td><td class="num subtle">' + money0s(row.contributed) + '</td><td class="num pos">' + money0s(row.interest) + "</td></tr>";
+        }).join("") + "</tbody>";
+    }
+    ci.last = { final: r.final };
+    ciChart({ age: s.age, target: s.retire, bal: r.values, con: r.contrib }, anim);
+    ciSchedulePaint();
+  }
+  var ciPaintT = null;
+  function ciSchedulePaint() {
+    if (ciPaintT) clearTimeout(ciPaintT);
+    requestAnimationFrame(function () { if (ui.view === "compound") ciDraw(); });
+    ciPaintT = setTimeout(function () { ciPaintT = null; if (ui.view === "compound") ciDraw(); }, 320);
+  }
+  function ciSample(arr) {
+    var out = [], n = arr.length - 1;
+    for (var i = 0; i <= CIN; i++) { var x = i / CIN * n, k = Math.floor(x), f = x - k; out.push(k >= n ? arr[n] : arr[k] + (arr[k + 1] - arr[k]) * f); }
+    return out;
+  }
+  function ciChart(raw, anim) {
+    var cv = $("ci-chart"); if (!cv) return;
+    var tgt = { age: raw.age, target: raw.target, bal: ciSample(raw.bal), con: ciSample(raw.con) };
+    var from = ci.chart, first = !ci.drawn;
+    ci.drawn = true;
+    ciChartInit(cv);
+    if (ci.raf) cancelAnimationFrame(ci.raf);
+    if (!motion() || (!first && !from) || (!anim && !first)) { ci.chart = tgt; ci.reveal = 1; ciDraw(); return; }
+    var t0 = performance.now(), dur = first ? 900 : 380;
+    function lerpA(a, b, f) { return b.map(function (v, i) { return a[i] + (v - a[i]) * f; }); }
+    (function step(now) {
+      var f = Math.min(1, (now - t0) / dur), e = first ? ease3(f) : easeIO(f);
+      if (first) { ci.chart = tgt; ci.reveal = e; }
+      else {
+        ci.reveal = 1;
+        ci.chart = { age: from.age + (tgt.age - from.age) * e, target: from.target + (tgt.target - from.target) * e,
+          bal: lerpA(from.bal, tgt.bal, e), con: lerpA(from.con, tgt.con, e) };
+      }
+      ciDraw();
+      if (f < 1) ci.raf = requestAnimationFrame(step); else { ci.chart = tgt; ci.raf = null; ciDraw(); }
+    })(t0);
+  }
+  function ciDraw() {
+    var cv = $("ci-chart"), c = ci.chart; if (!cv || !c || !cv.clientWidth) return;
+    var g = pjGeom(cv), dpr = window.devicePixelRatio || 1;
+    if (cv.width !== Math.round(g.w * dpr) || cv.height !== Math.round(g.h * dpr)) { cv.width = Math.round(g.w * dpr); cv.height = Math.round(g.h * dpr); cv.style.height = g.h + "px"; }
+    var ctx = cv.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, g.w, g.h);
+    var max = Math.max.apply(null, c.bal.concat(c.con, [1])), step = niceStep(max, 4), top = Math.ceil(max / step) * step;
+    var X = function (i) { return g.x0 + (g.x1 - g.x0) * i / CIN; }, Y = function (v) { return g.y1 - (g.y1 - g.y0) * Math.max(0, v) / top; };
+    ctx.font = "11px -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif";
+    ctx.textBaseline = "middle"; ctx.fillStyle = "#8e8e93"; ctx.strokeStyle = "rgba(84,84,88,.45)"; ctx.lineWidth = 1;
+    for (var v = 0; v <= top + 1e-6; v += step) {
+      var y = Math.round(Y(v)) + 0.5; ctx.beginPath(); ctx.moveTo(g.x0, y); ctx.lineTo(g.x1, y); ctx.stroke();
+      ctx.textAlign = "left"; ctx.fillText(pjAxis(v), g.x1 + 6, y);
+    }
+    var span = c.target - c.age, ystep = span > 40 ? 10 : span > 16 ? 5 : span > 6 ? 2 : 1;
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (var a = Math.ceil(c.age / ystep) * ystep; a <= c.target + 1e-9; a += ystep) {
+      var xx = X((a - c.age) / span * CIN);
+      if (xx < g.x0 + 10 || xx > g.x1 - 10) continue;
+      ctx.fillText(String(a), xx, g.y1 + 6);
+    }
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, g.x0 + (g.x1 - g.x0) * ci.reveal, g.h); ctx.clip();
+    function area(arr, fill) {
+      ctx.beginPath(); ctx.moveTo(X(0), g.y1);
+      for (var i = 0; i <= CIN; i++) ctx.lineTo(X(i), Y(arr[i]));
+      ctx.lineTo(X(CIN), g.y1); ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+    }
+    function line(arr, color, width) {
+      ctx.beginPath(); for (var i = 0; i <= CIN; i++) ctx[i ? "lineTo" : "moveTo"](X(i), Y(arr[i]));
+      ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineJoin = "round"; ctx.stroke();
+    }
+    var grad = ctx.createLinearGradient(0, g.y0, 0, g.y1);
+    grad.addColorStop(0, "rgba(10,132,255,.32)"); grad.addColorStop(1, "rgba(10,132,255,.02)");
+    area(c.bal, grad);
+    area(c.con, "rgba(99,99,102,.45)");
+    line(c.con, "#8e8e93", 1.6);
+    line(c.bal, "#0a84ff", 2.4);
+    ctx.restore();
+    if (isNum(ci.hover)) {
+      var hi = Math.max(0, Math.min(CIN, Math.round(ci.hover))), hx = Math.round(X(hi)) + 0.5;
+      ctx.strokeStyle = "rgba(235,235,245,.5)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(hx, g.y0); ctx.lineTo(hx, g.y1); ctx.stroke();
+      [[c.con[hi], "#8e8e93"], [c.bal[hi], "#0a84ff"]].forEach(function (p) {
+        ctx.beginPath(); ctx.arc(hx, Y(p[0]), 4, 0, Math.PI * 2); ctx.fillStyle = p[1]; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#1c1c1e"; ctx.stroke();
+      });
+      var ag = c.age + span * hi / CIN;
+      $("ci-readout").innerHTML = "<strong>Age " + esc(ageTxt(Math.round(ag * 2) / 2)) + "</strong> · balance <strong>" + money0s(c.bal[hi]) + "</strong> · put in " + money0s(c.con[hi]) +
+        ' · interest <span class="pos">' + money0s(c.bal[hi] - c.con[hi]) + "</span>";
+    } else $("ci-readout").innerHTML = '<span class="subtle">Drag across the chart to see each age</span>';
+  }
+  // Same scrub behavior as the Projections chart: touch locks page scroll while dragging (touch-action: none).
+  function ciChartInit(cv) {
+    if (cv._ci) return; cv._ci = true;
+    var dragging = false, hideT = null;
+    function pos(ev) {
+      var t = ev.touches && ev.touches[0] ? ev.touches[0] : ev, r = cv.getBoundingClientRect(), g = pjGeom(cv);
+      ci.hover = Math.max(0, Math.min(CIN, (t.clientX - r.left - g.x0) / (g.x1 - g.x0) * CIN)); clearTimeout(hideT); ciDraw();
+    }
+    function hide() { ci.hover = null; ciDraw(); }
+    function setDrag(on) {
+      dragging = on; cv.classList.toggle("dragging", on); document.body.classList.toggle("chart-dragging", on);
+      window.__pqChartDrag = on ? (window.__pqChartDrag || 0) + 1 : Math.max(0, (window.__pqChartDrag || 1) - 1);
+      if (!window.__pqChartDrag) document.body.classList.remove("chart-dragging");
+    }
+    cv.addEventListener("touchstart", function (ev) { if (!ev.touches || ev.touches.length !== 1) return; if (ev.cancelable) ev.preventDefault(); setDrag(true); pos(ev); }, { passive: false });
+    cv.addEventListener("touchmove", function (ev) { if (!dragging) return; if (ev.cancelable) ev.preventDefault(); pos(ev); }, { passive: false });
+    function end() { if (!dragging) return; setDrag(false); hideT = setTimeout(hide, 1500); }
+    cv.addEventListener("touchend", end); cv.addEventListener("touchcancel", end);
+    cv.addEventListener("pointerdown", function (ev) { if (ev.pointerType === "touch") return; setDrag(true); pos(ev); try { cv.setPointerCapture(ev.pointerId); } catch (e) { /* old browsers */ } });
+    cv.addEventListener("pointermove", function (ev) { if (ev.pointerType === "touch") return; if (dragging || ev.buttons === 0) pos(ev); });
+    cv.addEventListener("pointerup", function (ev) { if (ev.pointerType === "touch" || !dragging) return; setDrag(false); hide(); });
+    cv.addEventListener("pointercancel", function (ev) { if (ev.pointerType === "touch") return; if (dragging) setDrag(false); hide(); });
+    cv.addEventListener("pointerleave", function (ev) { if (ev.pointerType === "touch" || dragging) return; hide(); });
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (ents) {
+        for (var i = 0; i < ents.length; i++) if (ents[i].isIntersecting && ui.view === "compound") ciDraw();
+      }).observe(cv);
+    }
+    var det = $("ci-years"); if (det) det.addEventListener("toggle", function () { lsSet("pq-ci-years", det.open ? "1" : ""); });
+    if (det && lsGet("pq-ci-years", "")) det.open = true;
+  }
+
+  var TAB_ORDER = ["stocks", "overview", "projections", "compound", "transactions", "edit", "guide"];
+  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", compound: "Compound", transactions: "Transactions", edit: "Edit portfolio", guide: "Guide" };
   function route() {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, "")), parts = h.split("/");
     var v = parts[0];
@@ -1697,6 +1891,7 @@
         ve.classList.remove("view-in"); void ve.offsetWidth; ve.classList.add("view-in");
       }
     }
+    var gd = $("gd-btn"); if (gd) { if (v === "guide") gd.setAttribute("aria-current", "page"); else gd.removeAttribute("aria-current"); }
     var tabs = document.querySelectorAll(".tabs a");
     for (var k = 0; k < tabs.length; k++) {
       var on = tabs[k].getAttribute("data-tab") === v;
@@ -1722,6 +1917,8 @@
       renderChart(d, true);
     } else if (v === "projections") {
       renderProj(false);
+    } else if (v === "compound") {
+      renderCompound(false);
     } else if (v === "transactions") {
       renderTx(false);
     } else if (v === "edit") {
@@ -2056,6 +2253,7 @@
         renderRanges("ac-ranges", ui.acRange, chartFor("ACCOUNT"));
         if (ui.sel) { var rr = findRow(state.data, ui.sel); renderRanges("d-ranges", ui.range, rr && chartFor(rr.id)); }
         if (ui.view === "projections") pjDraw();
+        if (ui.view === "compound") ciDraw();
         if (ui.view === "stocks") { drawAccount(); var r = ui.sel && findRow(state.data, ui.sel); if (r) drawDetailChart(r); if (wide()) document.body.classList.remove("sheet-open"); else if (ui.sel) document.body.classList.add("sheet-open"); }
       }
     }, 200);

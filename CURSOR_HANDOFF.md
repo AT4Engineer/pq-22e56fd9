@@ -141,6 +141,7 @@ Edit holdings → commit/push `data/holdings.json`, or use Edit form / `python s
 
 ## Recently finished (2026-10-06)
 
+- **Compound tab** (`#compound`): standalone Ramsey compound calculator (`PQProj.compound`, tests in projection.test.js), localStorage `pq-compound`, not tied to the account. Phones: Guide moved from the bottom bar to a top-bar book icon (`#gd-btn`) so 6 tabs stay even; desktop keeps the Guide tab.
 - **Refresh button** (top bar, all tabs): tap reloads data now; hold/right-click → menu with **Get fresh prices** = prefilled issue (title/label `refresh`) → `.github/workflows/refresh.yml` (owner-only, calls `update.yml` via `workflow_call`, comments total + closes). Page polls every 15 s for ~3 min. Standalone hides it without a remote URL. E2E: issue #12 closed in ~45 s.
 - **Comma number inputs** on Edit amounts/prices + Projections start/monthly; denser Scriptable **small** widget
 - **Projections = Ramsey compound model** (monthly rate = annual/12, end-of-month deposits; presets 8/10/12% with 12% Ramsey default; Jack $36,635 test)
