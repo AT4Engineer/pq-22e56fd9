@@ -1,19 +1,19 @@
 {
   "UPRO|2026-10-16|154|call": {
     "last_good": {
-      "mark": 2.45,
-      "bid": 2.1,
-      "ask": 2.8,
-      "last": 2.1,
-      "iv": 0.3547,
-      "oi": 737.0,
-      "volume": 86.0,
-      "last_trade_et": "2026-10-08 15:49 ET",
+      "mark": 3.05,
+      "bid": 2.6,
+      "ask": 3.5,
+      "last": 2.95,
+      "iv": 0.3206,
+      "oi": 744.0,
+      "volume": 14.0,
+      "last_trade_et": "2026-10-09 11:16 ET",
       "contract": "UPRO261016C00154000",
-      "session": "2026-10-08",
-      "prev_mark": 3.9,
-      "prev_mark_source": "recorded mark for prior session 2026-10-07",
-      "as_of_et": "2026-10-08 21:10:04 ET"
+      "session": "2026-10-09",
+      "prev_mark": 2.45,
+      "prev_mark_source": "recorded mark for prior session 2026-10-08",
+      "as_of_et": "2026-10-09 11:59:43 ET"
     }
   }
 }
