@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-09 16:54:44 ET",
-  "generated_at_iso": "2026-10-09T16:54:44-04:00",
+  "generated_at_et": "2026-10-09 18:54:16 ET",
+  "generated_at_iso": "2026-10-09T18:54:16-04:00",
   "trade_date": "2026-10-09",
   "quotes_as_of_et": "2026-10-09 16:00 ET",
   "market_state": "POST",
@@ -9,9 +9,9 @@
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
     "total": 16851.98,
-    "prev_total": 16678.98,
-    "day_change": 173.0,
-    "day_change_pct": 1.04,
+    "prev_total": 16674.98,
+    "day_change": 177.0,
+    "day_change_pct": 1.06,
     "stocks_value": 16222.28,
     "cash": 964.7,
     "cash_share_pct": 5.72,
@@ -37,7 +37,7 @@
       "quote_time_et": "2026-10-09 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 162.71,
+      "ext_price": 162.72,
       "ext_label": "post-market",
       "share_pct": 3.86
     },
@@ -52,15 +52,15 @@
       "exchange": "NYSE Arca",
       "shares": 100,
       "price": 155.72,
-      "prev_close": 153.17,
-      "day_change_per_share": 2.55,
-      "day_change": 255.0,
-      "day_change_pct": 1.66,
+      "prev_close": 153.13,
+      "day_change_per_share": 2.59,
+      "day_change": 259.0,
+      "day_change_pct": 1.69,
       "value": 15572.0,
       "quote_time_et": "2026-10-09 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 156.03,
+      "ext_price": 155.92,
       "ext_label": "post-market",
       "share_pct": 92.4
     }
@@ -105,7 +105,7 @@
       "last_trade_et": "2026-10-09 15:03 ET",
       "assignment_risk": "HIGH",
       "assignment_note": "In the money - likely assigned at expiry if it stays above the strike.",
-      "prob_finish_itm": 0.5859,
+      "prob_finish_itm": 0.5865,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -155,8 +155,8 @@
     {
       "date": "2026-10-09",
       "total": 16851.98,
-      "day_change": 173.0,
-      "day_change_pct": 1.04
+      "day_change": 177.0,
+      "day_change_pct": 1.06
     }
   ],
   "watchlist": [
@@ -357,11 +357,11 @@
         "open": 165.34,
         "day_high": 166.38,
         "day_low": 160.61,
-        "volume": 92217290.0,
+        "volume": 92493813.0,
         "avg_volume": 92964754.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 2142962057216.0,
+        "market_cap": 2141727621120.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -691,16 +691,16 @@
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "price": 155.72,
-      "prev_close": 153.17,
-      "change": 2.55,
-      "change_pct": 1.66,
+      "prev_close": 153.13,
+      "change": 2.59,
+      "change_pct": 1.69,
       "quote_time_et": "2026-10-09 16:00 ET",
       "market_state": "POST",
       "stats": {
         "open": 154.41,
         "day_high": 156.25,
         "day_low": 153.75,
-        "volume": 1846618.0,
+        "volume": 1854919.0,
         "avg_volume": 1927279.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -1025,7 +1025,7 @@
           155.7
         ]
       ],
-      "spark_base": 153.17
+      "spark_base": 153.13
     },
     "NVDA": {
       "symbol": "NVDA",
@@ -1043,7 +1043,7 @@
         "open": 233.88,
         "day_high": 233.89,
         "day_low": 229.11,
-        "volume": 84122577.0,
+        "volume": 84307452.0,
         "avg_volume": 121315960.0,
         "high_52w": 243.37,
         "low_52w": 164.27,
@@ -1077,7 +1077,7 @@
         ],
         [
           25,
-          230.89
+          230.81
         ],
         [
           30,
@@ -1365,7 +1365,7 @@
         ],
         [
           385,
-          229.34
+          229.32
         ]
       ],
       "spark_base": 230.48
@@ -1383,10 +1383,10 @@
       "quote_time_et": "2026-10-09 16:00 ET",
       "market_state": "POST",
       "stats": {
-        "open": 256.5,
+        "open": 256.3,
         "day_high": 262.8,
         "day_low": 256.0,
-        "volume": 33415610.0,
+        "volume": 33510286.0,
         "avg_volume": 39186425.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
@@ -1729,7 +1729,7 @@
         "open": 92.5,
         "day_high": 93.94,
         "day_low": 92.5,
-        "volume": 1830258.0,
+        "volume": 1830335.0,
         "avg_volume": 3284578.0,
         "high_52w": 101.79,
         "low_52w": 76.55,
