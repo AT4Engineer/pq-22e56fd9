@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-12 16:00:39 ET",
-  "generated_at_iso": "2026-10-12T16:00:39-04:00",
+  "generated_at_et": "2026-10-12 16:10:31 ET",
+  "generated_at_iso": "2026-10-12T16:10:31-04:00",
   "trade_date": "2026-10-12",
   "quotes_as_of_et": "2026-10-12 16:00 ET",
   "market_state": "POST",
@@ -37,7 +37,7 @@
       "quote_time_et": "2026-10-12 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 163.4,
+      "ext_price": 163.52,
       "ext_label": "post-market",
       "share_pct": 3.87
     },
@@ -60,8 +60,8 @@
       "quote_time_et": "2026-10-12 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": null,
-      "ext_label": "",
+      "ext_price": 155.49,
+      "ext_label": "post-market",
       "share_pct": 92.13
     }
   ],
@@ -238,13 +238,13 @@
           "strike": 153.0,
           "contract": "UPRO261120C00153000",
           "bid": 8.1,
-          "ask": 10.9,
+          "ask": 11.0,
           "last": 9.9,
-          "iv": 0.473,
+          "iv": 0.478,
           "oi": 62.0,
           "volume": 3.0,
           "last_trade_et": "2026-10-07 14:59 ET",
-          "mid": 9.5,
+          "mid": 9.55,
           "atm": false
         },
         {
@@ -363,11 +363,11 @@
         "open": 164.7,
         "day_high": 167.06,
         "day_low": 160.85,
-        "volume": 65900659.0,
+        "volume": 65902331.0,
         "avg_volume": 93704956.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 2152925626368.0,
+        "market_cap": 2154166484992.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -1020,11 +1020,11 @@
         ],
         [
           375,
-          155.38
+          155.4
         ],
         [
           380,
-          155.33
+          155.34
         ],
         [
           385,
@@ -1371,7 +1371,7 @@
         ],
         [
           385,
-          226.43
+          226.42
         ]
       ],
       "spark_base": 229.28
@@ -1714,7 +1714,7 @@
         ],
         [
           385,
-          259.49
+          259.44
         ]
       ],
       "spark_base": 262.43
@@ -1734,8 +1734,8 @@
       "stats": {
         "open": 94.27,
         "day_high": 94.85,
-        "day_low": 93.79,
-        "volume": 1536233.0,
+        "day_low": 93.8,
+        "volume": 1537553.0,
         "avg_volume": 3272435.0,
         "high_52w": 101.79,
         "low_52w": 76.55,
