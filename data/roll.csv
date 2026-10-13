@@ -15,8 +15,8 @@ next_ask,8.4,per share
 next_mid,7.1,per share
 est_premium,580.0,new premium at the bid (conservative)
 net_roll,270.0,new premium (bid) minus buyback (ask); negative = debit
-premium_pct,3.75,premium as % of share value
-annualized_pct,36.0,"premium %, annualized"
-breakeven,148.96,share price minus new premium
+premium_pct,3.74,premium as % of share value
+annualized_pct,35.9,"premium %, annualized"
+breakeven,149.28,share price minus new premium
 premium_income_net,536.47,all premiums received minus buybacks (recorded)
-as_of_et,2026-10-13 12:15:38 ET,
+as_of_et,2026-10-13 12:30:29 ET,
