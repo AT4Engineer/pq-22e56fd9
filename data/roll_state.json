@@ -1,186 +1,186 @@
 {
   "UPRO|2026-11-20": {
-    "session": "2026-10-12",
+    "session": "2026-10-13",
     "rows": [
       {
         "strike": 95.0,
         "contract": "UPRO261120C00095000",
-        "bid": 58.6,
-        "ask": 62.7,
+        "bid": 58.9,
+        "ask": 62.9,
         "last": 60.09,
-        "iv": 0.7207,
+        "iv": 0.8394,
         "oi": null,
         "volume": null,
         "last_trade_et": "2026-10-07 13:00 ET",
-        "mid": 60.65
+        "mid": 60.9
       },
       {
         "strike": 110.0,
         "contract": "UPRO261120C00110000",
-        "bid": 44.2,
-        "ask": 48.1,
+        "bid": 44.3,
+        "ask": 48.4,
         "last": 45.69,
-        "iv": 0.6685,
+        "iv": 0.7139,
         "oi": 10.0,
         "volume": null,
         "last_trade_et": "2026-10-09 09:30 ET",
-        "mid": 46.15
+        "mid": 46.35
       },
       {
         "strike": 115.0,
         "contract": "UPRO261120C00115000",
-        "bid": 39.4,
-        "ask": 43.2,
+        "bid": 39.5,
+        "ask": 43.6,
         "last": 41.29,
-        "iv": 0.6243,
+        "iv": 0.6699,
         "oi": 10.0,
         "volume": 3.0,
         "last_trade_et": "2026-10-09 12:20 ET",
-        "mid": 41.3
+        "mid": 41.55
       },
       {
         "strike": 120.0,
         "contract": "UPRO261120C00120000",
         "bid": 34.7,
-        "ask": 38.7,
+        "ask": 38.9,
         "last": 37.53,
-        "iv": 0.6099,
+        "iv": 0.6274,
         "oi": 63.0,
         "volume": 6.0,
         "last_trade_et": "2026-10-09 15:24 ET",
-        "mid": 36.7
+        "mid": 36.8
       },
       {
         "strike": 125.0,
         "contract": "UPRO261120C00125000",
-        "bid": 30.0,
-        "ask": 33.6,
+        "bid": 30.2,
+        "ask": 33.7,
         "last": 31.84,
-        "iv": 0.5469,
+        "iv": 0.5679,
         "oi": 36.0,
         "volume": 57.0,
         "last_trade_et": "2026-10-09 13:06 ET",
-        "mid": 31.8
+        "mid": 31.95
       },
       {
         "strike": 130.0,
         "contract": "UPRO261120C00130000",
         "bid": 25.5,
-        "ask": 29.5,
+        "ask": 29.1,
         "last": 25.16,
-        "iv": 0.5405,
+        "iv": 0.5254,
         "oi": 16.0,
         "volume": 16.0,
         "last_trade_et": "2026-10-02 09:30 ET",
-        "mid": 27.5
+        "mid": 27.3
       },
       {
         "strike": 133.0,
         "contract": "UPRO261120C00133000",
-        "bid": 22.8,
+        "bid": 22.9,
         "ask": 27.0,
         "last": 22.9,
-        "iv": 0.5256,
+        "iv": 0.5324,
         "oi": 1.0,
         "volume": null,
         "last_trade_et": "2026-10-05 10:43 ET",
-        "mid": 24.9
+        "mid": 24.95
       },
       {
         "strike": 135.0,
         "contract": "UPRO261120C00135000",
-        "bid": 21.0,
-        "ask": 25.0,
+        "bid": 21.2,
+        "ask": 23.8,
         "last": 23.03,
-        "iv": 0.5002,
-        "oi": 30.0,
+        "iv": 0.5618,
+        "oi": 34.0,
         "volume": 4.0,
         "last_trade_et": "2026-10-12 10:30 ET",
-        "mid": 23.0
+        "mid": 22.5
       },
       {
         "strike": 138.0,
         "contract": "UPRO261120C00138000",
         "bid": 18.5,
-        "ask": 22.5,
+        "ask": 22.6,
         "last": 15.84,
-        "iv": 0.6167,
+        "iv": 0.6248,
         "oi": 2.0,
         "volume": null,
         "last_trade_et": "2026-09-17 15:33 ET",
-        "mid": 20.5
+        "mid": 20.55
       },
       {
         "strike": 139.0,
         "contract": "UPRO261120C00139000",
-        "bid": 17.6,
-        "ask": 21.6,
+        "bid": 17.7,
+        "ask": 21.8,
         "last": 21.75,
-        "iv": 0.6033,
+        "iv": 0.6173,
         "oi": 2.0,
         "volume": null,
         "last_trade_et": "2026-10-06 12:11 ET",
-        "mid": 19.6
+        "mid": 19.75
       },
       {
         "strike": 140.0,
         "contract": "UPRO261120C00140000",
-        "bid": 16.7,
-        "ask": 20.8,
+        "bid": 16.8,
+        "ask": 20.9,
         "last": 20.97,
-        "iv": 0.5956,
+        "iv": 0.6034,
         "oi": 3.0,
         "volume": 2.0,
         "last_trade_et": "2026-10-06 12:11 ET",
-        "mid": 18.75
+        "mid": 18.85
       },
       {
         "strike": 141.0,
         "contract": "UPRO261120C00141000",
         "bid": 15.9,
-        "ask": 19.9,
+        "ask": 20.1,
         "last": 15.3,
-        "iv": 0.5817,
+        "iv": 0.5952,
         "oi": 21.0,
         "volume": 1.0,
         "last_trade_et": "2026-09-28 10:29 ET",
-        "mid": 17.9
+        "mid": 18.0
       },
       {
         "strike": 143.0,
         "contract": "UPRO261120C00143000",
         "bid": 14.3,
-        "ask": 18.3,
+        "ask": 18.1,
         "last": 15.57,
-        "iv": 0.5643,
+        "iv": 0.5546,
         "oi": 3.0,
         "volume": null,
         "last_trade_et": "2026-10-08 12:34 ET",
-        "mid": 16.3
+        "mid": 16.2
       },
       {
         "strike": 144.0,
         "contract": "UPRO261120C00144000",
         "bid": 13.5,
-        "ask": 17.5,
+        "ask": 17.7,
         "last": 11.47,
-        "iv": 0.5551,
+        "iv": 0.5678,
         "oi": 1.0,
         "volume": null,
         "last_trade_et": "2026-09-17 12:38 ET",
-        "mid": 15.5
+        "mid": 15.6
       },
       {
         "strike": 145.0,
         "contract": "UPRO261120C00145000",
-        "bid": 12.7,
-        "ask": 16.7,
+        "bid": 12.8,
+        "ask": 16.5,
         "last": 14.94,
-        "iv": 0.5452,
-        "oi": 32.0,
+        "iv": 0.5356,
+        "oi": 34.0,
         "volume": 4.0,
         "last_trade_et": "2026-10-12 09:50 ET",
-        "mid": 14.7
+        "mid": 14.65
       },
       {
         "strike": 146.0,
@@ -188,7 +188,7 @@
         "bid": 12.0,
         "ask": 15.9,
         "last": 13.43,
-        "iv": 0.5349,
+        "iv": 0.5364,
         "oi": 188.0,
         "volume": 2.0,
         "last_trade_et": "2026-10-07 10:34 ET",
@@ -198,232 +198,232 @@
         "strike": 147.0,
         "contract": "UPRO261120C00147000",
         "bid": 11.2,
-        "ask": 15.4,
+        "ask": 15.3,
         "last": 9.97,
-        "iv": 0.5403,
+        "iv": 0.5363,
         "oi": 1.0,
         "volume": null,
         "last_trade_et": "2026-09-17 14:45 ET",
-        "mid": 13.3
+        "mid": 13.25
       },
       {
         "strike": 148.0,
         "contract": "UPRO261120C00148000",
         "bid": 10.5,
-        "ask": 14.6,
+        "ask": 14.4,
         "last": 10.9,
-        "iv": 0.5288,
+        "iv": 0.5196,
         "oi": 2.0,
         "volume": 2.0,
         "last_trade_et": "2026-09-24 13:02 ET",
-        "mid": 12.55
+        "mid": 12.45
       },
       {
         "strike": 149.0,
         "contract": "UPRO261120C00149000",
-        "bid": 9.8,
-        "ask": 13.1,
+        "bid": 9.7,
+        "ask": 13.6,
         "last": 11.32,
-        "iv": 0.4802,
+        "iv": 0.5077,
         "oi": 0.0,
         "volume": 1.0,
         "last_trade_et": "2026-10-07 11:25 ET",
-        "mid": 11.45
+        "mid": 11.65
       },
       {
         "strike": 150.0,
         "contract": "UPRO261120C00150000",
-        "bid": 10.1,
-        "ask": 11.9,
+        "bid": 9.0,
+        "ask": 11.7,
         "last": 11.5,
-        "iv": 0.4475,
+        "iv": 0.4384,
         "oi": 69.0,
         "volume": 21.0,
         "last_trade_et": "2026-10-09 12:51 ET",
-        "mid": 11.0
+        "mid": 10.35
       },
       {
         "strike": 151.0,
         "contract": "UPRO261120C00151000",
-        "bid": 9.2,
-        "ask": 12.3,
+        "bid": 8.3,
+        "ask": 12.2,
         "last": 8.62,
-        "iv": 0.4965,
+        "iv": 0.4927,
         "oi": 2.0,
         "volume": 1.0,
         "last_trade_et": "2026-10-02 15:15 ET",
-        "mid": 10.75
+        "mid": 10.25
       },
       {
         "strike": 152.0,
         "contract": "UPRO261120C00152000",
-        "bid": 8.2,
-        "ask": 11.7,
+        "bid": 7.5,
+        "ask": 11.5,
         "last": 10.1,
-        "iv": 0.493,
+        "iv": 0.4841,
         "oi": 21.0,
         "volume": 1.0,
         "last_trade_et": "2026-10-09 12:51 ET",
-        "mid": 9.95
+        "mid": 9.5
       },
       {
         "strike": 153.0,
         "contract": "UPRO261120C00153000",
-        "bid": 7.8,
-        "ask": 11.0,
+        "bid": 7.0,
+        "ask": 9.6,
         "last": 9.9,
-        "iv": 0.4838,
+        "iv": 0.4147,
         "oi": 62.0,
         "volume": 3.0,
         "last_trade_et": "2026-10-07 14:59 ET",
-        "mid": 9.4
+        "mid": 8.3
       },
       {
         "strike": 154.0,
         "contract": "UPRO261120C00154000",
-        "bid": 7.7,
-        "ask": 9.8,
+        "bid": 6.4,
+        "ask": 9.0,
         "last": 8.31,
-        "iv": 0.449,
+        "iv": 0.4102,
         "oi": 16.0,
         "volume": 1.0,
         "last_trade_et": "2026-10-07 10:10 ET",
-        "mid": 8.75
+        "mid": 7.7
       },
       {
         "strike": 155.0,
         "contract": "UPRO261120C00155000",
-        "bid": 7.3,
-        "ask": 8.9,
+        "bid": 5.7,
+        "ask": 8.4,
         "last": 7.0,
-        "iv": 0.4285,
+        "iv": 0.4048,
         "oi": 183.0,
         "volume": 1.0,
         "last_trade_et": "2026-10-09 10:44 ET",
-        "mid": 8.1
+        "mid": 7.05
       },
       {
         "strike": 156.0,
         "contract": "UPRO261120C00156000",
-        "bid": 6.7,
-        "ask": 8.2,
+        "bid": 5.2,
+        "ask": 7.6,
         "last": 7.78,
-        "iv": 0.4172,
-        "oi": 14.0,
+        "iv": 0.3886,
+        "oi": 15.0,
         "volume": 2.0,
         "last_trade_et": "2026-10-12 13:00 ET",
-        "mid": 7.45
+        "mid": 6.4
       },
       {
         "strike": 157.0,
         "contract": "UPRO261120C00157000",
-        "bid": 6.2,
-        "ask": 7.9,
+        "bid": 4.6,
+        "ask": 7.3,
         "last": 6.6,
-        "iv": 0.4248,
+        "iv": 0.3962,
         "oi": 75.0,
         "volume": 3.0,
         "last_trade_et": "2026-10-07 10:41 ET",
-        "mid": 7.05
+        "mid": 5.95
       },
       {
         "strike": 158.0,
         "contract": "UPRO261120C00158000",
-        "bid": 5.3,
-        "ask": 7.2,
+        "bid": 4.1,
+        "ask": 7.0,
         "last": 6.99,
-        "iv": 0.4117,
+        "iv": 0.4028,
         "oi": 62.0,
         "volume": 2.0,
         "last_trade_et": "2026-10-07 12:28 ET",
-        "mid": 6.25
+        "mid": 5.55
       },
       {
         "strike": 160.0,
         "contract": "UPRO261120C00160000",
-        "bid": 4.4,
-        "ask": 5.9,
+        "bid": 3.5,
+        "ask": 5.7,
         "last": 5.32,
-        "iv": 0.3875,
-        "oi": 38.0,
+        "iv": 0.3783,
+        "oi": 39.0,
         "volume": 1.0,
         "last_trade_et": "2026-10-12 14:13 ET",
-        "mid": 5.15
+        "mid": 4.6
       },
       {
         "strike": 165.0,
         "contract": "UPRO261120C00165000",
-        "bid": 3.0,
-        "ask": 3.9,
+        "bid": 1.6,
+        "ask": 3.6,
         "last": 3.34,
-        "iv": 0.3715,
-        "oi": 111.0,
+        "iv": 0.3558,
+        "oi": 115.0,
         "volume": 9.0,
         "last_trade_et": "2026-10-12 14:33 ET",
-        "mid": 3.45
+        "mid": 2.6
       },
       {
         "strike": 170.0,
         "contract": "UPRO261120C00170000",
-        "bid": 1.75,
-        "ask": 2.95,
+        "bid": 1.3,
+        "ask": 2.55,
         "last": 2.2,
-        "iv": 0.3899,
+        "iv": 0.366,
         "oi": 35.0,
         "volume": 5.0,
         "last_trade_et": "2026-10-09 15:43 ET",
-        "mid": 2.35
+        "mid": 1.925
       },
       {
         "strike": 175.0,
         "contract": "UPRO261120C00175000",
-        "bid": 1.05,
-        "ask": 1.6,
+        "bid": 0.45,
+        "ask": 1.65,
         "last": 1.35,
-        "iv": 0.3602,
-        "oi": 101.0,
+        "iv": 0.3646,
+        "oi": 103.0,
         "volume": 8.0,
         "last_trade_et": "2026-10-12 13:00 ET",
-        "mid": 1.325
+        "mid": 1.05
       },
       {
         "strike": 180.0,
         "contract": "UPRO261120C00180000",
-        "bid": 0.55,
+        "bid": 0.2,
         "ask": 1.15,
         "last": 1.18,
-        "iv": 0.3742,
+        "iv": 0.3745,
         "oi": 34.0,
         "volume": 44.0,
         "last_trade_et": "2026-10-09 11:49 ET",
-        "mid": 0.85
+        "mid": 0.675
       },
       {
         "strike": 185.0,
         "contract": "UPRO261120C00185000",
-        "bid": 0.2,
-        "ask": 0.95,
+        "bid": 0.05,
+        "ask": 0.75,
         "last": 0.67,
-        "iv": 0.4006,
-        "oi": 36.0,
+        "iv": 0.3779,
+        "oi": 16.0,
         "volume": 24.0,
         "last_trade_et": "2026-10-12 09:49 ET",
-        "mid": 0.575
+        "mid": 0.4
       },
       {
         "strike": 190.0,
         "contract": "UPRO261120C00190000",
-        "bid": 0.05,
-        "ask": 0.9,
+        "bid": 0.0,
+        "ask": 0.45,
         "last": 0.3,
-        "iv": 0.4382,
+        "iv": 0.3757,
         "oi": 12.0,
         "volume": 1.0,
         "last_trade_et": "2026-10-02 11:29 ET",
-        "mid": 0.475
+        "mid": null
       }
     ],
-    "spot": 155.46,
-    "as_of_et": "2026-10-12 22:32:10 ET"
+    "spot": 155.45,
+    "as_of_et": "2026-10-13 09:59:42 ET"
   }
 }
