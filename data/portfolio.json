@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-15 16:32:33 ET",
-  "generated_at_iso": "2026-10-15T16:32:33-04:00",
+  "generated_at_et": "2026-10-15 16:47:49 ET",
+  "generated_at_iso": "2026-10-15T16:47:49-04:00",
   "trade_date": "2026-10-15",
   "quotes_as_of_et": "2026-10-15 16:00 ET",
   "market_state": "POST",
@@ -37,7 +37,7 @@
       "quote_time_et": "2026-10-15 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 148.95,
+      "ext_price": 149.28,
       "ext_label": "post-market",
       "share_pct": 3.57
     },
@@ -60,7 +60,7 @@
       "quote_time_et": "2026-10-15 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 151.42,
+      "ext_price": 151.49,
       "ext_label": "post-market",
       "share_pct": 90.9
     }
@@ -105,7 +105,7 @@
       "last_trade_et": "2026-10-15 15:58 ET",
       "assignment_risk": "ELEVATED",
       "assignment_note": "Close to the strike - a normal UPRO day could push it above.",
-      "prob_finish_itm": 0.1846,
+      "prob_finish_itm": 0.1834,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -385,7 +385,7 @@
         "avg_volume": 94142778.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 1957947637760.0,
+        "market_cap": 1959076036608.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -399,7 +399,7 @@
         ],
         [
           5,
-          144.38
+          144.36
         ],
         [
           10,
@@ -1081,7 +1081,7 @@
       "spark": [
         [
           0,
-          214.21
+          214.2
         ],
         [
           5,
@@ -1101,11 +1101,11 @@
         ],
         [
           25,
-          214.07
+          214.08
         ],
         [
           30,
-          215.53
+          215.54
         ],
         [
           35,
@@ -1751,7 +1751,7 @@
       "market_state": "POST",
       "stats": {
         "open": 93.01,
-        "day_high": 93.74,
+        "day_high": 93.75,
         "day_low": 92.12,
         "volume": 2574598.0,
         "avg_volume": 3184787.0,
