@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-15 19:17:28 ET",
-  "generated_at_iso": "2026-10-15T19:17:28-04:00",
+  "generated_at_et": "2026-10-15 19:39:29 ET",
+  "generated_at_iso": "2026-10-15T19:39:29-04:00",
   "trade_date": "2026-10-15",
   "quotes_as_of_et": "2026-10-15 16:00 ET",
   "market_state": "POST",
@@ -37,7 +37,7 @@
       "quote_time_et": "2026-10-15 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 148.65,
+      "ext_price": 148.49,
       "ext_label": "post-market",
       "share_pct": 3.57
     },
@@ -60,7 +60,7 @@
       "quote_time_et": "2026-10-15 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 151.2,
+      "ext_price": 150.95,
       "ext_label": "post-market",
       "share_pct": 90.9
     }
@@ -105,7 +105,7 @@
       "last_trade_et": "2026-10-15 15:58 ET",
       "assignment_risk": "ELEVATED",
       "assignment_note": "Close to the strike - a normal UPRO day could push it above.",
-      "prob_finish_itm": 0.1699,
+      "prob_finish_itm": 0.1678,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
