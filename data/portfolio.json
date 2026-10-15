@@ -1,20 +1,20 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-14 21:21:20 ET",
-  "generated_at_iso": "2026-10-14T21:21:20-04:00",
+  "generated_at_et": "2026-10-14 22:33:58 ET",
+  "generated_at_iso": "2026-10-14T22:33:58-04:00",
   "trade_date": "2026-10-14",
   "quotes_as_of_et": "2026-10-14 16:00 ET",
   "market_state": "POSTPOST",
   "market_label": "Closed (after hours)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 16566.84,
-    "prev_total": 16818.36,
-    "day_change": -251.52,
-    "day_change_pct": -1.5,
-    "stocks_value": 15644.64,
+    "total": 320886.84,
+    "prev_total": 329898.36,
+    "day_change": -9011.52,
+    "day_change_pct": -2.73,
+    "stocks_value": 319964.64,
     "cash": 964.7,
-    "cash_share_pct": 5.82,
+    "cash_share_pct": 0.3,
     "option_liability": -42.5
   },
   "positions": [
@@ -27,19 +27,19 @@
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
-      "shares": 4,
+      "shares": 2004,
       "price": 152.16,
       "prev_close": 156.54,
       "day_change_per_share": -4.38,
-      "day_change": -17.52,
+      "day_change": -8777.52,
       "day_change_pct": -2.8,
-      "value": 608.64,
+      "value": 304928.64,
       "quote_time_et": "2026-10-14 16:00 ET",
       "market_state": "POSTPOST",
       "price_source": "regular-session close",
       "ext_price": 150.25,
       "ext_label": "post-market",
-      "share_pct": 3.67
+      "share_pct": 95.03
     },
     {
       "avg_cost": 154.155,
@@ -62,7 +62,7 @@
       "price_source": "regular-session close",
       "ext_price": 148.84,
       "ext_label": "post-market",
-      "share_pct": 90.76
+      "share_pct": 4.69
     }
   ],
   "options": [
@@ -105,7 +105,7 @@
       "last_trade_et": "2026-10-14 15:36 ET",
       "assignment_risk": "ELEVATED",
       "assignment_note": "Close to the strike - a normal UPRO day could push it above.",
-      "prob_finish_itm": 0.2313,
+      "prob_finish_itm": 0.2282,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -115,7 +115,7 @@
   ],
   "stats": {
     "days_tracked": 8,
-    "all_time_high": 16874.38,
+    "all_time_high": 320886.84,
     "best_day": {
       "date": "2026-10-05",
       "change": 242.52,
@@ -123,8 +123,8 @@
     },
     "worst_day": {
       "date": "2026-10-14",
-      "change": -251.52,
-      "pct": -1.5
+      "change": -9011.52,
+      "pct": -2.73
     }
   },
   "history": [
@@ -172,9 +172,9 @@
     },
     {
       "date": "2026-10-14",
-      "total": 16566.84,
-      "day_change": -251.52,
-      "day_change_pct": -1.5
+      "total": 320886.84,
+      "day_change": -9011.52,
+      "day_change_pct": -2.73
     }
   ],
   "watchlist": [
@@ -376,10 +376,10 @@
         "day_high": 155.44,
         "day_low": 151.1,
         "volume": 67600447.0,
-        "avg_volume": 93991931.0,
+        "avg_volume": 94142778.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 2004584366080.0,
+        "market_cap": 2005739634688.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -719,7 +719,7 @@
         "day_high": 154.31,
         "day_low": 148.58,
         "volume": 2478701.0,
-        "avg_volume": 1908157.0,
+        "avg_volume": 1917318.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
         "market_cap": null,
@@ -1062,7 +1062,7 @@
         "day_high": 226.0,
         "day_low": 219.64,
         "volume": 117762243.0,
-        "avg_volume": 118899660.0,
+        "avg_volume": 118784690.0,
         "high_52w": 243.37,
         "low_52w": 164.27,
         "market_cap": 5343730991104.0,
@@ -1405,7 +1405,7 @@
         "day_high": 259.65,
         "day_low": 252.66,
         "volume": 34598204.0,
-        "avg_volume": 39034589.0,
+        "avg_volume": 38867642.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
         "market_cap": 2740586545152.0,
@@ -1748,7 +1748,7 @@
         "day_high": 94.2,
         "day_low": 91.73,
         "volume": 3601938.0,
-        "avg_volume": 3215612.0,
+        "avg_volume": 3184787.0,
         "high_52w": 101.79,
         "low_52w": 76.55,
         "market_cap": 51403554816.0,

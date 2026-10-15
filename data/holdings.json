@@ -1,11 +1,11 @@
 {
-  "as_of": "2026-10-05",
+  "as_of": "2026-10-14",
   "note": "Tracking only. No brokerage connection. Updated by the 'Edit portfolio' form on the site (GitHub issue -> apply-trade workflow), or edit by hand.",
   "cash": 964.7,
   "stocks": [
     {
       "symbol": "SPCX",
-      "shares": 4,
+      "shares": 2004,
       "exchange": "Nasdaq",
       "display_name": "SpaceX"
     },
