@@ -138,20 +138,5 @@
     "cash_after": 964.7,
     "applied_at_et": "2026-10-07 16:53:26 ET",
     "source": "manual"
-  },
-  {
-    "id": "T19",
-    "type": "buy",
-    "date": "2026-10-14",
-    "symbol": "SPCX",
-    "fees": 0.0,
-    "qty": 2000.0,
-    "price": 152.16,
-    "description": "Buy 2000 SPCX @ $152.16",
-    "cash_before": 964.7,
-    "cash_after": 964.7,
-    "issue": 19,
-    "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/19",
-    "applied_at_et": "2026-10-14 22:33:58 ET"
   }
 ]
