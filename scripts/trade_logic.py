@@ -23,7 +23,8 @@ roll: a buy to close of an open short option and a sell to open of a new one, in
   The result record carries "legs": [buy_to_close record, sell_to_open record]; apply_trade.py saves
   them as two linked transactions. Cash only has to be non-negative after both legs.
 Cash rules (multiplier = 100 for options, 1 for stock):
-  buy / buy_to_close:  cash -= qty * price * multiplier + fees
+  buy (stock): cash unchanged (funded by new money); shares and cost basis added
+  buy_to_close:  cash -= qty * price * multiplier + fees
   sell / sell_to_open: cash += qty * price * multiplier - fees
   option_assigned (short call): shares -= 100 * contracts, cash += strike * 100 * contracts - fees
   option_assigned (short put):  shares += 100 * contracts, cash -= strike * 100 * contracts + fees
@@ -357,7 +358,7 @@ def apply_transaction(holdings, txn, today=None, check=None, _allow_negative_cas
         if s is None and check:
             check("symbol", t)
         cost = qty * px + fees
-        cash -= cost
+        # Stock buys are funded by new money, not the cash balance: cash is left unchanged.
         if s is None:
             H["stocks"].append({"symbol": sym, "shares": _clean_num(qty), "avg_cost": round(cost / qty, 4)})
         else:
@@ -527,7 +528,7 @@ def apply_transaction(holdings, txn, today=None, check=None, _allow_negative_cas
             raise TradeError(f"{sym} is not on the watchlist (it has: {', '.join(H['watchlist']) or 'nothing'}).")
         H["watchlist"] = [w for w in H["watchlist"] if w.upper() != sym]
 
-    if typ in ("buy", "buy_to_close", "withdraw", "option_assigned", "option_expired") and cash < -0.005 \
+    if typ in ("buy_to_close", "withdraw", "option_assigned", "option_expired") and cash < -0.005 \
             and not _allow_negative_cash:
         raise TradeError(f"Not enough cash: this would take cash from {money(cash0)} to {money(cash)}. "
                          f"If cash is out of date, submit a Deposit or Set cash first.")

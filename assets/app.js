@@ -1285,7 +1285,7 @@
   function edCashAfter(x, cash) {
     var mult = 100, f = isNum(x.fees) ? x.fees : 0, o = x.option || {};
     switch (x.type) {
-      case "buy": return cash - x.qty * x.price - f;
+      case "buy": return cash; // stock buys are funded by new money
       case "sell": return cash + x.qty * x.price - f;
       case "sell_to_open": return cash + x.qty * x.price * mult - f;
       case "buy_to_close": return cash - x.qty * x.price * mult - f;

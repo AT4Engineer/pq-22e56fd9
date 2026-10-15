@@ -60,7 +60,7 @@ class TestTypes(unittest.TestCase):
         s = stock(H, "QQQ")
         self.assertEqual(s["shares"], 1)
         self.assertAlmostEqual(s["avg_cost"], 500.5)
-        self.assertAlmostEqual(H["cash"], 464.2)
+        self.assertAlmostEqual(H["cash"], 964.7)  # buys never touch cash
 
     def test_buy_weighted_average(self):
         H = base(); stock(H, "SPCX")["avg_cost"] = 150.0
@@ -72,9 +72,10 @@ class TestTypes(unittest.TestCase):
         H, _ = ap(base(), type="buy", symbol="SPCX", qty="0.5", price="170")
         self.assertEqual(stock(H, "SPCX")["shares"], 4.5)
 
-    def test_buy_insufficient_cash(self):
-        with self.assertRaisesRegex(TradeError, "Not enough cash"):
-            ap(base(), type="buy", symbol="UPRO", qty=10, price=150)
+    def test_buy_leaves_cash_unchanged(self):
+        H, r = ap(base(), type="buy", symbol="UPRO", qty=10, price=150)
+        self.assertEqual(H["cash"], 964.7)
+        self.assertEqual(r["cash_after"], 964.7)
 
     def test_sell_partial_realized(self):
         H = base(); stock(H, "SPCX")["avg_cost"] = 150.0
