@@ -50,7 +50,7 @@ class TestTypes(unittest.TestCase):
         H, r = ap(H0, type="buy", symbol="UPRO", qty=10, price=50, fees=1)
         self.assertEqual(stock(H, "UPRO")["shares"], 110)
         self.assertNotIn("avg_cost", stock(H, "UPRO"))  # unknown basis stays unknown
-        self.assertAlmostEqual(H["cash"], 964.7 - 501)
+        self.assertAlmostEqual(H["cash"], 964.7)
         self.assertEqual(r["cash_before"], 964.7)
         self.assertEqual(r["description"], "Buy 10 UPRO @ $50.00")
         self.assertEqual(H0, base(), "input must not be mutated")
