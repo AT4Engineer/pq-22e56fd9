@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-16 18:26:25 ET",
-  "generated_at_iso": "2026-10-16T18:26:25-04:00",
+  "generated_at_et": "2026-10-16 19:28:25 ET",
+  "generated_at_iso": "2026-10-16T19:28:25-04:00",
   "trade_date": "2026-10-16",
   "quotes_as_of_et": "2026-10-16 16:00 ET",
   "market_state": "POST",
@@ -37,7 +37,7 @@
       "quote_time_et": "2026-10-16 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 145.81,
+      "ext_price": 145.39,
       "ext_label": "post-market",
       "share_pct": 3.61
     },
@@ -60,7 +60,7 @@
       "quote_time_et": "2026-10-16 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 146.1,
+      "ext_price": 145.31,
       "ext_label": "post-market",
       "share_pct": 90.46
     }
