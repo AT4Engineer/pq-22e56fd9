@@ -11,12 +11,12 @@ deadline,Buy to close before 4:00 PM ET Fri Oct 16 to keep your shares,
 next_expiry,2026-11-20,next monthly expiry
 next_atm_strike,150.0,strike nearest the share price
 next_bid,6.5,per share
-next_ask,7.9,per share
-next_mid,7.2,per share
+next_ask,7.5,per share
+next_mid,7.0,per share
 est_premium,650.0,new premium at the bid (conservative)
 net_roll,,new premium (bid) minus buyback (ask); negative = debit
-premium_pct,4.35,premium as % of share value
-annualized_pct,49.6,"premium %, annualized"
-breakeven,143.04,share price minus new premium
+premium_pct,4.34,premium as % of share value
+annualized_pct,49.5,"premium %, annualized"
+breakeven,143.33,share price minus new premium
 premium_income_net,536.47,all premiums received minus buybacks (recorded)
-as_of_et,2026-10-19 11:15:40 ET,
+as_of_et,2026-10-19 12:00:33 ET,
