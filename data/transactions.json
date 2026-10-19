@@ -138,5 +138,30 @@
     "cash_after": 964.7,
     "applied_at_et": "2026-10-07 16:53:26 ET",
     "source": "manual"
+  },
+  {
+    "id": "L_roll_20261016",
+    "type": "roll",
+    "date": "2026-10-16",
+    "symbol": "UPRO",
+    "qty": 1,
+    "fees": 0.0,
+    "net_credit": 464.47,
+    "close": {
+      "right": "call",
+      "strike": 154.0,
+      "expiry": "2026-10-16"
+    },
+    "open": {
+      "right": "call",
+      "strike": 154.0,
+      "expiry": "2026-11-20",
+      "price": 4.6447
+    },
+    "description": "Rolled UPRO $154 call Oct 16 -> Nov 20, 2026, net credit $464.47",
+    "note": "Reported by Anderson; per-leg prices unknown, net credit only (net of the Oct buyback)",
+    "cash_before": 964.7,
+    "cash_after": 1429.17,
+    "source": "manual"
   }
 ]
