@@ -1,13 +1,31 @@
 {
   "as_of": "2026-10-05",
   "note": "Tracking only. No brokerage connection. Updated by the 'Edit portfolio' form on the site (GitHub issue -> apply-trade workflow), or edit by hand.",
-  "cash": 1429.17,
+  "cash": 987.3,
   "stocks": [
     {
       "symbol": "SPCX",
-      "shares": 4,
+      "shares": 7,
       "exchange": "Nasdaq",
-      "display_name": "SpaceX"
+      "display_name": "SpaceX",
+      "lots": [
+        {
+          "date": "2026-09-25",
+          "shares": 3,
+          "price": 148.295
+        },
+        {
+          "date": null,
+          "shares": 1,
+          "price": null,
+          "note": "cost unknown"
+        },
+        {
+          "date": "2026-10-20",
+          "shares": 3,
+          "price": 147.29
+        }
+      ]
     },
     {
       "symbol": "UPRO",

@@ -163,5 +163,20 @@
     "cash_before": 964.7,
     "cash_after": 1429.17,
     "source": "manual"
+  },
+  {
+    "id": "L_buy_20261020_spcx",
+    "type": "buy",
+    "date": "2026-10-20",
+    "symbol": "SPCX",
+    "qty": 3,
+    "price": 147.29,
+    "fees": 0.0,
+    "total": 441.87,
+    "description": "Bought 3 SPCX at $147.29 ($441.87)",
+    "note": "Reported by Anderson; paid from option premium in cash, so this buy reduces cash (exception to the usual no-cash buys)",
+    "cash_before": 1429.17,
+    "cash_after": 987.3,
+    "source": "manual"
   }
 ]
