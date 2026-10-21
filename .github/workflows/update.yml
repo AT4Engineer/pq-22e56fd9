@@ -7,6 +7,8 @@ on:
     - cron: "*/15 13-20 * * 1-5"
     # Once after the close: 21:10 UTC = 17:10 EDT / 16:10 EST, Mon-Fri:
     - cron: "10 21 * * 1-5"
+    # After hours (extended-hours prices for the After Hours view): :10/:25/:40/:55, 21-23 UTC = 17-19:55 EDT
+    - cron: "10,25,40,55 21-23 * * 1-5"
   workflow_dispatch:
   # refresh.yml ("Get fresh prices" on the dashboard) runs this same job on demand.
   workflow_call:

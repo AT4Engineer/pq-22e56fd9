@@ -462,6 +462,37 @@
   function lsGet(k, d) { try { return localStorage.getItem(k) || d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* private mode */ } }
 
+  // ---------------------------------------------------------------- Regular / After Hours switch
+  function applyMode(m, btn, animate) {
+    ui.mode = m === "ah" ? "ah" : "reg";
+    var root = document.documentElement;
+    document.querySelectorAll("#mode-seg button").forEach(function (b) { b.setAttribute("aria-checked", String(b.getAttribute("data-mode") === ui.mode)); });
+    var tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute("content", ui.mode === "ah" ? "#0b0f2a" : "#000000");
+    function flip() { root.classList.toggle("mode-ah", ui.mode === "ah"); if (state.data) renderStocks(state.data); }
+    if (!animate || !motion()) { flip(); return; }
+    if (document.startViewTransition && btn) {
+      var r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+      var rad = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      var vt = document.startViewTransition(flip);
+      vt.ready.then(function () {
+        root.animate({ clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + rad + "px at " + x + "px " + y + "px)"] },
+          { duration: 600, easing: "cubic-bezier(.22,.61,.36,1)", pseudoElement: "::view-transition-new(root)" });
+      }).catch(function () {});
+    } else {
+      root.classList.add("mode-x"); flip();
+      setTimeout(function () { root.classList.remove("mode-x"); }, 650);
+    }
+  }
+  function initModeSeg() {
+    var seg = $("mode-seg"); if (!seg) return;
+    seg.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-mode]"); if (!b) return;
+      var m = b.getAttribute("data-mode"); if (m === ui.mode) return;
+      lsSet("pt.mode", m); applyMode(m, b, true);
+    });
+    applyMode(lsGet("pt.mode", "reg"), null, false);
+  }
+
   function abbr(x, cur) {
     if (!isNum(x)) return "n/a";
     var a = Math.abs(x), s = (x < 0 ? "−" : "") + (cur ? "$" : "");
@@ -553,14 +584,32 @@
   function renderStocks(d) {
     var a = d.account || {}, rows = stockRows(d);
     $("s-total").textContent = money(a.total);
-    if (isNum(ui.animFrom) && isNum(a.total) && Math.abs(ui.animFrom - a.total) > 0.004) {
+    if (ui.mode !== "ah" && isNum(ui.animFrom) && isNum(a.total) && Math.abs(ui.animFrom - a.total) > 0.004) {
       countUp($("s-total"), ui.animFrom, a.total, money); flash($("s-total"), a.total > ui.animFrom, true);
     }
     var day = $("s-day");
-    day.innerHTML = '<span class="' + cls(a.day_change) + '">' + sMoney(a.day_change) + " (" + sPct(a.day_change_pct) + ")</span> <span class=\"subtle\">today</span>";
-    var o = (d.options || [])[0];
-    $("s-sub").textContent = "Stocks " + money(a.stocks_value) + " · Cash " + money(a.cash) +
-      (o ? " · Short call " + money(a.option_liability) : "") + " · " + (d.market_label || "") + ", as of " + (d.quotes_as_of_et || "n/a");
+    var o = (d.options || [])[0], ax = a.extended;
+    if (ui.mode === "ah") {
+      $("s-label").textContent = "Account value · extended hours";
+      if (ax && isNum(ax.total)) {
+        $("s-total").textContent = money(ax.total);
+        day.innerHTML = '<span class="ah-sess">' + esc(ax.session_label || "Extended") + '</span><span class="' + cls(ax.change) + '">' + sMoney(ax.change) + " (" + sPct(ax.change_pct) + ")</span> <span class=\"subtle\">vs 4:00 PM close " + money(ax.close_total) + "</span>";
+        var legs = (ax.positions || []).map(function (p) { return p.symbol + " " + (isNum(p.ext_price) ? money(p.ext_price) : money(p.close) + " (close)"); }).join(" · ");
+        $("s-sub").innerHTML = esc(legs + " · Cash " + money(ax.cash) + (o ? " · Short call " + money(ax.option_liability) : "") +
+          (ax.quote_time_et ? " · quotes " + ax.quote_time_et : "")) +
+          '<div class="ah-note">' + esc((ax.stale ? "Last extended-hours value. " : "") + "Options don't trade after hours, so the call stays at its 4:00 PM mark." +
+          (ax.stale ? " No pre-market or after-hours trading right now (pre-market 4:00–9:30 AM, after hours 4:00–8:00 PM ET, weekdays)." : "")) + "</div>";
+      } else {
+        $("s-total").textContent = money(a.total);
+        day.innerHTML = '<span class="subtle">No extended-hours prices yet. Showing the regular-session value.</span>';
+        $("s-sub").textContent = "Pre-market runs 4:00–9:30 AM ET and after hours 4:00–8:00 PM ET on weekdays.";
+      }
+    } else {
+      $("s-label").textContent = "Account value";
+      day.innerHTML = '<span class="' + cls(a.day_change) + '">' + sMoney(a.day_change) + " (" + sPct(a.day_change_pct) + ")</span> <span class=\"subtle\">today</span>";
+      $("s-sub").textContent = "Stocks " + money(a.stocks_value) + " · Cash " + money(a.cash) +
+        (o ? " · Short call " + money(a.option_liability) : "") + " · " + (d.market_label || "") + ", as of " + (d.quotes_as_of_et || "n/a");
+    }
     var stag = ui.view === "stocks" && !ui.listShown && motion(), nh = rows.held.length;
     if (ui.view === "stocks") ui.listShown = true;
     $("s-held").innerHTML = rows.held.map(function (r, i) { return rowHtml(r, i, stag); }).join("");
@@ -2260,6 +2309,7 @@
   });
   uiInit();
   rfInit();
+  initModeSeg();
   if (STANDALONE) { state.source = "embedded"; render(EMBEDDED); }
   refresh();
   setInterval(refresh, REFRESH_MS);

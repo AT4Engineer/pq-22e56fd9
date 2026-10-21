@@ -1,11 +1,11 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-20 19:47:16 ET",
-  "generated_at_iso": "2026-10-20T19:47:16-04:00",
+  "generated_at_et": "2026-10-20 20:07:10 ET",
+  "generated_at_iso": "2026-10-20T20:07:10-04:00",
   "trade_date": "2026-10-20",
   "quotes_as_of_et": "2026-10-20 16:00 ET",
-  "market_state": "POST",
-  "market_label": "After hours",
+  "market_state": "POSTPOST",
+  "market_label": "Closed (after hours)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
     "total": 16489.83,
@@ -15,7 +15,43 @@
     "stocks_value": 15992.53,
     "cash": 987.3,
     "cash_share_pct": 5.99,
-    "option_liability": -490.0
+    "option_liability": -490.0,
+    "extended": {
+      "available": true,
+      "stale": false,
+      "session": "post-market",
+      "session_label": "After hours",
+      "total": 16677.23,
+      "close_total": 16489.83,
+      "change": 187.4,
+      "change_pct": 1.14,
+      "option_liability": -490.0,
+      "cash": 987.3,
+      "positions": [
+        {
+          "symbol": "SPCX",
+          "shares": 7.0,
+          "close": 147.79,
+          "ext_price": 159.7,
+          "value": 1117.93,
+          "change": 83.4,
+          "change_pct": 8.06
+        },
+        {
+          "symbol": "UPRO",
+          "shares": 100.0,
+          "close": 149.58,
+          "ext_price": 150.62,
+          "value": 15062.0,
+          "change": 104.0,
+          "change_pct": 0.7
+        }
+      ],
+      "quote_time_et": "2026-10-20 19:59 ET",
+      "as_of_et": "2026-10-20 20:07:10 ET",
+      "as_of_iso": "2026-10-20T20:07:10-04:00",
+      "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
+    }
   },
   "positions": [
     {
@@ -35,9 +71,9 @@
       "day_change_pct": -0.11,
       "value": 1034.53,
       "quote_time_et": "2026-10-20 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 159.07,
+      "ext_price": 159.7,
       "ext_label": "post-market",
       "share_pct": 6.27
     },
@@ -58,9 +94,9 @@
       "day_change_pct": 0.88,
       "value": 14958.0,
       "quote_time_et": "2026-10-20 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 150.48,
+      "ext_price": 150.62,
       "ext_label": "post-market",
       "share_pct": 90.71
     }
@@ -99,13 +135,13 @@
       "day_change": -50.0,
       "prev_mark": 4.4,
       "prev_mark_source": "recorded mark for prior session 2026-10-19",
-      "iv": 0.4188,
+      "iv": 0.4254,
       "open_interest": 69.0,
       "volume": 45.0,
       "last_trade_et": "2026-10-20 13:03 ET",
       "assignment_risk": "ELEVATED",
       "assignment_note": "Close to the strike - a normal UPRO day could push it above.",
-      "prob_finish_itm": 0.3821,
+      "prob_finish_itm": 0.3831,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -293,7 +329,7 @@
           "bid": 15.6,
           "ask": 18.0,
           "last": 15.83,
-          "iv": 0.5408,
+          "iv": 0.5454,
           "oi": 168.0,
           "volume": 1.0,
           "last_trade_et": "2026-10-20 09:57 ET",
@@ -306,7 +342,7 @@
           "bid": 12.4,
           "ask": 13.9,
           "last": 13.09,
-          "iv": 0.4819,
+          "iv": 0.4861,
           "oi": 86.0,
           "volume": 8.0,
           "last_trade_et": "2026-10-19 10:29 ET",
@@ -319,7 +355,7 @@
           "bid": 9.4,
           "ask": 10.8,
           "last": 10.2,
-          "iv": 0.455,
+          "iv": 0.4588,
           "oi": 141.0,
           "volume": 2.0,
           "last_trade_et": "2026-10-20 15:17 ET",
@@ -332,7 +368,7 @@
           "bid": 6.2,
           "ask": 8.3,
           "last": 7.06,
-          "iv": 0.4388,
+          "iv": 0.4425,
           "oi": 151.0,
           "volume": 5.0,
           "last_trade_et": "2026-10-19 09:31 ET",
@@ -345,7 +381,7 @@
           "bid": 4.8,
           "ask": 5.7,
           "last": 5.12,
-          "iv": 0.4025,
+          "iv": 0.4059,
           "oi": 193.0,
           "volume": 2.0,
           "last_trade_et": "2026-10-20 15:34 ET",
@@ -359,7 +395,7 @@
       "ask": 10.8,
       "mid": 10.1,
       "last": 10.2,
-      "iv": 0.455,
+      "iv": 0.4588,
       "oi": 141.0,
       "volume": 2.0,
       "last_trade_et": "2026-10-20 15:17 ET",
@@ -411,7 +447,7 @@
       "change": -0.17,
       "change_pct": -0.11,
       "quote_time_et": "2026-10-20 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 146.16,
         "day_high": 148.66,
@@ -420,7 +456,7 @@
         "avg_volume": 95159984.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 1947012956160.0,
+        "market_cap": 1948135194624.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -754,7 +790,7 @@
       "change": 1.31,
       "change_pct": 0.88,
       "quote_time_et": "2026-10-20 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 147.81,
         "day_high": 151.5,
@@ -1097,7 +1133,7 @@
       "change": -0.62,
       "change_pct": -0.29,
       "quote_time_et": "2026-10-20 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 215.98,
         "day_high": 218.46,
@@ -1440,7 +1476,7 @@
       "change": 0.18,
       "change_pct": 0.07,
       "quote_time_et": "2026-10-20 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 264.03,
         "day_high": 265.34,
@@ -1783,7 +1819,7 @@
       "change": 1.6,
       "change_pct": 1.72,
       "quote_time_et": "2026-10-20 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 93.82,
         "day_high": 95.63,
@@ -2447,7 +2483,7 @@
     }
   },
   "caveats": [
-    "Market not in regular session (After hours): stocks valued at the regular-session close; extended-hours quotes are not used.",
+    "Market not in regular session (Closed (after hours)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }

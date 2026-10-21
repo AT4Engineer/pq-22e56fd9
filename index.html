@@ -37,6 +37,7 @@
     }
   </script>
   <!-- pwa:end -->
+  <script>try{if(localStorage.getItem("pt.mode")==="ah")document.documentElement.classList.add("mode-ah")}catch(e){}</script>
 </head>
 <body>
   <div class="navbar" id="navbar" aria-hidden="true"><div class="navbar-title" id="nav-title">Stocks</div></div>
@@ -73,7 +74,12 @@
       <div class="stocks-layout">
         <div class="stocks-col">
           <section class="acct-head" aria-label="Account summary">
-            <div class="acct-label">Account value</div>
+            <div class="acct-label-row"><div class="acct-label" id="s-label">Account value</div>
+              <div class="seg-mode" id="mode-seg" role="radiogroup" aria-label="Price session">
+                <span class="seg-thumb" aria-hidden="true"></span>
+                <button type="button" role="radio" data-mode="reg" aria-checked="true">Regular</button>
+                <button type="button" role="radio" data-mode="ah" aria-checked="false">After Hours</button>
+              </div></div>
             <div class="acct-total" id="s-total"><span class="sk-bar sk-total"></span></div>
             <div class="acct-day" id="s-day"><span class="sk-bar sk-day"></span></div>
             <div class="acct-sub" id="s-sub"><span class="sk-bar sk-sub"></span><span class="sk-bar sk-sub2"></span></div>

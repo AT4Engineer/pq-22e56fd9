@@ -126,11 +126,11 @@ def get_quote(symbol, use_ext):
         raise RuntimeError(f"No price for {symbol}")
     qdt = datetime.fromtimestamp(qtime, ET) if qtime else datetime.now(ET)
     state = info.get("marketState") or "UNKNOWN"
-    ext_price, ext_label = None, ""
+    ext_price, ext_label, ext_time = None, "", None
     if state in ("POST", "POSTPOST", "CLOSED") and num(info.get("postMarketPrice")):
-        ext_price, ext_label = num(info.get("postMarketPrice")), "post-market"
+        ext_price, ext_label, ext_time = num(info.get("postMarketPrice")), "post-market", info.get("postMarketTime")
     elif state in ("PRE", "PREPRE") and num(info.get("preMarketPrice")):
-        ext_price, ext_label = num(info.get("preMarketPrice")), "pre-market"
+        ext_price, ext_label, ext_time = num(info.get("preMarketPrice")), "pre-market", info.get("preMarketTime")
     used, source = price, ("live regular session" if state == "REGULAR" else "regular-session close")
     if use_ext and ext_price is not None:
         used, source = ext_price, ext_label
@@ -158,6 +158,7 @@ def get_quote(symbol, use_ext):
         "market_state": state,
         "ext_price": ext_price,
         "ext_label": ext_label,
+        "ext_time": datetime.fromtimestamp(ext_time, ET) if isinstance(ext_time, (int, float)) and ext_time else None,
         "source": source,
     }
 
@@ -669,6 +670,48 @@ def build_roll(H, options, quotes, trade_date, now, stamp, caveats):
     return out
 
 
+# ---------------------------------------------------------------- extended hours
+def build_extended(H, quotes, positions, cash, opt_total, close_total, now):
+    """Account value at pre-/after-hours prices (Yahoo preMarketPrice/postMarketPrice).
+    Options do not trade outside 9:30-16:00, so the call stays at its regular-session mark.
+    With no extended quote now (overnight/weekend), carry the last recorded one, marked stale."""
+    try:
+        legs, total, any_ext, label, times = [], cash + opt_total, False, "", []
+        for s in H["stocks"]:
+            q, qty = quotes[s["symbol"]], float(s["shares"])
+            base = q["regular_price"]
+            px = q["ext_price"] if q["ext_price"] is not None else base
+            if q["ext_price"] is not None:
+                any_ext, label = True, q["ext_label"]
+                if q.get("ext_time"):
+                    times.append(q["ext_time"])
+            total += qty * px
+            legs.append({"symbol": s["symbol"], "shares": qty, "close": r2(base), "ext_price": r2(q["ext_price"]),
+                         "value": r2(qty * px), "change": r2(qty * (px - base)),
+                         "change_pct": r2((px - base) / base * 100) if base else None})
+        if any_ext:
+            chg = total - close_total
+            return {"available": True, "stale": False, "session": label,
+                    "session_label": "Pre-market" if label == "pre-market" else "After hours",
+                    "total": r2(total), "close_total": r2(close_total), "change": r2(chg),
+                    "change_pct": r2(chg / close_total * 100) if close_total else None,
+                    "option_liability": r2(opt_total), "cash": r2(cash), "positions": legs,
+                    "quote_time_et": et_str(max(times)) if times else None,
+                    "as_of_et": et_str(now, "%Y-%m-%d %H:%M:%S ET"), "as_of_iso": now.isoformat(timespec="seconds"),
+                    "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."}
+        prev = (load_json(D("portfolio.json"), {}) or {}).get("account", {}).get("extended")
+        if prev and prev.get("total") is not None:
+            prev = dict(prev)
+            prev["available"], prev["stale"] = False, True
+            prev["note"] = "No extended-hours trading right now. Showing the last extended-hours value."
+            return prev
+        return {"available": False, "stale": True, "total": None,
+                "note": "No extended-hours prices yet."}
+    except Exception as e:  # noqa: BLE001
+        warn(f"extended-hours block failed ({e})")
+        return None
+
+
 # ---------------------------------------------------------------- main
 def strip_volatile(obj):
     o = json.loads(json.dumps(obj))
@@ -836,6 +879,7 @@ def main():
     day = stock_day + opt_day
     prev_total = total - day
     day_pct = day / prev_total * 100 if prev_total else None
+    extended = build_extended(H, quotes, positions, cash, opt_total, total, now)
     for p in positions:
         p["share_pct"] = r2(p["value"] / total * 100) if total else None
     cash_share = r2(cash / total * 100) if total else None
@@ -899,7 +943,7 @@ def main():
         "account": {
             "total": r2(total), "prev_total": r2(prev_total), "day_change": r2(day), "day_change_pct": r2(day_pct),
             "stocks_value": r2(stock_total), "cash": r2(cash), "cash_share_pct": cash_share,
-            "option_liability": r2(opt_total),
+            "option_liability": r2(opt_total), "extended": extended,
         },
         "positions": positions,
         "options": options,

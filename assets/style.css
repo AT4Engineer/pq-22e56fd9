@@ -838,3 +838,30 @@ details.how[open] .how-body { animation: how-open .32s var(--ease-out) backwards
   .guide-lead { font-size: 16px; }
   .guide-dl > div { grid-template-columns: 1fr; gap: 4px; padding: 13px 0; }
 }
+
+/* ---- Regular / After Hours mode (After Hours: dark indigo palette, cyan up / amber down) */
+html.mode-ah {
+  --bg: #0b0f2a; --bg-2: #10123a; --surface: #1a1240; --surface-2: #241a55; --surface-3: #30246a;
+  --border: #2a2160; --text: #eef0ff; --muted: #9a9cc8; --accent: #8b7bff; --line: #4fd8ff; --grid: #1c1a48;
+  --pos: #4fd8ff; --neg: #ffab40; --pos-bg: #1fb6e6; --neg-bg: #e8891c; --flat-bg: #30246a;
+  --seg-bg: #1a1240; --seg-on: #3a2c80;
+}
+html.mode-ah body { background: radial-gradient(1200px 500px at 50% -120px, rgba(139,123,255,0.18), transparent 70%), var(--bg); background-attachment: fixed; }
+html.mode-ah .acct-total { text-shadow: 0 0 24px rgba(139,123,255,0.45); }
+html.mode-x, html.mode-x *, html.mode-x *::before, html.mode-x *::after {
+  transition: background-color .6s ease, color .6s ease, border-color .6s ease, fill .6s ease, stroke .6s ease, box-shadow .6s ease !important;
+}
+.acct-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.seg-mode { position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; padding: 2px; border-radius: 9px; background: var(--seg-bg); border: 1px solid var(--border); }
+.seg-mode button { position: relative; z-index: 1; appearance: none; border: 0; background: none; color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 600; padding: 5px 12px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+.seg-mode button[aria-checked="true"] { color: var(--text); }
+.seg-mode button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.seg-thumb { position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc(50% - 2px); border-radius: 7px; background: var(--seg-on); box-shadow: 0 1px 3px rgba(0,0,0,.35); transition: transform .32s var(--spring), background-color .6s ease; }
+html.mode-ah .seg-thumb { transform: translateX(100%); box-shadow: 0 0 12px rgba(139,123,255,.55); }
+.ah-note { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.ah-sess { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); margin-right: 6px; }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+@media (prefers-reduced-motion: reduce) {
+  html.mode-x, html.mode-x * { transition: none !important; }
+  .seg-thumb { transition: none; }
+}
