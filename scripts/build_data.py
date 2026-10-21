@@ -878,6 +878,11 @@ def main():
     total = stock_total + cash + opt_total
     day = stock_day + opt_day
     prev_total = total - day
+    # Baseline = the previous session's RECORDED close in history (what the account actually showed),
+    # not total minus per-position changes (which drifts when holdings, cash or the option mark change).
+    if prev_hist and num(prev_hist.get("total")) is not None:
+        prev_total = float(prev_hist["total"])
+        day = total - prev_total
     day_pct = day / prev_total * 100 if prev_total else None
     extended = build_extended(H, quotes, positions, cash, opt_total, total, now)
     for p in positions:
