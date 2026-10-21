@@ -470,10 +470,13 @@
     var tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute("content", ui.mode === "ah" ? "#0b0f2a" : "#000000");
     function flip() { root.classList.toggle("mode-ah", ui.mode === "ah"); if (state.data) renderStocks(state.data); }
     if (!animate || !motion()) { flip(); return; }
+    var vt = null;
     if (document.startViewTransition && btn) {
       var r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
       var rad = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-      var vt = document.startViewTransition(flip);
+      try { vt = document.startViewTransition(flip); } catch (e) { vt = null; }
+    }
+    if (vt) {
       vt.ready.then(function () {
         root.animate({ clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + rad + "px at " + x + "px " + y + "px)"] },
           { duration: 600, easing: "cubic-bezier(.22,.61,.36,1)", pseudoElement: "::view-transition-new(root)" });
@@ -484,13 +487,16 @@
     }
   }
   function initModeSeg() {
-    var seg = $("mode-seg"); if (!seg) return;
-    seg.addEventListener("click", function (e) {
-      var b = e.target.closest("button[data-mode]"); if (!b) return;
+    // delegated on document: works even if the header is re-rendered, and a failure here never blocks other buttons
+    document.addEventListener("click", function (e) {
+      var b = e.target && e.target.closest ? e.target.closest("#mode-seg button[data-mode]") : null;
+      if (!b) return;
+      e.preventDefault();
       var m = b.getAttribute("data-mode"); if (m === ui.mode) return;
-      lsSet("pt.mode", m); applyMode(m, b, true);
+      lsSet("pt.mode", m);
+      try { applyMode(m, b, true); } catch (err) { document.documentElement.classList.toggle("mode-ah", m === "ah"); if (window.console) console.error(err); }
     });
-    applyMode(lsGet("pt.mode", "reg"), null, false);
+    try { applyMode(lsGet("pt.mode", "reg"), null, false); } catch (err) { if (window.console) console.error(err); }
   }
 
   function abbr(x, cur) {
@@ -2307,9 +2313,9 @@
       }
     }, 200);
   });
+  try { initModeSeg(); } catch (e) { if (window.console) console.error(e); }
   uiInit();
   rfInit();
-  initModeSeg();
   if (STANDALONE) { state.source = "embedded"; render(EMBEDDED); }
   refresh();
   setInterval(refresh, REFRESH_MS);
