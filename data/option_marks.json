@@ -2,13 +2,6 @@
   "note": "Option bid/ask mid marks recorded by build_data.py on each regular-session run.",
   "points": [
     {
-      "t": 1791824425,
-      "et": "2026-10-12 13:00 ET",
-      "marks": {
-        "UPRO|2026-10-16|154|call": 3.075
-      }
-    },
-    {
       "t": 1791826230,
       "et": "2026-10-12 13:30 ET",
       "marks": {
@@ -795,6 +788,13 @@
     {
       "t": 1792687535,
       "et": "2026-10-22 12:45 ET",
+      "marks": {
+        "UPRO|2026-11-20|154|call": 4.0
+      }
+    },
+    {
+      "t": 1792688430,
+      "et": "2026-10-22 13:00 ET",
       "marks": {
         "UPRO|2026-11-20|154|call": 4.0
       }
