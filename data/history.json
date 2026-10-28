@@ -409,9 +409,9 @@
   },
   {
     "date": "2026-10-28",
-    "total": 16637.91,
-    "day_change": 140.55,
-    "day_change_pct": 0.85,
+    "total": 16642.91,
+    "day_change": 145.55,
+    "day_change_pct": 0.88,
     "cash": 987.3,
     "option_liability": -475.0,
     "option_mark": 4.75,
@@ -425,10 +425,10 @@
         "day_pct": -2.25
       },
       "UPRO": {
-        "value": 15109.0,
-        "day_pct": 1.03
+        "value": 15114.0,
+        "day_pct": 1.02
       }
     },
-    "updated_et": "2026-10-28 16:00:25 ET"
+    "updated_et": "2026-10-28 16:55:34 ET"
   }
 ]
