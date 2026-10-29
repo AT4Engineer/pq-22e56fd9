@@ -1,22 +1,22 @@
 key,value,note
 current_contract,UPRO Nov 20 2026 $154 call,open short call
-current_mark,3.35,per share
+current_mark,3.5,per share
 current_bid,2.9,per share
-current_ask,3.8,per share
-buyback_ask,380.0,cost to buy to close now at the ask (realistic fill)
-buyback_mid,335.0,cost to buy to close now at the mid
+current_ask,4.1,per share
+buyback_ask,410.0,cost to buy to close now at the ask (realistic fill)
+buyback_mid,350.0,cost to buy to close now at the mid
 premium_received,464.47,premium originally received (blank = not set)
-pl_if_closed,84.47,premium received minus buyback at the ask
+pl_if_closed,54.47,premium received minus buyback at the ask
 deadline,Buy to close before 4:00 PM ET Fri Nov 20 to keep your shares,
 next_expiry,2026-12-18,next monthly expiry
 next_atm_strike,150.0,strike nearest the share price
 next_bid,7.9,per share
-next_ask,8.6,per share
-next_mid,8.25,per share
+next_ask,9.2,per share
+next_mid,8.55,per share
 est_premium,790.0,new premium at the bid (conservative)
-net_roll,410.0,new premium (bid) minus buyback (ask); negative = debit
-premium_pct,5.32,premium as % of share value
-annualized_pct,38.8,"premium %, annualized"
-breakeven,140.58,share price minus new premium
+net_roll,380.0,new premium (bid) minus buyback (ask); negative = debit
+premium_pct,5.29,premium as % of share value
+annualized_pct,38.6,"premium %, annualized"
+breakeven,141.45,share price minus new premium
 premium_income_net,1000.94,all premiums received minus buybacks (recorded)
-as_of_et,2026-10-29 15:45:38 ET,
+as_of_et,2026-10-29 16:55:41 ET,
