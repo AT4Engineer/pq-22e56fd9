@@ -433,26 +433,26 @@
   },
   {
     "date": "2026-10-29",
-    "total": 16548.75,
-    "day_change": -94.16,
-    "day_change_pct": -0.57,
+    "total": 16528.68,
+    "day_change": -114.23,
+    "day_change_pct": -0.69,
     "cash": 987.3,
-    "option_liability": -365.0,
-    "option_mark": 3.65,
+    "option_liability": -350.0,
+    "option_mark": 3.5,
     "option_mark_source": "mid of bid/ask",
     "option_prev_mark": 4.75,
     "quote_quality": 3,
     "quote_reused": false,
     "positions": {
       "SPCX": {
-        "value": 1010.45,
+        "value": 1010.38,
         "day_pct": -0.61
       },
       "UPRO": {
-        "value": 14916.0,
-        "day_pct": -1.31
+        "value": 14881.0,
+        "day_pct": -1.54
       }
     },
-    "updated_et": "2026-10-29 12:45:31 ET"
+    "updated_et": "2026-10-29 13:30:20 ET"
   }
 ]
