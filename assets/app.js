@@ -4,7 +4,8 @@
  * panel), #overview (summary, positions, covered call, history; default on wide screens),
  * #projections (client-side growth from the birthdate), #transactions (data/transactions.json, newest first),
  * #edit (builds a prefilled GitHub issue that the apply-trade workflow turns into a holdings update;
- * the page never places a trade) and #guide (how the tracker works).
+ * the page never places a trade), #floor (assets/floor.js: a simulated trading-floor screen for fun, not real
+ * quotes) and #guide (how the tracker works).
  *
  * Modes
  *  - Site (GitHub Pages): fetches data/portfolio.json (cache-busted) on load and every 60 s.
@@ -1922,8 +1923,8 @@
     if (det && lsGet("pq-ci-years", "")) det.open = true;
   }
 
-  var TAB_ORDER = ["stocks", "overview", "projections", "compound", "transactions", "edit", "guide"];
-  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", compound: "Compound", transactions: "Transactions", edit: "Edit portfolio", guide: "Guide" };
+  var TAB_ORDER = ["stocks", "overview", "projections", "compound", "transactions", "edit", "floor", "guide"];
+  var VIEW_TITLES = { stocks: "Stocks", overview: "Overview", projections: "Projections", compound: "Compound", transactions: "Transactions", edit: "Edit portfolio", floor: "Trading Floor", guide: "Guide" };
   function route() {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, "")), parts = h.split("/");
     var v = parts[0];
@@ -1947,6 +1948,10 @@
       }
     }
     var gd = $("gd-btn"); if (gd) { if (v === "guide") gd.setAttribute("aria-current", "page"); else gd.removeAttribute("aria-current"); }
+    var fb = $("fl-btn"); if (fb) { if (v === "floor") fb.setAttribute("aria-current", "page"); else fb.removeAttribute("aria-current"); }
+    // Trading Floor (assets/floor.js) runs only while its view is on screen.
+    window.PQ_VIEW = v;
+    try { document.dispatchEvent(new CustomEvent("pq:view", { detail: v })); } catch (e) { /* old browsers: floor.js polls PQ_VIEW */ }
     var tabs = document.querySelectorAll(".tabs a");
     for (var k = 0; k < tabs.length; k++) {
       var on = tabs[k].getAttribute("data-tab") === v;
@@ -2093,6 +2098,8 @@
   }
   function render(d) {
     state.data = d;
+    window.PQ_DATA = d;
+    try { document.dispatchEvent(new CustomEvent("pq:data", { detail: d })); } catch (e) { /* floor.js reads PQ_DATA */ }
     ui.rowFrom = ui.lastPrices; ui.animFrom = ui.lastTotal;
     try {
       renderHeader(d); renderSummary(d); renderPositions(d); renderOption(d); renderRoll(d);

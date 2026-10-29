@@ -9,7 +9,7 @@
   <meta name="trade-repo" content="AT4Engineer/pq-22e56fd9">
   <title>Portfolio Tracker</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=17">
+  <link rel="stylesheet" href="assets/style.css?v=18">
   <!-- pwa:start (stripped from the standalone build) -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -48,6 +48,7 @@
         <span class="market" id="market-pill"><span class="dot" aria-hidden="true"></span><span id="market-label">Loading</span></span>
         <span class="updated">Last updated <strong id="updated">--</strong></span>
       </div>
+      <a href="#floor" class="fl-btn" id="fl-btn" aria-label="Trading Floor"><svg class="rf-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5v3M7 16.5v4M17 3.5v2M17 14.5v6"/><rect x="4.5" y="6.5" width="5" height="10" rx="1.2"/><rect x="14.5" y="5.5" width="5" height="9" rx="1.2"/></svg></a>
       <a href="#guide" class="gd-btn" id="gd-btn" aria-label="Guide"><svg class="rf-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.2A2.3 2.3 0 0 1 18.5 6.8V20H7.2A2.2 2.2 0 0 0 5 17.8z"/><path d="M5 4.5A2.2 2.2 0 0 1 7.2 6.7H18.5"/><path d="M8.5 11h6"/></svg></a>
       <button type="button" class="rf-btn" id="rf-btn" aria-label="Refresh data" aria-haspopup="menu" title="Refresh (hold for more)"><svg class="rf-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4.2h-4.2"/></svg></button>
     </div>
@@ -58,6 +59,7 @@
       <a href="#compound" data-tab="compound"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9 15l6-6"/><circle cx="9.3" cy="9.3" r="1.1"/><circle cx="14.7" cy="14.7" r="1.1"/></svg><span class="tl">Compound</span></a>
       <a href="#transactions" data-tab="transactions"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span class="tl">Transactions</span></a>
       <a href="#edit" data-tab="edit"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span class="tl">Edit</span></a>
+      <a href="#floor" data-tab="floor"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5v3M7 16.5v4M17 3.5v2M17 14.5v6"/><rect x="4.5" y="6.5" width="5" height="10" rx="1.2"/><rect x="14.5" y="5.5" width="5" height="9" rx="1.2"/></svg><span class="tl">Floor</span></a>
       <a href="#guide" data-tab="guide"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.2A2.3 2.3 0 0 1 18.5 6.8V20H7.2A2.2 2.2 0 0 0 5 17.8z"/><path d="M5 4.5A2.2 2.2 0 0 1 7.2 6.7H18.5"/><path d="M8.5 11h6"/></svg><span class="tl">Guide</span></a>
     </nav>
   </header>
@@ -461,6 +463,49 @@
       </section>
     </div>
 
+    <!-- ============================== Trading Floor (assets/floor.js; simulated, for fun) -->
+    <div class="view" id="view-floor" data-view="floor" hidden>
+      <div class="fl-root" id="fl-root">
+      <section class="fl-board" aria-label="Trading floor board">
+        <div class="fl-brand"><div class="fl-title"><span class="fl-live" aria-hidden="true"></span>Trading Floor</div><div class="fl-kicker">Market dashboard</div></div>
+        <div class="fl-clock-wrap"><span class="fl-clock" id="fl-clock">--:--:--</span><span class="fl-tz" id="fl-tz">ET</span></div>
+        <div class="fl-pill" id="fl-pill"><span class="fl-pdot" aria-hidden="true"></span><span id="fl-mkt">Market</span></div>
+        <div class="fl-date" id="fl-date"></div>
+        <div class="fl-stats">
+          <div class="fl-stat"><span class="fl-sk">Sim volume</span><span class="fl-sv" id="fl-vol">0</span></div>
+          <div class="fl-stat"><span class="fl-sk">Prints/s</span><span class="fl-sv" id="fl-tps">0</span></div>
+          <div class="fl-stat"><span class="fl-sk">Adv / Dec</span><span class="fl-sv"><span class="fl-adv" id="fl-adv">0</span><span class="fl-slash">/</span><span class="fl-dec" id="fl-dec">0</span></span><span class="fl-breadth" aria-hidden="true"><i id="fl-breadth-bar"></i></span></div>
+        </div>
+        <p class="fl-sim">Simulated for fun — not real quotes · <span class="fl-mine-k">●</span> = your holdings</p>
+      </section>
+      <div class="fl-tape" aria-hidden="true"><div class="fl-tape-track" id="fl-tape-a"></div></div>
+      <div class="fl-tape fl-tape-rev" aria-hidden="true"><div class="fl-tape-track" id="fl-tape-b"></div></div>
+      <div class="fl-main">
+        <section class="fl-card fl-grid-card" aria-label="Quote board">
+          <div class="fl-grid" id="fl-grid"></div>
+        </section>
+        <div class="fl-side">
+          <section class="fl-card" aria-labelledby="fl-ts-h">
+            <h3 class="fl-h" id="fl-ts-h">Time &amp; sales <span class="fl-hs"><span class="fl-ldot" aria-hidden="true"></span>Live trades</span></h3>
+            <div class="fl-ts-head" aria-hidden="true"><span>Time</span><span>Symbol</span><span>Price</span><span>Size</span><span>Exch</span></div>
+            <div class="fl-ts" id="fl-ts" aria-hidden="true"></div>
+          </section>
+          <section class="fl-card" aria-labelledby="fl-book-h">
+            <h3 class="fl-h" id="fl-book-h">Order book <span class="fl-hs">Depth ladder · <b id="fl-book-sym">UPRO</b></span></h3>
+            <div class="fl-book-head" aria-hidden="true"><span>Bid</span><span>Size</span><span>Size</span><span>Ask</span></div>
+            <div class="fl-book" id="fl-book" aria-hidden="true"></div>
+            <div class="fl-depth"><div class="fl-dk"><span>Bid depth</span><b id="fl-bdep">0</b></div><canvas class="fl-dchart" id="fl-dchart" aria-hidden="true"></canvas><div class="fl-dk fl-dk-r"><span>Ask depth</span><b id="fl-adep">0</b></div></div>
+          </section>
+        </div>
+      </div>
+      <section class="fl-card fl-pulse-card" aria-labelledby="fl-pulse-h">
+        <h3 class="fl-h" id="fl-pulse-h">Market pulse <span class="fl-hs">mini charts · sim</span></h3>
+        <div class="fl-pulse" id="fl-pulse"></div>
+      </section>
+      <p class="note fl-seed" id="fl-seed"></p>
+      </div>
+    </div>
+
     <!-- ============================== Guide -->
     <div class="view" id="view-guide" data-view="guide" hidden>
       <section class="card guide-hero" aria-labelledby="g-title">
@@ -483,6 +528,10 @@
           <div>
             <dt><a href="#projections">Projections</a></dt>
             <dd>A sketch of what steady saving could grow to. It runs in the browser from the birthdate and the live account total. It is not a quote, and it is not a forecast of this month.</dd>
+          </div>
+          <div>
+            <dt><a href="#floor">Trading Floor</a></dt>
+            <dd>Just for fun: a busy trading-floor screen with ticker tapes, a flashing quote board, an order book, time and sales, and a sparkline wall. Your holdings and watchlist start from the latest saved prices; every move after that is a random simulation. None of it is a real quote and it does not touch the account. On a phone it opens from the candlestick icon at the top right.</dd>
           </div>
           <div>
             <dt><a href="#transactions">Transactions</a></dt>
@@ -550,6 +599,7 @@
 
   <noscript><p class="noscript">This dashboard needs JavaScript enabled.</p></noscript>
   <script src="assets/projection.js?v=13"></script>
-  <script src="assets/app.js?v=16"></script>
+  <script src="assets/app.js?v=17"></script>
+  <script src="assets/floor.js?v=1"></script>
 </body>
 </html>
