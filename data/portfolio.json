@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-29 16:55:41 ET",
-  "generated_at_iso": "2026-10-29T16:55:41-04:00",
+  "generated_at_et": "2026-10-29 18:59:34 ET",
+  "generated_at_iso": "2026-10-29T18:59:34-04:00",
   "trade_date": "2026-10-29",
   "quotes_as_of_et": "2026-10-29 16:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 16324.46,
+      "total": 16238.94,
       "close_total": 16579.53,
-      "change": -255.07,
-      "change_pct": -1.54,
+      "change": -340.59,
+      "change_pct": -2.05,
       "option_liability": -350.0,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 143.89,
-          "ext_price": 142.02,
-          "value": 994.16,
-          "change": -13.07,
-          "change_pct": -1.3
+          "ext_price": 140.09,
+          "value": 980.63,
+          "change": -26.6,
+          "change_pct": -2.64
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 149.35,
-          "ext_price": 146.93,
-          "value": 14693.0,
-          "change": -242.0,
-          "change_pct": -1.62
+          "ext_price": 146.21,
+          "value": 14621.01,
+          "change": -313.99,
+          "change_pct": -2.1
         }
       ],
-      "quote_time_et": "2026-10-29 16:55 ET",
-      "as_of_et": "2026-10-29 16:55:41 ET",
-      "as_of_iso": "2026-10-29T16:55:41-04:00",
+      "quote_time_et": "2026-10-29 18:59 ET",
+      "as_of_et": "2026-10-29 18:59:34 ET",
+      "as_of_iso": "2026-10-29T18:59:34-04:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-10-29 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 142.02,
+      "ext_price": 140.09,
       "ext_label": "post-market",
       "share_pct": 6.08
     },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-10-29 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 146.93,
+      "ext_price": 146.21,
       "ext_label": "post-market",
       "share_pct": 90.08
     }
@@ -141,7 +141,7 @@
       "last_trade_et": "2026-10-29 10:37 ET",
       "assignment_risk": "MODERATE",
       "assignment_note": "Some cushion below the strike, but UPRO moves 3x the S&P 500.",
-      "prob_finish_itm": 0.36,
+      "prob_finish_itm": 0.3598,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -494,7 +494,7 @@
         "open": 142.31,
         "day_high": 144.95,
         "day_low": 141.03,
-        "volume": 65277895.0,
+        "volume": 66067670.0,
         "avg_volume": 102011240.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
@@ -837,7 +837,7 @@
         "open": 148.94,
         "day_high": 150.07,
         "day_low": 147.71,
-        "volume": 1921010.0,
+        "volume": 1997363.0,
         "avg_volume": 1922178.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -1180,7 +1180,7 @@
         "open": 214.35,
         "day_high": 215.32,
         "day_low": 212.08,
-        "volume": 74528373.0,
+        "volume": 75456091.0,
         "avg_volume": 114489409.0,
         "high_52w": 243.37,
         "low_52w": 164.27,
@@ -1523,7 +1523,7 @@
         "open": 246.91,
         "day_high": 249.14,
         "day_low": 241.24,
-        "volume": 70829326.0,
+        "volume": 79750364.0,
         "avg_volume": 38612678.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
@@ -1557,7 +1557,7 @@
         ],
         [
           25,
-          245.16
+          245.15
         ],
         [
           30,
@@ -1866,7 +1866,7 @@
         "open": 106.52,
         "day_high": 107.93,
         "day_low": 104.95,
-        "volume": 4365007.0,
+        "volume": 4884250.0,
         "avg_volume": 3090435.0,
         "high_52w": 107.93,
         "low_52w": 76.55,
