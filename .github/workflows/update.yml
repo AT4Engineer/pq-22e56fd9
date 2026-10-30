@@ -49,6 +49,7 @@ jobs:
             python scripts/current_csv.py
             python scripts/roll_csv.py
             python scripts/intraday_csv.py
+            python scripts/floor_data.py || echo "floor_data failed; keeping the last data/floor.json"
             python scripts/build_standalone.py
             git add data dist
             if git diff --cached --quiet; then

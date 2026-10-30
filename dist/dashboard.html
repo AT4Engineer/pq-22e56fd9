@@ -1088,6 +1088,12 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
   .fl-tile::after, .fl-tpx, .fl-tile, .fl-burst, .fl-tr.in { animation: none !important; }
 }
 .fl-mine-k { color: var(--accent); }
+/* Trading Floor quote panel (real values) */
+.fl-qr { line-height: 26px; border-bottom: 1px solid var(--fl-line); }
+.fl-qr .fl-qk { color: var(--muted); font-family: inherit; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.fl-qr .fl-qv { text-align: right; color: var(--text); }
+.fl-qr .fl-qv.up { color: var(--pos); } .fl-qr .fl-qv.dn { color: var(--neg); }
+.fl-tr.fl-empty { display: block; color: var(--muted); font-family: inherit; }
 
 </style>
   <script>try{if(localStorage.getItem("pt.mode")==="ah")document.documentElement.classList.add("mode-ah")}catch(e){}</script>
@@ -1516,7 +1522,7 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
       </section>
     </div>
 
-    <!-- ============================== Trading Floor (assets/floor.js; simulated, for fun) -->
+    <!-- ============================== Trading Floor (assets/floor.js; real delayed quotes from data/floor.json) -->
     <div class="view" id="view-floor" data-view="floor" hidden>
       <div class="fl-root" id="fl-root">
       <section class="fl-board" aria-label="Trading floor board">
@@ -1525,11 +1531,11 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
         <div class="fl-pill" id="fl-pill"><span class="fl-pdot" aria-hidden="true"></span><span id="fl-mkt">Market</span></div>
         <div class="fl-date" id="fl-date"></div>
         <div class="fl-stats">
-          <div class="fl-stat"><span class="fl-sk">Sim volume</span><span class="fl-sv" id="fl-vol">0</span></div>
-          <div class="fl-stat"><span class="fl-sk">Prints/s</span><span class="fl-sv" id="fl-tps">0</span></div>
+          <div class="fl-stat"><span class="fl-sk">Volume (day)</span><span class="fl-sv" id="fl-vol">0</span></div>
+          <div class="fl-stat"><span class="fl-sk">Quotes as of</span><span class="fl-sv" id="fl-asof">—</span></div>
           <div class="fl-stat"><span class="fl-sk">Adv / Dec</span><span class="fl-sv"><span class="fl-adv" id="fl-adv">0</span><span class="fl-slash">/</span><span class="fl-dec" id="fl-dec">0</span></span><span class="fl-breadth" aria-hidden="true"><i id="fl-breadth-bar"></i></span></div>
         </div>
-        <p class="fl-sim">Simulated for fun — not real quotes · <span class="fl-mine-k">●</span> = your holdings</p>
+        <p class="fl-sim" id="fl-sim">Real quotes, delayed · <span class="fl-mine-k">●</span> = your holdings</p>
       </section>
       <div class="fl-tape" aria-hidden="true"><div class="fl-tape-track" id="fl-tape-a"></div></div>
       <div class="fl-tape fl-tape-rev" aria-hidden="true"><div class="fl-tape-track" id="fl-tape-b"></div></div>
@@ -1539,20 +1545,19 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
         </section>
         <div class="fl-side">
           <section class="fl-card" aria-labelledby="fl-ts-h">
-            <h3 class="fl-h" id="fl-ts-h">Time &amp; sales <span class="fl-hs"><span class="fl-ldot" aria-hidden="true"></span>Live trades</span></h3>
-            <div class="fl-ts-head" aria-hidden="true"><span>Time</span><span>Symbol</span><span>Price</span><span>Size</span><span>Exch</span></div>
+            <h3 class="fl-h" id="fl-ts-h">Intraday · 5-min closes <span class="fl-hs"><span class="fl-ldot" aria-hidden="true"></span><b id="fl-ts-sym">UPRO</b></span></h3>
+            <div class="fl-ts-head" aria-hidden="true"><span>Time</span><span>Symbol</span><span>Close</span><span>Chg</span><span>vs prev</span></div>
             <div class="fl-ts" id="fl-ts" aria-hidden="true"></div>
           </section>
           <section class="fl-card" aria-labelledby="fl-book-h">
-            <h3 class="fl-h" id="fl-book-h">Order book <span class="fl-hs">Depth ladder · <b id="fl-book-sym">UPRO</b></span></h3>
-            <div class="fl-book-head" aria-hidden="true"><span>Bid</span><span>Size</span><span>Size</span><span>Ask</span></div>
-            <div class="fl-book" id="fl-book" aria-hidden="true"></div>
-            <div class="fl-depth"><div class="fl-dk"><span>Bid depth</span><b id="fl-bdep">0</b></div><canvas class="fl-dchart" id="fl-dchart" aria-hidden="true"></canvas><div class="fl-dk fl-dk-r"><span>Ask depth</span><b id="fl-adep">0</b></div></div>
+            <h3 class="fl-h" id="fl-book-h">Quote <span class="fl-hs">Tap a tile · <b id="fl-book-sym">UPRO</b></span></h3>
+                        <div class="fl-book" id="fl-book" aria-hidden="true"></div>
+            <div class="fl-depth"><div class="fl-dk"><span>Day low</span><b id="fl-bdep">0</b></div><canvas class="fl-dchart" id="fl-dchart" aria-hidden="true"></canvas><div class="fl-dk fl-dk-r"><span>Day high</span><b id="fl-adep">0</b></div></div>
           </section>
         </div>
       </div>
       <section class="fl-card fl-pulse-card" aria-labelledby="fl-pulse-h">
-        <h3 class="fl-h" id="fl-pulse-h">Market pulse <span class="fl-hs">mini charts · sim</span></h3>
+        <h3 class="fl-h" id="fl-pulse-h">Market pulse <span class="fl-hs">today vs prev close (dotted)</span></h3>
         <div class="fl-pulse" id="fl-pulse"></div>
       </section>
       <p class="note fl-seed" id="fl-seed"></p>
@@ -1584,7 +1589,7 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
           </div>
           <div>
             <dt><a href="#floor">Trading Floor</a></dt>
-            <dd>Just for fun: a busy trading-floor screen with ticker tapes, a flashing quote board, an order book, time and sales, and a sparkline wall. Your holdings and watchlist start from the latest saved prices; every move after that is a random simulation. None of it is a real quote and it does not touch the account. On a phone it opens from the candlestick icon at the top right.</dd>
+            <dd>A busy trading-floor screen with real market data: ticker tapes, a quote board, a quote panel, 5-minute intraday closes and a sparkline wall for 24 symbols (index ETFs, your holdings, big tech, sector ETFs and the VIX). Quotes come from Yahoo Finance, delayed about 15 minutes, refreshed every 15 minutes in market hours; after the close it shows the day close. Tiles flash only when a price really changed between refreshes. The offline file shows a snapshot with its as-of time. On a phone it opens from the candlestick icon at the top right.</dd>
           </div>
           <div>
             <dt><a href="#transactions">Transactions</a></dt>
@@ -4117,98 +4122,71 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
 })();
 
 </script>
+  <script>window.PQ_FLOOR = {"source":"Yahoo Finance via yfinance (delayed ~15 min)","generated_at_et":"2026-10-30 13:58 ET","generated_epoch":1793383117,"as_of_epoch":1793383117,"session_date":"2026-10-30","symbols":[{"sym":"SPY","name":"S&P 500 ETF","price":754.01,"prev_close":769.36,"change":-15.35,"change_pct":-2.0,"open":761.38,"high":761.46,"low":753.7,"volume":31718645,"session_date":"2026-10-30","spark":[760.01,760.75,760.11,760.3,760.64,761.12,760.4,759.59,758.59,758.25,757.53,758.06,758.19,759.42,759.93,760.09,759.61,759.8,758.93,759.19,758.6,758.54,758.77,758.51,758.2,757.83,757.38,757.57,757.57,758.02,757.07,757.09,757.0,757.29,756.99,757.58,757.37,757.7,757.41,756.27,755.56,755.86,755.79,755.29,755.31,755.42,755.72,755.59,755.03,755.14,755.42,754.67,754.0,753.99],"bars":[[1793379600,755.79],[1793379900,755.29],[1793380200,755.31],[1793380500,755.42],[1793380800,755.72],[1793381100,755.59],[1793381400,755.03],[1793381700,755.14],[1793382000,755.42],[1793382300,754.67],[1793382600,754.0],[1793382900,753.99]],"last_bar_epoch":1793382900},{"sym":"VOO","name":"Vanguard S&P 500","price":693.11,"prev_close":707.32,"change":-14.21,"change_pct":-2.01,"open":699.92,"high":700.0,"low":692.84,"volume":5348455,"session_date":"2026-10-30","spark":[698.65,699.28,698.74,698.89,699.22,699.71,698.99,698.24,697.3,696.99,696.33,696.88,696.93,698.05,698.5,698.67,698.28,698.43,697.63,697.83,697.34,697.22,697.47,697.26,696.96,696.61,696.21,696.39,696.36,696.78,695.9,695.98,695.85,696.09,695.84,696.44,696.18,696.48,696.21,695.19,694.53,694.79,694.72,694.27,694.28,694.38,694.66,694.52,694.03,694.12,694.36,693.73,693.09,693.11],"bars":[[1793379600,694.72],[1793379900,694.27],[1793380200,694.28],[1793380500,694.38],[1793380800,694.66],[1793381100,694.52],[1793381400,694.03],[1793381700,694.12],[1793382000,694.36],[1793382300,693.73],[1793382600,693.09],[1793382900,693.11]],"last_bar_epoch":1793382900},{"sym":"VTI","name":"Total Market","price":370.64,"prev_close":378.24,"change":-7.6,"change_pct":-2.01,"open":374.25,"high":374.49,"low":370.5,"volume":2818999,"session_date":"2026-10-30","spark":[373.83,374.23,373.87,373.93,374.04,374.26,373.92,373.44,372.92,372.8,372.44,372.69,372.71,373.33,373.54,373.6,373.38,373.46,373.03,373.16,372.87,372.83,372.91,372.82,372.58,372.41,372.2,372.3,372.3,372.54,372.04,372.11,372.05,372.2,372.06,372.35,372.22,372.38,372.22,371.68,371.36,371.46,371.45,371.22,371.21,371.27,371.42,371.38,371.08,371.14,371.29,370.95,370.63,370.64],"bars":[[1793379600,371.45],[1793379900,371.22],[1793380200,371.21],[1793380500,371.27],[1793380800,371.42],[1793381100,371.38],[1793381400,371.08],[1793381700,371.14],[1793382000,371.29],[1793382300,370.95],[1793382600,370.63],[1793382900,370.64]],"last_bar_epoch":1793382900},{"sym":"QQQ","name":"Nasdaq-100","price":687.41,"prev_close":715.34,"change":-27.93,"change_pct":-3.9,"open":697.13,"high":698.63,"low":687.03,"volume":45312690,"session_date":"2026-10-30","spark":[694.72,697.29,695.91,696.11,697.16,698.18,697.54,696.18,694.25,694.33,692.9,694.09,694.5,696.73,696.96,697.36,696.79,696.64,695.29,696.17,694.92,694.89,695.15,694.72,694.27,693.44,692.98,693.58,693.42,693.96,692.4,692.51,692.04,692.46,691.85,692.61,692.34,692.7,692.47,690.58,690.0,690.47,690.12,689.22,689.09,689.28,689.79,689.59,688.63,688.72,689.1,688.35,687.46,687.39],"bars":[[1793379600,690.12],[1793379900,689.22],[1793380200,689.09],[1793380500,689.28],[1793380800,689.79],[1793381100,689.59],[1793381400,688.63],[1793381700,688.72],[1793382000,689.1],[1793382300,688.35],[1793382600,687.46],[1793382900,687.39]],"last_bar_epoch":1793382900},{"sym":"DIA","name":"Dow 30","price":517.16,"prev_close":522.73,"change":-5.57,"change_pct":-1.07,"open":521.85,"high":522.02,"low":517.08,"volume":3151749,"session_date":"2026-10-30","spark":[521.53,520.79,521.1,521.12,520.84,521.1,520.55,519.72,519.56,518.97,518.82,519.23,519.58,519.66,520.32,520.58,520.3,520.49,520.11,519.91,519.79,519.51,519.71,519.67,519.34,519.33,518.99,519.05,518.92,519.19,518.99,518.87,518.89,518.93,518.78,519.16,518.98,519.07,518.99,518.44,517.86,517.85,517.98,517.93,517.9,517.68,517.79,517.8,517.69,517.74,517.83,517.53,517.23,517.16],"bars":[[1793379600,517.98],[1793379900,517.93],[1793380200,517.9],[1793380500,517.68],[1793380800,517.79],[1793381100,517.8],[1793381400,517.69],[1793381700,517.74],[1793382000,517.83],[1793382300,517.53],[1793382600,517.23],[1793382900,517.16]],"last_bar_epoch":1793382900},{"sym":"IWM","name":"Russell 2000","price":278.16,"prev_close":284.01,"change":-5.85,"change_pct":-2.06,"open":281.97,"high":282.71,"low":277.97,"volume":12284981,"session_date":"2026-10-30","spark":[282.57,282.44,281.94,281.33,281.35,281.52,280.94,280.51,280.15,280.16,280.09,279.98,279.92,280.26,280.47,280.51,280.15,280.45,280.05,280.12,279.87,279.83,279.89,279.76,279.54,279.37,279.12,279.25,279.2,279.37,278.98,279.07,279.07,279.31,279.16,279.41,279.2,279.19,278.98,278.67,278.37,278.42,278.42,278.3,278.3,278.36,278.48,278.46,278.27,278.21,278.39,278.19,278.11,278.16],"bars":[[1793379600,278.42],[1793379900,278.3],[1793380200,278.3],[1793380500,278.36],[1793380800,278.48],[1793381100,278.46],[1793381400,278.27],[1793381700,278.21],[1793382000,278.39],[1793382300,278.19],[1793382600,278.11],[1793382900,278.16]],"last_bar_epoch":1793382900},{"sym":"UPRO","name":"3x S&P 500","price":140.23,"prev_close":149.35,"change":-9.12,"change_pct":-6.11,"open":144.53,"high":144.57,"low":140.11,"volume":2027572,"session_date":"2026-10-30","spark":[143.76,144.18,143.86,143.89,144.11,144.44,143.89,143.47,142.95,142.77,142.29,142.69,142.72,143.41,143.68,143.72,143.36,143.56,143.13,143.25,142.98,142.86,143.0,142.9,142.71,142.44,142.24,142.35,142.27,142.53,142.04,142.11,142.0,142.17,142.0,142.36,142.05,142.31,142.28,141.51,141.16,141.34,141.28,141.0,140.99,141.06,141.24,141.15,140.84,140.93,141.05,140.61,140.26,140.23],"bars":[[1793379600,141.28],[1793379900,141.0],[1793380200,140.99],[1793380500,141.06],[1793380800,141.24],[1793381100,141.15],[1793381400,140.84],[1793381700,140.93],[1793382000,141.05],[1793382300,140.61],[1793382600,140.26],[1793382900,140.23]],"last_bar_epoch":1793382900},{"sym":"SPCX","name":"SpaceX","price":136.16,"prev_close":143.89,"change":-7.73,"change_pct":-5.37,"open":137.82,"high":140.2,"low":135.91,"volume":76689580,"session_date":"2026-10-30","spark":[137.66,138.85,138.07,137.69,138.11,138.1,138.69,138.18,136.76,136.58,136.3,137.02,137.62,138.44,138.56,139.49,139.52,139.75,139.17,140.05,138.73,138.45,137.91,138.38,138.22,137.68,137.72,137.85,138.18,138.38,138.21,138.42,138.17,138.06,137.88,137.96,137.94,138.09,138.3,137.51,137.18,137.67,137.71,137.15,137.01,136.99,136.91,136.69,136.43,136.52,136.62,136.4,136.27,136.14],"bars":[[1793379600,137.71],[1793379900,137.15],[1793380200,137.01],[1793380500,136.99],[1793380800,136.91],[1793381100,136.69],[1793381400,136.43],[1793381700,136.52],[1793382000,136.62],[1793382300,136.4],[1793382600,136.27],[1793382900,136.14]],"last_bar_epoch":1793382900},{"sym":"AAPL","name":"Apple","price":344.9,"prev_close":348.91,"change":-4.01,"change_pct":-1.15,"open":346.68,"high":349.19,"low":344.13,"volume":28301978,"session_date":"2026-10-30","spark":[345.8,345.02,344.22,345.34,345.33,345.33,344.95,345.1,345.52,345.57,345.76,346.33,346.74,347.7,348.82,349.03,348.94,348.5,348.36,348.01,347.89,347.84,348.43,347.69,347.55,347.27,347.12,347.26,347.36,346.92,346.01,346.28,346.83,347.52,347.3,347.5,346.98,347.55,347.43,347.6,347.23,346.95,347.13,346.7,346.99,346.94,346.96,346.55,346.61,346.13,346.04,345.52,344.86,344.85],"bars":[[1793379600,347.13],[1793379900,346.7],[1793380200,346.99],[1793380500,346.94],[1793380800,346.96],[1793381100,346.55],[1793381400,346.61],[1793381700,346.13],[1793382000,346.04],[1793382300,345.52],[1793382600,344.86],[1793382900,344.85]],"last_bar_epoch":1793382900},{"sym":"MSFT","name":"Microsoft","price":521.05,"prev_close":530.14,"change":-9.09,"change_pct":-1.71,"open":525.27,"high":526.0,"low":514.35,"volume":15521586,"session_date":"2026-10-30","spark":[519.11,517.98,522.16,522.7,522.11,523.96,522.91,522.21,521.57,521.7,520.1,522.1,524.05,523.99,523.41,522.81,522.96,522.04,522.35,522.47,521.68,522.0,521.97,521.77,522.54,521.88,521.94,521.76,522.11,523.1,522.57,521.55,521.34,521.7,521.72,523.41,522.63,522.21,522.15,521.67,521.5,521.34,521.9,521.46,521.45,520.79,521.36,521.19,520.46,520.4,520.79,521.95,520.98,521.05],"bars":[[1793379600,521.9],[1793379900,521.46],[1793380200,521.45],[1793380500,520.79],[1793380800,521.36],[1793381100,521.19],[1793381400,520.46],[1793381700,520.4],[1793382000,520.79],[1793382300,521.95],[1793382600,520.98],[1793382900,521.05]],"last_bar_epoch":1793382900},{"sym":"NVDA","name":"NVIDIA","price":202.89,"prev_close":213.66,"change":-10.77,"change_pct":-5.04,"open":208.88,"high":209.05,"low":202.41,"volume":78193213,"session_date":"2026-10-30","spark":[206.28,206.78,206.5,206.85,207.51,207.79,207.87,207.74,206.84,206.87,206.04,206.14,205.98,207.09,207.06,207.04,206.76,206.91,206.23,206.62,206.22,206.27,206.38,206.16,206.06,205.76,205.59,205.81,205.79,205.87,205.42,205.35,204.93,204.76,204.66,204.72,204.38,204.8,204.74,203.79,203.66,203.95,203.85,203.33,203.37,203.51,203.52,203.38,203.15,203.15,203.35,203.0,202.64,202.88],"bars":[[1793379600,203.85],[1793379900,203.33],[1793380200,203.37],[1793380500,203.51],[1793380800,203.52],[1793381100,203.38],[1793381400,203.15],[1793381700,203.15],[1793382000,203.35],[1793382300,203.0],[1793382600,202.64],[1793382900,202.88]],"last_bar_epoch":1793382900},{"sym":"AMZN","name":"Amazon","price":239.08,"prev_close":243.79,"change":-4.71,"change_pct":-1.93,"open":232.53,"high":241.54,"low":229.36,"volume":70702333,"session_date":"2026-10-30","spark":[233.24,236.89,237.37,239.21,238.38,239.2,238.36,237.67,237.26,236.15,236.04,238.4,238.95,239.53,239.34,239.12,239.04,239.72,238.93,240.61,240.18,241.13,241.47,239.81,240.66,240.27,239.32,239.07,238.94,239.04,238.35,238.88,239.27,239.11,238.71,239.31,239.86,240.5,240.16,238.81,238.01,239.14,238.38,238.29,238.26,238.47,238.38,238.54,238.34,239.2,239.51,239.46,238.85,239.08],"bars":[[1793379600,238.38],[1793379900,238.29],[1793380200,238.26],[1793380500,238.47],[1793380800,238.38],[1793381100,238.54],[1793381400,238.34],[1793381700,239.2],[1793382000,239.51],[1793382300,239.46],[1793382600,238.85],[1793382900,239.08]],"last_bar_epoch":1793382900},{"sym":"GOOGL","name":"Alphabet","price":278.52,"prev_close":283.82,"change":-5.3,"change_pct":-1.87,"open":281.09,"high":283.14,"low":278.41,"volume":40290758,"session_date":"2026-10-30","spark":[280.45,281.33,280.87,281.34,281.08,281.14,281.13,280.35,279.82,279.8,280.05,280.05,279.89,280.2,280.93,281.44,281.37,281.33,281.51,282.49,282.23,281.73,282.39,282.4,282.74,282.45,281.74,282.05,281.89,282.3,281.88,282.23,281.26,280.98,280.52,280.82,280.43,280.49,280.47,279.55,279.38,279.71,279.55,279.14,278.89,278.78,279.05,278.93,278.81,279.07,279.14,279.07,278.99,278.52],"bars":[[1793379600,279.55],[1793379900,279.14],[1793380200,278.89],[1793380500,278.78],[1793380800,279.05],[1793381100,278.93],[1793381400,278.81],[1793381700,279.07],[1793382000,279.14],[1793382300,279.07],[1793382600,278.99],[1793382900,278.52]],"last_bar_epoch":1793382900},{"sym":"META","name":"Meta","price":615.36,"prev_close":624.52,"change":-9.16,"change_pct":-1.47,"open":614.51,"high":626.37,"low":610.14,"volume":14596295,"session_date":"2026-10-30","spark":[610.89,614.82,615.88,617.9,618.29,620.16,620.83,618.99,617.07,618.67,616.86,618.65,620.38,622.5,623.25,623.9,623.7,625.18,624.08,624.98,623.16,623.68,623.11,621.34,622.47,622.52,622.54,622.58,623.07,624.48,622.09,621.47,620.0,620.48,619.89,619.94,621.0,621.09,621.85,620.26,620.69,621.39,621.06,619.93,619.89,620.16,621.01,619.61,618.53,618.35,618.73,618.28,616.71,615.36],"bars":[[1793379600,621.06],[1793379900,619.93],[1793380200,619.89],[1793380500,620.16],[1793380800,621.01],[1793381100,619.61],[1793381400,618.53],[1793381700,618.35],[1793382000,618.73],[1793382300,618.28],[1793382600,616.71],[1793382900,615.36]],"last_bar_epoch":1793382900},{"sym":"TSLA","name":"Tesla","price":395.82,"prev_close":403.3,"change":-7.48,"change_pct":-1.85,"open":393.04,"high":404.2,"low":387.52,"volume":25439309,"session_date":"2026-10-30","spark":[388.38,392.13,392.45,393.28,394.12,395.9,397.29,396.47,396.45,396.69,397.23,398.27,398.2,399.65,402.45,403.72,402.62,401.69,401.03,402.98,402.36,401.63,401.85,400.92,400.89,399.74,399.5,400.32,400.17,401.32,400.32,399.83,399.45,400.84,399.59,400.17,400.95,401.18,400.82,399.76,399.21,399.27,398.87,399.05,397.78,397.77,398.6,399.0,398.46,398.82,398.65,397.72,396.34,395.78],"bars":[[1793379600,398.87],[1793379900,399.05],[1793380200,397.78],[1793380500,397.77],[1793380800,398.6],[1793381100,399.0],[1793381400,398.46],[1793381700,398.82],[1793382000,398.65],[1793382300,397.72],[1793382600,396.34],[1793382900,395.78]],"last_bar_epoch":1793382900},{"sym":"AVGO","name":"Broadcom","price":322.7,"prev_close":345.0,"change":-22.3,"change_pct":-6.46,"open":330.71,"high":331.98,"low":322.28,"volume":14573461,"session_date":"2026-10-30","spark":[329.9,331.12,328.18,328.1,329.17,329.37,329.45,329.42,328.55,328.23,327.14,327.46,326.82,327.95,327.6,328.43,327.89,327.7,326.52,327.26,326.61,326.64,326.98,326.98,326.24,325.76,325.89,326.28,325.93,326.2,325.29,325.78,325.28,325.43,325.01,325.45,325.55,326.02,325.58,323.4,323.76,324.27,323.87,323.22,323.57,324.04,323.56,323.94,323.47,323.4,324.42,324.07,323.25,322.7],"bars":[[1793379600,323.87],[1793379900,323.22],[1793380200,323.57],[1793380500,324.04],[1793380800,323.56],[1793381100,323.94],[1793381400,323.47],[1793381700,323.4],[1793382000,324.42],[1793382300,324.07],[1793382600,323.25],[1793382900,322.7]],"last_bar_epoch":1793382900},{"sym":"AMD","name":"AMD","price":498.42,"prev_close":566.42,"change":-68.0,"change_pct":-12.01,"open":508.51,"high":520.4,"low":497.89,"volume":22023286,"session_date":"2026-10-30","spark":[509.0,520.03,512.61,513.49,514.58,515.55,516.32,515.74,513.37,513.38,510.77,511.17,510.83,517.28,517.26,515.67,515.06,514.69,512.4,513.67,512.59,512.45,513.0,511.79,511.36,510.67,511.24,511.73,510.3,510.69,507.14,508.11,505.37,505.33,503.51,502.35,503.5,503.65,504.0,500.97,500.41,501.18,499.98,499.15,498.77,499.2,500.27,500.03,498.71,499.22,501.31,500.45,499.27,498.42],"bars":[[1793379600,499.98],[1793379900,499.15],[1793380200,498.77],[1793380500,499.2],[1793380800,500.27],[1793381100,500.03],[1793381400,498.71],[1793381700,499.22],[1793382000,501.31],[1793382300,500.45],[1793382600,499.27],[1793382900,498.42]],"last_bar_epoch":1793382900},{"sym":"NFLX","name":"Netflix","price":61.99,"prev_close":62.05,"change":-0.06,"change_pct":-0.1,"open":62.65,"high":63.05,"low":61.68,"volume":28738736,"session_date":"2026-10-30","spark":[62.31,61.83,62.12,62.33,62.38,62.44,62.67,62.69,62.74,62.53,62.59,62.63,62.81,62.96,62.97,62.81,62.76,62.73,62.62,62.62,62.49,62.38,62.42,62.53,62.4,62.3,62.26,62.4,62.47,62.47,62.54,62.45,62.36,62.26,62.26,62.29,62.34,62.38,62.47,62.45,62.28,62.31,62.24,62.23,62.24,62.12,62.08,62.01,62.09,62.1,62.19,62.05,62.03,61.99],"bars":[[1793379600,62.24],[1793379900,62.23],[1793380200,62.24],[1793380500,62.12],[1793380800,62.08],[1793381100,62.01],[1793381400,62.09],[1793381700,62.1],[1793382000,62.19],[1793382300,62.05],[1793382600,62.03],[1793382900,61.99]],"last_bar_epoch":1793382900},{"sym":"JPM","name":"JPMorgan","price":337.02,"prev_close":343.58,"change":-6.56,"change_pct":-1.91,"open":345.29,"high":345.29,"low":336.94,"volume":3121620,"session_date":"2026-10-30","spark":[341.36,340.14,338.42,337.16,338.26,337.63,338.07,337.33,337.81,337.35,338.14,338.41,339.07,339.04,339.89,340.07,339.29,339.52,339.26,338.59,338.74,338.43,338.92,338.88,338.86,338.95,338.71,338.42,338.55,338.77,338.99,338.6,338.62,338.74,338.69,338.79,338.76,339.26,339.14,338.79,338.37,338.39,338.54,338.61,338.68,338.26,337.95,337.83,338.01,338.26,338.2,337.67,337.12,337.02],"bars":[[1793379600,338.54],[1793379900,338.61],[1793380200,338.68],[1793380500,338.26],[1793380800,337.95],[1793381100,337.83],[1793381400,338.01],[1793381700,338.26],[1793382000,338.2],[1793382300,337.67],[1793382600,337.12],[1793382900,337.02]],"last_bar_epoch":1793382900},{"sym":"XOM","name":"Exxon","price":186.55,"prev_close":183.29,"change":3.26,"change_pct":1.78,"open":185.98,"high":188.5,"low":184.68,"volume":10000059,"session_date":"2026-10-30","spark":[187.33,186.98,186.51,187.53,188.1,188.24,187.65,188.2,188.11,188.0,187.6,186.96,186.38,185.5,185.9,185.24,185.49,184.88,185.29,185.51,185.96,186.18,185.48,185.49,185.47,185.35,185.47,185.51,185.85,185.68,185.71,185.57,185.85,185.82,185.72,185.93,186.0,185.62,185.91,186.38,186.62,186.82,186.78,186.93,187.32,186.95,187.18,187.41,187.17,186.78,186.43,186.12,186.2,186.55],"bars":[[1793379600,186.78],[1793379900,186.93],[1793380200,187.32],[1793380500,186.95],[1793380800,187.18],[1793381100,187.41],[1793381400,187.17],[1793381700,186.78],[1793382000,186.43],[1793382300,186.12],[1793382600,186.2],[1793382900,186.55]],"last_bar_epoch":1793382900},{"sym":"XLK","name":"Tech sector","price":178.18,"prev_close":188.74,"change":-10.56,"change_pct":-5.59,"open":182.11,"high":182.29,"low":178.01,"volume":9582190,"session_date":"2026-10-30","spark":[181.2,182.04,181.39,181.29,181.76,181.97,181.79,181.39,180.72,180.86,180.22,180.58,180.64,181.53,181.31,181.46,181.24,181.17,180.69,180.86,180.51,180.44,180.54,180.44,180.22,179.98,179.94,180.16,180.03,180.2,179.67,179.7,179.55,179.7,179.51,179.71,179.58,179.63,179.55,178.98,178.93,178.96,178.85,178.58,178.61,178.7,178.85,178.78,178.48,178.47,178.7,178.45,178.13,178.17],"bars":[[1793379600,178.85],[1793379900,178.58],[1793380200,178.61],[1793380500,178.7],[1793380800,178.85],[1793381100,178.78],[1793381400,178.48],[1793381700,178.47],[1793382000,178.7],[1793382300,178.45],[1793382600,178.13],[1793382900,178.17]],"last_bar_epoch":1793382900},{"sym":"XLF","name":"Financials","price":56.5,"prev_close":56.94,"change":-0.44,"change_pct":-0.77,"open":57.19,"high":57.2,"low":56.49,"volume":21529267,"session_date":"2026-10-30","spark":[56.97,56.73,56.72,56.62,56.64,56.58,56.61,56.56,56.59,56.51,56.6,56.62,56.65,56.62,56.71,56.72,56.66,56.73,56.67,56.6,56.62,56.58,56.63,56.65,56.65,56.65,56.62,56.63,56.62,56.63,56.65,56.63,56.63,56.62,56.63,56.68,56.71,56.71,56.71,56.65,56.6,56.58,56.62,56.63,56.65,56.61,56.62,56.6,56.58,56.62,56.62,56.54,56.5,56.5],"bars":[[1793379600,56.62],[1793379900,56.63],[1793380200,56.65],[1793380500,56.61],[1793380800,56.62],[1793381100,56.6],[1793381400,56.58],[1793381700,56.62],[1793382000,56.62],[1793382300,56.54],[1793382600,56.5],[1793382900,56.5]],"last_bar_epoch":1793382900},{"sym":"XLE","name":"Energy","price":69.67,"prev_close":68.71,"change":0.96,"change_pct":1.4,"open":69.52,"high":70.15,"low":69.28,"volume":20756995,"session_date":"2026-10-30","spark":[69.88,69.67,69.61,70.01,70.07,70.13,69.97,70.1,70.01,70.01,69.97,69.82,69.74,69.7,69.74,69.57,69.64,69.59,69.64,69.68,69.71,69.72,69.57,69.56,69.56,69.58,69.58,69.64,69.66,69.67,69.64,69.6,69.67,69.68,69.64,69.69,69.71,69.62,69.64,69.74,69.78,69.79,69.75,69.77,69.86,69.82,69.86,69.86,69.81,69.75,69.65,69.62,69.62,69.67],"bars":[[1793379600,69.75],[1793379900,69.77],[1793380200,69.86],[1793380500,69.82],[1793380800,69.86],[1793381100,69.86],[1793381400,69.81],[1793381700,69.75],[1793382000,69.65],[1793382300,69.62],[1793382600,69.62],[1793382900,69.67]],"last_bar_epoch":1793382900},{"sym":"VIX","name":"VIX","price":21.24,"prev_close":17.2,"change":4.04,"change_pct":23.49,"open":18.43,"high":21.46,"low":18.03,"volume":0,"session_date":"2026-10-30","spark":[18.42,18.47,18.47,18.46,18.46,18.41,18.51,18.52,18.52,18.52,18.57,18.55,18.58,18.54,18.52,18.44,18.4,18.31,18.19,18.11,18.08,18.09,18.11,18.15,18.22,18.3,18.29,18.25,18.23,18.27,18.34,18.39,18.38,18.47,18.44,18.5,18.5,18.5,18.5,18.44,18.46,18.51,18.57,18.53,18.42,18.46,18.43,18.4,18.45,18.44,18.42,18.41,18.47,18.57,18.6,18.64,18.63,18.67,18.68,18.72,18.74,18.72,18.68,18.62,18.59,18.75,18.68,18.67,18.63,18.64,18.74,18.69,18.66,18.69,18.71,19.09,18.82,18.98,18.91,18.81,18.54,18.79,18.99,19.44,19.67,20.14,19.81,19.78,19.37,19.12,19.07,19.29,19.16,19.36,19.32,19.43,19.55,19.41,19.55,19.69,19.77,20.04,20.02,19.97,19.73,20.15,20.12,20.15,20.02,20.06,19.81,19.92,19.96,19.97,20.62,20.92,20.74,20.83,21.09,21.07,21.09,20.89,20.99,21.27,21.27,21.24],"bars":[[1793378700,20.62],[1793379000,20.92],[1793379300,20.74],[1793379600,20.83],[1793379900,21.09],[1793380200,21.07],[1793380500,21.09],[1793380800,20.89],[1793381100,20.99],[1793381400,21.27],[1793381700,21.27],[1793382000,21.24]],"last_bar_epoch":1793382000}]};</script>
   <script>
-/* Trading Floor tab (#floor). Just for fun: a simulated trading-floor screen.
- * Holdings and watchlist symbols start from the latest saved prices in data/portfolio.json (window.PQ_DATA,
- * set by app.js); every move after that is a random walk. Nothing here is a real quote and nothing touches
- * the account. One requestAnimationFrame loop drives everything; it only runs while the tab is on screen and
- * the page is visible. DOM writes are batched and throttled. prefers-reduced-motion: slow ticks, no flashes.
+/* Trading Floor tab (#floor): real, delayed quotes in a busy trading-floor layout.
+ * Every price, change and % change comes from data/floor.json (written by scripts/floor_data.py from
+ * Yahoo Finance, ~15 min delayed, every 15 min in market hours). Nothing is simulated or made up: a symbol
+ * missing from the file is not shown. Tiles flash only when a value really changed between refreshes.
+ * The offline dashboard.html carries a snapshot (window.PQ_FLOOR) labelled with its as-of time.
+ * One requestAnimationFrame loop for the clock/flash; it only runs while the tab is on screen.
  */
 (function () {
   "use strict";
   var RM = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  var PULSE = ["SPY", "QQQ", "DIA", "IWM", "VIX", "UPRO", "SPCX", "NVDA", "AAPL", "TSLA"];
+  var REFRESH_MS = 60000;
   function $(id) { return document.getElementById(id); }
   function isNum(x) { return typeof x === "number" && isFinite(x); }
-  function rnd(a, b) { return a + Math.random() * (b - a); }
-  function gauss() { var u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-  function pick(a) { return a[(Math.random() * a.length) | 0]; }
-  function f2(x) { return x.toFixed(2); }
-  function sgn(x, d) { return (x > 0 ? "+" : x < 0 ? "−" : "") + Math.abs(x).toFixed(d == null ? 2 : d); }
-  function big(n) { return n >= 1e9 ? (n / 1e9).toFixed(2) + "B" : n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e3 ? (n / 1e3).toFixed(1) + "K" : String(Math.round(n)); }
+  function f2(x) { return isNum(x) ? x.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"; }
+  function sgn(x) { return isNum(x) ? (x > 0 ? "+" : x < 0 ? "−" : "") + Math.abs(x).toFixed(2) : "—"; }
+  function big(n) { return !isNum(n) || n <= 0 ? "—" : n >= 1e9 ? (n / 1e9).toFixed(2) + "B" : n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e3 ? (n / 1e3).toFixed(1) + "K" : String(Math.round(n)); }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var ET = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+  var ETHM = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" });
+  var ETD = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "long", month: "2-digit", day: "2-digit", year: "numeric" });
+  var ETMD = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", month: "short", day: "numeric" });
 
-  // Base prices for the simulated names are rough placeholders; they are labelled as simulated on screen.
-  var UNIVERSE = [
-    ["SPY", "NYSE Arca", 685, 0.9], ["QQQ", "NASDAQ", 610, 1.1], ["VOO", "NYSE Arca", 630, 0.9], ["VTI", "NYSE Arca", 335, 0.9],
-    ["UPRO", "NYSE Arca", 150, 2.8], ["SPCX", "NASDAQ", 145, 2.2], ["AAPL", "NASDAQ", 265, 1.3], ["NVDA", "NASDAQ", 215, 2.0],
-    ["TSLA", "NASDAQ", 450, 2.6], ["MSFT", "NASDAQ", 525, 1.2], ["AMZN", "NASDAQ", 230, 1.5], ["META", "NASDAQ", 740, 1.7],
-    ["GOOGL", "NASDAQ", 260, 1.5], ["AMD", "NASDAQ", 250, 2.4], ["NFLX", "NASDAQ", 1150, 1.8], ["AVGO", "NASDAQ", 350, 2.0],
-    ["PLTR", "NASDAQ", 185, 3.0], ["COIN", "NASDAQ", 340, 3.2], ["JPM", "NYSE", 305, 1.1], ["V", "NYSE", 345, 0.9],
-    ["DIA", "NYSE Arca", 470, 0.8], ["IWM", "NYSE Arca", 245, 1.3], ["NDAQ", "NASDAQ", 95, 1.0], ["XOM", "NYSE", 115, 1.1]
-  ];
-  var PULSE = ["SPY", "QQQ", "VOO", "VTI", "AAPL", "NVDA", "TSLA", "UPRO", "SPCX", "MSFT"];
-  var EXCH = ["NYSE", "NASDAQ", "ARCA", "BATS", "IEX", "EDGX", "MEMX"];
-  var SPARK_N = 48, PULSE_N = 90;
+  var S = { syms: [], by: {}, built: false, running: false, raf: 0, held: {}, sel: "UPRO", data: null, colors: null, timer: 0 };
 
-  var S = { syms: [], by: {}, built: false, running: false, raf: 0, seeded: {}, held: {},
-            sel: "UPRO", vol: 0, prints: [], tpsWin: [], pending: [], colors: null };
-
-  function makeSym(row) {
-    var base = row[2], prev = base * (1 + rnd(-0.015, 0.015));
-    var s = { sym: row[0], exch: row[1], prev: prev, px: base, anchor: base, sig: row[3] / 100, hist: [], pulse: [],
-              dirty: true, sparkDirty: true, dir: 0, flip: 0, bigUntil: 0, tile: null, tape: [] };
-    // Fill the lines so the screen looks busy immediately: a short walk that ends at the current price.
-    var p = base, h = [];
-    for (var i = 0; i < PULSE_N; i++) { h.push(p); p *= 1 + gauss() * s.sig * 0.08; }
-    var k = base / h[h.length - 1];
-    s.pulse = h.map(function (v) { return v * k; });
-    s.hist = s.pulse.slice(-SPARK_N);
-    return s;
+  // ---------------------------------------------------------------- data
+  // "As of" text: the close after the session, otherwise the last delayed bar's time.
+  function asOfText(d, now) {
+    if (!d || !isNum(d.as_of_epoch)) return d && d.generated_at_et ? "As of " + d.generated_at_et : "";
+    var t = new Date(d.as_of_epoch * 1000), hm = ETHM.format(t);
+    var mins = +new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit", hour12: false }).format(t).replace(":", "");
+    if (mins >= 1600) return "Close · " + ETMD.format(t);
+    var stale = now && (now - t.getTime()) > 6 * 3600 * 1000;
+    return "As of " + hm + " ET" + (stale ? " · " + ETMD.format(t) : "");
   }
-  function initSyms() {
-    S.syms = UNIVERSE.map(makeSym);
-    S.syms.forEach(function (s) { S.by[s.sym] = s; });
-  }
-  // Seed holdings and watchlist from the feed (regular close, or the extended price in After Hours mode).
-  function seed(d) {
-    if (!d || !d.quotes || !S.syms.length) return;
-    var ah = document.documentElement.classList.contains("mode-ah");
-    S.held = {}; (d.positions || []).forEach(function (p) { if (p && p.symbol) S.held[p.symbol] = 1; });
-    var notes = [];
-    Object.keys(d.quotes).forEach(function (k) {
-      var q = d.quotes[k];
-      if (!q || q.kind !== "stock" || !isNum(q.price)) return;
-      var pos = (d.positions || []).filter(function (p) { return p.symbol === k; })[0];
-      var px = (ah && pos && isNum(pos.ext_price)) ? pos.ext_price : q.price;
-      var s = S.by[k];
-      if (!s) {
-        s = makeSym([k, String(q.exchange || "NASDAQ").replace(/GS$|GM$/, "").toUpperCase(), px, 1.5]);
-        S.syms.push(s); S.by[k] = s; if (S.built) addTile(s);
-      }
-      var firstSeed = !S.seeded[k];
-      s.anchor = px;
-      if (isNum(q.prev_close)) s.prev = q.prev_close;
-      if (firstSeed) { var r = px / s.px; s.px = px; s.pulse = s.pulse.map(function (v) { return v * r; }); s.hist = s.pulse.slice(-SPARK_N); }
-      S.seeded[k] = 1; s.dirty = s.sparkDirty = true;
-      if (S.held[k]) notes.push(k + " $" + f2(px));
-      if (s.tile) s.tile.classList.toggle("fl-mine", !!S.held[k]);
+  function ingest(d) {
+    if (!d || !d.symbols || !d.symbols.length) return;
+    if (S.data && d.generated_epoch && S.data.generated_epoch && d.generated_epoch < S.data.generated_epoch) return;
+    S.data = d;
+    var fresh = !S.syms.length;
+    d.symbols.forEach(function (q) {
+      if (!isNum(q.price) || !isNum(q.prev_close)) return;
+      var s = S.by[q.sym];
+      if (!s) { s = { sym: q.sym, tape: [] }; S.syms.push(s); S.by[q.sym] = s; if (S.built) addTile(s); }
+      var old = s.px;
+      s.name = q.name; s.px = q.price; s.prev = q.prev_close; s.chg = q.change; s.pct = q.change_pct;
+      s.open = q.open; s.high = q.high; s.low = q.low; s.vol = q.volume; s.spark = q.spark || []; s.bars = q.bars || [];
+      s.dir = (!fresh && isNum(old) && old !== s.px) ? (s.px > old ? 1 : -1) : 0;
+      s.dirty = true;
     });
-    var n = $("fl-seed");
-    if (n) n.textContent = (notes.length ? "Your holdings start from the latest saved prices (" + notes.join(", ") + ", " + (d.quotes_as_of_et || "") + ")." : "")
-      + " Every move on this tab is a random simulation, not a real quote. It never changes your account.";
-    var m = $("fl-mkt"), pill = $("fl-pill");
-    if (m) {
-      var open = d.market_state === "REGULAR";
-      m.textContent = open ? "Market open" : (d.market_label || "Market closed");
-      if (pill) { pill.classList.toggle("open", open); }
-    }
+    if (S.built) { renderAll(true); }
+  }
+  function load() {
+    if (!window.fetch || location.protocol === "file:") return;
+    fetch("data/floor.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d) ingest(d); }).catch(function () { /* keep the last values */ });
   }
 
-  // ---------------------------------------------------------------- colors (follow the theme: green/red, or cyan/amber after hours)
+  // ---------------------------------------------------------------- colors
   function readColors() {
     var cs = getComputedStyle(document.documentElement);
     function v(n, f) { var x = cs.getPropertyValue(n).trim(); return x || f; }
-    S.colors = { pos: v("--pos", "#30d158"), neg: v("--neg", "#ff453a"), muted: v("--muted", "#8e8e93"), grid: v("--grid", "#1f1f22") };
+    S.colors = { pos: v("--pos", "#30d158"), neg: v("--neg", "#ff453a"), muted: v("--muted", "#8e8e93") };
   }
   function rgba(hex, a) {
     var h = hex.replace("#", ""); if (h.length === 3) h = h.replace(/./g, "$&$&");
@@ -4218,14 +4196,12 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
 
   // ---------------------------------------------------------------- DOM
   function addTile(s) {
-    var t = el("button", "fl-tile"); t.type = "button"; t.setAttribute("data-sym", s.sym);
-    var top = el("div", "fl-tt"); s.eSym = el("span", "fl-tsym", s.sym); s.ePct = el("span", "fl-tpct");
-    top.appendChild(s.eSym); top.appendChild(s.ePct);
-    var mid = el("div", "fl-tx"); mid.appendChild(el("span", "fl-tex", s.exch)); s.eChg = el("span", "fl-tchg"); mid.appendChild(s.eChg);
+    var t = el("button", "fl-tile"); t.type = "button"; t.setAttribute("data-sym", s.sym); t.title = s.name || s.sym;
+    var top = el("div", "fl-tt"); top.appendChild(el("span", "fl-tsym", s.sym)); s.ePct = el("span", "fl-tpct"); top.appendChild(s.ePct);
+    var mid = el("div", "fl-tx"); mid.appendChild(el("span", "fl-tex", s.name || "")); s.eChg = el("span", "fl-tchg"); mid.appendChild(s.eChg);
     var pw = el("div", "fl-tpw"); s.ePx = el("span", "fl-tpx"); pw.appendChild(s.ePx);
     s.cv = el("canvas", "fl-tsp"); s.burst = el("span", "fl-burst");
     t.appendChild(top); t.appendChild(mid); t.appendChild(pw); t.appendChild(s.cv); t.appendChild(s.burst);
-    if (S.held[s.sym]) t.classList.add("fl-mine");
     s.tile = t; $("fl-grid").appendChild(t);
   }
   function buildTape(id, list) {
@@ -4237,37 +4213,32 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
     });
   }
   function build() {
-    if (S.built) return;
+    if (S.built || !S.syms.length) return;
     S.built = true;
     S.syms.forEach(addTile);
     var half = Math.ceil(S.syms.length / 2);
     buildTape("fl-tape-a", S.syms.slice(0, half)); buildTape("fl-tape-b", S.syms.slice(half));
-    var pl = $("fl-pulse");
     PULSE.forEach(function (k) {
       var s = S.by[k]; if (!s) return;
       var c = el("div", "fl-pc"); var h = el("div", "fl-pch"); h.appendChild(el("b", null, k)); s.pPct = el("span", "fl-pcq"); h.appendChild(s.pPct);
       var r = el("div", "fl-pcr"); s.pPx = el("span", "fl-pcp"); s.pChg = el("span", "fl-pcc"); r.appendChild(s.pPx); r.appendChild(s.pChg);
-      s.pcv = el("canvas", "fl-pcv"); c.appendChild(h); c.appendChild(r); c.appendChild(s.pcv); pl.appendChild(c); s.pCard = c;
+      s.pcv = el("canvas", "fl-pcv"); c.appendChild(h); c.appendChild(r); c.appendChild(s.pcv); $("fl-pulse").appendChild(c); s.pCard = c;
     });
-    // order book rows
     var bk = $("fl-book"); S.book = [];
-    for (var i = 0; i < 8; i++) {
-      var row = el("div", "fl-br");
-      var bb = el("i", "fl-bbar"), ab = el("i", "fl-abar");
-      var cells = [el("span", "fl-bp"), el("span", "fl-bs"), el("span", "fl-as"), el("span", "fl-ap")];
-      row.appendChild(bb); row.appendChild(ab); cells.forEach(function (c) { row.appendChild(c); });
-      bk.appendChild(row); S.book.push({ bb: bb, ab: ab, c: cells, bsz: 0, asz: 0 });
+    for (var i = 0; i < 4; i++) {
+      var row = el("div", "fl-br fl-qr");
+      var cells = [el("span", "fl-qk"), el("span", "fl-qv"), el("span", "fl-qk"), el("span", "fl-qv")];
+      cells.forEach(function (c) { row.appendChild(c); }); bk.appendChild(row); S.book.push(cells);
     }
     $("fl-grid").addEventListener("click", function (e) {
       var t = e.target.closest && e.target.closest(".fl-tile"); if (!t) return;
-      S.sel = t.getAttribute("data-sym"); $("fl-book-sym").textContent = S.sel; markSel(); bookTick(true);
+      S.sel = t.getAttribute("data-sym"); markSel(); renderSide(true);
     });
-    markSel();
-    sizeCanvases();
-    if (window.ResizeObserver) new ResizeObserver(function () { sizeCanvases(); }).observe($("fl-root"));
-    else window.addEventListener("resize", sizeCanvases);
+    markHeld(); markSel(); sizeCanvases();
+    if (window.ResizeObserver) new ResizeObserver(function () { sizeCanvases(); renderCharts(); }).observe($("fl-root"));
   }
   function markSel() { S.syms.forEach(function (s) { if (s.tile) s.tile.classList.toggle("fl-sel", s.sym === S.sel); }); }
+  function markHeld() { S.syms.forEach(function (s) { if (s.tile) s.tile.classList.toggle("fl-mine", !!S.held[s.sym]); }); }
   function fitCanvas(c) {
     if (!c) return;
     var dpr = Math.min(2, window.devicePixelRatio || 1), w = c.clientWidth, h = c.clientHeight;
@@ -4278,25 +4249,23 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
   }
   function sizeCanvases() {
     if (!S.built) return;
-    S.syms.forEach(function (s) { fitCanvas(s.cv); fitCanvas(s.pcv); s.sparkDirty = true; });
+    S.syms.forEach(function (s) { fitCanvas(s.cv); fitCanvas(s.pcv); });
     fitCanvas($("fl-dchart"));
-    // tape speed: constant pixels per second whatever the width
     ["fl-tape-a", "fl-tape-b"].forEach(function (id) {
       var tr = $(id); var w = tr.scrollWidth / 2; if (w > 0) tr.style.setProperty("--dur", Math.max(20, w / 55).toFixed(1) + "s");
     });
   }
-  function line(c, pts, up, glow) {
-    if (!c || !c.width || !pts.length) return;
+  function line(c, pts, up, glow, base) {
+    if (!c || !c.width || !pts || pts.length < 2) { if (c && c.width) c.getContext("2d").clearRect(0, 0, c.width, c.height); return; }
     var g = c.getContext("2d"), W = c.width, H = c.height, d = c._dpr || 1;
     g.clearRect(0, 0, W, H);
     var lo = Infinity, hi = -Infinity;
-    for (var i = 0; i < pts.length; i++) { if (pts[i] < lo) lo = pts[i]; if (pts[i] > hi) hi = pts[i]; }
+    pts.concat(isNum(base) ? [base] : []).forEach(function (v) { if (v < lo) lo = v; if (v > hi) hi = v; });
     var span = hi - lo || 1, pad = 3 * d, col = up ? S.colors.pos : S.colors.neg;
+    function Y(v) { return pad + (1 - (v - lo) / span) * (H - 2 * pad); }
+    if (isNum(base)) { g.setLineDash([2 * d, 3 * d]); g.strokeStyle = rgba(S.colors.muted, 0.6); g.lineWidth = d; g.beginPath(); g.moveTo(0, Y(base)); g.lineTo(W, Y(base)); g.stroke(); g.setLineDash([]); }
     g.beginPath();
-    for (var j = 0; j < pts.length; j++) {
-      var x = j / (pts.length - 1) * W, y = pad + (1 - (pts[j] - lo) / span) * (H - 2 * pad);
-      if (j) g.lineTo(x, y); else g.moveTo(x, y);
-    }
+    for (var j = 0; j < pts.length; j++) { var x = j / (pts.length - 1) * W, y = Y(pts[j]); if (j) g.lineTo(x, y); else g.moveTo(x, y); }
     g.lineWidth = 1.6 * d; g.strokeStyle = col; g.lineJoin = "round";
     if (glow) { g.shadowColor = col; g.shadowBlur = 6 * d; }
     g.stroke(); g.shadowBlur = 0;
@@ -4305,160 +4274,92 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
     g.fillStyle = gr; g.fill();
   }
 
-  // ---------------------------------------------------------------- simulation
-  function move(s, pct) {
-    var old = s.px;
-    // random walk with a gentle pull back toward the seed so prices stay believable
-    var pull = (s.anchor - s.px) / s.anchor * 0.02;
-    var np = s.px * (1 + (pct != null ? pct : gauss() * s.sig * 0.06) + pull);
-    np = Math.max(0.5, Math.round(np * 100) / 100);
-    if (np === old) np = Math.round((old + (Math.random() < 0.5 ? -0.01 : 0.01)) * 100) / 100;
-    s.px = np; s.dir = np > old ? 1 : -1; s.dirty = true;
-    var size = (Math.random() < 0.12 ? (1 + (Math.random() * 40 | 0)) * 100 : (1 + (Math.random() * 9 | 0)) * 100);
-    S.pending.push({ s: s, px: np, size: size, dir: s.dir });
-    S.vol += size;
-  }
-  function bigMove(now) {
-    var s = pick(S.syms), pct = (Math.random() < 0.5 ? -1 : 1) * rnd(0.004, 0.011) * (s.sig / 0.015);
-    move(s, pct);
-    s.bigUntil = now + 1400; s.bigFlag = true; s.burstTxt = (pct > 0 ? "▲ " : "▼ ") + Math.abs(pct * 100).toFixed(1) + "%";
-    S.pending.push({ s: s, px: s.px, size: (20 + (Math.random() * 80 | 0)) * 100, dir: s.dir, blk: 1 });
-  }
-
-  // ---------------------------------------------------------------- render pieces
-  function paintTile(s, now, fx) {
-    var chg = s.px - s.prev, pct = chg / s.prev * 100, up = chg >= 0;
-    s.ePx.textContent = f2(s.px);
-    s.ePct.textContent = sgn(pct) + "%"; s.eChg.textContent = sgn(chg);
+  // ---------------------------------------------------------------- render (only on real data)
+  function paintTile(s, fx) {
+    var up = s.chg >= 0;
+    s.ePx.textContent = f2(s.px); s.ePct.textContent = sgn(s.pct) + "%"; s.eChg.textContent = sgn(s.chg);
     var t = s.tile; t.classList.toggle("up", up); t.classList.toggle("dn", !up);
     if (fx && s.dir) {
-      s.flip ^= 1;
+      s.flip = (s.flip || 0) ^ 1;
       t.classList.remove("fu0", "fu1", "fd0", "fd1"); s.ePx.classList.remove("ru0", "ru1", "rd0", "rd1");
       t.classList.add((s.dir > 0 ? "fu" : "fd") + s.flip); s.ePx.classList.add((s.dir > 0 ? "ru" : "rd") + s.flip);
     }
-    if (s.bigFlag) {
-      s.bigFlag = false; s.burst.textContent = s.burstTxt;
-      t.classList.remove("big0", "big1"); s.bflip = (s.bflip || 0) ^ 1; if (fx) t.classList.add("big" + s.bflip);
-    }
-    s.dir = 0;
+    for (var i = 0; i < s.tape.length; i++) { s.tape[i][0].textContent = f2(s.px); s.tape[i][1].textContent = sgn(s.pct) + "%"; s.tape[i][1].className = "fl-tic " + (up ? "up" : "dn"); }
+    if (s.pCard) { s.pPx.textContent = f2(s.px); s.pPct.textContent = sgn(s.pct) + "%"; s.pChg.textContent = sgn(s.chg); s.pCard.classList.toggle("up", up); s.pCard.classList.toggle("dn", !up); }
   }
-  function paintTape(s) {
-    var chg = s.px - s.prev, pct = chg / s.prev * 100, cl = "fl-tic " + (chg >= 0 ? "up" : "dn");
-    for (var i = 0; i < s.tape.length; i++) { s.tape[i][0].textContent = f2(s.px); s.tape[i][1].textContent = sgn(pct) + "%"; s.tape[i][1].className = cl; }
+  function renderCharts() {
+    if (!S.colors) return;
+    S.syms.forEach(function (s) { line(s.cv, s.spark, s.chg >= 0, false); if (s.pcv) line(s.pcv, s.spark, s.chg >= 0, true, s.prev); });
+    var sel = S.by[S.sel]; if (sel) line($("fl-dchart"), sel.spark, sel.chg >= 0, true, sel.prev);
   }
-  function paintPulse(s) {
-    if (!s.pCard) return;
-    var chg = s.px - s.prev, pct = chg / s.prev * 100, up = chg >= 0;
-    s.pPx.textContent = f2(s.px); s.pPct.textContent = sgn(pct) + "%"; s.pChg.textContent = sgn(chg);
-    s.pCard.classList.toggle("up", up); s.pCard.classList.toggle("dn", !up);
-    line(s.pcv, s.pulse, up, true);
-  }
-  var ET = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
-  var ETD = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "long", month: "2-digit", day: "2-digit", year: "numeric" });
-  var ETMS = function () { var d = new Date(); return ET.format(d) + "." + String(d.getMilliseconds()).padStart(3, "0"); };
-  function flushPrints(fx) {
-    if (!S.pending.length) return;
-    var box = $("fl-ts"), max = window.innerWidth <= 700 ? 10 : 16;
-    var batch = S.pending.splice(0, S.pending.length);
-    var take = batch.slice(-3), now = performance.now();
-    batch.forEach(function () { S.tpsWin.push(now); });
-    take.forEach(function (p) {
-      var r = el("div", "fl-tr " + (p.dir > 0 ? "up" : "dn") + (p.blk ? " blk" : "") + (fx ? " in" : ""));
-      r.appendChild(el("span", null, ETMS())); r.appendChild(el("b", null, p.s.sym)); r.appendChild(el("span", null, f2(p.px)));
-      r.appendChild(el("span", null, p.size.toLocaleString("en-US"))); r.appendChild(el("span", "fl-tex", pick(EXCH)));
-      box.insertBefore(r, box.firstChild);
+  function renderSide(fx) {
+    var s = S.by[S.sel] || S.syms[0]; if (!s || !S.book) return;
+    S.sel = s.sym;
+    $("fl-book-sym").textContent = s.sym; $("fl-ts-sym").textContent = s.sym;
+    var rows = [["Last", f2(s.px), "Prev close", f2(s.prev)], ["Change", sgn(s.chg), "% change", sgn(s.pct) + "%"],
+                ["Open", f2(s.open), "Volume", big(s.vol)], ["Day low", f2(s.low), "Day high", f2(s.high)]];
+    rows.forEach(function (r, i) { for (var k = 0; k < 4; k++) S.book[i][k].textContent = r[k]; });
+    S.book[1][1].className = S.book[1][3].className = "fl-qv " + (s.chg >= 0 ? "up" : "dn");
+    $("fl-bdep").textContent = f2(s.low); $("fl-adep").textContent = f2(s.high);
+    var box = $("fl-ts"); box.textContent = "";
+    var bars = (s.bars || []).slice().reverse();
+    if (!bars.length) box.appendChild(el("div", "fl-tr fl-empty", "No intraday bars yet for this session."));
+    bars.forEach(function (b, i) {
+      var prevC = (bars[i + 1] || [0, null])[1], d = isNum(prevC) ? b[1] - prevC : 0;
+      var vsPrev = (b[1] - s.prev) / s.prev * 100;
+      var r = el("div", "fl-tr " + (d >= 0 ? "up" : "dn") + (fx && i === 0 ? " in" : ""));
+      r.appendChild(el("span", null, ETHM.format(new Date((b[0] + 300) * 1000)))); r.appendChild(el("b", null, s.sym));
+      r.appendChild(el("span", null, f2(b[1]))); r.appendChild(el("span", null, isNum(prevC) ? sgn(d) : "—")); r.appendChild(el("span", "fl-tex", sgn(vsPrev) + "%"));
+      box.appendChild(r);
     });
-    while (box.childNodes.length > max) box.removeChild(box.lastChild);
+    renderCharts();
   }
-  function bookTick(force) {
-    var s = S.by[S.sel]; if (!s || !S.book) return;
-    var spread = Math.max(0.01, Math.round(s.px * 0.0001 * 100) / 100), bid = s.px - spread / 2, ask = s.px + spread / 2;
-    var bt = 0, at = 0, rows = [];
-    for (var i = 0; i < S.book.length; i++) {
-      var r = S.book[i];
-      var nb = force || !r.bsz || Math.random() < 0.45 ? (2 + (Math.random() * 12 | 0) + i * 4) * 100 : r.bsz;
-      var na = force || !r.asz || Math.random() < 0.45 ? (2 + (Math.random() * 12 | 0) + i * 4) * 100 : r.asz;
-      rows.push([Math.floor((bid - i * 0.01) * 100) / 100, nb, na, Math.ceil((ask + i * 0.01) * 100) / 100]);
-      bt += nb; at += na;
-    }
-    var mx = 0; rows.forEach(function (x) { mx = Math.max(mx, x[1], x[2]); });
-    var cb = 0, ca = 0, cumB = [], cumA = [];
-    rows.forEach(function (x, i) {
-      var r = S.book[i];
-      if (r.bsz && x[1] !== r.bsz) { r.c[1].classList.remove("hit0", "hit1"); r.c[1].classList.add("hit" + (r.h = (r.h || 0) ^ 1)); }
-      if (r.asz && x[2] !== r.asz) { r.c[2].classList.remove("hit0", "hit1"); r.c[2].classList.add("hit" + (r.h2 = (r.h2 || 0) ^ 1)); }
-      r.bsz = x[1]; r.asz = x[2];
-      r.c[0].textContent = f2(x[0]); r.c[1].textContent = x[1].toLocaleString("en-US"); r.c[2].textContent = x[2].toLocaleString("en-US"); r.c[3].textContent = f2(x[3]);
-      r.bb.style.transform = "scaleX(" + (x[1] / mx).toFixed(3) + ")"; r.ab.style.transform = "scaleX(" + (x[2] / mx).toFixed(3) + ")";
-      cb += x[1]; ca += x[2]; cumB.push(cb); cumA.push(ca);
-    });
-    $("fl-bdep").textContent = big(bt); $("fl-adep").textContent = big(at);
-    var c = $("fl-dchart"); if (!c || !c.width) return;
-    var g = c.getContext("2d"), W = c.width, H = c.height, top = Math.max(cb, ca), n = cumB.length, half = W / 2;
-    g.clearRect(0, 0, W, H);
-    function side(cum, col, dirn) {
-      g.beginPath(); g.moveTo(half, H);
-      for (var k = 0; k < n; k++) { var x = half + dirn * (k + 1) / n * half, y = H - cum[k] / top * (H - 4); var px = half + dirn * k / n * half; g.lineTo(px, y); g.lineTo(x, y); }
-      g.lineTo(half + dirn * half, H); g.closePath();
-      g.fillStyle = rgba(col, 0.25); g.fill(); g.strokeStyle = col; g.lineWidth = 1.5 * (c._dpr || 1); g.stroke();
-    }
-    side(cumB, S.colors.pos, -1); side(cumA, S.colors.neg, 1);
+  function renderAll(fx) {
+    if (!S.built) return;
+    var movers = [];
+    S.syms.forEach(function (s) { if (s.dirty) { s.dirty = false; paintTile(s, fx && !RM.matches); if (s.dir) movers.push(s); s.dir = 0; } });
+    // burst label on the biggest real % mover of the day
+    var top = S.syms.slice().sort(function (a, b) { return Math.abs(b.pct || 0) - Math.abs(a.pct || 0); })[0];
+    S.syms.forEach(function (s) { if (s.tile) s.tile.classList.remove("big0", "big1"); });
+    if (top && top.tile) { top.burst.textContent = (top.pct >= 0 ? "▲ " : "▼ ") + Math.abs(top.pct).toFixed(2) + "%"; if (!RM.matches) top.tile.classList.add("big" + (S.bflip = (S.bflip || 0) ^ 1)); }
+    var vol = 0, adv = 0, n = 0;
+    S.syms.forEach(function (s) { if (s.sym !== "VIX") { vol += s.vol || 0; n++; if (s.chg >= 0) adv++; } });
+    $("fl-vol").textContent = big(vol); $("fl-adv").textContent = adv; $("fl-dec").textContent = n - adv;
+    $("fl-breadth-bar").style.transform = "scaleX(" + (n ? adv / n : 0).toFixed(3) + ")";
+    var a = asOfText(S.data, Date.now()); $("fl-asof").textContent = a.replace(/^As of /, "");
+    $("fl-sim").firstChild.textContent = "Real quotes from Yahoo Finance, delayed ~15 min · " + a + (location.protocol === "file:" ? " (snapshot)" : "") + " · ";
+    renderSide(fx);
   }
-  function header(now) {
+  function header() {
     var d = new Date(), sec = Math.floor(d.getTime() / 1000);
-    if (sec !== S.lastSec) {
-      S.lastSec = sec;
-      $("fl-clock").textContent = ET.format(d).replace(/^24/, "00");
-      $("fl-date").textContent = ETD.format(d).replace(/,/g, "");
-      var dst = /EDT/.test(new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", timeZoneName: "short" }).format(d));
-      $("fl-tz").textContent = dst ? "EDT" : "EST";
-    }
-    while (S.tpsWin.length && now - S.tpsWin[0] > 1000) S.tpsWin.shift();
-    $("fl-tps").textContent = S.tpsWin.length;
-    $("fl-vol").textContent = big(S.vol);
-    var adv = 0; S.syms.forEach(function (s) { if (s.px >= s.prev) adv++; });
-    $("fl-adv").textContent = adv; $("fl-dec").textContent = S.syms.length - adv;
-    $("fl-breadth-bar").style.transform = "scaleX(" + (adv / S.syms.length).toFixed(3) + ")";
+    if (sec === S.lastSec) return; S.lastSec = sec;
+    $("fl-clock").textContent = ET.format(d).replace(/^24/, "00");
+    $("fl-date").textContent = ETD.format(d).replace(/,/g, "");
+    $("fl-tz").textContent = /EDT/.test(new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", timeZoneName: "short" }).format(d)) ? "EDT" : "EST";
+  }
+  function seedAccount(d) {
+    if (!d) return;
+    S.held = {}; (d.positions || []).forEach(function (p) { if (p && p.symbol) S.held[p.symbol] = 1; });
+    markHeld();
+    var m = $("fl-mkt"), pill = $("fl-pill"), open = d.market_state === "REGULAR";
+    if (m) m.textContent = open ? "Market open" : (d.market_label || "Market closed");
+    if (pill) pill.classList.toggle("open", open);
   }
 
   // ---------------------------------------------------------------- loop
-  var T = { last: 0, acc: 0, tile: 0, tape: 0, spark: 0, pulse: 0, book: 0, hdr: 0, prints: 0, sample: 0, psample: 0, nextBig: 0 };
-  function frame(now) {
-    S.raf = requestAnimationFrame(frame);
-    var reduced = RM.matches, fx = !reduced;
-    var dt = Math.min(250, now - (T.last || now)); T.last = now;
-    var TICK = reduced ? 900 : 45;
-    T.acc += dt;
-    var steps = 0;
-    while (T.acc >= TICK && steps < 6) {
-      T.acc -= TICK; steps++;
-      var n = reduced ? 3 : 1 + (Math.random() * 3 | 0);
-      for (var i = 0; i < n; i++) move(pick(S.syms));
-    }
-    if (T.acc > TICK) T.acc = 0;
-    if (!T.nextBig) T.nextBig = now + rnd(1500, 3000);
-    if (now > T.nextBig) { bigMove(now); T.nextBig = now + (reduced ? rnd(8000, 12000) : rnd(2200, 4800)); }
-    if (now - T.sample > 400) { T.sample = now; S.syms.forEach(function (s) { s.hist.push(s.px); if (s.hist.length > SPARK_N) s.hist.shift(); s.sparkDirty = true; }); }
-    if (now - T.psample > 900) { T.psample = now; S.syms.forEach(function (s) { s.pulse.push(s.px); if (s.pulse.length > PULSE_N) s.pulse.shift(); }); }
-    if (now - T.tile > (reduced ? 900 : 70)) { T.tile = now; S.syms.forEach(function (s) { if (s.dirty) { s.dirty = false; paintTile(s, now, fx); s.tapeDirty = true; } }); }
-    if (now - T.spark > 260) { T.spark = now; S.syms.forEach(function (s) { if (s.sparkDirty) { s.sparkDirty = false; line(s.cv, s.hist, s.px >= s.prev, false); } }); }
-    if (now - T.tape > 600) { T.tape = now; S.syms.forEach(function (s) { if (s.tapeDirty) { s.tapeDirty = false; paintTape(s); } }); }
-    if (now - T.prints > (reduced ? 1000 : 110)) { T.prints = now; flushPrints(fx); }
-    if (now - T.book > (reduced ? 1500 : 320)) { T.book = now; bookTick(false); }
-    if (now - T.pulse > 900) { T.pulse = now; PULSE.forEach(function (k) { if (S.by[k]) paintPulse(S.by[k]); }); }
-    if (now - T.hdr > 100) { T.hdr = now; header(now); }
-  }
+  function frame() { S.raf = requestAnimationFrame(frame); header(); }
   function start() {
     if (S.running) return;
-    build(); readColors(); sizeCanvases();
-    S.running = true; T.last = 0; $("fl-root").classList.remove("fl-paused");
-    S.syms.forEach(function (s) { s.dirty = s.sparkDirty = s.tapeDirty = true; });
-    T.pulse = T.book = T.tape = 0;
+    build(); if (!S.built) return;
+    readColors(); sizeCanvases();
+    S.running = true; $("fl-root").classList.remove("fl-paused");
+    S.syms.forEach(function (s) { s.dirty = true; }); renderAll(false);
     S.raf = requestAnimationFrame(frame);
+    load(); S.timer = setInterval(load, REFRESH_MS);
   }
   function stop() {
     if (!S.running) return;
-    S.running = false; cancelAnimationFrame(S.raf);
+    S.running = false; cancelAnimationFrame(S.raf); clearInterval(S.timer);
     var r = $("fl-root"); if (r) r.classList.add("fl-paused");
   }
   function sync() {
@@ -4466,18 +4367,17 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
     if (window.PQ_VIEW === "floor" && !document.hidden) start(); else stop();
   }
 
-  initSyms();
-  if (window.PQ_DATA) seed(window.PQ_DATA);
-  document.addEventListener("pq:data", function (e) { seed(e.detail); });
+  window.PQFloor = { asOfText: asOfText };
+  if (window.PQ_FLOOR) ingest(window.PQ_FLOOR);
+  if (window.PQ_DATA) seedAccount(window.PQ_DATA);
+  document.addEventListener("pq:data", function (e) { seedAccount(e.detail); });
   document.addEventListener("pq:view", sync);
   document.addEventListener("visibilitychange", sync);
-  // theme switch (Regular / After Hours): recolor the canvases, reseed from the extended price
-  if (window.MutationObserver) new MutationObserver(function () {
-    var ah = document.documentElement.classList.contains("mode-ah");
-    if (ah !== S.ah) { S.ah = ah; S.seeded = {}; if (window.PQ_DATA) seed(window.PQ_DATA); }
-    readColors(); S.syms.forEach(function (s) { s.sparkDirty = true; }); T.pulse = 0;
-  }).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-  S.ah = document.documentElement.classList.contains("mode-ah");
+  if (window.MutationObserver) new MutationObserver(function () { if (S.built) { readColors(); renderCharts(); } })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  if (!S.syms.length && window.fetch && location.protocol !== "file:") {
+    fetch("data/floor.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) { if (d) { ingest(d); sync(); } }).catch(function () {});
+  }
   sync();
 })();
 

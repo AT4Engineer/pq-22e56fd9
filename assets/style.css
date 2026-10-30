@@ -1076,3 +1076,9 @@ html.mode-ah .fl-pc.up { border-color: rgba(79,216,255,.4); } html.mode-ah .fl-p
   .fl-tile::after, .fl-tpx, .fl-tile, .fl-burst, .fl-tr.in { animation: none !important; }
 }
 .fl-mine-k { color: var(--accent); }
+/* Trading Floor quote panel (real values) */
+.fl-qr { line-height: 26px; border-bottom: 1px solid var(--fl-line); }
+.fl-qr .fl-qk { color: var(--muted); font-family: inherit; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.fl-qr .fl-qv { text-align: right; color: var(--text); }
+.fl-qr .fl-qv.up { color: var(--pos); } .fl-qr .fl-qv.dn { color: var(--neg); }
+.fl-tr.fl-empty { display: block; color: var(--muted); font-family: inherit; }

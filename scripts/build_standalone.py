@@ -51,6 +51,11 @@ def main():
     js = read("assets/app.js")
     proj_js = read("assets/projection.js")
     floor_js = read("assets/floor.js")
+    try:
+        floor_data = json.loads(read("data/floor.json"))
+    except (OSError, ValueError):
+        floor_data = None
+    floor_json = json.dumps(floor_data, separators=(",", ":")).replace("</", "<\\/")
     icon = base64.b64encode(read("assets/favicon.svg").encode()).decode()
 
     data_json = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -69,7 +74,7 @@ def main():
               f"  <script>\n{safe_script(js)}\n</script>")
     html = html.replace('<script src="assets/projection.js"></script>', f"<script>\n{safe_script(proj_js)}\n</script>")
     html = html.replace('<script src="assets/app.js"></script>', inline)
-    html = html.replace('<script src="assets/floor.js"></script>', f"<script>\n{safe_script(floor_js)}\n</script>")
+    html = html.replace('<script src="assets/floor.js"></script>', f"<script>window.PQ_FLOOR = {floor_json};</script>\n  <script>\n{safe_script(floor_js)}\n</script>")
     for leftover in ('href="assets/', 'src="assets/'):
         if leftover in html:
             sys.exit(f"build_standalone: unreplaced asset reference {leftover!r} in index.html")
