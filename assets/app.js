@@ -597,7 +597,7 @@
     var day = $("s-day");
     var o = (d.options || [])[0], ax = a.extended;
     if (ui.mode === "ah") {
-      $("s-label").textContent = "Account value · extended hours";
+      $("s-label").textContent = "Extended hours value";
       if (ax && isNum(ax.total)) {
         $("s-total").textContent = money(ax.total);
         day.innerHTML = '<span class="ah-sess">' + esc(ax.session_label || "Extended") + '</span><span class="' + cls(ax.change) + '">' + sMoney(ax.change) + " (" + sPct(ax.change_pct) + ")</span> <span class=\"subtle\">vs 4:00 PM close " + money(ax.close_total) + "</span>";

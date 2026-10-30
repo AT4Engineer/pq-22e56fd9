@@ -851,7 +851,9 @@ html.mode-ah .acct-total { text-shadow: 0 0 24px rgba(139,123,255,0.45); }
 html.mode-x, html.mode-x *, html.mode-x *::before, html.mode-x *::after {
   transition: background-color .6s ease, color .6s ease, border-color .6s ease, fill .6s ease, stroke .6s ease, box-shadow .6s ease !important;
 }
-.acct-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.acct-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap; min-height: 32px; }
+.acct-label-row .acct-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.acct-label-row .seg-mode { flex: 0 0 auto; margin-left: auto; }
 .seg-mode { position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; padding: 2px; border-radius: 9px; background: var(--seg-bg); border: 1px solid var(--border); }
 .seg-mode button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; position: relative; z-index: 1; appearance: none; border: 0; background: none; color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 600; padding: 5px 12px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
 .seg-mode button[aria-checked="true"] { color: var(--text); }
