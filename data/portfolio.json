@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-30 17:40:37 ET",
-  "generated_at_iso": "2026-10-30T17:40:37-04:00",
+  "generated_at_et": "2026-10-30 17:55:38 ET",
+  "generated_at_iso": "2026-10-30T17:55:38-04:00",
   "trade_date": "2026-10-30",
   "quotes_as_of_et": "2026-10-30 16:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 15917.95,
+      "total": 15936.86,
       "close_total": 15896.34,
-      "change": 21.61,
-      "change_pct": 0.14,
+      "change": 40.52,
+      "change_pct": 0.25,
       "option_liability": -155.0,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 134.72,
-          "ext_price": 135.54,
-          "value": 948.78,
-          "change": 5.74,
-          "change_pct": 0.61
+          "ext_price": 135.48,
+          "value": 948.36,
+          "change": 5.32,
+          "change_pct": 0.56
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 141.21,
-          "ext_price": 141.37,
-          "value": 14136.87,
-          "change": 15.87,
-          "change_pct": 0.11
+          "ext_price": 141.56,
+          "value": 14156.2,
+          "change": 35.2,
+          "change_pct": 0.25
         }
       ],
-      "quote_time_et": "2026-10-30 17:40 ET",
-      "as_of_et": "2026-10-30 17:40:37 ET",
-      "as_of_iso": "2026-10-30T17:40:37-04:00",
+      "quote_time_et": "2026-10-30 17:55 ET",
+      "as_of_et": "2026-10-30 17:55:38 ET",
+      "as_of_iso": "2026-10-30T17:55:38-04:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-10-30 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 135.54,
+      "ext_price": 135.48,
       "ext_label": "post-market",
       "share_pct": 5.93
     },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-10-30 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 141.37,
+      "ext_price": 141.56,
       "ext_label": "post-market",
       "share_pct": 88.83
     }
@@ -141,7 +141,7 @@
       "last_trade_et": "2026-10-30 12:32 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
-      "prob_finish_itm": 0.1927,
+      "prob_finish_itm": 0.1926,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -570,7 +570,7 @@
         ],
         [
           70,
-          138.57
+          138.56
         ],
         [
           75,
@@ -714,7 +714,7 @@
         ],
         [
           250,
-          136.59
+          136.62
         ],
         [
           255,
@@ -1527,7 +1527,7 @@
       "market_state": "POST",
       "stats": {
         "open": 232.53,
-        "day_high": 241.55,
+        "day_high": 241.54,
         "day_low": 229.36,
         "volume": 104652185.0,
         "avg_volume": 38332071.0,
@@ -1851,7 +1851,7 @@
         ],
         [
           385,
-          240.41
+          240.47
         ]
       ],
       "spark_base": 243.79
