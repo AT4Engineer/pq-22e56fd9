@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-29 20:48:41 ET",
-  "generated_at_iso": "2026-10-29T20:48:41-04:00",
+  "generated_at_et": "2026-10-29 20:54:12 ET",
+  "generated_at_iso": "2026-10-29T20:54:12-04:00",
   "trade_date": "2026-10-29",
   "quotes_as_of_et": "2026-10-29 16:00 ET",
   "market_state": "POSTPOST",
@@ -48,8 +48,8 @@
         }
       ],
       "quote_time_et": "2026-10-29 19:59 ET",
-      "as_of_et": "2026-10-29 20:48:41 ET",
-      "as_of_iso": "2026-10-29T20:48:41-04:00",
+      "as_of_et": "2026-10-29 20:54:12 ET",
+      "as_of_iso": "2026-10-29T20:54:12-04:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -1557,7 +1557,7 @@
         ],
         [
           25,
-          245.16
+          245.15
         ],
         [
           30,
