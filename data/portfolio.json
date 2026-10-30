@@ -1,11 +1,11 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-10-29 18:59:34 ET",
-  "generated_at_iso": "2026-10-29T18:59:34-04:00",
+  "generated_at_et": "2026-10-29 20:48:41 ET",
+  "generated_at_iso": "2026-10-29T20:48:41-04:00",
   "trade_date": "2026-10-29",
   "quotes_as_of_et": "2026-10-29 16:00 ET",
-  "market_state": "POST",
-  "market_label": "After hours",
+  "market_state": "POSTPOST",
+  "market_label": "Closed (after hours)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
     "total": 16579.53,
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 16238.94,
+      "total": 16276.1,
       "close_total": 16579.53,
-      "change": -340.59,
-      "change_pct": -2.05,
+      "change": -303.43,
+      "change_pct": -1.83,
       "option_liability": -350.0,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 143.89,
-          "ext_price": 140.09,
-          "value": 980.63,
-          "change": -26.6,
-          "change_pct": -2.64
+          "ext_price": 140.4,
+          "value": 982.8,
+          "change": -24.43,
+          "change_pct": -2.43
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 149.35,
-          "ext_price": 146.21,
-          "value": 14621.01,
-          "change": -313.99,
-          "change_pct": -2.1
+          "ext_price": 146.56,
+          "value": 14656.0,
+          "change": -279.0,
+          "change_pct": -1.87
         }
       ],
-      "quote_time_et": "2026-10-29 18:59 ET",
-      "as_of_et": "2026-10-29 18:59:34 ET",
-      "as_of_iso": "2026-10-29T18:59:34-04:00",
+      "quote_time_et": "2026-10-29 19:59 ET",
+      "as_of_et": "2026-10-29 20:48:41 ET",
+      "as_of_iso": "2026-10-29T20:48:41-04:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -71,9 +71,9 @@
       "day_change_pct": -0.92,
       "value": 1007.23,
       "quote_time_et": "2026-10-29 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 140.09,
+      "ext_price": 140.4,
       "ext_label": "post-market",
       "share_pct": 6.08
     },
@@ -94,9 +94,9 @@
       "day_change_pct": -1.18,
       "value": 14935.0,
       "quote_time_et": "2026-10-29 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 146.21,
+      "ext_price": 146.56,
       "ext_label": "post-market",
       "share_pct": 90.08
     }
@@ -135,13 +135,13 @@
       "day_change": 125.0,
       "prev_mark": 4.75,
       "prev_mark_source": "recorded mark for prior session 2026-10-28",
-      "iv": 0.4049,
+      "iv": 0.4139,
       "open_interest": 73.0,
       "volume": 10.0,
       "last_trade_et": "2026-10-29 10:37 ET",
       "assignment_risk": "MODERATE",
       "assignment_note": "Some cushion below the strike, but UPRO moves 3x the S&P 500.",
-      "prob_finish_itm": 0.3598,
+      "prob_finish_itm": 0.3618,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -371,7 +371,7 @@
           "bid": 13.9,
           "ask": 16.3,
           "last": 14.88,
-          "iv": 0.5107,
+          "iv": 0.5158,
           "oi": 178.0,
           "volume": 54.0,
           "last_trade_et": "2026-10-29 13:19 ET",
@@ -384,7 +384,7 @@
           "bid": 10.6,
           "ask": 12.4,
           "last": 11.25,
-          "iv": 0.4596,
+          "iv": 0.4642,
           "oi": 314.0,
           "volume": 177.0,
           "last_trade_et": "2026-10-29 15:41 ET",
@@ -397,7 +397,7 @@
           "bid": 7.9,
           "ask": 9.2,
           "last": 8.0,
-          "iv": 0.427,
+          "iv": 0.4313,
           "oi": 377.0,
           "volume": 130.0,
           "last_trade_et": "2026-10-29 13:54 ET",
@@ -410,7 +410,7 @@
           "bid": 5.5,
           "ask": 6.8,
           "last": 5.9,
-          "iv": 0.4127,
+          "iv": 0.4168,
           "oi": 159.0,
           "volume": 8.0,
           "last_trade_et": "2026-10-29 13:41 ET",
@@ -423,7 +423,7 @@
           "bid": 3.8,
           "ask": 4.5,
           "last": 4.0,
-          "iv": 0.3829,
+          "iv": 0.3867,
           "oi": 261.0,
           "volume": 42.0,
           "last_trade_et": "2026-10-29 15:40 ET",
@@ -437,7 +437,7 @@
       "ask": 9.2,
       "mid": 8.55,
       "last": 8.0,
-      "iv": 0.427,
+      "iv": 0.4313,
       "oi": 377.0,
       "volume": 130.0,
       "last_trade_et": "2026-10-29 13:54 ET",
@@ -489,7 +489,7 @@
       "change": -1.34,
       "change_pct": -0.92,
       "quote_time_et": "2026-10-29 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 142.31,
         "day_high": 144.95,
@@ -832,7 +832,7 @@
       "change": -1.79,
       "change_pct": -1.18,
       "quote_time_et": "2026-10-29 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 148.94,
         "day_high": 150.07,
@@ -1175,7 +1175,7 @@
       "change": -1.72,
       "change_pct": -0.8,
       "quote_time_et": "2026-10-29 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 214.35,
         "day_high": 215.32,
@@ -1518,7 +1518,7 @@
       "change": -10.81,
       "change_pct": -4.25,
       "quote_time_et": "2026-10-29 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 246.91,
         "day_high": 249.14,
@@ -1557,7 +1557,7 @@
         ],
         [
           25,
-          245.15
+          245.16
         ],
         [
           30,
@@ -1861,7 +1861,7 @@
       "change": 0.05,
       "change_pct": 0.05,
       "quote_time_et": "2026-10-29 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 106.52,
         "day_high": 107.93,
@@ -2526,7 +2526,7 @@
   },
   "caveats": [
     "UPRO Nov 20 2026 $154 call: wide bid/ask (2.90 x 4.10); the mid-price mark is approximate.",
-    "Market not in regular session (After hours): stocks valued at the regular-session close; extended-hours quotes are not used.",
+    "Market not in regular session (Closed (after hours)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }
