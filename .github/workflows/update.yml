@@ -3,12 +3,15 @@ name: Update portfolio data
 on:
   schedule:
     # GitHub cron is UTC. US market hours are 9:30-16:00 ET = 13:30-20:00 UTC (EDT) / 14:30-21:00 UTC (EST).
-    # Every 15 min, 13:00-20:45 UTC, Mon-Fri (covers the whole session in EDT, and to 15:45 ET in EST):
-    - cron: "*/15 13-20 * * 1-5"
+    # Set for EST (Nov-Mar). Every 15 min, 14:00-20:45 UTC = 9:00 AM-3:45 PM EST, Mon-Fri.
+    # In EDT (from Mar 8, 2027) change 14-20 back to 13-20.
+    - cron: "*/15 14-20 * * 1-5"
     # Once after the close: 21:10 UTC = 17:10 EDT / 16:10 EST, Mon-Fri:
     - cron: "10 21 * * 1-5"
-    # After hours (extended-hours prices for the After Hours view): :10/:25/:40/:55, 21-23 UTC = 17-19:55 EDT
+    # After hours (extended-hours prices for the After Hours view): :10/:25/:40/:55, 21-23 UTC = 4:10-6:55 PM EST
     - cron: "10,25,40,55 21-23 * * 1-5"
+    # ...plus 00:xx UTC Tue-Sat = 7:10-7:55 PM EST Mon-Fri, so after hours runs to 8 PM.
+    - cron: "10,25,40,55 0 * * 2-6"
   workflow_dispatch:
   # refresh.yml ("Get fresh prices" on the dashboard) runs this same job on demand.
   workflow_call:
