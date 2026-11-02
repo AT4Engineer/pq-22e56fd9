@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-02 16:56:54 ET",
-  "generated_at_iso": "2026-11-02T16:56:54-05:00",
+  "generated_at_et": "2026-11-02 17:40:32 ET",
+  "generated_at_iso": "2026-11-02T17:40:32-05:00",
   "trade_date": "2026-11-02",
   "quotes_as_of_et": "2026-11-02 16:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 15768.81,
+      "total": 15695.97,
       "close_total": 15705.89,
-      "change": 62.92,
-      "change_pct": 0.4,
+      "change": -9.92,
+      "change_pct": -0.06,
       "option_liability": -150.0,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 136.37,
-          "ext_price": 136.98,
-          "value": 958.86,
-          "change": 4.27,
-          "change_pct": 0.45
+          "ext_price": 136.68,
+          "value": 956.74,
+          "change": 2.15,
+          "change_pct": 0.23
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 139.14,
-          "ext_price": 139.73,
-          "value": 13972.65,
-          "change": 58.65,
-          "change_pct": 0.42
+          "ext_price": 139.02,
+          "value": 13901.93,
+          "change": -12.07,
+          "change_pct": -0.09
         }
       ],
-      "quote_time_et": "2026-11-02 16:56 ET",
-      "as_of_et": "2026-11-02 16:56:54 ET",
-      "as_of_iso": "2026-11-02T16:56:54-05:00",
+      "quote_time_et": "2026-11-02 17:40 ET",
+      "as_of_et": "2026-11-02 17:40:32 ET",
+      "as_of_iso": "2026-11-02T17:40:32-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-11-02 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 136.98,
+      "ext_price": 136.68,
       "ext_label": "post-market",
       "share_pct": 6.08
     },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-11-02 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 139.73,
+      "ext_price": 139.02,
       "ext_label": "post-market",
       "share_pct": 88.59
     }
@@ -141,7 +141,7 @@
       "last_trade_et": "2026-10-30 12:32 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
-      "prob_finish_itm": 0.1811,
+      "prob_finish_itm": 0.1809,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -506,7 +506,7 @@
         "open": 137.04,
         "day_high": 142.05,
         "day_low": 135.72,
-        "volume": 89645962.0,
+        "volume": 90161890.0,
         "avg_volume": 103198170.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
@@ -849,7 +849,7 @@
         "open": 143.26,
         "day_high": 145.75,
         "day_low": 138.9,
-        "volume": 2193128.0,
+        "volume": 2250800.0,
         "avg_volume": 1927689.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -1192,7 +1192,7 @@
         "open": 207.59,
         "day_high": 209.98,
         "day_low": 201.66,
-        "volume": 117019063.0,
+        "volume": 117533823.0,
         "avg_volume": 114133204.0,
         "high_52w": 243.37,
         "low_52w": 164.27,
@@ -1214,7 +1214,7 @@
         ],
         [
           10,
-          208.41
+          208.42
         ],
         [
           15,
@@ -1535,7 +1535,7 @@
         "open": 243.09,
         "day_high": 253.81,
         "day_low": 242.28,
-        "volume": 57688063.0,
+        "volume": 57870783.0,
         "avg_volume": 37978881.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
@@ -1849,7 +1849,7 @@
         ],
         [
           375,
-          246.88
+          246.89
         ],
         [
           380,
@@ -1878,7 +1878,7 @@
         "open": 106.81,
         "day_high": 108.69,
         "day_low": 106.29,
-        "volume": 3065661.0,
+        "volume": 3066819.0,
         "avg_volume": 3121365.0,
         "high_52w": 108.69,
         "low_52w": 76.55,
