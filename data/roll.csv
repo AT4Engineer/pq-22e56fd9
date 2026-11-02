@@ -10,13 +10,13 @@ pl_if_closed,259.47,premium received minus buyback at the ask
 deadline,Buy to close before 4:00 PM ET Fri Nov 20 to keep your shares,
 next_expiry,2026-12-18,next monthly expiry
 next_atm_strike,140.0,strike nearest the share price
-next_bid,10.7,per share
+next_bid,10.5,per share
 next_ask,12.4,per share
-next_mid,11.55,per share
-est_premium,1070.0,new premium at the bid (conservative)
-net_roll,865.0,new premium (bid) minus buyback (ask); negative = debit
-premium_pct,7.54,premium as % of share value
-annualized_pct,59.9,"premium %, annualized"
-breakeven,131.15,share price minus new premium
+next_mid,11.45,per share
+est_premium,1050.0,new premium at the bid (conservative)
+net_roll,845.0,new premium (bid) minus buyback (ask); negative = debit
+premium_pct,7.41,premium as % of share value
+annualized_pct,58.8,"premium %, annualized"
+breakeven,131.19,share price minus new premium
 premium_income_net,1000.94,all premiums received minus buybacks (recorded)
-as_of_et,2026-11-02 14:00:20 ET,
+as_of_et,2026-11-02 14:15:34 ET,
