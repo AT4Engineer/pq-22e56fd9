@@ -1,20 +1,20 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-03 10:30:38 ET",
-  "generated_at_iso": "2026-11-03T10:30:38-05:00",
+  "generated_at_et": "2026-11-03 10:45:25 ET",
+  "generated_at_iso": "2026-11-03T10:45:25-05:00",
   "trade_date": "2026-11-03",
-  "quotes_as_of_et": "2026-11-03 10:30 ET",
+  "quotes_as_of_et": "2026-11-03 10:43 ET",
   "market_state": "REGULAR",
   "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 15900.97,
+    "total": 15935.65,
     "prev_total": 15705.89,
-    "day_change": 195.08,
-    "day_change_pct": 1.24,
-    "stocks_value": 15036.17,
+    "day_change": 229.76,
+    "day_change_pct": 1.46,
+    "stocks_value": 15070.85,
     "cash": 987.3,
-    "cash_share_pct": 6.21,
+    "cash_share_pct": 6.2,
     "option_liability": -122.5,
     "extended": {
       "available": false,
@@ -64,41 +64,41 @@
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 7,
-      "price": 142.31,
+      "price": 142.07,
       "prev_close": 136.37,
-      "day_change_per_share": 5.94,
-      "day_change": 41.58,
-      "day_change_pct": 4.36,
-      "value": 996.17,
-      "quote_time_et": "2026-11-03 10:30 ET",
+      "day_change_per_share": 5.7,
+      "day_change": 39.9,
+      "day_change_pct": 4.18,
+      "value": 994.49,
+      "quote_time_et": "2026-11-03 10:43 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 6.26
+      "share_pct": 6.24
     },
     {
       "avg_cost": 154.155,
       "cost_basis": 15415.5,
-      "unrealized": -1375.5,
-      "unrealized_pct": -8.92,
+      "unrealized": -1339.14,
+      "unrealized_pct": -8.69,
       "symbol": "UPRO",
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "shares": 100,
-      "price": 140.4,
+      "price": 140.76,
       "prev_close": 139.14,
-      "day_change_per_share": 1.26,
-      "day_change": 126.0,
-      "day_change_pct": 0.91,
-      "value": 14040.0,
-      "quote_time_et": "2026-11-03 10:30 ET",
+      "day_change_per_share": 1.62,
+      "day_change": 162.36,
+      "day_change_pct": 1.17,
+      "value": 14076.36,
+      "quote_time_et": "2026-11-03 10:43 ET",
       "market_state": "REGULAR",
       "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 88.3
+      "share_pct": 88.33
     }
   ],
   "options": [
@@ -118,9 +118,9 @@
       "expiry_close_iso": "2026-11-20T16:00:00-05:00",
       "dte": 17,
       "expired": false,
-      "spot": 140.4,
-      "distance": -13.6,
-      "distance_pct": -8.83,
+      "spot": 140.76,
+      "distance": -13.24,
+      "distance_pct": -8.6,
       "status": "OTM",
       "itm": false,
       "covered": true,
@@ -135,13 +135,13 @@
       "day_change": 27.5,
       "prev_mark": 1.5,
       "prev_mark_source": "recorded mark for prior session 2026-11-02",
-      "iv": 0.4722,
+      "iv": 0.4639,
       "open_interest": 83.0,
       "volume": 10.0,
       "last_trade_et": "2026-10-30 12:32 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
-      "prob_finish_itm": 0.1704,
+      "prob_finish_itm": 0.173,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -292,9 +292,9 @@
     },
     {
       "date": "2026-11-03",
-      "total": 15900.97,
-      "day_change": 195.08,
-      "day_change_pct": 1.24
+      "total": 15935.65,
+      "day_change": 229.76,
+      "day_change_pct": 1.46
     }
   ],
   "watchlist": [
@@ -354,7 +354,7 @@
       "expiry": "2026-11-20",
       "contracts": 1,
       "multiplier": 100,
-      "spot": 140.4,
+      "spot": 140.76,
       "itm": false,
       "mark": 1.225,
       "bid": 0.85,
@@ -378,7 +378,7 @@
       "expiry": "2026-12-18",
       "expiry_label": "Fri Dec 18 2026",
       "days": 45,
-      "spot": 140.4,
+      "spot": 140.76,
       "contracts": 1,
       "multiplier": 100,
       "quote_note": null,
@@ -386,14 +386,14 @@
         {
           "strike": 131.0,
           "contract": "UPRO261218C00131000",
-          "bid": 14.0,
+          "bid": 14.2,
           "ask": 17.7,
           "last": 28.0,
-          "iv": 0.5466,
+          "iv": 0.5385,
           "oi": 119.0,
           "volume": 2.0,
           "last_trade_et": "2026-10-13 13:18 ET",
-          "mid": 15.85,
+          "mid": 15.95,
           "atm": false
         },
         {
@@ -402,7 +402,7 @@
           "bid": 11.8,
           "ask": 14.0,
           "last": 15.13,
-          "iv": 0.5118,
+          "iv": 0.5579,
           "oi": 318.0,
           "volume": 100.0,
           "last_trade_et": "2026-11-02 10:14 ET",
@@ -415,7 +415,7 @@
           "bid": 9.4,
           "ask": 10.5,
           "last": 9.8,
-          "iv": 0.5194,
+          "iv": 0.5093,
           "oi": 314.0,
           "volume": 1.0,
           "last_trade_et": "2026-11-03 10:06 ET",
@@ -425,27 +425,27 @@
         {
           "strike": 145.0,
           "contract": "UPRO261218C00145000",
-          "bid": 6.5,
-          "ask": 7.6,
+          "bid": 7.3,
+          "ask": 7.3,
           "last": 7.35,
-          "iv": 0.4819,
+          "iv": 0.4584,
           "oi": 408.0,
           "volume": 124.0,
           "last_trade_et": "2026-11-02 14:54 ET",
-          "mid": 7.05,
+          "mid": 7.3,
           "atm": false
         },
         {
           "strike": 150.0,
           "contract": "UPRO261218C00150000",
           "bid": 4.6,
-          "ask": 5.1,
+          "ask": 5.2,
           "last": 5.0,
-          "iv": 0.4434,
+          "iv": 0.4416,
           "oi": 345.0,
           "volume": 6.0,
           "last_trade_et": "2026-11-03 09:53 ET",
-          "mid": 4.85,
+          "mid": 4.9,
           "atm": false
         }
       ],
@@ -455,21 +455,21 @@
       "ask": 10.5,
       "mid": 9.95,
       "last": 9.8,
-      "iv": 0.5194,
+      "iv": 0.5093,
       "oi": 314.0,
       "volume": 1.0,
       "last_trade_et": "2026-11-03 10:06 ET",
       "est_premium": 940.0,
       "net_roll": 780.0,
-      "premium_pct": 6.7,
-      "annualized_pct": 54.3,
-      "breakeven": 131.0,
+      "premium_pct": 6.68,
+      "annualized_pct": 54.2,
+      "breakeven": 131.36,
       "called_away_value": 14000.0,
-      "max_gain_vs_today": 900.0,
+      "max_gain_vs_today": 863.64,
       "above_text": "Above $140 on Fri Dec 18 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $140 ($14,000.00). You keep $940.00 either way.",
       "below_text": "Below $140: the call expires worthless. You keep $940.00 and the 100 shares, which are worth less if UPRO fell.",
       "underlying": "UPRO",
-      "quote_time_et": "2026-11-03 10:30 ET"
+      "quote_time_et": "2026-11-03 10:43 ET"
     },
     "dividends": [
       {
@@ -502,21 +502,21 @@
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
-      "price": 142.31,
+      "price": 142.07,
       "prev_close": 136.37,
-      "change": 5.94,
-      "change_pct": 4.36,
-      "quote_time_et": "2026-11-03 10:30 ET",
+      "change": 5.7,
+      "change_pct": 4.18,
+      "quote_time_et": "2026-11-03 10:43 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 137.65,
-        "day_high": 142.33,
+        "day_high": 142.72,
         "day_low": 137.56,
-        "volume": 23034774.0,
+        "volume": 26355455.0,
         "avg_volume": 103523143.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 1932721258496.0,
+        "market_cap": 1929461891072.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -574,7 +574,15 @@
         ],
         [
           60,
-          142.35
+          142.38
+        ],
+        [
+          65,
+          142.01
+        ],
+        [
+          70,
+          142.07
         ]
       ],
       "spark_base": 136.37
@@ -585,17 +593,17 @@
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
-      "price": 140.4,
+      "price": 140.76,
       "prev_close": 139.14,
-      "change": 1.26,
-      "change_pct": 0.91,
-      "quote_time_et": "2026-11-03 10:30 ET",
+      "change": 1.62,
+      "change_pct": 1.17,
+      "quote_time_et": "2026-11-03 10:43 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 139.42,
-        "day_high": 140.65,
+        "day_high": 140.86,
         "day_low": 139.29,
-        "volume": 593311.0,
+        "volume": 623721.0,
         "avg_volume": 1919565.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -657,7 +665,15 @@
         ],
         [
           60,
-          140.4
+          140.29
+        ],
+        [
+          65,
+          140.3
+        ],
+        [
+          70,
+          140.76
         ]
       ],
       "spark_base": 139.14
@@ -668,21 +684,21 @@
       "name": "NVIDIA Corporation",
       "long_name": "NVIDIA Corporation",
       "exchange": "NasdaqGS",
-      "price": 207.91,
+      "price": 207.94,
       "prev_close": 202.06,
-      "change": 5.85,
-      "change_pct": 2.9,
-      "quote_time_et": "2026-11-03 10:30 ET",
+      "change": 5.88,
+      "change_pct": 2.91,
+      "quote_time_et": "2026-11-03 10:43 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 207.85,
         "day_high": 209.14,
         "day_low": 205.93,
-        "volume": 23376364.0,
+        "volume": 25732430.0,
         "avg_volume": 113986756.0,
         "high_52w": 243.37,
         "low_52w": 164.27,
-        "market_cap": 5020402581504.0,
+        "market_cap": 5021127147520.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -740,7 +756,15 @@
         ],
         [
           60,
-          207.92
+          207.64
+        ],
+        [
+          65,
+          207.19
+        ],
+        [
+          70,
+          207.94
         ]
       ],
       "spark_base": 202.06
@@ -751,21 +775,21 @@
       "name": "Amazon.com, Inc.",
       "long_name": "Amazon.com, Inc.",
       "exchange": "NasdaqGS",
-      "price": 246.69,
+      "price": 246.33,
       "prev_close": 245.63,
-      "change": 1.06,
-      "change_pct": 0.43,
-      "quote_time_et": "2026-11-03 10:30 ET",
+      "change": 0.7,
+      "change_pct": 0.28,
+      "quote_time_et": "2026-11-03 10:43 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 248.62,
         "day_high": 249.82,
         "day_low": 245.89,
-        "volume": 7491951.0,
+        "volume": 8389084.0,
         "avg_volume": 37470200.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
-        "market_cap": 2667547197440.0,
+        "market_cap": 2663600357376.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -823,7 +847,15 @@
         ],
         [
           60,
-          246.72
+          246.15
+        ],
+        [
+          65,
+          246.1
+        ],
+        [
+          70,
+          246.33
         ]
       ],
       "spark_base": 245.63
@@ -834,21 +866,21 @@
       "name": "Nasdaq, Inc.",
       "long_name": "Nasdaq, Inc.",
       "exchange": "NasdaqGS",
-      "price": 107.99,
+      "price": 108.3,
       "prev_close": 108.62,
-      "change": -0.63,
-      "change_pct": -0.58,
-      "quote_time_et": "2026-11-03 10:30 ET",
+      "change": -0.33,
+      "change_pct": -0.3,
+      "quote_time_et": "2026-11-03 10:43 ET",
       "market_state": "REGULAR",
       "stats": {
         "open": 108.09,
         "day_high": 108.37,
         "day_low": 106.9,
-        "volume": 337160.0,
+        "volume": 381889.0,
         "avg_volume": 3108865.0,
         "high_52w": 108.69,
         "low_52w": 76.55,
-        "market_cap": 60364689408.0,
+        "market_cap": 60534452224.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -906,7 +938,15 @@
         ],
         [
           60,
-          107.99
+          108.1
+        ],
+        [
+          65,
+          108.12
+        ],
+        [
+          70,
+          108.29
         ]
       ],
       "spark_base": 108.62
@@ -975,6 +1015,14 @@
         ],
         [
           60,
+          1.225
+        ],
+        [
+          65,
+          1.225
+        ],
+        [
+          70,
           1.225
         ]
       ],
