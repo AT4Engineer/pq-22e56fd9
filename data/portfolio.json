@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-04 20:06:32 ET",
-  "generated_at_iso": "2026-11-04T20:06:32-05:00",
+  "generated_at_et": "2026-11-04 20:25:32 ET",
+  "generated_at_iso": "2026-11-04T20:25:32-05:00",
   "trade_date": "2026-11-04",
   "quotes_as_of_et": "2026-11-04 16:00 ET",
   "market_state": "POSTPOST",
@@ -21,9 +21,9 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 16418.64,
+      "total": 16417.74,
       "close_total": 16439.74,
-      "change": -21.1,
+      "change": -22.0,
       "change_pct": -0.13,
       "option_liability": -225.0,
       "cash": 987.3,
@@ -41,15 +41,15 @@
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 147.26,
-          "ext_price": 147.18,
-          "value": 14717.8,
-          "change": -8.2,
+          "ext_price": 147.17,
+          "value": 14716.9,
+          "change": -9.1,
           "change_pct": -0.06
         }
       ],
       "quote_time_et": "2026-11-04 19:59 ET",
-      "as_of_et": "2026-11-04 20:06:32 ET",
-      "as_of_iso": "2026-11-04T20:06:32-05:00",
+      "as_of_et": "2026-11-04 20:25:32 ET",
+      "as_of_iso": "2026-11-04T20:25:32-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-11-04 16:00 ET",
       "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 147.18,
+      "ext_price": 147.17,
       "ext_label": "post-market",
       "share_pct": 89.58
     }
@@ -756,7 +756,7 @@
         ],
         [
           280,
-          135.01
+          134.99
         ],
         [
           285,
@@ -1526,7 +1526,7 @@
         ],
         [
           385,
-          200.29
+          200.28
         ]
       ],
       "spark_base": 206.69
@@ -1609,7 +1609,7 @@
         ],
         [
           60,
-          268.08
+          268.07
         ],
         [
           65,
@@ -1677,7 +1677,7 @@
         ],
         [
           145,
-          268.16
+          268.17
         ],
         [
           150,
