@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-09 16:55:41 ET",
-  "generated_at_iso": "2026-11-09T16:55:41-05:00",
+  "generated_at_et": "2026-11-09 17:55:42 ET",
+  "generated_at_iso": "2026-11-09T17:55:42-05:00",
   "trade_date": "2026-11-09",
   "quotes_as_of_et": "2026-11-09 16:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 15778.4,
+      "total": 15772.35,
       "close_total": 15742.79,
-      "change": 35.61,
-      "change_pct": 0.23,
+      "change": 29.56,
+      "change_pct": 0.19,
       "option_liability": -30.0,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 142.07,
-          "ext_price": 142.3,
-          "value": 996.1,
-          "change": 1.61,
-          "change_pct": 0.16
+          "ext_price": 142.15,
+          "value": 995.05,
+          "change": 0.56,
+          "change_pct": 0.06
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 137.91,
-          "ext_price": 138.25,
-          "value": 13825.0,
-          "change": 34.0,
-          "change_pct": 0.25
+          "ext_price": 138.2,
+          "value": 13820.0,
+          "change": 29.0,
+          "change_pct": 0.21
         }
       ],
-      "quote_time_et": "2026-11-09 16:55 ET",
-      "as_of_et": "2026-11-09 16:55:41 ET",
-      "as_of_iso": "2026-11-09T16:55:41-05:00",
+      "quote_time_et": "2026-11-09 17:55 ET",
+      "as_of_et": "2026-11-09 17:55:42 ET",
+      "as_of_iso": "2026-11-09T17:55:42-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-11-09 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 142.3,
+      "ext_price": 142.15,
       "ext_label": "post-market",
       "share_pct": 6.32
     },
@@ -88,15 +88,15 @@
       "exchange": "NYSE Arca",
       "shares": 100,
       "price": 137.91,
-      "prev_close": 128.85,
-      "day_change_per_share": 9.06,
-      "day_change": 906.0,
-      "day_change_pct": 7.03,
+      "prev_close": 128.94,
+      "day_change_per_share": 8.97,
+      "day_change": 897.0,
+      "day_change_pct": 6.96,
       "value": 13791.0,
       "quote_time_et": "2026-11-09 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 138.25,
+      "ext_price": 138.2,
       "ext_label": "post-market",
       "share_pct": 87.6
     }
@@ -141,7 +141,7 @@
       "last_trade_et": "2026-11-09 14:43 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
-      "prob_finish_itm": 0.0795,
+      "prob_finish_itm": 0.0791,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -534,9 +534,9 @@
       "market_state": "POST",
       "stats": {
         "open": 136.53,
-        "day_high": 143.2,
+        "day_high": 143.18,
         "day_low": 135.37,
-        "volume": 102321831.0,
+        "volume": 102730791.0,
         "avg_volume": 97980481.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
@@ -858,7 +858,7 @@
         ],
         [
           385,
-          142.11
+          142.1
         ]
       ],
       "spark_base": 134.27
@@ -870,16 +870,16 @@
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "price": 137.91,
-      "prev_close": 128.85,
-      "change": 9.06,
-      "change_pct": 7.03,
+      "prev_close": 128.94,
+      "change": 8.97,
+      "change_pct": 6.96,
       "quote_time_et": "2026-11-09 16:00 ET",
       "market_state": "POST",
       "stats": {
         "open": 132.27,
         "day_high": 139.36,
         "day_low": 131.86,
-        "volume": 3154475.0,
+        "volume": 3160283.0,
         "avg_volume": 2022332.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -1204,7 +1204,7 @@
           137.95
         ]
       ],
-      "spark_base": 128.85
+      "spark_base": 128.94
     },
     "NVDA": {
       "symbol": "NVDA",
@@ -1220,9 +1220,9 @@
       "market_state": "POST",
       "stats": {
         "open": 173.04,
-        "day_high": 179.91,
+        "day_high": 179.92,
         "day_low": 170.24,
-        "volume": 455146828.0,
+        "volume": 456756830.0,
         "avg_volume": 117341326.0,
         "high_52w": 243.37,
         "low_52w": 164.27,
@@ -1565,7 +1565,7 @@
         "open": 269.32,
         "day_high": 275.31,
         "day_low": 266.92,
-        "volume": 50438489.0,
+        "volume": 50588278.0,
         "avg_volume": 38721757.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
@@ -1908,7 +1908,7 @@
         "open": 107.81,
         "day_high": 109.28,
         "day_low": 107.31,
-        "volume": 2481029.0,
+        "volume": 2482903.0,
         "avg_volume": 3167812.0,
         "high_52w": 111.45,
         "low_52w": 76.55,
