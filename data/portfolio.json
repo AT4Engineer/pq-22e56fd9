@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-09 18:20:34 ET",
-  "generated_at_iso": "2026-11-09T18:20:34-05:00",
+  "generated_at_et": "2026-11-09 18:25:31 ET",
+  "generated_at_iso": "2026-11-09T18:25:31-05:00",
   "trade_date": "2026-11-09",
   "quotes_as_of_et": "2026-11-09 16:00 ET",
   "market_state": "POST",
@@ -21,9 +21,9 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 15793.05,
+      "total": 15792.77,
       "close_total": 15742.79,
-      "change": 50.26,
+      "change": 49.98,
       "change_pct": 0.32,
       "option_liability": -30.0,
       "cash": 987.3,
@@ -32,10 +32,10 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 142.07,
-          "ext_price": 142.25,
-          "value": 995.75,
-          "change": 1.26,
-          "change_pct": 0.13
+          "ext_price": 142.21,
+          "value": 995.47,
+          "change": 0.98,
+          "change_pct": 0.1
         },
         {
           "symbol": "UPRO",
@@ -47,9 +47,9 @@
           "change_pct": 0.36
         }
       ],
-      "quote_time_et": "2026-11-09 18:20 ET",
-      "as_of_et": "2026-11-09 18:20:34 ET",
-      "as_of_iso": "2026-11-09T18:20:34-05:00",
+      "quote_time_et": "2026-11-09 18:25 ET",
+      "as_of_et": "2026-11-09 18:25:31 ET",
+      "as_of_iso": "2026-11-09T18:25:31-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-11-09 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 142.25,
+      "ext_price": 142.21,
       "ext_label": "post-market",
       "share_pct": 6.32
     },
@@ -534,7 +534,7 @@
       "market_state": "POST",
       "stats": {
         "open": 136.53,
-        "day_high": 143.2,
+        "day_high": 143.18,
         "day_low": 135.37,
         "volume": 102730791.0,
         "avg_volume": 97980481.0,
@@ -858,7 +858,7 @@
         ],
         [
           385,
-          142.11
+          142.1
         ]
       ],
       "spark_base": 134.27
@@ -1220,7 +1220,7 @@
       "market_state": "POST",
       "stats": {
         "open": 173.04,
-        "day_high": 179.91,
+        "day_high": 179.92,
         "day_low": 170.24,
         "volume": 456756830.0,
         "avg_volume": 117341326.0,
