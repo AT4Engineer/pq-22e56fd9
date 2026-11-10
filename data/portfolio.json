@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-09 18:55:23 ET",
-  "generated_at_iso": "2026-11-09T18:55:23-05:00",
+  "generated_at_et": "2026-11-09 19:10:36 ET",
+  "generated_at_iso": "2026-11-09T19:10:36-05:00",
   "trade_date": "2026-11-09",
   "quotes_as_of_et": "2026-11-09 16:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 15790.02,
+      "total": 15806.15,
       "close_total": 15742.79,
-      "change": 47.23,
-      "change_pct": 0.3,
+      "change": 63.36,
+      "change_pct": 0.4,
       "option_liability": -30.0,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 142.07,
-          "ext_price": 142.39,
-          "value": 996.73,
-          "change": 2.24,
-          "change_pct": 0.23
+          "ext_price": 142.55,
+          "value": 997.85,
+          "change": 3.36,
+          "change_pct": 0.34
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 137.91,
-          "ext_price": 138.36,
-          "value": 13835.99,
-          "change": 44.99,
-          "change_pct": 0.33
+          "ext_price": 138.51,
+          "value": 13851.0,
+          "change": 60.0,
+          "change_pct": 0.44
         }
       ],
-      "quote_time_et": "2026-11-09 18:55 ET",
-      "as_of_et": "2026-11-09 18:55:23 ET",
-      "as_of_iso": "2026-11-09T18:55:23-05:00",
+      "quote_time_et": "2026-11-09 19:10 ET",
+      "as_of_et": "2026-11-09 19:10:36 ET",
+      "as_of_iso": "2026-11-09T19:10:36-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-11-09 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 142.39,
+      "ext_price": 142.55,
       "ext_label": "post-market",
       "share_pct": 6.32
     },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-11-09 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 138.36,
+      "ext_price": 138.51,
       "ext_label": "post-market",
       "share_pct": 87.6
     }
@@ -135,13 +135,13 @@
       "day_change": -12.5,
       "prev_mark": 0.175,
       "prev_mark_source": "recorded mark for prior session 2026-11-06",
-      "iv": 0.4653,
+      "iv": 0.4858,
       "open_interest": 89.0,
       "volume": 1.0,
       "last_trade_et": "2026-11-09 14:43 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
-      "prob_finish_itm": 0.0787,
+      "prob_finish_itm": 0.0872,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -413,7 +413,7 @@
           "bid": 12.0,
           "ask": 14.5,
           "last": 9.7,
-          "iv": 0.5298,
+          "iv": 0.5365,
           "oi": 121.0,
           "volume": 13.0,
           "last_trade_et": "2026-11-06 11:48 ET",
@@ -426,7 +426,7 @@
           "bid": 9.8,
           "ask": 11.4,
           "last": 10.65,
-          "iv": 0.5039,
+          "iv": 0.5103,
           "oi": 310.0,
           "volume": 7.0,
           "last_trade_et": "2026-11-09 15:46 ET",
@@ -439,7 +439,7 @@
           "bid": 7.0,
           "ask": 8.5,
           "last": 7.9,
-          "iv": 0.5187,
+          "iv": 0.5254,
           "oi": 241.0,
           "volume": 32.0,
           "last_trade_et": "2026-11-09 15:17 ET",
@@ -452,7 +452,7 @@
           "bid": 4.7,
           "ask": 5.9,
           "last": 4.87,
-          "iv": 0.4825,
+          "iv": 0.4888,
           "oi": 437.0,
           "volume": 11.0,
           "last_trade_et": "2026-11-09 13:32 ET",
@@ -465,7 +465,7 @@
           "bid": 2.85,
           "ask": 3.8,
           "last": 3.1,
-          "iv": 0.4485,
+          "iv": 0.4542,
           "oi": 345.0,
           "volume": 29.0,
           "last_trade_et": "2026-11-09 14:38 ET",
@@ -479,7 +479,7 @@
       "ask": 8.5,
       "mid": 7.75,
       "last": 7.9,
-      "iv": 0.5187,
+      "iv": 0.5254,
       "oi": 241.0,
       "volume": 32.0,
       "last_trade_et": "2026-11-09 15:17 ET",
@@ -534,7 +534,7 @@
       "market_state": "POST",
       "stats": {
         "open": 136.53,
-        "day_high": 143.18,
+        "day_high": 143.2,
         "day_low": 135.37,
         "volume": 102730791.0,
         "avg_volume": 97980481.0,
@@ -858,7 +858,7 @@
         ],
         [
           385,
-          142.1
+          142.11
         ]
       ],
       "spark_base": 134.27
@@ -1220,7 +1220,7 @@
       "market_state": "POST",
       "stats": {
         "open": 173.04,
-        "day_high": 179.92,
+        "day_high": 179.91,
         "day_low": 170.24,
         "volume": 456756830.0,
         "avg_volume": 117341326.0,
