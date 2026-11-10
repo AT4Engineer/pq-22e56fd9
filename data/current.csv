@@ -1,6 +1,6 @@
 symbol,price,source,market_value,as_of_et
 SPCX,143.09,regular-session close,1001.63,2026-11-10 16:00 ET
 UPRO,136.37,regular-session close,13637.0,2026-11-10 16:00 ET
-UPRO261120C00154000,0.275,mid of bid/ask,-27.5,2026-11-10 18:40:40 ET
-CASH,1,holdings.json,987.3,2026-11-10 18:40:40 ET
-TOTAL,,account total (stocks + cash + option liability),15598.43,2026-11-10 18:40:40 ET
+UPRO261120C00154000,0.275,mid of bid/ask,-27.5,2026-11-10 18:55:40 ET
+CASH,1,holdings.json,987.3,2026-11-10 18:55:40 ET
+TOTAL,,account total (stocks + cash + option liability),15598.43,2026-11-10 18:55:40 ET
