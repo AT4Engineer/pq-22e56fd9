@@ -625,12 +625,12 @@
   },
   {
     "date": "2026-11-10",
-    "total": 15609.43,
-    "day_change": -133.36,
-    "day_change_pct": -0.85,
+    "total": 15598.43,
+    "day_change": -144.36,
+    "day_change_pct": -0.92,
     "cash": 987.3,
-    "option_liability": -17.5,
-    "option_mark": 0.175,
+    "option_liability": -27.5,
+    "option_mark": 0.275,
     "option_mark_source": "mid of bid/ask",
     "option_prev_mark": 0.3,
     "quote_quality": 3,
@@ -641,10 +641,10 @@
         "day_pct": 0.72
       },
       "UPRO": {
-        "value": 13638.0,
-        "day_pct": -1.11
+        "value": 13637.0,
+        "day_pct": -1.12
       }
     },
-    "updated_et": "2026-11-10 16:00:36 ET"
+    "updated_et": "2026-11-10 16:55:30 ET"
   }
 ]
