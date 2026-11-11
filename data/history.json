@@ -646,5 +646,29 @@
       }
     },
     "updated_et": "2026-11-10 20:12:50 ET"
+  },
+  {
+    "date": "2026-11-11",
+    "total": 15888.58,
+    "day_change": 290.15,
+    "day_change_pct": 1.86,
+    "cash": 987.3,
+    "option_liability": -27.5,
+    "option_mark": 0.275,
+    "option_mark_source": "last good bid/ask mid (session 2026-11-10, saved 2026-11-10 19:10:17 ET); no live bid/ask now",
+    "option_prev_mark": 0.275,
+    "quote_quality": 2,
+    "quote_reused": true,
+    "positions": {
+      "SPCX": {
+        "value": 981.78,
+        "day_pct": -1.98
+      },
+      "UPRO": {
+        "value": 13947.0,
+        "day_pct": 2.27
+      }
+    },
+    "updated_et": "2026-11-11 09:45:38 ET"
   }
 ]
