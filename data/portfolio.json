@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-11 16:10:30 ET",
-  "generated_at_iso": "2026-11-11T16:10:30-05:00",
+  "generated_at_et": "2026-11-11 16:12:05 ET",
+  "generated_at_iso": "2026-11-11T16:12:05-05:00",
   "trade_date": "2026-11-11",
   "quotes_as_of_et": "2026-11-11 16:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 16127.04,
+      "total": 16137.22,
       "close_total": 16106.05,
-      "change": 20.99,
-      "change_pct": 0.13,
+      "change": 31.17,
+      "change_pct": 0.19,
       "option_liability": -27.5,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 139.75,
-          "ext_price": 140.02,
-          "value": 980.14,
-          "change": 1.89,
-          "change_pct": 0.19
+          "ext_price": 140.06,
+          "value": 980.42,
+          "change": 2.17,
+          "change_pct": 0.22
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 141.68,
-          "ext_price": 141.87,
-          "value": 14187.1,
-          "change": 19.1,
-          "change_pct": 0.13
+          "ext_price": 141.97,
+          "value": 14197.0,
+          "change": 29.0,
+          "change_pct": 0.2
         }
       ],
-      "quote_time_et": "2026-11-11 16:10 ET",
-      "as_of_et": "2026-11-11 16:10:30 ET",
-      "as_of_iso": "2026-11-11T16:10:30-05:00",
+      "quote_time_et": "2026-11-11 16:11 ET",
+      "as_of_et": "2026-11-11 16:12:05 ET",
+      "as_of_iso": "2026-11-11T16:12:05-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-11-11 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 140.02,
+      "ext_price": 140.06,
       "ext_label": "post-market",
       "share_pct": 6.07
     },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-11-11 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 141.87,
+      "ext_price": 141.97,
       "ext_label": "post-market",
       "share_pct": 87.97
     }
@@ -548,7 +548,7 @@
         "open": 143.4,
         "day_high": 145.16,
         "day_low": 138.62,
-        "volume": 110157455.0,
+        "volume": 110155565.0,
         "avg_volume": 96526671.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
@@ -562,7 +562,7 @@
       "spark": [
         [
           0,
-          144.27
+          144.29
         ],
         [
           5,
@@ -870,7 +870,7 @@
         ],
         [
           385,
-          139.84
+          139.83
         ]
       ],
       "spark_base": 143.09
@@ -891,7 +891,7 @@
         "open": 140.07,
         "day_high": 143.22,
         "day_low": 139.09,
-        "volume": 1990939.0,
+        "volume": 1991187.0,
         "avg_volume": 2062250.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -1544,7 +1544,7 @@
         ],
         [
           370,
-          174.73
+          174.72
         ],
         [
           375,
@@ -1577,7 +1577,7 @@
         "open": 273.26,
         "day_high": 274.87,
         "day_low": 265.62,
-        "volume": 35879141.0,
+        "volume": 35878602.0,
         "avg_volume": 39078429.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
@@ -1899,7 +1899,7 @@
         ],
         [
           385,
-          266.22
+          266.19
         ]
       ],
       "spark_base": 270.87
@@ -1920,7 +1920,7 @@
         "open": 109.7,
         "day_high": 110.24,
         "day_low": 109.5,
-        "volume": 3437146.0,
+        "volume": 3423623.0,
         "avg_volume": 3180587.0,
         "high_52w": 111.45,
         "low_52w": 76.55,
