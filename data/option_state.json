@@ -18,19 +18,19 @@
   },
   "UPRO|2026-11-20|154|call": {
     "last_good": {
-      "mark": 0.25,
-      "bid": 0.1,
+      "mark": 0.275,
+      "bid": 0.15,
       "ask": 0.4,
       "last": 0.25,
-      "iv": 0.3701,
+      "iv": 0.3799,
       "oi": 90.0,
       "volume": 1.0,
-      "last_trade_et": "2026-11-09 14:43 ET",
+      "last_trade_et": "2026-11-11 15:09 ET",
       "contract": "UPRO261120C00154000",
       "session": "2026-11-11",
       "prev_mark": 0.275,
       "prev_mark_source": "recorded mark for prior session 2026-11-10",
-      "as_of_et": "2026-11-11 15:00:39 ET"
+      "as_of_et": "2026-11-11 16:00:38 ET"
     }
   }
 }
