@@ -1,11 +1,11 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-11 19:55:26 ET",
-  "generated_at_iso": "2026-11-11T19:55:26-05:00",
+  "generated_at_et": "2026-11-11 21:12:33 ET",
+  "generated_at_iso": "2026-11-11T21:12:33-05:00",
   "trade_date": "2026-11-11",
   "quotes_as_of_et": "2026-11-11 16:00 ET",
-  "market_state": "POST",
-  "market_label": "After hours",
+  "market_state": "POSTPOST",
+  "market_label": "Closed (after hours)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
     "total": 16108.05,
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 15893.52,
+      "total": 15892.8,
       "close_total": 16108.05,
-      "change": -214.53,
-      "change_pct": -1.33,
+      "change": -215.25,
+      "change_pct": -1.34,
       "option_liability": -27.5,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 139.75,
-          "ext_price": 138.21,
-          "value": 967.45,
-          "change": -10.8,
-          "change_pct": -1.1
+          "ext_price": 138.1,
+          "value": 966.7,
+          "change": -11.55,
+          "change_pct": -1.18
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 141.7,
           "ext_price": 139.66,
-          "value": 13966.27,
-          "change": -203.73,
+          "value": 13966.3,
+          "change": -203.7,
           "change_pct": -1.44
         }
       ],
-      "quote_time_et": "2026-11-11 19:55 ET",
-      "as_of_et": "2026-11-11 19:55:26 ET",
-      "as_of_iso": "2026-11-11T19:55:26-05:00",
+      "quote_time_et": "2026-11-11 19:59 ET",
+      "as_of_et": "2026-11-11 21:12:33 ET",
+      "as_of_iso": "2026-11-11T21:12:33-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -71,9 +71,9 @@
       "day_change_pct": -2.33,
       "value": 978.25,
       "quote_time_et": "2026-11-11 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 138.21,
+      "ext_price": 138.1,
       "ext_label": "post-market",
       "share_pct": 6.07
     },
@@ -94,7 +94,7 @@
       "day_change_pct": 3.91,
       "value": 14170.0,
       "quote_time_et": "2026-11-11 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
       "ext_price": 139.66,
       "ext_label": "post-market",
@@ -141,7 +141,7 @@
       "last_trade_et": "2026-11-11 15:09 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
-      "prob_finish_itm": 0.0855,
+      "prob_finish_itm": 0.0849,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 3,
@@ -543,13 +543,13 @@
       "change": -3.34,
       "change_pct": -2.33,
       "quote_time_et": "2026-11-11 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 143.4,
         "day_high": 145.16,
         "day_low": 138.62,
         "volume": 111844290.0,
-        "avg_volume": 96526671.0,
+        "avg_volume": 96534556.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
         "market_cap": 1897953755136.0,
@@ -562,7 +562,7 @@
       "spark": [
         [
           0,
-          144.29
+          144.27
         ],
         [
           5,
@@ -870,7 +870,7 @@
         ],
         [
           385,
-          139.83
+          139.84
         ]
       ],
       "spark_base": 143.09
@@ -886,13 +886,13 @@
       "change": 5.33,
       "change_pct": 3.91,
       "quote_time_et": "2026-11-11 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 140.07,
         "day_high": 143.22,
         "day_low": 139.09,
         "volume": 2009602.0,
-        "avg_volume": 2062250.0,
+        "avg_volume": 2062617.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
         "market_cap": null,
@@ -1229,13 +1229,13 @@
       "change": 4.93,
       "change_pct": 2.92,
       "quote_time_et": "2026-11-11 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 172.72,
         "day_high": 177.54,
         "day_low": 170.77,
         "volume": 281514030.0,
-        "avg_volume": 127852095.0,
+        "avg_volume": 127893868.0,
         "high_52w": 243.37,
         "low_52w": 164.27,
         "market_cap": 4195058188288.0,
@@ -1544,7 +1544,7 @@
         ],
         [
           370,
-          174.72
+          174.73
         ],
         [
           375,
@@ -1572,13 +1572,13 @@
       "change": -4.7,
       "change_pct": -1.74,
       "quote_time_et": "2026-11-11 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 273.26,
         "day_high": 274.87,
         "day_low": 265.62,
         "volume": 37223624.0,
-        "avg_volume": 39078429.0,
+        "avg_volume": 39080168.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
         "market_cap": 2878132977664.0,
@@ -1899,7 +1899,7 @@
         ],
         [
           385,
-          266.19
+          266.22
         ]
       ],
       "spark_base": 270.87
@@ -1915,7 +1915,7 @@
       "change": -0.34,
       "change_pct": -0.31,
       "quote_time_et": "2026-11-11 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 109.7,
         "day_high": 110.24,
@@ -2580,7 +2580,7 @@
   },
   "caveats": [
     "UPRO Nov 20 2026 $154 call: wide bid/ask (0.15 x 0.40); the mid-price mark is approximate.",
-    "Market not in regular session (After hours): stocks valued at the regular-session close; extended-hours quotes are not used.",
+    "Market not in regular session (Closed (after hours)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }
