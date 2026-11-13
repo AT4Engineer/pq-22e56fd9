@@ -178,5 +178,18 @@
     "cash_before": 1429.17,
     "cash_after": 987.3,
     "source": "manual"
+  },
+  {
+    "id": "T21",
+    "type": "watchlist_add",
+    "date": "2026-11-13",
+    "symbol": "TSLA",
+    "fees": 0.0,
+    "description": "Watchlist add TSLA",
+    "cash_before": 987.3,
+    "cash_after": 987.3,
+    "issue": 21,
+    "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/21",
+    "applied_at_et": "2026-11-13 11:04:43 ET"
   }
 ]
