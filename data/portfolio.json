@@ -1,31 +1,31 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-14 01:10:15 ET",
-  "generated_at_iso": "2026-11-14T01:10:15-05:00",
+  "generated_at_et": "2026-11-15 18:51:18 ET",
+  "generated_at_iso": "2026-11-15T18:51:18-05:00",
   "trade_date": "2026-11-13",
   "quotes_as_of_et": "2026-11-13 16:00 ET",
   "market_state": "CLOSED",
   "market_label": "Market closed",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 15788.57,
-    "prev_total": 15828.97,
-    "day_change": -40.4,
-    "day_change_pct": -0.26,
+    "total": 15783.57,
+    "prev_total": 15962.38,
+    "day_change": -178.81,
+    "day_change_pct": -1.12,
     "stocks_value": 14823.77,
     "cash": 987.3,
-    "cash_share_pct": 6.25,
-    "option_liability": -22.5,
+    "cash_share_pct": 6.26,
+    "option_liability": -27.5,
     "extended": {
       "available": true,
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 15568.55,
-      "close_total": 15788.57,
+      "total": 15563.55,
+      "close_total": 15783.57,
       "change": -220.02,
       "change_pct": -1.39,
-      "option_liability": -22.5,
+      "option_liability": -27.5,
       "cash": 987.3,
       "positions": [
         {
@@ -48,8 +48,8 @@
         }
       ],
       "quote_time_et": "2026-11-13 19:59 ET",
-      "as_of_et": "2026-11-14 01:10:15 ET",
-      "as_of_iso": "2026-11-14T01:10:15-05:00",
+      "as_of_et": "2026-11-15 18:51:18 ET",
+      "as_of_iso": "2026-11-15T18:51:18-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -98,13 +98,13 @@
       "price_source": "regular-session close",
       "ext_price": 136.5,
       "ext_label": "post-market",
-      "share_pct": 87.72
+      "share_pct": 87.75
     }
   ],
   "options": [
     {
       "open_price": 4.6447,
-      "unrealized": 441.97,
+      "unrealized": 436.97,
       "key": "UPRO|2026-11-20|154|call",
       "label": "UPRO Nov 20 2026 $154 call",
       "contract": "UPRO261120C00154000",
@@ -116,7 +116,7 @@
       "strike": 154.0,
       "expiry": "2026-11-20",
       "expiry_close_iso": "2026-11-20T16:00:00-05:00",
-      "dte": 6,
+      "dte": 7,
       "expired": false,
       "spot": 138.5,
       "distance": -15.5,
@@ -124,15 +124,15 @@
       "status": "OTM",
       "itm": false,
       "covered": true,
-      "bid": 0.05,
+      "bid": 0.15,
       "ask": 0.4,
       "last": 0.25,
-      "mark": 0.225,
-      "mark_source": "last good bid/ask mid (session 2026-11-13, saved 2026-11-13 15:01:18 ET); no live bid/ask now",
+      "mark": 0.275,
+      "mark_source": "last good bid/ask mid (session 2026-11-11, saved 2026-11-11 16:46:54 ET); no live bid/ask now",
       "intrinsic": 0.0,
-      "extrinsic": 0.225,
-      "liability": -22.5,
-      "day_change": 5.0,
+      "extrinsic": 0.275,
+      "liability": -27.5,
+      "day_change": 0.0,
       "prev_mark": 0.275,
       "prev_mark_source": "recorded mark for prior session 2026-11-12",
       "iv": 0.5234,
@@ -144,9 +144,9 @@
       "prob_finish_itm": 0.0617,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
-      "quote_quality": 3,
+      "quote_quality": 2,
       "quote_reused": true,
-      "quote_as_of_et": "2026-11-13 15:01:18 ET"
+      "quote_as_of_et": "2026-11-11 16:46:54 ET"
     }
   ],
   "stats": {
@@ -334,15 +334,15 @@
     },
     {
       "date": "2026-11-12",
-      "total": 15828.97,
-      "day_change": -279.08,
-      "day_change_pct": -1.73
+      "total": 15962.38,
+      "day_change": -145.67,
+      "day_change_pct": -0.9
     },
     {
       "date": "2026-11-13",
-      "total": 15745.49,
-      "day_change": -83.48,
-      "day_change_pct": -0.53
+      "total": 15783.57,
+      "day_change": -178.81,
+      "day_change_pct": -1.12
     }
   ],
   "watchlist": [
@@ -405,20 +405,20 @@
       "multiplier": 100,
       "spot": 138.5,
       "itm": false,
-      "mark": 0.225,
-      "bid": 0.05,
+      "mark": 0.275,
+      "bid": 0.15,
       "ask": 0.4,
-      "mid": 0.225,
-      "mark_source": "last good bid/ask mid (session 2026-11-13, saved 2026-11-13 15:01:18 ET); no live bid/ask now",
+      "mid": 0.275,
+      "mark_source": "last good bid/ask mid (session 2026-11-11, saved 2026-11-11 16:46:54 ET); no live bid/ask now",
       "quote_reused": true,
-      "quote_as_of_et": "2026-11-13 15:01:18 ET",
+      "quote_as_of_et": "2026-11-11 16:46:54 ET",
       "buyback_ask": 40.0,
-      "buyback_mid": 22.5,
-      "buyback_mark": 22.5,
+      "buyback_mid": 27.5,
+      "buyback_mark": 27.5,
       "premium_received_per_share": 4.6447,
       "premium_received": 464.47,
       "pl_if_closed_ask": 424.47,
-      "pl_if_closed_mid": 441.97,
+      "pl_if_closed_mid": 436.97,
       "deadline_iso": "2026-11-20T16:00:00-05:00",
       "deadline_text": "Buy to close before 4:00 PM ET Fri Nov 20 to keep your shares",
       "expired": false
@@ -2609,10 +2609,10 @@
       "display": "UPRO 154C",
       "name": "UPRO Nov 20 2026 $154 call",
       "underlying": "UPRO",
-      "price": 0.225,
+      "price": 0.275,
       "prev_close": 0.275,
-      "change": -0.05,
-      "change_pct": -18.18,
+      "change": 0.0,
+      "change_pct": 0.0,
       "held": true,
       "watch": false,
       "chart": "data/charts/UPRO261120C00154000.json",
@@ -2935,8 +2935,8 @@
     }
   },
   "caveats": [
-    "UPRO Nov 20 2026 $154 call: no live bid/ask right now (market closed or no quotes); using the last good bid/ask mid 0.23 from session 2026-11-13 (saved 2026-11-13 15:01:18 ET).",
-    "UPRO Nov 20 2026 $154 call: wide bid/ask (0.05 x 0.40); the mid-price mark is approximate.",
+    "UPRO Nov 20 2026 $154 call: no live bid/ask right now (market closed or no quotes); using the last good bid/ask mid 0.28 from session 2026-11-11 (saved 2026-11-11 16:46:54 ET).",
+    "UPRO Nov 20 2026 $154 call: wide bid/ask (0.15 x 0.40); the mid-price mark is approximate.",
     "Market not in regular session (Market closed): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
