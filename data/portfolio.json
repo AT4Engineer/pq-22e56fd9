@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-16 16:55:42 ET",
-  "generated_at_iso": "2026-11-16T16:55:42-05:00",
+  "generated_at_et": "2026-11-16 18:17:07 ET",
+  "generated_at_iso": "2026-11-16T18:17:07-05:00",
   "trade_date": "2026-11-16",
   "quotes_as_of_et": "2026-11-16 16:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 14943.54,
+      "total": 15007.5,
       "close_total": 14994.32,
-      "change": -50.78,
-      "change_pct": -0.34,
+      "change": 13.18,
+      "change_pct": 0.09,
       "option_liability": -22.5,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 137.36,
-          "ext_price": 137.82,
-          "value": 964.74,
-          "change": 3.22,
-          "change_pct": 0.33
+          "ext_price": 137.96,
+          "value": 965.7,
+          "change": 4.18,
+          "change_pct": 0.43
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 130.68,
-          "ext_price": 130.14,
-          "value": 13014.0,
-          "change": -54.0,
-          "change_pct": -0.41
+          "ext_price": 130.77,
+          "value": 13077.0,
+          "change": 9.0,
+          "change_pct": 0.07
         }
       ],
-      "quote_time_et": "2026-11-16 16:55 ET",
-      "as_of_et": "2026-11-16 16:55:42 ET",
-      "as_of_iso": "2026-11-16T16:55:42-05:00",
+      "quote_time_et": "2026-11-16 18:16 ET",
+      "as_of_et": "2026-11-16 18:17:07 ET",
+      "as_of_iso": "2026-11-16T18:17:07-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-11-16 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 137.82,
+      "ext_price": 137.96,
       "ext_label": "post-market",
       "share_pct": 6.41
     },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-11-16 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 130.14,
+      "ext_price": 130.77,
       "ext_label": "post-market",
       "share_pct": 87.15
     }
@@ -141,7 +141,7 @@
       "last_trade_et": "2026-11-11 15:09 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
-      "prob_finish_itm": 0.0012,
+      "prob_finish_itm": 0.0011,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 2,
@@ -567,7 +567,7 @@
         "open": 138.45,
         "day_high": 139.98,
         "day_low": 135.73,
-        "volume": 100406047.0,
+        "volume": 100883675.0,
         "avg_volume": 95022671.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
@@ -910,7 +910,7 @@
         "open": 135.96,
         "day_high": 136.03,
         "day_low": 129.57,
-        "volume": 3403737.0,
+        "volume": 3419402.0,
         "avg_volume": 2096470.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -1252,8 +1252,8 @@
       "stats": {
         "open": 159.0,
         "day_high": 163.0,
-        "day_low": 155.01,
-        "volume": 326601200.0,
+        "day_low": 155.02,
+        "volume": 329959344.0,
         "avg_volume": 146134656.0,
         "high_52w": 243.37,
         "low_52w": 148.8,
@@ -1596,7 +1596,7 @@
         "open": 262.71,
         "day_high": 262.92,
         "day_low": 256.68,
-        "volume": 47307388.0,
+        "volume": 47704999.0,
         "avg_volume": 39301387.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
@@ -1738,7 +1738,7 @@
         ],
         [
           160,
-          259.0
+          259.02
         ],
         [
           165,
@@ -1939,7 +1939,7 @@
         "open": 108.56,
         "day_high": 109.3,
         "day_low": 107.63,
-        "volume": 3584683.0,
+        "volume": 3584887.0,
         "avg_volume": 3250481.0,
         "high_52w": 111.45,
         "low_52w": 76.55,
@@ -2282,7 +2282,7 @@
         "open": 387.11,
         "day_high": 389.8,
         "day_low": 375.63,
-        "volume": 29613692.0,
+        "volume": 30080721.0,
         "avg_volume": 37643070.0,
         "high_52w": 498.83,
         "low_52w": 297.38,
