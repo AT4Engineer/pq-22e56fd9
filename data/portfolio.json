@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-17 18:55:39 ET",
-  "generated_at_iso": "2026-11-17T18:55:39-05:00",
+  "generated_at_et": "2026-11-17 19:10:27 ET",
+  "generated_at_iso": "2026-11-17T19:10:27-05:00",
   "trade_date": "2026-11-17",
   "quotes_as_of_et": "2026-11-17 16:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 14853.2,
+      "total": 14893.64,
       "close_total": 14610.7,
-      "change": 242.5,
-      "change_pct": 1.66,
+      "change": 282.94,
+      "change_pct": 1.94,
       "option_liability": -22.5,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 141.7,
-          "ext_price": 143.2,
-          "value": 1002.4,
-          "change": 10.5,
-          "change_pct": 1.06
+          "ext_price": 143.41,
+          "value": 1003.84,
+          "change": 11.94,
+          "change_pct": 1.2
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 126.54,
-          "ext_price": 128.86,
-          "value": 12886.0,
-          "change": 232.0,
-          "change_pct": 1.83
+          "ext_price": 129.25,
+          "value": 12925.0,
+          "change": 271.0,
+          "change_pct": 2.14
         }
       ],
-      "quote_time_et": "2026-11-17 18:55 ET",
-      "as_of_et": "2026-11-17 18:55:39 ET",
-      "as_of_iso": "2026-11-17T18:55:39-05:00",
+      "quote_time_et": "2026-11-17 19:10 ET",
+      "as_of_et": "2026-11-17 19:10:27 ET",
+      "as_of_iso": "2026-11-17T19:10:27-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-11-17 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 143.2,
+      "ext_price": 143.41,
       "ext_label": "post-market",
       "share_pct": 6.79
     },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-11-17 16:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 128.86,
+      "ext_price": 129.25,
       "ext_label": "post-market",
       "share_pct": 86.61
     }
@@ -450,7 +450,7 @@
           "bid": 9.0,
           "ask": 10.5,
           "last": 9.7,
-          "iv": 0.6038,
+          "iv": 0.6135,
           "oi": 417.0,
           "volume": 91.0,
           "last_trade_et": "2026-11-17 15:26 ET",
@@ -463,7 +463,7 @@
           "bid": 7.9,
           "ask": 10.0,
           "last": 8.62,
-          "iv": 0.5824,
+          "iv": 0.5918,
           "oi": 4.0,
           "volume": 1.0,
           "last_trade_et": "2026-11-17 10:57 ET",
@@ -476,7 +476,7 @@
           "bid": 7.2,
           "ask": 9.0,
           "last": 7.79,
-          "iv": 0.5568,
+          "iv": 0.5657,
           "oi": 0.0,
           "volume": 8.0,
           "last_trade_et": "2026-11-17 15:03 ET",
@@ -489,7 +489,7 @@
           "bid": 6.7,
           "ask": 8.8,
           "last": 7.2,
-          "iv": 0.5922,
+          "iv": 0.6017,
           "oi": 260.0,
           "volume": 7.0,
           "last_trade_et": "2026-11-17 15:39 ET",
@@ -502,7 +502,7 @@
           "bid": 6.1,
           "ask": 7.3,
           "last": 6.26,
-          "iv": 0.5494,
+          "iv": 0.5582,
           "oi": 301.0,
           "volume": 77.0,
           "last_trade_et": "2026-11-17 15:05 ET",
@@ -516,7 +516,7 @@
       "ask": 9.0,
       "mid": 8.1,
       "last": 7.79,
-      "iv": 0.5568,
+      "iv": 0.5657,
       "oi": 0.0,
       "volume": 8.0,
       "last_trade_et": "2026-11-17 15:03 ET",
@@ -572,7 +572,7 @@
       "stats": {
         "open": 138.58,
         "day_high": 142.11,
-        "day_low": 137.4,
+        "day_low": 137.39,
         "volume": 87396571.0,
         "avg_volume": 94798412.0,
         "high_52w": 225.64,
@@ -1581,7 +1581,7 @@
         ],
         [
           385,
-          155.47
+          155.46
         ]
       ],
       "spark_base": 156.14
@@ -1924,7 +1924,7 @@
         ],
         [
           385,
-          257.85
+          257.84
         ]
       ],
       "spark_base": 257.75
