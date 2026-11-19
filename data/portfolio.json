@@ -1,11 +1,11 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-18 21:30:34 ET",
-  "generated_at_iso": "2026-11-18T21:30:34-05:00",
+  "generated_at_et": "2026-11-19 02:14:53 ET",
+  "generated_at_iso": "2026-11-19T02:14:53-05:00",
   "trade_date": "2026-11-18",
   "quotes_as_of_et": "2026-11-18 16:00 ET",
-  "market_state": "POSTPOST",
-  "market_label": "Closed (after hours)",
+  "market_state": "PREPRE",
+  "market_label": "Closed (overnight)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
     "total": 14505.8,
@@ -17,8 +17,8 @@
     "cash_share_pct": 6.81,
     "option_liability": -26.0,
     "extended": {
-      "available": true,
-      "stale": false,
+      "available": false,
+      "stale": true,
       "session": "post-market",
       "session_label": "After hours",
       "total": 14790.62,
@@ -50,7 +50,7 @@
       "quote_time_et": "2026-11-18 19:59 ET",
       "as_of_et": "2026-11-18 21:30:34 ET",
       "as_of_iso": "2026-11-18T21:30:34-05:00",
-      "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
+      "note": "No extended-hours trading right now. Showing the last extended-hours value."
     }
   },
   "positions": [
@@ -71,10 +71,10 @@
       "day_change_pct": 1.27,
       "value": 1004.5,
       "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "POSTPOST",
+      "market_state": "PREPRE",
       "price_source": "regular-session close",
-      "ext_price": 145.05,
-      "ext_label": "post-market",
+      "ext_price": null,
+      "ext_label": "",
       "share_pct": 6.92
     },
     {
@@ -94,10 +94,10 @@
       "day_change_pct": -0.9,
       "value": 12540.0,
       "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "POSTPOST",
+      "market_state": "PREPRE",
       "price_source": "regular-session close",
-      "ext_price": 128.14,
-      "ext_label": "post-market",
+      "ext_price": null,
+      "ext_label": "",
       "share_pct": 86.45
     }
   ],
@@ -116,7 +116,7 @@
       "strike": 154.0,
       "expiry": "2026-11-20",
       "expiry_close_iso": "2026-11-20T16:00:00-05:00",
-      "dte": 2,
+      "dte": 1,
       "expired": false,
       "spot": 125.4,
       "distance": -28.6,
@@ -125,7 +125,7 @@
       "itm": false,
       "covered": true,
       "bid": 0.0,
-      "ask": 0.55,
+      "ask": 0.0,
       "last": 0.26,
       "mark": 0.26,
       "mark_source": "last trade (no two-sided quote)",
@@ -135,13 +135,13 @@
       "day_change": -3.5,
       "prev_mark": 0.225,
       "prev_mark_source": "recorded mark for prior session 2026-11-17",
-      "iv": 1.5977,
-      "open_interest": 91.0,
+      "iv": 0.5,
+      "open_interest": 0.0,
       "volume": 2.0,
       "last_trade_et": "2026-11-18 12:32 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
-      "prob_finish_itm": 0.0286,
+      "prob_finish_itm": 0.0,
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 2,
@@ -425,17 +425,17 @@
       "itm": false,
       "mark": 0.26,
       "bid": 0.0,
-      "ask": 0.55,
+      "ask": 0.0,
       "mid": null,
       "mark_source": "last trade (no two-sided quote)",
       "quote_reused": false,
       "quote_as_of_et": null,
-      "buyback_ask": 55.0,
+      "buyback_ask": null,
       "buyback_mid": null,
       "buyback_mark": 26.0,
       "premium_received_per_share": 4.6447,
       "premium_received": 464.47,
-      "pl_if_closed_ask": 409.47,
+      "pl_if_closed_ask": null,
       "pl_if_closed_mid": null,
       "deadline_iso": "2026-11-20T16:00:00-05:00",
       "deadline_text": "Buy to close before 4:00 PM ET Fri Nov 20 to keep your shares",
@@ -444,11 +444,11 @@
     "next": {
       "expiry": "2026-12-18",
       "expiry_label": "Fri Dec 18 2026",
-      "days": 30,
+      "days": 29,
       "spot": 125.4,
       "contracts": 1,
       "multiplier": 100,
-      "quote_note": null,
+      "quote_note": "No live bid/ask right now; using the last good 2026-12-18 chain from session 2026-11-18 (saved 2026-11-18 19:10:41 ET).",
       "strikes": [
         {
           "strike": 123.0,
@@ -527,9 +527,9 @@
       "volume": 6.0,
       "last_trade_et": "2026-11-18 13:33 ET",
       "est_premium": 840.0,
-      "net_roll": 785.0,
+      "net_roll": null,
       "premium_pct": 6.7,
-      "annualized_pct": 81.5,
+      "annualized_pct": 84.3,
       "breakeven": 117.0,
       "called_away_value": 12500.0,
       "max_gain_vs_today": 800.0,
@@ -574,7 +574,7 @@
       "change": 1.8,
       "change_pct": 1.27,
       "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "POSTPOST",
+      "market_state": "PREPRE",
       "stats": {
         "open": 143.23,
         "day_high": 146.31,
@@ -917,7 +917,7 @@
       "change": -1.14,
       "change_pct": -0.9,
       "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "POSTPOST",
+      "market_state": "PREPRE",
       "stats": {
         "open": 127.03,
         "day_high": 127.88,
@@ -1260,7 +1260,7 @@
       "change": -4.5,
       "change_pct": -2.89,
       "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "POSTPOST",
+      "market_state": "PREPRE",
       "stats": {
         "open": 159.19,
         "day_high": 159.7,
@@ -1323,7 +1323,7 @@
         ],
         [
           55,
-          153.8
+          153.79
         ],
         [
           60,
@@ -1603,7 +1603,7 @@
       "change": 9.85,
       "change_pct": 3.82,
       "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "POSTPOST",
+      "market_state": "PREPRE",
       "stats": {
         "open": 259.81,
         "day_high": 268.29,
@@ -1946,7 +1946,7 @@
       "change": 0.59,
       "change_pct": 0.57,
       "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "POSTPOST",
+      "market_state": "PREPRE",
       "stats": {
         "open": 104.93,
         "day_high": 106.03,
@@ -2289,7 +2289,7 @@
       "change": 3.61,
       "change_pct": 0.95,
       "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "POSTPOST",
+      "market_state": "PREPRE",
       "stats": {
         "open": 385.19,
         "day_high": 389.27,
@@ -2608,7 +2608,7 @@
         ],
         [
           375,
-          383.99
+          383.94
         ],
         [
           380,
@@ -2953,7 +2953,8 @@
     }
   },
   "caveats": [
-    "Market not in regular session (Closed (after hours)): stocks valued at the regular-session close; extended-hours quotes are not used.",
+    "Next roll preview: No live bid/ask right now; using the last good 2026-12-18 chain from session 2026-11-18 (saved 2026-11-18 19:10:41 ET).",
+    "Market not in regular session (Closed (overnight)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }
