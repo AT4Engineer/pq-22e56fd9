@@ -1,21 +1,21 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-19 02:14:53 ET",
-  "generated_at_iso": "2026-11-19T02:14:53-05:00",
-  "trade_date": "2026-11-18",
-  "quotes_as_of_et": "2026-11-18 16:00 ET",
-  "market_state": "PREPRE",
-  "market_label": "Closed (overnight)",
+  "generated_at_et": "2026-11-19 09:45:35 ET",
+  "generated_at_iso": "2026-11-19T09:45:35-05:00",
+  "trade_date": "2026-11-19",
+  "quotes_as_of_et": "2026-11-19 09:45 ET",
+  "market_state": "REGULAR",
+  "market_label": "Market open",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
-    "total": 14505.8,
-    "prev_total": 14944.89,
-    "day_change": -439.09,
-    "day_change_pct": -2.94,
-    "stocks_value": 13544.5,
+    "total": 14914.03,
+    "prev_total": 14505.8,
+    "day_change": 408.23,
+    "day_change_pct": 2.81,
+    "stocks_value": 13949.23,
     "cash": 987.3,
-    "cash_share_pct": 6.81,
-    "option_liability": -26.0,
+    "cash_share_pct": 6.62,
+    "option_liability": -22.5,
     "extended": {
       "available": false,
       "stale": true,
@@ -64,47 +64,47 @@
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
       "shares": 7,
-      "price": 143.5,
-      "prev_close": 141.7,
-      "day_change_per_share": 1.8,
-      "day_change": 12.6,
-      "day_change_pct": 1.27,
-      "value": 1004.5,
-      "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "PREPRE",
-      "price_source": "regular-session close",
+      "price": 145.03,
+      "prev_close": 143.5,
+      "day_change_per_share": 1.53,
+      "day_change": 10.72,
+      "day_change_pct": 1.07,
+      "value": 1015.22,
+      "quote_time_et": "2026-11-19 09:45 ET",
+      "market_state": "REGULAR",
+      "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 6.92
+      "share_pct": 6.81
     },
     {
       "avg_cost": 154.155,
       "cost_basis": 15415.5,
-      "unrealized": -2875.5,
-      "unrealized_pct": -18.65,
+      "unrealized": -2481.49,
+      "unrealized_pct": -16.1,
       "symbol": "UPRO",
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
       "shares": 100,
-      "price": 125.4,
-      "prev_close": 126.54,
-      "day_change_per_share": -1.14,
-      "day_change": -114.0,
-      "day_change_pct": -0.9,
-      "value": 12540.0,
-      "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "PREPRE",
-      "price_source": "regular-session close",
+      "price": 129.34,
+      "prev_close": 125.36,
+      "day_change_per_share": 3.98,
+      "day_change": 398.01,
+      "day_change_pct": 3.17,
+      "value": 12934.01,
+      "quote_time_et": "2026-11-19 09:45 ET",
+      "market_state": "REGULAR",
+      "price_source": "live regular session",
       "ext_price": null,
       "ext_label": "",
-      "share_pct": 86.45
+      "share_pct": 86.72
     }
   ],
   "options": [
     {
       "open_price": 4.6447,
-      "unrealized": 438.47,
+      "unrealized": 441.97,
       "key": "UPRO|2026-11-20|154|call",
       "label": "UPRO Nov 20 2026 $154 call",
       "contract": "UPRO261120C00154000",
@@ -118,26 +118,26 @@
       "expiry_close_iso": "2026-11-20T16:00:00-05:00",
       "dte": 1,
       "expired": false,
-      "spot": 125.4,
-      "distance": -28.6,
-      "distance_pct": -18.57,
+      "spot": 129.34,
+      "distance": -24.66,
+      "distance_pct": -16.01,
       "status": "OTM",
       "itm": false,
       "covered": true,
-      "bid": 0.0,
-      "ask": 0.0,
-      "last": 0.26,
-      "mark": 0.26,
-      "mark_source": "last trade (no two-sided quote)",
+      "bid": 0.05,
+      "ask": 0.4,
+      "last": 0.25,
+      "mark": 0.225,
+      "mark_source": "last good bid/ask mid (session 2026-11-13, saved 2026-11-13 15:01:18 ET); no live bid/ask now",
       "intrinsic": 0.0,
-      "extrinsic": 0.26,
-      "liability": -26.0,
-      "day_change": -3.5,
-      "prev_mark": 0.225,
-      "prev_mark_source": "recorded mark for prior session 2026-11-17",
-      "iv": 0.5,
-      "open_interest": 0.0,
-      "volume": 2.0,
+      "extrinsic": 0.225,
+      "liability": -22.5,
+      "day_change": 3.5,
+      "prev_mark": 0.26,
+      "prev_mark_source": "recorded mark for prior session 2026-11-18",
+      "iv": 0.5234,
+      "open_interest": 91.0,
+      "volume": 1.0,
       "last_trade_et": "2026-11-18 12:32 ET",
       "assignment_risk": "LOW",
       "assignment_note": "Well below the strike.",
@@ -145,12 +145,12 @@
       "assigned_proceeds": 15400.0,
       "shares_at_risk": 100,
       "quote_quality": 2,
-      "quote_reused": false,
-      "quote_as_of_et": null
+      "quote_reused": true,
+      "quote_as_of_et": "2026-11-13 15:01:18 ET"
     }
   ],
   "stats": {
-    "days_tracked": 33,
+    "days_tracked": 34,
     "all_time_high": 16874.38,
     "best_day": {
       "date": "2026-11-09",
@@ -361,6 +361,12 @@
       "total": 14505.8,
       "day_change": -439.09,
       "day_change_pct": -2.94
+    },
+    {
+      "date": "2026-11-19",
+      "total": 14914.03,
+      "day_change": 408.23,
+      "day_change_pct": 2.81
     }
   ],
   "watchlist": [
@@ -421,22 +427,22 @@
       "expiry": "2026-11-20",
       "contracts": 1,
       "multiplier": 100,
-      "spot": 125.4,
+      "spot": 129.34,
       "itm": false,
-      "mark": 0.26,
-      "bid": 0.0,
-      "ask": 0.0,
-      "mid": null,
-      "mark_source": "last trade (no two-sided quote)",
-      "quote_reused": false,
-      "quote_as_of_et": null,
-      "buyback_ask": null,
-      "buyback_mid": null,
-      "buyback_mark": 26.0,
+      "mark": 0.225,
+      "bid": 0.05,
+      "ask": 0.4,
+      "mid": 0.225,
+      "mark_source": "last good bid/ask mid (session 2026-11-13, saved 2026-11-13 15:01:18 ET); no live bid/ask now",
+      "quote_reused": true,
+      "quote_as_of_et": "2026-11-13 15:01:18 ET",
+      "buyback_ask": 40.0,
+      "buyback_mid": 22.5,
+      "buyback_mark": 22.5,
       "premium_received_per_share": 4.6447,
       "premium_received": 464.47,
-      "pl_if_closed_ask": null,
-      "pl_if_closed_mid": null,
+      "pl_if_closed_ask": 424.47,
+      "pl_if_closed_mid": 441.97,
       "deadline_iso": "2026-11-20T16:00:00-05:00",
       "deadline_text": "Buy to close before 4:00 PM ET Fri Nov 20 to keep your shares",
       "expired": false
@@ -445,50 +451,11 @@
       "expiry": "2026-12-18",
       "expiry_label": "Fri Dec 18 2026",
       "days": 29,
-      "spot": 125.4,
+      "spot": 129.34,
       "contracts": 1,
       "multiplier": 100,
       "quote_note": "No live bid/ask right now; using the last good 2026-12-18 chain from session 2026-11-18 (saved 2026-11-18 19:10:41 ET).",
       "strikes": [
-        {
-          "strike": 123.0,
-          "contract": "UPRO261218C00123000",
-          "bid": 0.0,
-          "ask": 0.0,
-          "last": 35.1,
-          "iv": 0.0,
-          "oi": 0.0,
-          "volume": 3.0,
-          "last_trade_et": "2026-08-28 12:43 ET",
-          "mid": null,
-          "atm": false
-        },
-        {
-          "strike": 124.0,
-          "contract": "UPRO261218C00124000",
-          "bid": 8.8,
-          "ask": 10.8,
-          "last": 9.78,
-          "iv": 0.6377,
-          "oi": 5.0,
-          "volume": 8.0,
-          "last_trade_et": "2026-11-17 15:14 ET",
-          "mid": 9.8,
-          "atm": false
-        },
-        {
-          "strike": 125.0,
-          "contract": "UPRO261218C00125000",
-          "bid": 8.4,
-          "ask": 9.5,
-          "last": 9.41,
-          "iv": 0.6117,
-          "oi": 372.0,
-          "volume": 6.0,
-          "last_trade_et": "2026-11-18 13:33 ET",
-          "mid": 8.95,
-          "atm": true
-        },
         {
           "strike": 126.0,
           "contract": "UPRO261218C00126000",
@@ -514,29 +481,68 @@
           "last_trade_et": "2026-11-17 15:03 ET",
           "mid": 7.95,
           "atm": false
+        },
+        {
+          "strike": 129.0,
+          "contract": "UPRO261218C00129000",
+          "bid": 5.9,
+          "ask": 7.2,
+          "last": 6.45,
+          "iv": 0.5659,
+          "oi": 264.0,
+          "volume": 10.0,
+          "last_trade_et": "2026-11-18 15:46 ET",
+          "mid": 6.55,
+          "atm": true
+        },
+        {
+          "strike": 130.0,
+          "contract": "UPRO261218C00130000",
+          "bid": 5.5,
+          "ask": 6.9,
+          "last": 6.05,
+          "iv": 0.5689,
+          "oi": 268.0,
+          "volume": 25.0,
+          "last_trade_et": "2026-11-18 15:40 ET",
+          "mid": 6.2,
+          "atm": false
+        },
+        {
+          "strike": 131.0,
+          "contract": "UPRO261218C00131000",
+          "bid": 4.9,
+          "ask": 6.6,
+          "last": 5.5,
+          "iv": 0.5632,
+          "oi": 108.0,
+          "volume": 11.0,
+          "last_trade_et": "2026-11-18 12:00 ET",
+          "mid": 5.75,
+          "atm": false
         }
       ],
-      "atm_strike": 125.0,
-      "contract": "UPRO261218C00125000",
-      "bid": 8.4,
-      "ask": 9.5,
-      "mid": 8.95,
-      "last": 9.41,
-      "iv": 0.6117,
-      "oi": 372.0,
-      "volume": 6.0,
-      "last_trade_et": "2026-11-18 13:33 ET",
-      "est_premium": 840.0,
-      "net_roll": null,
-      "premium_pct": 6.7,
-      "annualized_pct": 84.3,
-      "breakeven": 117.0,
-      "called_away_value": 12500.0,
-      "max_gain_vs_today": 800.0,
-      "above_text": "Above $125 on Fri Dec 18 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $125 ($12,500.00). You keep $840.00 either way.",
-      "below_text": "Below $125: the call expires worthless. You keep $840.00 and the 100 shares, which are worth less if UPRO fell.",
+      "atm_strike": 129.0,
+      "contract": "UPRO261218C00129000",
+      "bid": 5.9,
+      "ask": 7.2,
+      "mid": 6.55,
+      "last": 6.45,
+      "iv": 0.5659,
+      "oi": 264.0,
+      "volume": 10.0,
+      "last_trade_et": "2026-11-18 15:46 ET",
+      "est_premium": 590.0,
+      "net_roll": 550.0,
+      "premium_pct": 4.56,
+      "annualized_pct": 57.4,
+      "breakeven": 123.44,
+      "called_away_value": 12900.0,
+      "max_gain_vs_today": 555.99,
+      "above_text": "Above $129 on Fri Dec 18 2026: the call is in the money. Buy it back before 4:00 PM ET to keep the shares and roll again (it costs more the higher UPRO is), or let the 100 shares be sold at $129 ($12,900.00). You keep $590.00 either way.",
+      "below_text": "Below $129: the call expires worthless. You keep $590.00 and the 100 shares, which are worth less if UPRO fell.",
       "underlying": "UPRO",
-      "quote_time_et": "2026-11-18 16:00 ET"
+      "quote_time_et": "2026-11-19 09:45 ET"
     },
     "dividends": [
       {
@@ -569,21 +575,21 @@
       "name": "SpaceX",
       "long_name": "Space Exploration Technologies Corp.",
       "exchange": "Nasdaq",
-      "price": 143.5,
-      "prev_close": 141.7,
-      "change": 1.8,
-      "change_pct": 1.27,
-      "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "PREPRE",
+      "price": 145.03,
+      "prev_close": 143.5,
+      "change": 1.53,
+      "change_pct": 1.07,
+      "quote_time_et": "2026-11-19 09:45 ET",
+      "market_state": "REGULAR",
       "stats": {
-        "open": 143.23,
-        "day_high": 146.31,
-        "day_low": 141.22,
-        "volume": 85245028.0,
-        "avg_volume": 94886250.0,
+        "open": 144.91,
+        "day_high": 147.29,
+        "day_low": 143.85,
+        "volume": 15620683.0,
+        "avg_volume": 95025285.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
-        "market_cap": 1948882698240.0,
+        "market_cap": 1969675436032.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -593,318 +599,22 @@
       "spark": [
         [
           0,
-          143.88
+          147.24
         ],
         [
           5,
-          142.77
-        ],
-        [
-          10,
-          141.52
-        ],
-        [
-          15,
-          141.99
-        ],
-        [
-          20,
-          142.19
-        ],
-        [
-          25,
-          143.36
-        ],
-        [
-          30,
-          143.58
-        ],
-        [
-          35,
-          143.27
-        ],
-        [
-          40,
-          144.91
-        ],
-        [
-          45,
-          145.0
-        ],
-        [
-          50,
-          144.89
-        ],
-        [
-          55,
           145.96
         ],
         [
-          60,
-          145.43
+          10,
+          145.34
         ],
         [
-          65,
-          144.17
-        ],
-        [
-          70,
-          144.55
-        ],
-        [
-          75,
-          144.73
-        ],
-        [
-          80,
-          144.85
-        ],
-        [
-          85,
-          145.05
-        ],
-        [
-          90,
-          144.34
-        ],
-        [
-          95,
-          144.92
-        ],
-        [
-          100,
-          144.5
-        ],
-        [
-          105,
-          144.13
-        ],
-        [
-          110,
-          144.74
-        ],
-        [
-          115,
-          144.49
-        ],
-        [
-          120,
-          144.39
-        ],
-        [
-          125,
-          144.03
-        ],
-        [
-          130,
-          144.0
-        ],
-        [
-          135,
-          144.26
-        ],
-        [
-          140,
-          143.45
-        ],
-        [
-          145,
-          144.04
-        ],
-        [
-          150,
-          144.28
-        ],
-        [
-          155,
-          144.2
-        ],
-        [
-          160,
-          143.83
-        ],
-        [
-          165,
-          144.18
-        ],
-        [
-          170,
-          144.98
-        ],
-        [
-          175,
-          144.84
-        ],
-        [
-          180,
-          144.96
-        ],
-        [
-          185,
-          144.55
-        ],
-        [
-          190,
-          144.37
-        ],
-        [
-          195,
-          144.63
-        ],
-        [
-          200,
-          145.11
-        ],
-        [
-          205,
-          145.06
-        ],
-        [
-          210,
-          145.22
-        ],
-        [
-          215,
+          15,
           144.99
-        ],
-        [
-          220,
-          144.41
-        ],
-        [
-          225,
-          144.36
-        ],
-        [
-          230,
-          144.67
-        ],
-        [
-          235,
-          144.15
-        ],
-        [
-          240,
-          144.11
-        ],
-        [
-          245,
-          144.38
-        ],
-        [
-          250,
-          144.47
-        ],
-        [
-          255,
-          144.4
-        ],
-        [
-          260,
-          144.47
-        ],
-        [
-          265,
-          144.32
-        ],
-        [
-          270,
-          144.06
-        ],
-        [
-          275,
-          143.99
-        ],
-        [
-          280,
-          144.38
-        ],
-        [
-          285,
-          144.01
-        ],
-        [
-          290,
-          144.37
-        ],
-        [
-          295,
-          144.6
-        ],
-        [
-          300,
-          144.44
-        ],
-        [
-          305,
-          143.92
-        ],
-        [
-          310,
-          143.99
-        ],
-        [
-          315,
-          144.07
-        ],
-        [
-          320,
-          144.07
-        ],
-        [
-          325,
-          143.88
-        ],
-        [
-          330,
-          143.99
-        ],
-        [
-          335,
-          144.11
-        ],
-        [
-          340,
-          144.02
-        ],
-        [
-          345,
-          143.76
-        ],
-        [
-          350,
-          143.67
-        ],
-        [
-          355,
-          143.35
-        ],
-        [
-          360,
-          143.45
-        ],
-        [
-          365,
-          143.23
-        ],
-        [
-          370,
-          142.94
-        ],
-        [
-          375,
-          143.25
-        ],
-        [
-          380,
-          143.75
-        ],
-        [
-          385,
-          143.47
         ]
       ],
-      "spark_base": 141.7
+      "spark_base": 143.5
     },
     "UPRO": {
       "symbol": "UPRO",
@@ -912,18 +622,18 @@
       "name": "ProShares UltraPro S&P 500 (3x)",
       "long_name": "ProShares UltraPro S&P500",
       "exchange": "NYSE Arca",
-      "price": 125.4,
-      "prev_close": 126.54,
-      "change": -1.14,
-      "change_pct": -0.9,
-      "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "PREPRE",
+      "price": 129.34,
+      "prev_close": 125.36,
+      "change": 3.98,
+      "change_pct": 3.17,
+      "quote_time_et": "2026-11-19 09:45 ET",
+      "market_state": "REGULAR",
       "stats": {
-        "open": 127.03,
-        "day_high": 127.88,
-        "day_low": 123.58,
-        "volume": 2499017.0,
-        "avg_volume": 2167448.0,
+        "open": 129.0,
+        "day_high": 130.18,
+        "day_low": 127.98,
+        "volume": 809586.0,
+        "avg_volume": 2178250.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
         "market_cap": null,
@@ -936,318 +646,22 @@
       "spark": [
         [
           0,
-          127.08
+          130.07
         ],
         [
           5,
-          126.36
+          128.64
         ],
         [
           10,
-          125.56
+          129.47
         ],
         [
           15,
-          125.1
-        ],
-        [
-          20,
-          125.8
-        ],
-        [
-          25,
-          127.14
-        ],
-        [
-          30,
-          126.49
-        ],
-        [
-          35,
-          126.0
-        ],
-        [
-          40,
-          126.41
-        ],
-        [
-          45,
-          126.35
-        ],
-        [
-          50,
-          126.01
-        ],
-        [
-          55,
-          126.2
-        ],
-        [
-          60,
-          125.84
-        ],
-        [
-          65,
-          125.43
-        ],
-        [
-          70,
-          125.04
-        ],
-        [
-          75,
-          124.55
-        ],
-        [
-          80,
-          124.9
-        ],
-        [
-          85,
-          125.59
-        ],
-        [
-          90,
-          125.26
-        ],
-        [
-          95,
-          125.41
-        ],
-        [
-          100,
-          124.75
-        ],
-        [
-          105,
-          124.36
-        ],
-        [
-          110,
-          125.14
-        ],
-        [
-          115,
-          124.51
-        ],
-        [
-          120,
-          124.81
-        ],
-        [
-          125,
-          124.18
-        ],
-        [
-          130,
-          124.21
-        ],
-        [
-          135,
-          124.38
-        ],
-        [
-          140,
-          123.86
-        ],
-        [
-          145,
-          124.89
-        ],
-        [
-          150,
-          125.39
-        ],
-        [
-          155,
-          125.18
-        ],
-        [
-          160,
-          125.12
-        ],
-        [
-          165,
-          125.8
-        ],
-        [
-          170,
-          126.44
-        ],
-        [
-          175,
-          126.89
-        ],
-        [
-          180,
-          126.98
-        ],
-        [
-          185,
-          126.28
-        ],
-        [
-          190,
-          126.07
-        ],
-        [
-          195,
-          126.01
-        ],
-        [
-          200,
-          126.29
-        ],
-        [
-          205,
-          125.97
-        ],
-        [
-          210,
-          125.85
-        ],
-        [
-          215,
-          125.45
-        ],
-        [
-          220,
-          125.25
-        ],
-        [
-          225,
-          125.82
-        ],
-        [
-          230,
-          126.29
-        ],
-        [
-          235,
-          126.33
-        ],
-        [
-          240,
-          126.61
-        ],
-        [
-          245,
-          126.9
-        ],
-        [
-          250,
-          127.1
-        ],
-        [
-          255,
-          126.98
-        ],
-        [
-          260,
-          126.88
-        ],
-        [
-          265,
-          126.83
-        ],
-        [
-          270,
-          126.06
-        ],
-        [
-          275,
-          125.45
-        ],
-        [
-          280,
-          125.96
-        ],
-        [
-          285,
-          125.5
-        ],
-        [
-          290,
-          125.74
-        ],
-        [
-          295,
-          125.68
-        ],
-        [
-          300,
-          125.47
-        ],
-        [
-          305,
-          125.38
-        ],
-        [
-          310,
-          125.47
-        ],
-        [
-          315,
-          125.32
-        ],
-        [
-          320,
-          125.39
-        ],
-        [
-          325,
-          125.36
-        ],
-        [
-          330,
-          125.57
-        ],
-        [
-          335,
-          125.52
-        ],
-        [
-          340,
-          125.65
-        ],
-        [
-          345,
-          125.51
-        ],
-        [
-          350,
-          125.25
-        ],
-        [
-          355,
-          125.27
-        ],
-        [
-          360,
-          125.19
-        ],
-        [
-          365,
-          125.62
-        ],
-        [
-          370,
-          125.63
-        ],
-        [
-          375,
-          125.56
-        ],
-        [
-          380,
-          125.83
-        ],
-        [
-          385,
-          125.42
+          129.34
         ]
       ],
-      "spark_base": 126.54
+      "spark_base": 125.36
     },
     "NVDA": {
       "symbol": "NVDA",
@@ -1255,21 +669,21 @@
       "name": "NVIDIA Corporation",
       "long_name": "NVIDIA Corporation",
       "exchange": "NasdaqGS",
-      "price": 150.96,
-      "prev_close": 155.46,
-      "change": -4.5,
-      "change_pct": -2.89,
-      "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "PREPRE",
+      "price": 158.05,
+      "prev_close": 150.96,
+      "change": 7.09,
+      "change_pct": 4.7,
+      "quote_time_et": "2026-11-19 09:45 ET",
+      "market_state": "REGULAR",
       "stats": {
-        "open": 159.19,
-        "day_high": 159.7,
-        "day_low": 150.4,
-        "volume": 343007056.0,
-        "avg_volume": 154665550.0,
+        "open": 152.92,
+        "day_high": 158.13,
+        "day_low": 152.55,
+        "volume": 51850741.0,
+        "avg_volume": 158546367.0,
         "high_52w": 243.37,
         "low_52w": 148.8,
-        "market_cap": 3645231071232.0,
+        "market_cap": 3816433385472.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -1279,318 +693,22 @@
       "spark": [
         [
           0,
-          158.15
+          156.91
         ],
         [
           5,
-          156.56
+          156.73
         ],
         [
           10,
-          154.46
+          157.8
         ],
         [
           15,
-          154.49
-        ],
-        [
-          20,
-          154.31
-        ],
-        [
-          25,
-          154.82
-        ],
-        [
-          30,
-          155.14
-        ],
-        [
-          35,
-          154.62
-        ],
-        [
-          40,
-          154.76
-        ],
-        [
-          45,
-          154.3
-        ],
-        [
-          50,
-          153.03
-        ],
-        [
-          55,
-          153.79
-        ],
-        [
-          60,
-          153.85
-        ],
-        [
-          65,
-          152.63
-        ],
-        [
-          70,
-          152.38
-        ],
-        [
-          75,
-          152.76
-        ],
-        [
-          80,
-          152.68
-        ],
-        [
-          85,
-          153.25
-        ],
-        [
-          90,
-          152.29
-        ],
-        [
-          95,
-          152.82
-        ],
-        [
-          100,
-          152.46
-        ],
-        [
-          105,
-          152.18
-        ],
-        [
-          110,
-          152.67
-        ],
-        [
-          115,
-          152.0
-        ],
-        [
-          120,
-          152.01
-        ],
-        [
-          125,
-          151.67
-        ],
-        [
-          130,
-          151.57
-        ],
-        [
-          135,
-          151.85
-        ],
-        [
-          140,
-          151.03
-        ],
-        [
-          145,
-          151.67
-        ],
-        [
-          150,
-          152.24
-        ],
-        [
-          155,
-          151.88
-        ],
-        [
-          160,
-          151.39
-        ],
-        [
-          165,
-          152.19
-        ],
-        [
-          170,
-          152.57
-        ],
-        [
-          175,
-          152.85
-        ],
-        [
-          180,
-          152.73
-        ],
-        [
-          185,
-          152.06
-        ],
-        [
-          190,
-          152.07
-        ],
-        [
-          195,
-          151.87
-        ],
-        [
-          200,
-          151.93
-        ],
-        [
-          205,
-          151.79
-        ],
-        [
-          210,
-          151.71
-        ],
-        [
-          215,
-          151.34
-        ],
-        [
-          220,
-          151.4
-        ],
-        [
-          225,
-          151.79
-        ],
-        [
-          230,
-          152.16
-        ],
-        [
-          235,
-          152.13
-        ],
-        [
-          240,
-          152.18
-        ],
-        [
-          245,
-          152.16
-        ],
-        [
-          250,
-          152.26
-        ],
-        [
-          255,
-          152.19
-        ],
-        [
-          260,
-          152.21
-        ],
-        [
-          265,
-          152.39
-        ],
-        [
-          270,
-          151.82
-        ],
-        [
-          275,
-          151.53
-        ],
-        [
-          280,
-          151.65
-        ],
-        [
-          285,
-          151.58
-        ],
-        [
-          290,
-          151.84
-        ],
-        [
-          295,
-          151.75
-        ],
-        [
-          300,
-          151.26
-        ],
-        [
-          305,
-          150.82
-        ],
-        [
-          310,
-          150.98
-        ],
-        [
-          315,
-          150.7
-        ],
-        [
-          320,
-          150.69
-        ],
-        [
-          325,
-          150.74
-        ],
-        [
-          330,
-          150.96
-        ],
-        [
-          335,
-          151.17
-        ],
-        [
-          340,
-          151.04
-        ],
-        [
-          345,
-          150.73
-        ],
-        [
-          350,
-          150.57
-        ],
-        [
-          355,
-          150.59
-        ],
-        [
-          360,
-          150.85
-        ],
-        [
-          365,
-          151.09
-        ],
-        [
-          370,
-          151.12
-        ],
-        [
-          375,
-          150.92
-        ],
-        [
-          380,
-          150.9
-        ],
-        [
-          385,
-          150.87
+          157.96
         ]
       ],
-      "spark_base": 155.46
+      "spark_base": 150.96
     },
     "AMZN": {
       "symbol": "AMZN",
@@ -1598,21 +716,21 @@
       "name": "Amazon.com, Inc.",
       "long_name": "Amazon.com, Inc.",
       "exchange": "NasdaqGS",
-      "price": 267.74,
-      "prev_close": 257.89,
-      "change": 9.85,
-      "change_pct": 3.82,
-      "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "PREPRE",
+      "price": 272.55,
+      "prev_close": 267.74,
+      "change": 4.81,
+      "change_pct": 1.79,
+      "quote_time_et": "2026-11-19 09:45 ET",
+      "market_state": "REGULAR",
       "stats": {
-        "open": 259.81,
-        "day_high": 268.29,
-        "day_low": 259.63,
-        "volume": 40845576.0,
-        "avg_volume": 39453635.0,
+        "open": 272.58,
+        "day_high": 273.65,
+        "day_low": 270.78,
+        "volume": 6069471.0,
+        "avg_volume": 39535467.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
-        "market_cap": 2895109423104.0,
+        "market_cap": 2947066888192.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -1622,318 +740,22 @@
       "spark": [
         [
           0,
-          261.07
+          272.27
         ],
         [
           5,
-          261.8
+          271.2
         ],
         [
           10,
-          261.38
+          272.61
         ],
         [
           15,
-          261.98
-        ],
-        [
-          20,
-          262.27
-        ],
-        [
-          25,
-          263.28
-        ],
-        [
-          30,
-          263.38
-        ],
-        [
-          35,
-          263.45
-        ],
-        [
-          40,
-          264.14
-        ],
-        [
-          45,
-          264.15
-        ],
-        [
-          50,
-          264.25
-        ],
-        [
-          55,
-          264.67
-        ],
-        [
-          60,
-          264.53
-        ],
-        [
-          65,
-          264.07
-        ],
-        [
-          70,
-          263.41
-        ],
-        [
-          75,
-          262.85
-        ],
-        [
-          80,
-          262.93
-        ],
-        [
-          85,
-          263.76
-        ],
-        [
-          90,
-          263.57
-        ],
-        [
-          95,
-          263.74
-        ],
-        [
-          100,
-          263.49
-        ],
-        [
-          105,
-          263.23
-        ],
-        [
-          110,
-          264.24
-        ],
-        [
-          115,
-          263.74
-        ],
-        [
-          120,
-          264.46
-        ],
-        [
-          125,
-          264.04
-        ],
-        [
-          130,
-          263.06
-        ],
-        [
-          135,
-          263.32
-        ],
-        [
-          140,
-          263.37
-        ],
-        [
-          145,
-          264.44
-        ],
-        [
-          150,
-          265.04
-        ],
-        [
-          155,
-          265.1
-        ],
-        [
-          160,
-          264.99
-        ],
-        [
-          165,
-          265.7
-        ],
-        [
-          170,
-          266.3
-        ],
-        [
-          175,
-          266.25
-        ],
-        [
-          180,
-          266.63
-        ],
-        [
-          185,
-          266.17
-        ],
-        [
-          190,
-          266.17
-        ],
-        [
-          195,
-          266.24
-        ],
-        [
-          200,
-          266.76
-        ],
-        [
-          205,
-          266.59
-        ],
-        [
-          210,
-          266.55
-        ],
-        [
-          215,
-          266.42
-        ],
-        [
-          220,
-          266.41
-        ],
-        [
-          225,
-          266.9
-        ],
-        [
-          230,
-          267.1
-        ],
-        [
-          235,
-          267.08
-        ],
-        [
-          240,
-          267.72
-        ],
-        [
-          245,
-          267.85
-        ],
-        [
-          250,
-          267.64
-        ],
-        [
-          255,
-          267.54
-        ],
-        [
-          260,
-          267.32
-        ],
-        [
-          265,
-          267.3
-        ],
-        [
-          270,
-          267.21
-        ],
-        [
-          275,
-          266.86
-        ],
-        [
-          280,
-          267.63
-        ],
-        [
-          285,
-          267.27
-        ],
-        [
-          290,
-          267.72
-        ],
-        [
-          295,
-          267.45
-        ],
-        [
-          300,
-          267.36
-        ],
-        [
-          305,
-          267.13
-        ],
-        [
-          310,
-          267.43
-        ],
-        [
-          315,
-          267.2
-        ],
-        [
-          320,
-          267.43
-        ],
-        [
-          325,
-          267.34
-        ],
-        [
-          330,
-          267.29
-        ],
-        [
-          335,
-          267.2
-        ],
-        [
-          340,
-          267.14
-        ],
-        [
-          345,
-          266.58
-        ],
-        [
-          350,
-          266.08
-        ],
-        [
-          355,
-          266.2
-        ],
-        [
-          360,
-          265.91
-        ],
-        [
-          365,
-          266.52
-        ],
-        [
-          370,
-          266.55
-        ],
-        [
-          375,
-          266.99
-        ],
-        [
-          380,
-          268.19
-        ],
-        [
-          385,
-          267.67
+          272.52
         ]
       ],
-      "spark_base": 257.89
+      "spark_base": 267.74
     },
     "NDAQ": {
       "symbol": "NDAQ",
@@ -1941,21 +763,21 @@
       "name": "Nasdaq, Inc.",
       "long_name": "Nasdaq, Inc.",
       "exchange": "NasdaqGS",
-      "price": 105.72,
-      "prev_close": 105.12,
-      "change": 0.59,
-      "change_pct": 0.57,
-      "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "PREPRE",
+      "price": 106.19,
+      "prev_close": 105.72,
+      "change": 0.47,
+      "change_pct": 0.44,
+      "quote_time_et": "2026-11-19 09:45 ET",
+      "market_state": "REGULAR",
       "stats": {
-        "open": 104.93,
-        "day_high": 106.03,
-        "day_low": 103.96,
-        "volume": 2759769.0,
-        "avg_volume": 3288679.0,
+        "open": 105.47,
+        "day_high": 106.61,
+        "day_low": 105.42,
+        "volume": 153243.0,
+        "avg_volume": 3284721.0,
         "high_52w": 111.45,
         "low_52w": 76.55,
-        "market_cap": 58670661632.0,
+        "market_cap": 58928717824.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -1965,318 +787,22 @@
       "spark": [
         [
           0,
-          105.26
+          106.1
         ],
         [
           5,
-          105.15
+          105.96
         ],
         [
           10,
-          104.98
+          106.44
         ],
         [
           15,
-          104.9
-        ],
-        [
-          20,
-          104.61
-        ],
-        [
-          25,
-          104.69
-        ],
-        [
-          30,
-          104.68
-        ],
-        [
-          35,
-          104.26
-        ],
-        [
-          40,
-          104.5
-        ],
-        [
-          45,
-          104.64
-        ],
-        [
-          50,
-          104.76
-        ],
-        [
-          55,
-          104.85
-        ],
-        [
-          60,
-          104.88
-        ],
-        [
-          65,
-          104.99
-        ],
-        [
-          70,
-          104.95
-        ],
-        [
-          75,
-          104.68
-        ],
-        [
-          80,
-          104.54
-        ],
-        [
-          85,
-          104.62
-        ],
-        [
-          90,
-          104.66
-        ],
-        [
-          95,
-          104.53
-        ],
-        [
-          100,
-          104.61
-        ],
-        [
-          105,
-          104.5
-        ],
-        [
-          110,
-          104.68
-        ],
-        [
-          115,
-          104.56
-        ],
-        [
-          120,
-          104.53
-        ],
-        [
-          125,
-          104.44
-        ],
-        [
-          130,
-          104.39
-        ],
-        [
-          135,
-          104.46
-        ],
-        [
-          140,
-          104.41
-        ],
-        [
-          145,
-          104.61
-        ],
-        [
-          150,
-          104.68
-        ],
-        [
-          155,
-          104.66
-        ],
-        [
-          160,
-          104.6
-        ],
-        [
-          165,
-          104.5
-        ],
-        [
-          170,
-          104.63
-        ],
-        [
-          175,
-          104.61
-        ],
-        [
-          180,
-          104.71
-        ],
-        [
-          185,
-          104.56
-        ],
-        [
-          190,
-          104.53
-        ],
-        [
-          195,
-          104.55
-        ],
-        [
-          200,
-          104.68
-        ],
-        [
-          205,
-          104.59
-        ],
-        [
-          210,
-          104.51
-        ],
-        [
-          215,
-          104.44
-        ],
-        [
-          220,
-          104.42
-        ],
-        [
-          225,
-          104.53
-        ],
-        [
-          230,
-          104.61
-        ],
-        [
-          235,
-          104.66
-        ],
-        [
-          240,
-          104.9
-        ],
-        [
-          245,
-          104.86
-        ],
-        [
-          250,
-          105.21
-        ],
-        [
-          255,
-          105.29
-        ],
-        [
-          260,
-          105.42
-        ],
-        [
-          265,
-          105.35
-        ],
-        [
-          270,
-          105.11
-        ],
-        [
-          275,
-          105.08
-        ],
-        [
-          280,
-          105.09
-        ],
-        [
-          285,
-          105.15
-        ],
-        [
-          290,
-          105.21
-        ],
-        [
-          295,
-          105.28
-        ],
-        [
-          300,
-          105.24
-        ],
-        [
-          305,
-          105.25
-        ],
-        [
-          310,
-          105.22
-        ],
-        [
-          315,
-          105.14
-        ],
-        [
-          320,
-          105.18
-        ],
-        [
-          325,
-          105.24
-        ],
-        [
-          330,
-          105.34
-        ],
-        [
-          335,
-          105.42
-        ],
-        [
-          340,
-          105.5
-        ],
-        [
-          345,
-          105.71
-        ],
-        [
-          350,
-          105.47
-        ],
-        [
-          355,
-          105.33
-        ],
-        [
-          360,
-          105.39
-        ],
-        [
-          365,
-          105.6
-        ],
-        [
-          370,
-          105.56
-        ],
-        [
-          375,
-          105.6
-        ],
-        [
-          380,
-          105.81
-        ],
-        [
-          385,
-          105.69
+          106.18
         ]
       ],
-      "spark_base": 105.12
+      "spark_base": 105.72
     },
     "TSLA": {
       "symbol": "TSLA",
@@ -2284,21 +810,21 @@
       "name": "Tesla, Inc.",
       "long_name": "Tesla, Inc.",
       "exchange": "NasdaqGS",
-      "price": 383.72,
-      "prev_close": 380.11,
-      "change": 3.61,
-      "change_pct": 0.95,
-      "quote_time_et": "2026-11-18 16:00 ET",
-      "market_state": "PREPRE",
+      "price": 389.73,
+      "prev_close": 383.72,
+      "change": 6.01,
+      "change_pct": 1.57,
+      "quote_time_et": "2026-11-19 09:45 ET",
+      "market_state": "REGULAR",
       "stats": {
-        "open": 385.19,
-        "day_high": 389.27,
-        "day_low": 378.36,
-        "volume": 26666127.0,
-        "avg_volume": 37621540.0,
+        "open": 389.9,
+        "day_high": 393.6,
+        "day_low": 388.32,
+        "volume": 2929349.0,
+        "avg_volume": 37465378.0,
         "high_52w": 498.83,
         "low_52w": 297.38,
-        "market_cap": 1516752338944.0,
+        "market_cap": 1540508483584.0,
         "net_assets": null,
         "quote_type": "EQUITY"
       },
@@ -2308,318 +834,22 @@
       "spark": [
         [
           0,
-          380.64
+          393.06
         ],
         [
           5,
-          380.91
+          390.51
         ],
         [
           10,
-          380.57
+          389.84
         ],
         [
           15,
-          382.48
-        ],
-        [
-          20,
-          383.82
-        ],
-        [
-          25,
-          384.74
-        ],
-        [
-          30,
-          384.33
-        ],
-        [
-          35,
-          382.49
-        ],
-        [
-          40,
-          384.38
-        ],
-        [
-          45,
-          384.0
-        ],
-        [
-          50,
-          382.9
-        ],
-        [
-          55,
-          381.72
-        ],
-        [
-          60,
-          381.51
-        ],
-        [
-          65,
-          381.1
-        ],
-        [
-          70,
-          380.11
-        ],
-        [
-          75,
-          379.38
-        ],
-        [
-          80,
-          380.55
-        ],
-        [
-          85,
-          381.1
-        ],
-        [
-          90,
-          381.18
-        ],
-        [
-          95,
-          381.49
-        ],
-        [
-          100,
-          380.45
-        ],
-        [
-          105,
-          379.88
-        ],
-        [
-          110,
-          381.62
-        ],
-        [
-          115,
-          380.6
-        ],
-        [
-          120,
-          381.02
-        ],
-        [
-          125,
-          379.86
-        ],
-        [
-          130,
-          380.09
-        ],
-        [
-          135,
-          380.3
-        ],
-        [
-          140,
-          379.56
-        ],
-        [
-          145,
-          381.46
-        ],
-        [
-          150,
-          381.98
-        ],
-        [
-          155,
-          381.48
-        ],
-        [
-          160,
-          381.56
-        ],
-        [
-          165,
-          382.95
-        ],
-        [
-          170,
-          384.02
-        ],
-        [
-          175,
-          385.36
-        ],
-        [
-          180,
-          385.7
-        ],
-        [
-          185,
-          384.77
-        ],
-        [
-          190,
-          384.1
-        ],
-        [
-          195,
-          384.61
-        ],
-        [
-          200,
-          385.14
-        ],
-        [
-          205,
-          384.27
-        ],
-        [
-          210,
-          383.61
-        ],
-        [
-          215,
-          383.44
-        ],
-        [
-          220,
-          383.22
-        ],
-        [
-          225,
-          384.17
-        ],
-        [
-          230,
-          384.86
-        ],
-        [
-          235,
-          385.1
-        ],
-        [
-          240,
-          385.96
-        ],
-        [
-          245,
-          386.62
-        ],
-        [
-          250,
-          386.41
-        ],
-        [
-          255,
-          386.36
-        ],
-        [
-          260,
-          386.6
-        ],
-        [
-          265,
-          385.84
-        ],
-        [
-          270,
-          384.66
-        ],
-        [
-          275,
-          383.11
-        ],
-        [
-          280,
-          383.8
-        ],
-        [
-          285,
-          383.1
-        ],
-        [
-          290,
-          383.21
-        ],
-        [
-          295,
-          382.95
-        ],
-        [
-          300,
-          382.93
-        ],
-        [
-          305,
-          382.71
-        ],
-        [
-          310,
-          383.21
-        ],
-        [
-          315,
-          382.63
-        ],
-        [
-          320,
-          383.54
-        ],
-        [
-          325,
-          383.26
-        ],
-        [
-          330,
-          384.04
-        ],
-        [
-          335,
-          384.28
-        ],
-        [
-          340,
-          384.34
-        ],
-        [
-          345,
-          383.61
-        ],
-        [
-          350,
-          383.17
-        ],
-        [
-          355,
-          382.76
-        ],
-        [
-          360,
-          383.11
-        ],
-        [
-          365,
-          383.77
-        ],
-        [
-          370,
-          383.36
-        ],
-        [
-          375,
-          383.94
-        ],
-        [
-          380,
-          385.2
-        ],
-        [
-          385,
-          383.54
+          389.74
         ]
       ],
-      "spark_base": 380.11
+      "spark_base": 383.72
     },
     "UPRO261120C00154000": {
       "symbol": "UPRO261120C00154000",
@@ -2627,334 +857,39 @@
       "display": "UPRO 154C",
       "name": "UPRO Nov 20 2026 $154 call",
       "underlying": "UPRO",
-      "price": 0.26,
-      "prev_close": 0.225,
-      "change": 0.035,
-      "change_pct": 15.56,
+      "price": 0.225,
+      "prev_close": 0.26,
+      "change": -0.035,
+      "change_pct": -13.46,
       "held": true,
       "watch": false,
       "chart": "data/charts/UPRO261120C00154000.json",
       "spark": [
         [
           0,
-          0.225
+          0.26
         ],
         [
           5,
-          0.225
+          0.26
         ],
         [
           10,
-          0.225
+          0.26
         ],
         [
           15,
-          0.225
-        ],
-        [
-          20,
-          0.225
-        ],
-        [
-          25,
-          0.225
-        ],
-        [
-          30,
-          0.225
-        ],
-        [
-          35,
-          0.225
-        ],
-        [
-          40,
-          0.225
-        ],
-        [
-          45,
-          0.225
-        ],
-        [
-          50,
-          0.225
-        ],
-        [
-          55,
-          0.225
-        ],
-        [
-          60,
-          0.225
-        ],
-        [
-          65,
-          0.225
-        ],
-        [
-          70,
-          0.225
-        ],
-        [
-          75,
-          0.225
-        ],
-        [
-          80,
-          0.225
-        ],
-        [
-          85,
-          0.01
-        ],
-        [
-          90,
-          0.01
-        ],
-        [
-          95,
-          0.01
-        ],
-        [
-          100,
-          0.01
-        ],
-        [
-          105,
-          0.01
-        ],
-        [
-          110,
-          0.01
-        ],
-        [
-          115,
-          0.01
-        ],
-        [
-          120,
-          0.01
-        ],
-        [
-          125,
-          0.01
-        ],
-        [
-          130,
-          0.01
-        ],
-        [
-          135,
-          0.01
-        ],
-        [
-          140,
-          0.01
-        ],
-        [
-          145,
-          0.01
-        ],
-        [
-          150,
-          0.01
-        ],
-        [
-          155,
-          0.01
-        ],
-        [
-          160,
-          0.01
-        ],
-        [
-          165,
-          0.01
-        ],
-        [
-          170,
-          0.01
-        ],
-        [
-          175,
-          0.01
-        ],
-        [
-          180,
-          0.26
-        ],
-        [
-          185,
-          0.26
-        ],
-        [
-          190,
-          0.26
-        ],
-        [
-          195,
-          0.26
-        ],
-        [
-          200,
-          0.26
-        ],
-        [
-          205,
-          0.26
-        ],
-        [
-          210,
-          0.26
-        ],
-        [
-          215,
-          0.26
-        ],
-        [
-          220,
-          0.26
-        ],
-        [
-          225,
-          0.26
-        ],
-        [
-          230,
-          0.26
-        ],
-        [
-          235,
-          0.26
-        ],
-        [
-          240,
-          0.26
-        ],
-        [
-          245,
-          0.26
-        ],
-        [
-          250,
-          0.26
-        ],
-        [
-          255,
-          0.26
-        ],
-        [
-          260,
-          0.26
-        ],
-        [
-          265,
-          0.26
-        ],
-        [
-          270,
-          0.26
-        ],
-        [
-          275,
-          0.26
-        ],
-        [
-          280,
-          0.26
-        ],
-        [
-          285,
-          0.26
-        ],
-        [
-          290,
-          0.26
-        ],
-        [
-          295,
-          0.26
-        ],
-        [
-          300,
-          0.26
-        ],
-        [
-          305,
-          0.26
-        ],
-        [
-          310,
-          0.26
-        ],
-        [
-          315,
-          0.26
-        ],
-        [
-          320,
-          0.26
-        ],
-        [
-          325,
-          0.26
-        ],
-        [
-          330,
-          0.26
-        ],
-        [
-          335,
-          0.26
-        ],
-        [
-          340,
-          0.26
-        ],
-        [
-          345,
-          0.26
-        ],
-        [
-          350,
-          0.26
-        ],
-        [
-          355,
-          0.26
-        ],
-        [
-          360,
-          0.26
-        ],
-        [
-          365,
-          0.26
-        ],
-        [
-          370,
-          0.26
-        ],
-        [
-          375,
-          0.26
-        ],
-        [
-          380,
-          0.26
-        ],
-        [
-          385,
           0.26
         ]
       ],
-      "spark_base": 0.225,
+      "spark_base": 0.26,
       "key": "UPRO|2026-11-20|154|call"
     }
   },
   "caveats": [
+    "UPRO Nov 20 2026 $154 call: no live bid/ask right now (market closed or no quotes); using the last good bid/ask mid 0.23 from session 2026-11-13 (saved 2026-11-13 15:01:18 ET).",
+    "UPRO Nov 20 2026 $154 call: wide bid/ask (0.05 x 0.40); the mid-price mark is approximate.",
     "Next roll preview: No live bid/ask right now; using the last good 2026-12-18 chain from session 2026-11-18 (saved 2026-11-18 19:10:41 ET).",
-    "Market not in regular session (Closed (overnight)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }
