@@ -191,5 +191,18 @@
     "issue": 21,
     "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/21",
     "applied_at_et": "2026-11-13 11:04:43 ET"
+  },
+  {
+    "id": "T22",
+    "type": "watchlist_add",
+    "date": "2026-11-19",
+    "symbol": "ANT",
+    "fees": 0.0,
+    "description": "Watchlist add ANT",
+    "cash_before": 987.3,
+    "cash_after": 987.3,
+    "issue": 22,
+    "issue_url": "https://github.com/AT4Engineer/pq-22e56fd9/issues/22",
+    "applied_at_et": "2026-11-19 12:40:53 ET"
   }
 ]
