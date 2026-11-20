@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-19 21:14:04 ET",
-  "generated_at_iso": "2026-11-19T21:14:04-05:00",
+  "generated_at_et": "2026-11-19 21:16:10 ET",
+  "generated_at_iso": "2026-11-19T21:16:10-05:00",
   "trade_date": "2026-11-19",
   "quotes_as_of_et": "2026-11-19 16:00 ET",
   "market_state": "POSTPOST",
@@ -48,8 +48,8 @@
         }
       ],
       "quote_time_et": "2026-11-19 19:59 ET",
-      "as_of_et": "2026-11-19 21:14:04 ET",
-      "as_of_iso": "2026-11-19T21:14:04-05:00",
+      "as_of_et": "2026-11-19 21:16:10 ET",
+      "as_of_iso": "2026-11-19T21:16:10-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -600,7 +600,7 @@
       "spark": [
         [
           0,
-          147.22
+          147.24
         ],
         [
           5,
@@ -748,7 +748,7 @@
         ],
         [
           185,
-          136.85
+          137.01
         ],
         [
           190,
@@ -1243,7 +1243,7 @@
         ],
         [
           375,
-          118.57
+          118.51
         ],
         [
           380,
@@ -1426,7 +1426,7 @@
         ],
         [
           175,
-          150.22
+          150.25
         ],
         [
           180,
@@ -1745,7 +1745,7 @@
         ],
         [
           145,
-          266.39
+          266.42
         ],
         [
           150,
@@ -1777,7 +1777,7 @@
         ],
         [
           185,
-          264.7
+          264.8
         ],
         [
           190,
@@ -1805,7 +1805,7 @@
         ],
         [
           220,
-          260.18
+          260.17
         ],
         [
           225,
@@ -2463,7 +2463,7 @@
         ],
         [
           185,
-          379.25
+          379.28
         ],
         [
           190,
@@ -2631,8 +2631,8 @@
     "ANT": {
       "symbol": "ANT",
       "kind": "stock",
-      "name": "Anthropic, PBC",
-      "long_name": "Anthropic, PBC",
+      "name": "Anthropic, PBC Class A Common Stock",
+      "long_name": "Anthropic, PBC Class A Common Stock",
       "exchange": "NasdaqGS",
       "price": 97.17,
       "prev_close": 83.0,
@@ -2686,7 +2686,7 @@
         ],
         [
           165,
-          96.09
+          96.12
         ],
         [
           170,
@@ -2702,7 +2702,7 @@
         ],
         [
           185,
-          98.88
+          99.61
         ],
         [
           190,
