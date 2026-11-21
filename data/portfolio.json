@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-20 21:06:09 ET",
-  "generated_at_iso": "2026-11-20T21:06:09-05:00",
+  "generated_at_et": "2026-11-20 21:09:47 ET",
+  "generated_at_iso": "2026-11-20T21:09:47-05:00",
   "trade_date": "2026-11-20",
   "quotes_as_of_et": "2026-11-20 16:00 ET",
   "market_state": "POSTPOST",
@@ -48,8 +48,8 @@
         }
       ],
       "quote_time_et": "2026-11-20 19:59 ET",
-      "as_of_et": "2026-11-20 21:06:09 ET",
-      "as_of_iso": "2026-11-20T21:06:09-05:00",
+      "as_of_et": "2026-11-20 21:09:47 ET",
+      "as_of_iso": "2026-11-20T21:09:47-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -914,7 +914,7 @@
         ],
         [
           385,
-          127.96
+          127.93
         ]
       ],
       "spark_base": 138.43
@@ -1241,7 +1241,7 @@
         ],
         [
           365,
-          105.78
+          105.79
         ],
         [
           370,
@@ -1440,7 +1440,7 @@
         ],
         [
           185,
-          135.3
+          135.32
         ],
         [
           190,
@@ -1516,7 +1516,7 @@
         ],
         [
           280,
-          132.99
+          133.0
         ],
         [
           285,
@@ -1548,7 +1548,7 @@
         ],
         [
           320,
-          128.66
+          128.67
         ],
         [
           325,
@@ -1556,7 +1556,7 @@
         ],
         [
           330,
-          128.07
+          128.06
         ],
         [
           335,
@@ -2629,7 +2629,7 @@
         ],
         [
           385,
-          346.17
+          346.15
         ]
       ],
       "spark_base": 374.41
@@ -2637,8 +2637,8 @@
     "ANT": {
       "symbol": "ANT",
       "kind": "stock",
-      "name": "Anthropic, PBC Class A Common Stock",
-      "long_name": "Anthropic, PBC Class A Common Stock",
+      "name": "Anthropic, PBC",
+      "long_name": "Anthropic, PBC",
       "exchange": "NasdaqGS",
       "price": 88.91,
       "prev_close": 97.17,
@@ -2776,7 +2776,7 @@
         ],
         [
           140,
-          86.09
+          86.08
         ],
         [
           145,
@@ -2820,7 +2820,7 @@
         ],
         [
           195,
-          83.7
+          83.71
         ],
         [
           200,
@@ -2968,7 +2968,7 @@
         ],
         [
           380,
-          87.65
+          87.67
         ],
         [
           385,
