@@ -1,11 +1,11 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-24 18:26:46 ET",
-  "generated_at_iso": "2026-11-24T18:26:46-05:00",
+  "generated_at_et": "2026-11-24 23:04:46 ET",
+  "generated_at_iso": "2026-11-24T23:04:46-05:00",
   "trade_date": "2026-11-24",
   "quotes_as_of_et": "2026-11-24 16:00 ET",
-  "market_state": "POST",
-  "market_label": "After hours",
+  "market_state": "POSTPOST",
+  "market_label": "Closed (after hours)",
   "delay_note": "Prices may be delayed ~15 minutes. Tracking only - not financial advice.",
   "account": {
     "total": 13659.97,
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 13600.64,
+      "total": 13538.38,
       "close_total": 13659.97,
-      "change": -59.33,
-      "change_pct": -0.43,
+      "change": -121.59,
+      "change_pct": -0.89,
       "option_liability": 0.0,
       "cash": 987.3,
       "positions": [
@@ -32,24 +32,24 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 125.81,
-          "ext_price": 126.62,
-          "value": 886.34,
-          "change": 5.67,
-          "change_pct": 0.64
+          "ext_price": 125.08,
+          "value": 875.58,
+          "change": -5.09,
+          "change_pct": -0.58
         },
         {
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 117.92,
-          "ext_price": 117.27,
-          "value": 11727.0,
-          "change": -65.0,
-          "change_pct": -0.55
+          "ext_price": 116.75,
+          "value": 11675.5,
+          "change": -116.5,
+          "change_pct": -0.99
         }
       ],
-      "quote_time_et": "2026-11-24 18:26 ET",
-      "as_of_et": "2026-11-24 18:26:46 ET",
-      "as_of_iso": "2026-11-24T18:26:46-05:00",
+      "quote_time_et": "2026-11-24 19:59 ET",
+      "as_of_et": "2026-11-24 23:04:46 ET",
+      "as_of_iso": "2026-11-24T23:04:46-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -71,9 +71,9 @@
       "day_change_pct": -5.65,
       "value": 880.67,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 126.62,
+      "ext_price": 125.08,
       "ext_label": "post-market",
       "share_pct": 6.45
     },
@@ -94,9 +94,9 @@
       "day_change_pct": -1.52,
       "value": 11792.0,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "price_source": "regular-session close",
-      "ext_price": 117.27,
+      "ext_price": 116.75,
       "ext_label": "post-market",
       "share_pct": 86.33
     }
@@ -481,7 +481,7 @@
           "bid": 7.9,
           "ask": 10.5,
           "last": 9.8,
-          "iv": 0.6727,
+          "iv": 0.6865,
           "oi": 5.0,
           "volume": 2.0,
           "last_trade_et": "2026-11-23 09:43 ET",
@@ -494,7 +494,7 @@
           "bid": 7.6,
           "ask": 9.5,
           "last": 8.51,
-          "iv": 0.6598,
+          "iv": 0.6733,
           "oi": 61.0,
           "volume": 3.0,
           "last_trade_et": "2026-11-24 10:37 ET",
@@ -507,7 +507,7 @@
           "bid": 6.7,
           "ask": 9.3,
           "last": 9.11,
-          "iv": 0.6536,
+          "iv": 0.667,
           "oi": 15.0,
           "volume": 16.0,
           "last_trade_et": "2026-11-23 14:50 ET",
@@ -520,7 +520,7 @@
           "bid": 5.9,
           "ask": 8.9,
           "last": 8.8,
-          "iv": 0.6417,
+          "iv": 0.655,
           "oi": 7.0,
           "volume": 7.0,
           "last_trade_et": "2026-11-23 14:41 ET",
@@ -533,7 +533,7 @@
           "bid": 6.0,
           "ask": 8.2,
           "last": 6.0,
-          "iv": 0.6527,
+          "iv": 0.6663,
           "oi": 30.0,
           "volume": 16.0,
           "last_trade_et": "2026-11-24 15:03 ET",
@@ -547,7 +547,7 @@
       "ask": 9.3,
       "mid": 8.0,
       "last": 9.11,
-      "iv": 0.6536,
+      "iv": 0.667,
       "oi": 15.0,
       "volume": 16.0,
       "last_trade_et": "2026-11-23 14:50 ET",
@@ -599,13 +599,13 @@
       "change": -7.54,
       "change_pct": -5.65,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 131.9,
         "day_high": 132.5,
         "day_low": 123.53,
         "volume": 103186106.0,
-        "avg_volume": 96306857.0,
+        "avg_volume": 96314540.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
         "market_cap": 1708633620480.0,
@@ -942,13 +942,13 @@
       "change": -1.82,
       "change_pct": -1.52,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 116.02,
         "day_high": 118.94,
         "day_low": 114.6,
         "volume": 3455147.0,
-        "avg_volume": 2415579.0,
+        "avg_volume": 2416187.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
         "market_cap": null,
@@ -1269,7 +1269,7 @@
         ],
         [
           385,
-          117.95
+          117.98
         ]
       ],
       "spark_base": 119.74
@@ -1285,13 +1285,13 @@
       "change": -9.67,
       "change_pct": -5.86,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 159.06,
         "day_high": 159.92,
         "day_low": 150.5,
         "volume": 382058256.0,
-        "avg_volume": 180634662.0,
+        "avg_volume": 180687929.0,
         "high_52w": 243.37,
         "low_52w": 124.5,
         "market_cap": 3751960903680.0,
@@ -1324,7 +1324,7 @@
         ],
         [
           25,
-          156.22
+          156.24
         ],
         [
           30,
@@ -1612,7 +1612,7 @@
         ],
         [
           385,
-          155.47
+          155.48
         ]
       ],
       "spark_base": 165.05
@@ -1628,13 +1628,13 @@
       "change": -3.1,
       "change_pct": -1.21,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 252.54,
         "day_high": 255.56,
         "day_low": 250.53,
         "volume": 33796817.0,
-        "avg_volume": 40922490.0,
+        "avg_volume": 40924220.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
         "market_cap": 2728046362624.0,
@@ -1971,7 +1971,7 @@
       "change": 1.08,
       "change_pct": 1.03,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 105.14,
         "day_high": 107.42,
@@ -2314,13 +2314,13 @@
       "change": -0.78,
       "change_pct": -0.2,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 383.89,
         "day_high": 390.09,
         "day_low": 375.5,
         "volume": 28208872.0,
-        "avg_volume": 37320350.0,
+        "avg_volume": 37322473.0,
         "high_52w": 498.83,
         "low_52w": 297.38,
         "market_cap": 1520546873344.0,
@@ -2649,21 +2649,21 @@
     "ANT": {
       "symbol": "ANT",
       "kind": "stock",
-      "name": "Anthropic, PBC",
-      "long_name": "Anthropic, PBC",
+      "name": "Anthropic, PBC Class A Common Stock",
+      "long_name": "Anthropic, PBC Class A Common Stock",
       "exchange": "NasdaqGS",
       "price": 81.91,
       "prev_close": 87.64,
       "change": -5.73,
       "change_pct": -6.54,
       "quote_time_et": "2026-11-24 16:00 ET",
-      "market_state": "POST",
+      "market_state": "POSTPOST",
       "stats": {
         "open": 83.44,
         "day_high": 83.49,
         "day_low": 75.61,
         "volume": 311641596.0,
-        "avg_volume": 503798933.0,
+        "avg_volume": 503958100.0,
         "high_52w": 115.1,
         "low_52w": 75.61,
         "market_cap": 1094794870784.0,
@@ -3322,7 +3322,7 @@
   },
   "caveats": [
     "UPRO Nov 20 2026 $154 call: Option has expired - update data/holdings.json (assigned or expired worthless).",
-    "Market not in regular session (After hours): stocks valued at the regular-session close; extended-hours quotes are not used.",
+    "Market not in regular session (Closed (after hours)): stocks valued at the regular-session close; extended-hours quotes are not used.",
     "Quotes from Yahoo Finance via yfinance (free, unofficial) and may be delayed ~15 minutes."
   ]
 }
