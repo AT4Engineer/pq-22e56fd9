@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-26 11:01:03 ET",
-  "generated_at_iso": "2026-11-26T11:01:03-05:00",
+  "generated_at_et": "2026-11-26 12:45:42 ET",
+  "generated_at_iso": "2026-11-26T12:45:42-05:00",
   "trade_date": "2026-11-25",
   "quotes_as_of_et": "2026-11-25 16:00 ET",
   "market_state": "CLOSED",
@@ -48,8 +48,8 @@
         }
       ],
       "quote_time_et": "2026-11-25 19:59 ET",
-      "as_of_et": "2026-11-26 11:01:03 ET",
-      "as_of_iso": "2026-11-26T11:01:03-05:00",
+      "as_of_et": "2026-11-26 12:45:42 ET",
+      "as_of_iso": "2026-11-26T12:45:42-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -656,7 +656,7 @@
         ],
         [
           40,
-          116.09
+          116.06
         ],
         [
           45,
@@ -1610,7 +1610,7 @@
         ],
         [
           375,
-          148.53
+          148.52
         ],
         [
           380,
@@ -1618,7 +1618,7 @@
         ],
         [
           385,
-          149.27
+          149.29
         ]
       ],
       "spark_base": 155.38
@@ -1673,7 +1673,7 @@
         ],
         [
           25,
-          240.93
+          240.91
         ],
         [
           30,
@@ -2359,7 +2359,7 @@
         ],
         [
           25,
-          364.28
+          364.3
         ],
         [
           30,
@@ -2655,8 +2655,8 @@
     "ANT": {
       "symbol": "ANT",
       "kind": "stock",
-      "name": "Anthropic, PBC Class A Common Stock",
-      "long_name": "Anthropic, PBC Class A Common Stock",
+      "name": "Anthropic, PBC",
+      "long_name": "Anthropic, PBC",
       "exchange": "NasdaqGS",
       "price": 82.79,
       "prev_close": 81.91,
