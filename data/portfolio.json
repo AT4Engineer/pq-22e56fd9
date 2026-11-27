@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-27 15:15:20 ET",
-  "generated_at_iso": "2026-11-27T15:15:20-05:00",
+  "generated_at_et": "2026-11-27 15:30:25 ET",
+  "generated_at_iso": "2026-11-27T15:30:25-05:00",
   "trade_date": "2026-11-27",
   "quotes_as_of_et": "2026-11-27 13:00 ET",
   "market_state": "POST",
@@ -21,9 +21,9 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 14214.45,
+      "total": 14215.08,
       "close_total": 14179.43,
-      "change": 35.02,
+      "change": 35.65,
       "change_pct": 0.25,
       "option_liability": 0.0,
       "cash": 987.3,
@@ -32,10 +32,10 @@
           "symbol": "SPCX",
           "shares": 7.0,
           "close": 133.59,
-          "ext_price": 132.45,
-          "value": 927.15,
-          "change": -7.98,
-          "change_pct": -0.85
+          "ext_price": 132.54,
+          "value": 927.78,
+          "change": -7.35,
+          "change_pct": -0.79
         },
         {
           "symbol": "UPRO",
@@ -47,9 +47,9 @@
           "change_pct": 0.35
         }
       ],
-      "quote_time_et": "2026-11-27 15:14 ET",
-      "as_of_et": "2026-11-27 15:15:20 ET",
-      "as_of_iso": "2026-11-27T15:15:20-05:00",
+      "quote_time_et": "2026-11-27 15:30 ET",
+      "as_of_et": "2026-11-27 15:30:25 ET",
+      "as_of_iso": "2026-11-27T15:30:25-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -73,7 +73,7 @@
       "quote_time_et": "2026-11-27 13:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 132.45,
+      "ext_price": 132.54,
       "ext_label": "post-market",
       "share_pct": 6.59
     },
