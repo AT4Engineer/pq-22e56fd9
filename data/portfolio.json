@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "generated_at_et": "2026-11-27 17:11:15 ET",
-  "generated_at_iso": "2026-11-27T17:11:15-05:00",
+  "generated_at_et": "2026-11-27 17:36:31 ET",
+  "generated_at_iso": "2026-11-27T17:36:31-05:00",
   "trade_date": "2026-11-27",
   "quotes_as_of_et": "2026-11-27 13:00 ET",
   "market_state": "POST",
@@ -21,10 +21,10 @@
       "stale": false,
       "session": "post-market",
       "session_label": "After hours",
-      "total": 14265.31,
+      "total": 14274.71,
       "close_total": 14179.43,
-      "change": 85.88,
-      "change_pct": 0.61,
+      "change": 95.28,
+      "change_pct": 0.67,
       "option_liability": 0.0,
       "cash": 987.3,
       "positions": [
@@ -41,15 +41,15 @@
           "symbol": "UPRO",
           "shares": 100.0,
           "close": 122.57,
-          "ext_price": 123.5,
-          "value": 12349.6,
-          "change": 92.6,
-          "change_pct": 0.76
+          "ext_price": 123.59,
+          "value": 12359.0,
+          "change": 102.0,
+          "change_pct": 0.83
         }
       ],
       "quote_time_et": "2026-11-27 16:59 ET",
-      "as_of_et": "2026-11-27 17:11:15 ET",
-      "as_of_iso": "2026-11-27T17:11:15-05:00",
+      "as_of_et": "2026-11-27 17:36:31 ET",
+      "as_of_iso": "2026-11-27T17:36:31-05:00",
       "note": "Stocks at extended-hours prices. Options don't trade after hours, so the call stays at its 4:00 PM mark."
     }
   },
@@ -96,7 +96,7 @@
       "quote_time_et": "2026-11-27 13:00 ET",
       "market_state": "POST",
       "price_source": "regular-session close",
-      "ext_price": 123.5,
+      "ext_price": 123.59,
       "ext_label": "post-market",
       "share_pct": 86.44
     }
@@ -616,7 +616,7 @@
         "open": 131.19,
         "day_high": 134.44,
         "day_low": 129.1,
-        "volume": 50851629.0,
+        "volume": 51364369.0,
         "avg_volume": 99154238.0,
         "high_52w": 225.64,
         "low_52w": 104.83,
@@ -815,7 +815,7 @@
         "open": 121.21,
         "day_high": 122.74,
         "day_low": 118.19,
-        "volume": 1616301.0,
+        "volume": 1667941.0,
         "avg_volume": 2504342.0,
         "high_52w": 158.63,
         "low_52w": 88.15,
@@ -1006,7 +1006,7 @@
         "open": 151.94,
         "day_high": 151.98,
         "day_low": 145.39,
-        "volume": 180940449.0,
+        "volume": 185759641.0,
         "avg_volume": 185963558.0,
         "high_52w": 243.37,
         "low_52w": 124.5,
@@ -1205,7 +1205,7 @@
         "open": 250.45,
         "day_high": 255.28,
         "day_low": 248.45,
-        "volume": 27148968.0,
+        "volume": 27263135.0,
         "avg_volume": 41786411.0,
         "high_52w": 287.2,
         "low_52w": 196.0,
@@ -1404,7 +1404,7 @@
         "open": 109.16,
         "day_high": 109.28,
         "day_low": 107.93,
-        "volume": 1460263.0,
+        "volume": 1724438.0,
         "avg_volume": 3338723.0,
         "high_52w": 111.45,
         "low_52w": 76.55,
@@ -1603,7 +1603,7 @@
         "open": 391.33,
         "day_high": 401.18,
         "day_low": 384.66,
-        "volume": 25702955.0,
+        "volume": 26634592.0,
         "avg_volume": 37520969.0,
         "high_52w": 498.83,
         "low_52w": 297.38,
@@ -1697,7 +1697,7 @@
         ],
         [
           100,
-          397.59
+          397.57
         ],
         [
           105,
@@ -1789,8 +1789,8 @@
     "ANT": {
       "symbol": "ANT",
       "kind": "stock",
-      "name": "Anthropic, PBC Class A Common Stock",
-      "long_name": "Anthropic, PBC Class A Common Stock",
+      "name": "Anthropic, PBC",
+      "long_name": "Anthropic, PBC",
       "exchange": "NasdaqGS",
       "price": 91.88,
       "prev_close": 82.79,
@@ -1802,7 +1802,7 @@
         "open": 84.99,
         "day_high": 93.22,
         "day_low": 84.53,
-        "volume": 143058437.0,
+        "volume": 143747654.0,
         "avg_volume": 423732180.0,
         "high_52w": 115.1,
         "low_52w": 73.85,
